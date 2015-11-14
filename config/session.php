@@ -101,7 +101,7 @@ return [
     |
     */
 
-    'cookie' => 'laravel_session',
+    'cookie' => 'bad_session',
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Path

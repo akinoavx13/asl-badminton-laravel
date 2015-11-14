@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => env('MAIL_ADDRESS', 587), 'name' => env('MAIL_NAME', 587)],
     /*
     |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol
