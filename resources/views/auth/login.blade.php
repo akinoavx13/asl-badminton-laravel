@@ -4,15 +4,20 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Se connecter</title>
 
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}"
+          rel="stylesheet">
+    <link href="{{ asset('font-awesome/css/font-awesome.css') }}"
+          rel="stylesheet">
 
-    <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/animate.css') }}"
+          rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}"
+          rel="stylesheet">
 
 </head>
 
@@ -23,7 +28,9 @@
 
 <div class="row">
     <div class="col-md-2 col-md-push-5">
-        <img class="img-responsive" src="{{ asset('img/logo.png') }}" alt="logo"/>
+        <img class="img-responsive"
+             src="{{ asset('img/logo.png') }}"
+             alt="logo" />
     </div>
 </div>
 
@@ -51,9 +58,13 @@
                 </h3>
             </div>
             <div class="panel-body">
-                <form method="POST" action="{{ url('/auth/login') }}">
 
-                    <input name="_token" value="{{ csrf_token() }}" type="hidden"/>
+                <form method="POST"
+                      action="{{ url('/auth/login') }}">
+
+                    <input name="_token"
+                           value="{{ csrf_token() }}"
+                           type="hidden" />
 
                     <div class="form-group">
                         <input type="email"
@@ -66,24 +77,33 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="password" name="password" id="password" class="form-control"
-                               value="{{ old('password') }}" placeholder="Mot de passe" required>
+                        <input type="password"
+                               name="password"
+                               id="password"
+                               class="form-control"
+                               value="{{ old('password') }}"
+                               placeholder="Mot de passe"
+                               required>
                     </div>
 
                     <div class="form-group text-center">
-                        <input type="checkbox" name="remember"> Se souvenir de moi
+                        <input type="checkbox"
+                               name="remember"> Se souvenir de moi
                     </div>
 
                     <p class="help-block text-center">Vous n'avez pas de compte ?
-                        <a href="{{ url('auth/register') }}" class="text-info">Créer un compte</a>
+                        <a href="{{ url('auth/register') }}"
+                           class="text-info">Créer un compte</a>
                     </p>
 
                     <p class="help-block text-center">
-                        <a href="{{ url('password/email') }}" class="text-info">Mot de passe oublié ?</a>
+                        <a href="{{ url('password/email') }}"
+                           class="text-info">Mot de passe oublié ?</a>
                     </p>
 
                     <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary">Se connecter</button>
+                        <button type="submit"
+                                class="btn btn-primary">Se connecter</button>
                     </div>
 
                 </form>
