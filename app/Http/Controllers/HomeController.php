@@ -5,17 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 
 
-class HomeController extends Controller {
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-        parent::__constructor();
-    }
+class HomeController extends Controller
+{
 
     public static function routes($router)
     {
+        //home page
         $router->get('/', [
+            'middleware' => 'auth',
             'uses' => 'HomeController@index',
             'as' => 'home.index',
         ]);

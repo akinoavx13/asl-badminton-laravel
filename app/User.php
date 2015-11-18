@@ -61,4 +61,9 @@ class User extends Model implements AuthenticatableContract,
     {
         return ucfirst($this->forname) . ' ' . ucfirst($this->name);
     }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
 }

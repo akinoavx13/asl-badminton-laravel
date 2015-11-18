@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -36,4 +37,8 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'home'], function () use ($router) {
     HomeController::routes($router);
+});
+
+Route::group(['prefix' => 'users'], function () use ($router) {
+    UserController::routes($router);
 });

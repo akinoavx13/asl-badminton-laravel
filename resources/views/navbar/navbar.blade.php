@@ -12,12 +12,12 @@
                         <span class="clear">
                             <span class="block m-t-xs">
                                 <strong class="font-bold">
-                                    {{ $user }}
+                                    {{ $auth }}
                                 </strong>
                             </span>
                             <span class="text-muted text-xs block">
                                 <span>
-                                    @if($isAdmin)
+                                    @if($auth->role === "admin")
                                         Administrateur
                                     @else
                                         Utilisateur
