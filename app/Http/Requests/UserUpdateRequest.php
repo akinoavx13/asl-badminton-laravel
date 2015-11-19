@@ -40,7 +40,9 @@ class UserUpdateRequest extends Request
             'state'               => 'required|in:hurt,holiday,active,inactive',
             'lectra_relationship' => 'required|in:lectra,child,conjoint,external,trainee,subcontractor',
             'newsletter'          => 'required|in:0,1',
-            'avatar' => 'image',
+            'avatar'         => 'image',
+            'ending_holiday' => 'date_format:d/m/Y|required_if:active,holiday',
+            'ending_injury'  => 'date_format:d/m/Y|required_if:active,hurt',
         ];
     }
 }

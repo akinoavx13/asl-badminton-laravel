@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -47,6 +48,13 @@ class UserController extends Controller
             'as'         => 'user.delete',
         ]);
 
+        //users show
+        $router->get('/show/{user_id}', [
+            'middleware' => 'auth',
+            'uses'       => 'UserController@show',
+            'as'         => 'user.show',
+        ]);
+
     }
 
     public function index()
@@ -73,15 +81,39 @@ class UserController extends Controller
             'birthday'            => $request->birthday,
             'tshirt_size'         => $request->tshirt_size,
             'gender'              => $request->gender,
-            'address'             => $request->address !== "" ? $request->address : $user->address,
-            'phone'               => $request->phone !== "" ? $request->phone : $user->phone,
-            'license'             => $request->license !== "" ? $request->license : $user->license,
+            'address'  => $request->address !== "" ? $request->address : null,
+            'phone'    => $request->phone !== "" ? $request->phone : null,
+            'license'  => $request->license !== "" ? $request->license : null,
             'state'               => $request->state,
             'lectra_relationship' => $request->lectra_relationship,
             'newsletter'          => $request->newsletter,
             'password' => $request->password !== "" ? bcrypt($request->password) : $user->password,
             'avatar'   => $request->avatar,
         ]);
+
+        if ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y', $request->ending_injury) <= Carbon::now())
+        {
+            return redirect()->back()->with('error',
+                "La date de fin de blessure doit supérieur à aujourd'hui")->withInput($request->all());
+        }
+        elseif ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y', $request->ending_injury) > Carbon::now())
+        {
+            $user->ending_injury = $request->ending_injury;
+            $user->save();
+        }
+
+        if ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y', $request->ending_holiday) <= Carbon::now())
+        {
+            return redirect()->back()->with('error',
+                "La date de fin de vacances doit supérieur à aujourd'hui")->withInput($request->all());
+        }
+        elseif ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y',
+                $request->ending_holiday) > Carbon::now()
+        )
+        {
+            $user->ending_holiday = $request->ending_holiday;
+            $user->save();
+        }
 
         if ($this->user->hasRole('admin'))
         {
@@ -104,5 +136,12 @@ class UserController extends Controller
         flash()->success('Supprimer !', '');
 
         return redirect()->back();
+    }
+
+    public function show($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        return view('users.show', compact('user'));
     }
 }

@@ -47,6 +47,8 @@ class User extends Model implements AuthenticatableContract,
         'avatar',
         'role',
         'password',
+        'ending_holiday',
+        'ending_injury',
     ];
 
     /**
@@ -102,6 +104,16 @@ class User extends Model implements AuthenticatableContract,
         return $this->active === $active;
     }
 
+    public function hasState($state)
+    {
+        return $this->state === $state;
+    }
+
+    public function hasLectraRelation($lectraRelationShip)
+    {
+        return $this->lectra_relationship === $lectraRelationShip;
+    }
+
     public function getBirthdayAttribute($birthday)
     {
         $date = Carbon::createFromFormat('Y-m-d', $birthday);
@@ -109,9 +121,48 @@ class User extends Model implements AuthenticatableContract,
         return $date->format('d/m/Y');
     }
 
+    public function getBirthday()
+    {
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['birthday']);
+    }
+
+    public function getEndingInjury()
+    {
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['ending_injury']);
+    }
+
+    public function getEndingHoliday()
+    {
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['ending_holiday']);
+    }
+
     public function setBirthdayAttribute($birthday)
     {
         $this->attributes['birthday'] = Carbon::createFromFormat('d/m/Y', $birthday)->format('Y-m-d');
+    }
+
+    public function getEndingInjuryAttribute($ending_injury)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $ending_injury);
+
+        return $date->format('d/m/Y');
+    }
+
+    public function setEndingInjuryAttribute($ending_injury)
+    {
+        $this->attributes['ending_injury'] = Carbon::createFromFormat('d/m/Y', $ending_injury)->format('Y-m-d');
+    }
+
+    public function getEndingHolidayAttribute($ending_holiday)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $ending_holiday);
+
+        return $date->format('d/m/Y');
+    }
+
+    public function setEndingHolidayAttribute($ending_holiday)
+    {
+        $this->attributes['ending_holiday'] = Carbon::createFromFormat('d/m/Y', $ending_holiday)->format('Y-m-d');
     }
 
     public function setAvatarAttribute($avatar)

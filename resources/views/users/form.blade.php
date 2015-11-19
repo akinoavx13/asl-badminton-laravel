@@ -162,6 +162,28 @@
                     </div>
                 </div>
 
+                <div class="form-group" id="endingInjury">
+                    <div class="col-md-3">
+                        {!! Form::label('ending_injury', 'Fin de blessure :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+
+                    <div class="col-md-9">
+                        {!! Form::text('ending_injury', $user->exists ? $user->ending_injury : old('ending_injury'), ['class' => 'form-control', 'data-mask' => '99/99/9999']) !!}
+                    </div>
+                </div>
+
+                <div class="form-group" id="endingHolidays">
+                    <div class="col-md-3">
+                        {!! Form::label('ending_holiday', 'Fin de vacances :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+
+                    <div class="col-md-9">
+                        {!! Form::text('ending_holiday', $user->exists ? $user->ending_holiday : old('ending_holiday'), ['class' => 'form-control', 'data-mask' => '99/99/9999']) !!}
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="col-md-3">
                         {!! Form::label('lectra_relationship', 'Relation avec lectra :', ['class' => 'control-label']) !!}
@@ -263,4 +285,31 @@
 @section('javascript')
         <!-- Mask -->
 <script src="{{ asset('js/plugins/jasny/jasny-bootstrap.min.js') }}"></script>
+
+<script>
+
+    function updateSelect() {
+
+        var state = $('select[name=state]').val();
+
+        if (state == 'hurt') {
+            $('#endingInjury').show();
+            $('#endingHolidays').hide();
+        }
+        else if (state == 'holiday') {
+            $('#endingHolidays').show();
+            $('#endingInjury').hide();
+        }
+        else {
+            $('#endingInjury').hide();
+            $('#endingHolidays').hide();
+        }
+    }
+
+    $(document).ready(function () {
+        $('select[name=state]').on('change', updateSelect);
+        updateSelect();
+    });
+</script>
+
 @stop

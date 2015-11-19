@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('license', 60)->nullable();
             $table->boolean('active')->default(true);
             $table->string('state', 60)->default('active');
+            $table->date('ending_holiday');
+            $table->date('ending_injury');
             $table->string('lectra_relationship', 60);
             $table->boolean('newsletter')->default(false);
             $table->boolean('avatar')->default(false);

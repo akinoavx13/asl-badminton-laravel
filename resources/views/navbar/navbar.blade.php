@@ -35,7 +35,7 @@
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li>
-                            <a href="{{ route('user.edit', $auth->id) }}">Mon profil</a>
+                            <a href="{{ route('user.show', $auth->id) }}">Mon profil</a>
                         </li>
                         <li class="divider"></li>
                         <li>
