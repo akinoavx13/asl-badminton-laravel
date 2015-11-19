@@ -192,6 +192,8 @@ class UserController extends Controller
             'role'                   => $request->role,
             'active'                 => $request->active,
             'token_first_connection' => str_random(60),
+            'ending_injury'  => Carbon::now()->format('d/m/Y'),
+            'ending_holiday' => Carbon::now()->format('d/m/Y'),
         ]);
 
         if (canSendMail())
@@ -243,6 +245,34 @@ class UserController extends Controller
                 'avatar'              => $request->avatar,
                 'first_connect'       => false,
             ]);
+
+            if ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y', $request->ending_injury) <= Carbon::now())
+            {
+                return redirect()->back()->with('error',
+                    "La date de fin de blessure doit supérieur à aujourd'hui")->withInput($request->all());
+            }
+            elseif ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y',
+                    $request->ending_injury) > Carbon::now()
+            )
+            {
+                $user->ending_injury = $request->ending_injury;
+                $user->save();
+            }
+
+            if ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y',
+                    $request->ending_holiday) <= Carbon::now()
+            )
+            {
+                return redirect()->back()->with('error',
+                    "La date de fin de vacances doit supérieur à aujourd'hui")->withInput($request->all());
+            }
+            elseif ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y',
+                    $request->ending_holiday) > Carbon::now()
+            )
+            {
+                $user->ending_holiday = $request->ending_holiday;
+                $user->save();
+            }
 
             Auth::login($user);
 
