@@ -123,7 +123,7 @@ class User extends Model implements AuthenticatableContract,
     {
         if (is_object($avatar) && $avatar->isValid())
         {
-            ImageManagerStatic::make($avatar)->fit(150, 150)->save(public_path() . "/img/avatars/{$this->id}.jpg");
+            ImageManagerStatic::make($avatar)->fit(200)->save(public_path() . "/img/avatars/{$this->id}.jpg");
             $this->attributes['avatar'] = 1;
         }
     }
