@@ -39,7 +39,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="">Se déconnecter</a>
+                            <a href="{{ url('auth/logout') }}">Se déconnecter</a>
                         </li>
                     </ul>
                 </div>

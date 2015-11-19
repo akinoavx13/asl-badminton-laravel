@@ -40,6 +40,13 @@ class UserController extends Controller
             'as'         => 'user.update',
         ]);
 
+        //users delete
+        $router->get('/delete/{user_id}', [
+            'middleware' => 'userAdmin',
+            'uses'       => 'UserController@delete',
+            'as'         => 'user.delete',
+        ]);
+
     }
 
     public function index()
@@ -72,7 +79,7 @@ class UserController extends Controller
             'state'               => $request->state,
             'lectra_relationship' => $request->lectra_relationship,
             'newsletter'          => $request->newsletter,
-            'password' => $request->password !== "" ? $request->password : $user->password,
+            'password' => $request->password !== "" ? bcrypt($request->password) : $user->password,
             'avatar'   => $request->avatar,
         ]);
 
@@ -83,8 +90,19 @@ class UserController extends Controller
             $user->save();
         }
 
-        flash()->success('Sauvegarder', '');
+        flash()->success('Sauvegarde !', '');
 
         return redirect()->route('home.index');
+    }
+
+    public function delete($user_id)
+    {
+
+        $user = User::findOrFail($user_id);
+        $user->delete();
+
+        flash()->success('Supprimer !', '');
+
+        return redirect()->back();
     }
 }

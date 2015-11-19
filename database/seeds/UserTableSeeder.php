@@ -22,7 +22,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Maheo',
             'forname' => 'Maxime',
             'email' => 'imaxame@gmail.com',
-            'birthday' => Carbon::create(1996, 9, 20),
+            'birthday' => Carbon::create(1996, 9, 20)->format('d/m/Y'),
             'tshirt_size' => 'M',
             'gender' => 'man',
             'address' => '3 rue du Maréchal Lyautey',

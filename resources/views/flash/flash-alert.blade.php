@@ -4,7 +4,7 @@
             title: "{{ session('flash_alert.title') }}",
             text: "{{ session('flash_alert.message') }}",
             type: "{{ session('flash_alert.level') }}",
-            timer: 2000,
+            timer: 1700,
             showConfirmButton: false,
         });
     </script>

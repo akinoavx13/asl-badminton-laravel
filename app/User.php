@@ -114,11 +114,6 @@ class User extends Model implements AuthenticatableContract,
         $this->attributes['birthday'] = Carbon::createFromFormat('d/m/Y', $birthday)->format('Y-m-d');
     }
 
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes['password'] = bcrypt($password);
-    }
-
     public function setAvatarAttribute($avatar)
     {
         if (is_object($avatar) && $avatar->isValid())

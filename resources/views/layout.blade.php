@@ -46,9 +46,6 @@
 <!-- jQuery UI -->
 <script src="{{ asset('js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
-<!-- Delete -->
-<script src="{{ asset('js/laravel.js') }}"></script>
-
 <!-- Sweetalert -->
 <script src="{{ asset('js/sweetalert-dev.js') }}"></script>
 

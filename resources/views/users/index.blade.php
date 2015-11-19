@@ -40,9 +40,9 @@
                                     <td class="text-center">{{ $user->name }}</td>
                                     <td class="text-center">{{ $user->email }}</td>
                                     <td class="text-center">
-                                        @if($user->gender == 'man')
+                                        @if($user->hasGender('man'))
                                             Homme
-                                        @elseif($user->gender == 'woman')
+                                        @elseif($user->hasGender('woman'))
                                             Femme
                                         @endif
                                     </td>
@@ -63,7 +63,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($user->newsletter)
+                                        @if($user->hasNewsletter('1'))
                                             <span class="fa fa-check-circle-o text-success" aria-hidden="true"></span>
                                         @else
                                             <span class="fa fa-times-circle-o text-danger"
@@ -71,11 +71,11 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($user->role == 'admin')
+                                        @if($user->hasRole('admin'))
                                             <span class="badge badge-danger">
                                         Administrateur
                                     </span>
-                                        @elseif($user->role == 'user')
+                                        @elseif($user->hasRole('user'))
                                             <span class="badge badge-primary">
                                         Utilisateur
                                     </span>
@@ -84,24 +84,20 @@
                                     <td class="text-center">
                                         @if($user->firstConnect)
                                             <div class="text-center">
-                                                <a href="#"
-                                                   class="btn btn-primary"><span
-                                                            class="fa fa-send" aria-hidden="true"></span></a>
+                                                <a href="#" class="btn btn-primary"><span class="fa fa-send"
+                                                                                          aria-hidden="true"></span></a>
                                             </div>
                                         @else
-                                            <span class="fa fa-check-circle-o text-success"
-                                                  aria-hidden="true"></span>
+                                            <span class="fa fa-check-circle-o text-success" aria-hidden="true"></span>
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-info dim">
+                                        <a href="{{ route('user.edit', $user->id) }}" class="btn btn-info dim">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-danger dim"
-                                           data-method="delete"
-                                           data-confirm="Voulez vous vraiment supprimer cet utilisateur ?">
+                                        <a href="{{ route('user.delete', $user->id) }}" class="btn btn-danger dim">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     </td>
