@@ -35,6 +35,12 @@ Route::group(['prefix' => 'home'], function () use ($router) {
     HomeController::routes($router);
 });
 
-Route::group(['prefix' => 'users'], function () use ($router) {
+Route::group(['prefix' => 'user'], function () use ($router)
+{
+    UserController::routes($router);
+});
+
+Route::group(['prefix' => 'season'], function () use ($router)
+{
     UserController::routes($router);
 });

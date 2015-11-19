@@ -93,14 +93,14 @@ class UserController extends Controller
     {
         $users = User::orderBy('forname', 'asc')->get();
 
-        return view('users.index', compact('users'));
+        return view('user.index', compact('users'));
     }
 
     public function edit($user_id)
     {
         $user = User::findOrFail($user_id);
 
-        return view('users.edit', compact('user'));
+        return view('user.edit', compact('user'));
     }
 
     public function update(UserUpdateRequest $request, $user_id)
@@ -173,14 +173,14 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        return view('users.show', compact('user'));
+        return view('user.show', compact('user'));
     }
 
     public function create()
     {
         $user = new User();
 
-        return view('users.create', compact('user'));
+        return view('user.create', compact('user'));
     }
 
     public function store(UserStoreRequest $request)
@@ -198,7 +198,7 @@ class UserController extends Controller
 
         if (canSendMail())
         {
-            Mail::send('emails.users.store', $user->attributesToArray(), function ($message) use ($user)
+            Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
             {
                 $message->from(fromAddressMail(), fromNameMail());
                 $message->to($user->email, $user)
@@ -217,7 +217,7 @@ class UserController extends Controller
 
         if ($user !== null)
         {
-            return view('users.first_connection', compact('user'));
+            return view('user.first_connection', compact('user'));
         }
 
         abort(401, 'Unauthorized action.');
