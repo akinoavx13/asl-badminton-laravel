@@ -26,28 +26,28 @@ class UserController extends Controller
 
         //user list
         $router->get('/index', [
-            'middleware' => 'userAdmin',
-            'uses' => 'UserController@index',
-            'as'   => 'user.index',
+            'middleware' => ['auth', 'userAdmin'],
+            'uses'       => 'UserController@index',
+            'as'         => 'user.index',
         ]);
 
         //users edit
         $router->get('/edit/{user_id}', [
-            'middleware' => 'owner',
+            'middleware' => ['auth', 'owner'],
             'uses'       => 'UserController@edit',
             'as'         => 'user.edit',
         ]);
 
         //users update
         $router->post('/edit/{user_id}', [
-            'middleware' => 'owner',
+            'middleware' => ['auth', 'owner'],
             'uses'       => 'UserController@update',
             'as'         => 'user.update',
         ]);
 
         //users delete
         $router->get('/delete/{user_id}', [
-            'middleware' => 'userAdmin',
+            'middleware' => ['auth', 'userAdmin'],
             'uses'       => 'UserController@delete',
             'as'         => 'user.delete',
         ]);
@@ -61,14 +61,14 @@ class UserController extends Controller
 
         //users create
         $router->get('/create', [
-            'middleware' => 'userAdmin',
+            'middleware' => ['auth', 'userAdmin'],
             'uses'       => 'UserController@create',
             'as'         => 'user.create',
         ]);
 
         //users store
         $router->post('/store', [
-            'middleware' => 'userAdmin',
+            'middleware' => ['auth', 'userAdmin'],
             'uses'       => 'UserController@store',
             'as'         => 'user.store',
         ]);
