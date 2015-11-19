@@ -52,25 +52,21 @@
                 </h3>
             </div>
             <div class="panel-body">
-                <form method="POST" action="{{ url('/password/email') }}">
 
-                    <input name="_token" value="{{ csrf_token() }}" type="hidden"/>
+                {!! Form::open(['url' => '/password/email']) !!}
 
-                    <div class="form-group">
-                        <input type="email"
-                               name="email"
-                               id="email"
-                               class="form-control"
-                               value="{{ old('email') }}"
-                               placeholder="Email"
-                               required>
-                    </div>
+                {!! Form::token() !!}
 
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary">Envoyer le lien de réinitialisation</button>
-                    </div>
+                <div class="form-group">
+                    {!! Form::email('email', old('email'), ['placeholder' => 'Email', 'class' => 'form-control', 'required']) !!}
+                </div>
 
-                </form>
+                <div class="form-group">
+                    {!! Form::submit('Envoyer le lien de réinitialisation', ['class' => 'btn btn-primary']) !!}
+                </div>
+
+                {!! Form::close() !!}
+
             </div>
         </div>
     </div>

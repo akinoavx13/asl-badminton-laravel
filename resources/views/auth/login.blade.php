@@ -30,7 +30,7 @@
     <div class="col-md-2 col-md-push-5">
         <img class="img-responsive"
              src="{{ asset('img/logo.png') }}"
-             alt="logo" />
+             alt="logo"/>
     </div>
 </div>
 
@@ -59,54 +59,35 @@
             </div>
             <div class="panel-body">
 
-                <form method="POST"
-                      action="{{ url('/auth/login') }}">
+                {!! Form::open(['url' => '/auth/login']) !!}
 
-                    <input name="_token"
-                           value="{{ csrf_token() }}"
-                           type="hidden" />
+                {!! Form::token() !!}
 
-                    <div class="form-group">
-                        <input type="email"
-                               name="email"
-                               id="email"
-                               class="form-control"
-                               value="{{ old('email') }}"
-                               placeholder="Email"
-                               required>
-                    </div>
+                <div class="form-group">
+                    {!! Form::email('email', old('email'), ['placeholder' => 'Email', 'class' => 'form-control', 'required']) !!}
+                </div>
 
-                    <div class="form-group">
-                        <input type="password"
-                               name="password"
-                               id="password"
-                               class="form-control"
-                               value="{{ old('password') }}"
-                               placeholder="Mot de passe"
-                               required>
-                    </div>
+                <div class="form-group">
+                    {!! Form::password('password', ['placeholder' => 'Mot de passe', 'class' => 'form-control', 'required']) !!}
+                </div>
 
-                    <div class="form-group text-center">
-                        <input type="checkbox"
-                               name="remember"> Se souvenir de moi
-                    </div>
+                <div class="form-group text-center">
+                    <input type="checkbox" name="remember"> Se souvenir de moi
+                </div>
 
-                    <p class="help-block text-center">Vous n'avez pas de compte ?
-                        <a href="{{ url('auth/register') }}"
-                           class="text-info">Créer un compte</a>
-                    </p>
+                <p class="help-block text-center">Vous n'avez pas de compte ?
+                    <a href="{{ url('auth/register') }}" class="text-info">Créer un compte</a>
+                </p>
 
-                    <p class="help-block text-center">
-                        <a href="{{ url('password/email') }}"
-                           class="text-info">Mot de passe oublié ?</a>
-                    </p>
+                <p class="help-block text-center">
+                    <a href="{{ url('password/email') }}" class="text-info">Mot de passe oublié ?</a>
+                </p>
 
-                    <div class="form-group text-center">
-                        <button type="submit"
-                                class="btn btn-primary">Se connecter</button>
-                    </div>
+                <div class="form-group text-center">
+                    {!! Form::submit('Se connecter', ['class' => 'btn btn-primary']) !!}
+                </div>
 
-                </form>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

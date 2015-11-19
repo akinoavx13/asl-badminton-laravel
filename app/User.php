@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -65,5 +66,37 @@ class User extends Model implements AuthenticatableContract,
     public function hasRole($role)
     {
         return $this->role === $role;
+    }
+
+    public function hasOwner($user_id)
+    {
+        return $this->id === $user_id;
+    }
+
+    public function hasGender($gender)
+    {
+        return $this->gender === $gender;
+    }
+
+    public function hasNewsletter($newsletter)
+    {
+        return $this->newsletter === $newsletter;
+    }
+
+    public function hasActive($active)
+    {
+        return $this->active === $active;
+    }
+
+    public function getBirthdayAttribute($birthday)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $birthday);
+
+        return $date->format('d/m/Y');
+    }
+
+    public function setBirthdayAttribute($birthday)
+    {
+        $this->attributes['birthday'] = Carbon::createFromFormat('d/m/Y', $birthday)->format('Y-m-d');
     }
 }

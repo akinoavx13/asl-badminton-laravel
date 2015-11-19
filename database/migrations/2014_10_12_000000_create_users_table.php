@@ -20,9 +20,9 @@ class CreateUsersTable extends Migration
             $table->date('birthday');
             $table->string('tshirt_size', 10);
             $table->string('gender', 10);
-            $table->string('address');
-            $table->string('phone', 60);
-            $table->string('license', 60);
+            $table->string('address')->nullable();
+            $table->string('phone', 60)->nullable();
+            $table->string('license', 60)->nullable();
             $table->boolean('active')->default(true);
             $table->string('state', 60)->default('active');
             $table->string('lectra_relationship', 60);

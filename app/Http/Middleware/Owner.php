@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class UserAdmin
+class Owner
 {
     /**
      * Handle an incoming request.
@@ -15,9 +15,16 @@ class UserAdmin
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()->hasRole('admin')) {
+
+        $user_id = $request->route()->getParameter('user_id');
+        $user = $request->user();
+
+        if ($user->hasOwner($user_id) || $user->hasRole('admin'))
+        {
             return $next($request);
-        } else {
+        }
+        else
+        {
             abort(401, 'Unauthorized action.');
         }
     }

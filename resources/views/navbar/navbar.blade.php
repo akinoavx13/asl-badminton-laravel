@@ -17,7 +17,7 @@
                             </span>
                             <span class="text-muted text-xs block">
                                 <span>
-                                    @if($auth->role === "admin")
+                                    @if($auth->hasRole('admin'))
                                         Administrateur
                                     @else
                                         Utilisateur
@@ -29,7 +29,7 @@
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li>
-                            <a href="">Mon profil</a>
+                            <a href="{{ route('user.edit', $auth->id) }}">Mon profil</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -39,18 +39,27 @@
                 </div>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('home.index') }}">
                     <i class="fa fa-home"></i>
                     <span class="nav-label">Accueil</span>
                 </a>
             </li>
 
-            <li>
-                <a href="#">
-                    <i class="fa fa-users"></i>
-                    <span class="nav-label">Utilisateurs</span>
-                </a>
-            </li>
+            @if($auth->hasRole('admin'))
+                <li>
+                    <a href="#">
+                        <i class="fa fa-user"></i>
+                        <span class="nav-label">Utilisateurs</span>
+                        <span class="fa arrow"></span>
+                    </a>
+
+                    <ul class="nav nav-second-level">
+                        <li><a href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des utilisateurs</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-user-plus"></i>Créer unutilisateur</a></li>
+                    </ul>
+                </li>
+            @endif
 
         </ul>
     </div>

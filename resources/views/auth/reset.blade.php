@@ -55,61 +55,45 @@
 
                 <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 
-                <form method="POST" action="{{ url('/password/reset') }}" class="form-horizontal">
+                {!! Form::open(['url' => '/password/reset', 'class' => 'form-horizontal']) !!}
 
-                    <input name="_token" value="{{ csrf_token() }}" type="hidden"/>
-                    <input type="hidden" name="token" value="{{ $token }}">
+                {!! Form::token() !!}
 
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            <label for="email" class="control-label">Email :</label>
-                            <i class="text-navy">*</i>
-                        </div>
-                        <div class="col-md-9">
-                            <input type="email"
-                                   name="email"
-                                   id="email"
-                                   class="form-control"
-                                   value="{{ old('email') }}"
-                                   required>
-                        </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('Email', 'Email :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
                     </div>
-
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            <label for="password" class="control-label">Mot de passe :</label>
-                            <i class="text-navy">*</i>
-                        </div>
-                        <div class="col-md-9">
-                            <input type="password"
-                                   name="password"
-                                   id="password"
-                                   class="form-control"
-                                   value="{{ old('password') }}"
-                                   required>
-                        </div>
+                    <div class="col-md-9">
+                        {!! Form::email('email', old('email'), ['placeholder' => 'Email', 'class' => 'form-control', 'required']) !!}
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            <label for="password_confirmation" class="control-label">Confirmer :</label>
-                            <i class="text-navy">*</i>
-                        </div>
-                        <div class="col-md-9">
-                            <input type="password"
-                                   name="password_confirmation"
-                                   id="password_confirmation"
-                                   class="form-control"
-                                   value="{{ old('password_confirmation') }}"
-                                   required>
-                        </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('password', 'Mot de passe :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
                     </div>
-
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary">Réinitialiser le mot de passe</button>
+                    <div class="col-md-9">
+                        {!! Form::password('password', ['class' => 'form-control', 'required']) !!}
                     </div>
+                </div>
 
-                </form>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('password_confirmation', 'Confirmer :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::password('password_confirmation', ['class' => 'form-control', 'required']) !!}
+                    </div>
+                </div>
+
+                <div class="form-group text-center">
+                    {!! Form::submit('Réinitialiser le mot de passe', ['class' => 'btn btn-primary']) !!}
+                </div>
+
+                {!! Form::close() !!}
             </div>
         </div>
     </div>
