@@ -40,6 +40,7 @@ class UserUpdateRequest extends Request
             'state'               => 'required|in:hurt,holiday,active,inactive',
             'lectra_relationship' => 'required|in:lectra,child,conjoint,external,trainee,subcontractor',
             'newsletter'          => 'required|in:0,1',
+            'avatar' => 'image',
         ];
     }
 }

@@ -12,7 +12,7 @@
             </div>
             <div class="ibox-content">
 
-                {!! Form::open(['route' => ['user.update', $user->id], 'class' => 'form-horizontal']) !!}
+                {!! Form::open(['route' => ['user.update', $user->id], 'class' => 'form-horizontal', 'files' => true]) !!}
                 {!! Form::token() !!}
 
                 <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
@@ -107,6 +107,16 @@
                                 Femme
                             </label>
                         </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('avatar', 'Photo :', ['class' => 'control-label']) !!}
+                    </div>
+
+                    <div class="col-md-9">
+                        {!! Form::file('avatar', ['class' => 'form-control']) !!}
                     </div>
                 </div>
 

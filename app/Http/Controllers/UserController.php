@@ -23,7 +23,7 @@ class UserController extends Controller
         $router->get('/index', [
             'middleware' => 'userAdmin',
             'uses' => 'UserController@index',
-            'as' => 'user.index',
+            'as'   => 'user.index',
         ]);
 
         //users edit
@@ -72,7 +72,8 @@ class UserController extends Controller
             'state'               => $request->state,
             'lectra_relationship' => $request->lectra_relationship,
             'newsletter'          => $request->newsletter,
-            'password'            => $request->password !== "" ? bcrypt($request->password) : $user->password,
+            'password' => $request->password !== "" ? $request->password : $user->password,
+            'avatar'   => $request->avatar,
         ]);
 
         if ($this->user->hasRole('admin'))

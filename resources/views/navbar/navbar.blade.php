@@ -5,7 +5,13 @@
                 <div class="dropdown profile-element">
                     <div class="text-center">
                         <span>
-
+                            @if($auth->avatar)
+                                <img src="{{ url($auth->avatar) }}"
+                                     class="img-circle" alt="logo" width="50" height="50"/>
+                            @else
+                                <img src="{{ asset('img/anonymous.png') }}"
+                                     class="img-circle" alt="logo" width="50" height="50"/>
+                            @endif
                         </span>
                     </div>
                     <a data-toggle="dropdown" class="dropdown-toggle text-center" href="#">

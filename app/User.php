@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Intervention\Image\ImageManagerStatic;
 
 class User extends Model implements AuthenticatableContract,
     AuthorizableContract,
@@ -57,6 +58,19 @@ class User extends Model implements AuthenticatableContract,
 
     protected $dates = ['created_at', 'updated_at', 'birthday'];
 
+    public static function boot()
+    {
+        parent::boot();
+        static::deleted(function ($instance)
+        {
+            if ($instance->avatar)
+            {
+                unlink(public_path() . $instance->avatar);
+            }
+
+            return true;
+        });
+    }
 
     public function __toString()
     {
@@ -98,5 +112,34 @@ class User extends Model implements AuthenticatableContract,
     public function setBirthdayAttribute($birthday)
     {
         $this->attributes['birthday'] = Carbon::createFromFormat('d/m/Y', $birthday)->format('Y-m-d');
+    }
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+
+    public function setAvatarAttribute($avatar)
+    {
+        if (is_object($avatar) && $avatar->isValid())
+        {
+            ImageManagerStatic::make($avatar)->fit(150, 150)->save(public_path() . "/img/avatars/{$this->id}.jpg");
+            $this->attributes['avatar'] = 1;
+        }
+    }
+
+    public function getAvatarAttribute()
+    {
+        if ($this->hasAvatar("1"))
+        {
+            return "/img/avatars/{$this->id}.jpg";
+        }
+
+        return false;
+    }
+
+    public function hasAvatar($avatar)
+    {
+        return $this->attributes['avatar'] === $avatar;
     }
 }
