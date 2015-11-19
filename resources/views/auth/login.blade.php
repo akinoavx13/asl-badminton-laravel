@@ -75,10 +75,6 @@
                     <input type="checkbox" name="remember"> Se souvenir de moi
                 </div>
 
-                <p class="help-block text-center">Vous n'avez pas de compte ?
-                    <a href="{{ url('auth/register') }}" class="text-info">Créer un compte</a>
-                </p>
-
                 <p class="help-block text-center">
                     <a href="{{ url('password/email') }}" class="text-info">Mot de passe oublié ?</a>
                 </p>

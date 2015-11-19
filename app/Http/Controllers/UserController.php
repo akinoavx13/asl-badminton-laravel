@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Http\Requests\UserFirstConnectionRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
+use Auth;
 use Carbon\Carbon;
+use Mail;
 
 class UserController extends Controller
 {
@@ -53,6 +57,34 @@ class UserController extends Controller
             'middleware' => 'auth',
             'uses'       => 'UserController@show',
             'as'         => 'user.show',
+        ]);
+
+        //users create
+        $router->get('/create', [
+            'middleware' => 'userAdmin',
+            'uses'       => 'UserController@create',
+            'as'         => 'user.create',
+        ]);
+
+        //users store
+        $router->post('/store', [
+            'middleware' => 'userAdmin',
+            'uses'       => 'UserController@store',
+            'as'         => 'user.store',
+        ]);
+
+        //users first connection
+        $router->get('/first_connection/{user_id}/{token_first_connection}', [
+            'middleware' => 'firstConnection',
+            'uses'       => 'UserController@getFirstConnection',
+            'as'         => 'user.get_first_connection',
+        ]);
+
+        //users first connection
+        $router->post('/first_connection/{user_id}/{token_first_connection}', [
+            'middleware' => 'firstConnection',
+            'uses'       => 'UserController@postFirstConnection',
+            'as'         => 'user.post_first_connection',
         ]);
 
     }
@@ -129,7 +161,6 @@ class UserController extends Controller
 
     public function delete($user_id)
     {
-
         $user = User::findOrFail($user_id);
         $user->delete();
 
@@ -143,5 +174,83 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
 
         return view('users.show', compact('user'));
+    }
+
+    public function create()
+    {
+        $user = new User();
+
+        return view('users.create', compact('user'));
+    }
+
+    public function store(UserStoreRequest $request)
+    {
+        $user = User::create([
+            'name'                   => $request->name,
+            'forname'                => $request->forname,
+            'email'                  => $request->email,
+            'role'                   => $request->role,
+            'active'                 => $request->active,
+            'token_first_connection' => str_random(60),
+        ]);
+
+        if (canSendMail())
+        {
+            Mail::send('emails.users.store', $user->attributesToArray(), function ($message) use ($user)
+            {
+                $message->from(fromAddressMail(), fromNameMail());
+                $message->to($user->email, $user)
+                    ->subject('Création de compte AS Lectra Badminton')->cc('c.maheo@lectra.com');
+            });
+        }
+
+        flash()->success('Cree !', 'Un email lui a ete envoye.');
+
+        return redirect()->route('home.index');
+    }
+
+    public function getFirstConnection($user_id, $token_first_connection)
+    {
+        $user = User::where('id', $user_id)->where('token_first_connection', $token_first_connection)->first();
+
+        if ($user !== null)
+        {
+            return view('users.first_connection', compact('user'));
+        }
+
+        abort(401, 'Unauthorized action.');
+    }
+
+    public function postFirstConnection(UserFirstConnectionRequest $request, $user_id, $token_first_connection)
+    {
+        $user = User::where('id', $user_id)->where('token_first_connection', $token_first_connection)->first();
+
+        if ($user !== null)
+        {
+            $user->update([
+                'name'                => $request->name,
+                'forname'             => $request->forname,
+                'birthday'            => $request->birthday,
+                'tshirt_size'         => $request->tshirt_size,
+                'gender'              => $request->gender,
+                'address'             => $request->address !== "" ? $request->address : null,
+                'phone'               => $request->phone !== "" ? $request->phone : null,
+                'license'             => $request->license !== "" ? $request->license : null,
+                'state'               => $request->state,
+                'lectra_relationship' => $request->lectra_relationship,
+                'newsletter'          => $request->newsletter,
+                'password'            => $request->password,
+                'avatar'              => $request->avatar,
+                'first_connect'       => false,
+            ]);
+
+            Auth::login($user);
+
+            flash()->success('Compte valide !', "Le compte viens d etre creer avec sucess");
+
+            return redirect()->route('home.index');
+        }
+
+        abort(401, 'Unauthorized action.');
     }
 }

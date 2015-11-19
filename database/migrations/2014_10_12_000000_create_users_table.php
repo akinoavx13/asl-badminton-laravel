@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('role', 10);
             $table->boolean('first_connect')->default(true);
             $table->string('password', 60);
+            $table->string('token_first_connection');
             $table->rememberToken();
             $table->timestamps();
         });

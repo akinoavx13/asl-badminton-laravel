@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class UserUpdateRequest extends Request
+use App\User;
+
+class UserFirstConnectionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,13 +14,13 @@ class UserUpdateRequest extends Request
     public function authorize()
     {
         $user_id = $this->route()->getParameter('user_id');
-        $user = $this->user();
+        $token_first_connection = $this->route()->getParameter('token_first_connection');
+        $user = User::where('id', $user_id)->where('token_first_connection', $token_first_connection)->first();
 
-        if ($user->hasOwner($user_id) || $user->hasRole('admin'))
+        if ($user !== null && $user->hasFirstConnection('1'))
         {
             return true;
         }
-
         abort(401, 'Unauthorized action.');
 
         return false;
@@ -35,16 +37,16 @@ class UserUpdateRequest extends Request
             'name'                => 'required',
             'forname'             => 'required',
             'email'               => 'unique:users,email|email',
-            'password'            => 'confirmed|required_with:password_confirmation|min:6',
+            'password'            => 'confirmed|min:6',
             'birthday'            => 'required|date_format:d/m/Y',
             'tshirt_size'         => 'required|in:XXS,XS,S,M,L,XL,XXL',
             'gender'              => 'required|in:man,woman',
             'state'               => 'required|in:hurt,holiday,active,inactive',
             'lectra_relationship' => 'required|in:lectra,child,conjoint,external,trainee,subcontractor',
             'newsletter'          => 'required|in:0,1',
-            'avatar'         => 'image',
-            'ending_holiday' => 'date_format:d/m/Y|required_if:active,holiday',
-            'ending_injury'  => 'date_format:d/m/Y|required_if:active,hurt',
+            'avatar'              => 'image',
+            'ending_holiday'      => 'date_format:d/m/Y|required_if:active,holiday',
+            'ending_injury'       => 'date_format:d/m/Y|required_if:active,hurt',
         ];
     }
 }

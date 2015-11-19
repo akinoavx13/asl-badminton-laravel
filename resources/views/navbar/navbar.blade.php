@@ -62,7 +62,8 @@
                     <ul class="nav nav-second-level">
                         <li><a href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des utilisateurs</a>
                         </li>
-                        <li><a href="#"><i class="fa fa-user-plus"></i>Créer unutilisateur</a></li>
+                        <li><a href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer unutilisateur</a>
+                        </li>
                     </ul>
                 </li>
             @endif

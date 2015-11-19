@@ -49,6 +49,7 @@ class User extends Model implements AuthenticatableContract,
         'password',
         'ending_holiday',
         'ending_injury',
+        'token_first_connection',
     ];
 
     /**
@@ -112,6 +113,11 @@ class User extends Model implements AuthenticatableContract,
     public function hasLectraRelation($lectraRelationShip)
     {
         return $this->lectra_relationship === $lectraRelationShip;
+    }
+
+    public function hasFirstConnection($firstConnection)
+    {
+        return $this->first_connect === $firstConnection;
     }
 
     public function getBirthdayAttribute($birthday)

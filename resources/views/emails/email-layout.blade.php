@@ -11,9 +11,7 @@
 
 <body>
 
-<p>Bonjour {{ $user }}, </p>
 @yield('content')
-<br>
 
 <p>Cordialement, </p>
 

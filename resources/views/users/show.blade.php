@@ -39,7 +39,7 @@
                                 <label>Anniversaire:</label>
                             </div>
                             <div class="col-md-8">
-                                {{ \Jenssegers\Date\Date::create($user->getBirthday()->year, $user->getBirthday()->month, $user->getBirthday()->day)->format('l j F Y') }}
+                                {{ \Jenssegers\Date\Date::create($user->getBirthday()->year, $user->getBirthday()->month, $user->getBirthday()->day)->format('l j F') }}
                                 <i>({{ \Jenssegers\Date\Date::create($user->getBirthday()->year, $user->getBirthday()->month, $user->getBirthday()->day)->age }} ans)</i>
                             </div>
                         </div>
@@ -91,10 +91,10 @@
                             <div class="col-md-8">
                                 @if($user->hasState('holiday'))
                                     En vacances jusqu'au <i class="text-warning">{{
-                             \Jenssegers\Date\Date::create($user->getEndingHoliday()->year, $user->getEndingHoliday()->month, $user->getEndingHoliday()->day)->format('l j F Y') }}</i>
+                             \Jenssegers\Date\Date::create($user->getEndingHoliday()->year, $user->getEndingHoliday()->month, $user->getEndingHoliday()->day)->format('l j F') }}</i>
                                 @elseif($user->hasState('hurt'))
                                     Bléssé jusqu'au <i class="text-warning">{{
-                            \Jenssegers\Date\Date::create($user->getEndingInjury()->year, $user->getEndingInjury()->month, $user->getEndingInjury()->day)->format('l j F Y') }}</i>
+                            \Jenssegers\Date\Date::create($user->getEndingInjury()->year, $user->getEndingInjury()->month, $user->getEndingInjury()->day)->format('l j F') }}</i>
                                 @elseif($user->hasState('active'))
                                     Actif
                                 @elseif($user->hasState('inactive'))
@@ -168,9 +168,9 @@
                                 </div>
                                 <div class="col-md-8">
                                     @if($user->hasActive('1'))
-                                        <span class="fa fa-check-circle-o text-success" aria-hidden="true"></span>
+                                        <span class="fa fa-check-circle-o fa-2x text-success" aria-hidden="true"></span>
                                     @elseif($user->hasActive('0'))
-                                        <span class="fa fa-times-circle-o text-danger"aria-hidden="true"></span>
+                                        <span class="fa fa-times-circle-o fa-2x text-warning" aria-hidden="true"></span>
                                     @endif
                                 </div>
                             </div>
@@ -183,9 +183,9 @@
                                 </div>
                                 <div class="col-md-8">
                                     @if($user->hasNewsletter('1'))
-                                        <span class="fa fa-check-circle-o text-success" aria-hidden="true"></span>
+                                        <span class="fa fa-check-circle-o fa-2x text-success" aria-hidden="true"></span>
                                     @elseif($user->hasNewsletter('0'))
-                                        <span class="fa fa-times-circle-o text-danger"aria-hidden="true"></span>
+                                        <span class="fa fa-times-circle-o fa-2x text-warning" aria-hidden="true"></span>
                                     @endif
                                 </div>
                             </div>
