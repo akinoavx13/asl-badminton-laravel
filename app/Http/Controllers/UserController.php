@@ -26,7 +26,7 @@ class UserController extends Controller
 
         //user list
         $router->get('/index', [
-            'middleware' => ['auth', 'userAdmin'],
+            'middleware' => ['auth', 'admin'],
             'uses'       => 'UserController@index',
             'as'         => 'user.index',
         ]);
@@ -47,7 +47,7 @@ class UserController extends Controller
 
         //users delete
         $router->get('/delete/{user_id}', [
-            'middleware' => ['auth', 'userAdmin'],
+            'middleware' => ['auth', 'admin'],
             'uses'       => 'UserController@delete',
             'as'         => 'user.delete',
         ]);
@@ -61,14 +61,14 @@ class UserController extends Controller
 
         //users create
         $router->get('/create', [
-            'middleware' => ['auth', 'userAdmin'],
+            'middleware' => ['auth', 'admin'],
             'uses'       => 'UserController@create',
             'as'         => 'user.create',
         ]);
 
         //users store
         $router->post('/store', [
-            'middleware' => ['auth', 'userAdmin'],
+            'middleware' => ['auth', 'admin'],
             'uses'       => 'UserController@store',
             'as'         => 'user.store',
         ]);
@@ -85,6 +85,13 @@ class UserController extends Controller
             'middleware' => 'firstConnection',
             'uses'       => 'UserController@postFirstConnection',
             'as'         => 'user.post_first_connection',
+        ]);
+
+        //users send creation link again
+        $router->get('/send_creation_link/{user_id}', [
+            'middleware' => ['auth', 'admin'],
+            'uses'       => 'UserController@sendCreationLink',
+            'as'         => 'user.send_creation_link',
         ]);
 
     }
@@ -282,5 +289,24 @@ class UserController extends Controller
         }
 
         abort(401, 'Unauthorized action.');
+    }
+
+    public function sendCreationLink($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        if (canSendMail())
+        {
+            Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
+            {
+                $message->from(fromAddressMail(), fromNameMail());
+                $message->to($user->email, $user)
+                    ->subject('Création de compte AS Lectra Badminton')->cc('c.maheo@lectra.com');
+            });
+        }
+
+        flash()->success('Cree !', 'Un email lui a ete envoye.');
+
+        return redirect()->back();
     }
 }

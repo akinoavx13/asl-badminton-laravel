@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\UserController;
 
 // Authentication routes...
@@ -42,5 +43,5 @@ Route::group(['prefix' => 'user'], function () use ($router)
 
 Route::group(['prefix' => 'season'], function () use ($router)
 {
-    UserController::routes($router);
+    SeasonController::routes($router);
 });

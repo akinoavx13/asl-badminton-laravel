@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use File;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -59,7 +60,7 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
-    protected $dates = ['created_at', 'updated_at', 'birthday'];
+    protected $dates = ['created_at', 'updated_at'];
 
     public static function boot()
     {
@@ -68,7 +69,7 @@ class User extends Model implements AuthenticatableContract,
         {
             if ($instance->avatar)
             {
-                unlink(public_path() . $instance->avatar);
+                File::delete(public_path() . $instance->avatar);
             }
 
             return true;

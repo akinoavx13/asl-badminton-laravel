@@ -6,7 +6,17 @@ use App\Http\Requests;
 
 class SeasonController extends Controller
 {
-    public function routes($router)
+    public static function routes($router)
+    {
+        //season list
+        $router->get('/index', [
+            'middleware' => ['auth', 'userAdmin'],
+            'uses'       => 'SeasonController@index',
+            'as'         => 'season.index',
+        ]);
+    }
+
+    public function index()
     {
 
     }

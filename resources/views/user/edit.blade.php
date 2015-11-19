@@ -21,5 +21,5 @@
     </div>
 
     <br>
-    @include('users.form')
+    @include('user.form')
 @stop

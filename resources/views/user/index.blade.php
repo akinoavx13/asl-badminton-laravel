@@ -48,17 +48,17 @@
                                     </td>
                                     <td class="text-center">{{ $user->tshirt_size }}</td>
                                     <td class="text-center">
-                                        @if($user->lectra_relationship == 'lectra')
+                                        @if($user->hasLectraRelation('lectra'))
                                             Lectra
-                                        @elseif($user->lectra_relationship == 'child')
+                                        @elseif($user->hasLectraRelation('child'))
                                             Enfant
-                                        @elseif($user->lectra_relationship == 'conjoint')
+                                        @elseif($user->hasLectraRelation('conjoint'))
                                             Conjoint
-                                        @elseif($user->lectra_relationship == 'external')
+                                        @elseif($user->hasLectraRelation('external'))
                                             Externe
-                                        @elseif($user->lectra_relationship == 'trainee')
+                                        @elseif($user->hasLectraRelation('trainee'))
                                             Stagiaire
-                                        @elseif($user->lectra_relationship == 'subcontractor')
+                                        @elseif($user->hasLectraRelation('subcontractor'))
                                             Prestataire
                                         @endif
                                     </td>
@@ -82,10 +82,12 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($user->firstConnect)
+                                        @if($user->hasFirstConnection('1'))
                                             <div class="text-center">
-                                                <a href="#" class="btn btn-primary"><span class="fa fa-send"
-                                                                                          aria-hidden="true"></span></a>
+                                                <a href="{{ route('user.send_creation_link', $user->id) }}"
+                                                   class="btn btn-primary">
+                                                    <span class="fa fa-send" aria-hidden="true"></span>
+                                                </a>
                                             </div>
                                         @else
                                             <span class="fa fa-check-circle-o text-success" aria-hidden="true"></span>
