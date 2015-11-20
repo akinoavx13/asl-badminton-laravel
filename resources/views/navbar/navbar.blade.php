@@ -62,7 +62,22 @@
                     <ul class="nav nav-second-level">
                         <li><a href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des utilisateurs</a>
                         </li>
-                        <li><a href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer unutilisateur</a>
+                        <li><a href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer un utilisateur</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-star-half-full"></i>
+                        <span class="nav-label">Saisons</span>
+                        <span class="fa arrow"></span>
+                    </a>
+
+                    <ul class="nav nav-second-level">
+                        <li><a href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des saisons</a>
+                        </li>
+                        <li><a href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une saison</a>
                         </li>
                     </ul>
                 </li>

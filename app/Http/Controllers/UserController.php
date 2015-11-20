@@ -137,8 +137,9 @@ class UserController extends Controller
         }
         elseif ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y', $request->ending_injury) > Carbon::now())
         {
-            $user->ending_injury = $request->ending_injury;
-            $user->save();
+            $user->update([
+                'ending_injury' => $request->ending_injury,
+            ]);
         }
 
         if ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y', $request->ending_holiday) <= Carbon::now())
@@ -150,18 +151,20 @@ class UserController extends Controller
                 $request->ending_holiday) > Carbon::now()
         )
         {
-            $user->ending_holiday = $request->ending_holiday;
-            $user->save();
+            $user->update([
+                'ending_holiday' => $request->ending_holiday,
+            ]);
         }
 
         if ($this->user->hasRole('admin'))
         {
-            $user->active = $request->active;
-            $user->role = $request->role;
-            $user->save();
+            $user->update([
+                'active' => $request->active,
+                'role'   => $request->role,
+            ]);
         }
 
-        flash()->success('Sauvegarde !', '');
+        flash()->success('Sauvegardé !', '');
 
         return redirect()->route('home.index');
     }
@@ -171,7 +174,7 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
         $user->delete();
 
-        flash()->success('Supprimer !', '');
+        flash()->success('Supprimé !', '');
 
         return redirect()->back();
     }
@@ -213,7 +216,7 @@ class UserController extends Controller
             });
         }
 
-        flash()->success('Cree !', 'Un email lui a ete envoye.');
+        flash()->success('Crée !', 'Un email lui a été envoyé.');
 
         return redirect()->route('home.index');
     }
@@ -262,8 +265,9 @@ class UserController extends Controller
                     $request->ending_injury) > Carbon::now()
             )
             {
-                $user->ending_injury = $request->ending_injury;
-                $user->save();
+                $user->update([
+                    'ending_injury' => $request->ending_injury,
+                ]);
             }
 
             if ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y',
@@ -277,13 +281,14 @@ class UserController extends Controller
                     $request->ending_holiday) > Carbon::now()
             )
             {
-                $user->ending_holiday = $request->ending_holiday;
-                $user->save();
+                $user->update([
+                    'ending_holiday' => $request->ending_holiday,
+                ]);
             }
 
             Auth::login($user);
 
-            flash()->success('Compte valide !', "Le compte viens d etre creer avec sucess");
+            flash()->success('Compte crée !', "Le compte viens d'être crée avec sucèss");
 
             return redirect()->route('home.index');
         }
@@ -305,7 +310,7 @@ class UserController extends Controller
             });
         }
 
-        flash()->success('Cree !', 'Un email lui a ete envoye.');
+        flash()->success('Crée !', 'Un email lui a été envoyé.');
 
         return redirect()->back();
     }
