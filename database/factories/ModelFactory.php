@@ -38,3 +38,19 @@ $factory->define(App\User::class, function (Faker\Generator $faker)
         'token_first_connection' => str_random(60),
     ];
 });
+
+$factory->define(App\Player::class, function (Faker\Generator $faker)
+{
+    return [
+        'formula'     => 'fun',
+        'ce_state'    => 'valid',
+        'gbc_state'   => 'valid',
+        'simple'      => true,
+        'double'      => true,
+        'mixte'       => true,
+        'corpo_man'   => true,
+        'corpo_woman' => true,
+        'corpo_mixte' => true,
+        't_shirt'     => false,
+    ];
+});

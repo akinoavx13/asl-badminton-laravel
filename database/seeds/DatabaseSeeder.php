@@ -17,7 +17,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UserTableSeeder::class);
 
-        factory(App\User::class, 10)->create();
+        factory(App\User::class, 10)->create()->each(function ($user)
+        {
+            $user->players()->save(factory(App\Player::class)->make());
+        });
 
         Model::reguard();
     }

@@ -76,6 +76,11 @@ class User extends Model implements AuthenticatableContract,
         });
     }
 
+    public function players()
+    {
+        return $this->hasMany('App\Player');
+    }
+
     public function __toString()
     {
         return ucfirst($this->forname) . ' ' . ucfirst($this->name);

@@ -18,19 +18,20 @@ class CreateUsersTable extends Migration
             $table->string('forname', 60);
             $table->string('email')->unique();
             $table->date('birthday');
-            $table->string('tshirt_size', 10);
-            $table->string('gender', 10);
+            $table->enum('tshirt_size', ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XLL']);
+            $table->enum('gender', ['man', 'woman']);
             $table->string('address')->nullable();
             $table->string('phone', 60)->nullable();
             $table->string('license', 60)->nullable();
             $table->boolean('active')->default(true);
-            $table->string('state', 60)->default('active');
+            $table->enum('state', ['active', 'holiday', 'hurt', 'inactive'])->default('active');
             $table->date('ending_holiday');
             $table->date('ending_injury');
-            $table->string('lectra_relationship', 60);
+            $table->enum('lectra_relationship',
+                ['lectra', 'child', 'conjoint', 'external', 'trainee', 'subcontractor']);
             $table->boolean('newsletter')->default(false);
             $table->boolean('avatar')->default(false);
-            $table->string('role', 10);
+            $table->enum('role', ['user', 'admin']);
             $table->boolean('first_connect')->default(true);
             $table->string('password', 60);
             $table->string('token_first_connection');
