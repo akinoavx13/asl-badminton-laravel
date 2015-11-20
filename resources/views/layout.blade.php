@@ -15,6 +15,8 @@
     <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
 
+    <link href="{{ asset('css/plugins/chosen/chosen.css') }}" rel="stylesheet">
+
 </head>
 
 <body>

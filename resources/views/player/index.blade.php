@@ -16,7 +16,7 @@
 
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-4">
-                    {!! Form::select('season_id', $seasons, $season_id !== null ? $season_id : null,['class' => 'form-control']) !!}
+                    {!! Form::select('season_id', $seasons, $season_id !== null ? $season_id : null,['class' => 'chosen-select', 'style' => 'width: 320px;']) !!}
                 </div>
             </div>
 
@@ -180,4 +180,11 @@
 
         @endif
     @endif
+@stop
+
+@section('javascript')
+    <script src="{{ asset('js/plugins/chosen/chosen.jquery.js') }}"></script>
+    <script type="text/javascript">
+        $(".chosen-select").chosen()
+    </script>
 @stop
