@@ -54,3 +54,11 @@ $factory->define(App\Player::class, function (Faker\Generator $faker)
         't_shirt'     => false,
     ];
 });
+
+$factory->define(App\Season::class, function (Faker\Generator $faker)
+{
+    return [
+        'name'   => $faker->date('Y'),
+        'active' => false,
+    ];
+});

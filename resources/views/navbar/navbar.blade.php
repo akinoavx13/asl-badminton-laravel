@@ -74,7 +74,8 @@
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
-                        <li><a href="{{ route('player.index') }}"><i class="fa fa-list"></i>Liste des joueurs</a></li>
+                        <li><a href="{{ route('player.index', null) }}"><i class="fa fa-list"></i>Liste des joueurs</a>
+                        </li>
                     </ul>
                 </li>
 

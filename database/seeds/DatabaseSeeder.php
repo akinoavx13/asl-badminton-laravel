@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             $user->players()->save(factory(App\Player::class)->make());
         });
 
+        $this->call(SeasonTableSeeder::class);
+
         Model::reguard();
     }
 }

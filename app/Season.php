@@ -25,6 +25,11 @@ class Season extends Model
         return $this->name;
     }
 
+    public function players()
+    {
+        return $this->belongsToMany('App\Player');
+    }
+
     /******************/
     /*      Has       */
     /******************/

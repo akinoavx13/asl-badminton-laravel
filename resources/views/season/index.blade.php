@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Liste des utilisateurs
+    Liste des saisons
 @stop
 
 @section('content')

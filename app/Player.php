@@ -29,6 +29,11 @@ class Player extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function seasons()
+    {
+        return $this->belongsToMany('App\Season');
+    }
+
     /******************/
     /*      Has       */
     /******************/
@@ -81,6 +86,17 @@ class Player extends Model
     public function hasTShirt($t_shirt)
     {
         return $this->t_shirt === $t_shirt;
+    }
+
+    /******************/
+    /*      Scope     */
+    /******************/
+
+    public function scopeSeason($query, $season_id)
+    {
+        $query->join('player_season', 'player_season.player_id', '=', 'players.id')
+            ->join('seasons', 'seasons.id', '=', 'player_season.season_id')
+            ->where('seasons.id', $season_id);
     }
 
 }
