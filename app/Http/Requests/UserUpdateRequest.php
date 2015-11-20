@@ -41,7 +41,7 @@ class UserUpdateRequest extends Request
             'gender'              => 'required|in:man,woman',
             'state'               => 'required|in:hurt,holiday,active,inactive',
             'lectra_relationship' => 'required|in:lectra,child,conjoint,external,trainee,subcontractor',
-            'newsletter'          => 'required|in:0,1',
+            'newsletter'     => 'required|boolean',
             'avatar'         => 'image',
             'ending_holiday' => 'required_if:active,holiday|date_format:d/m/Y',
             'ending_injury'  => 'required_if:active,hurt|date_format:d/m/Y',

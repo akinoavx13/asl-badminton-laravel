@@ -36,17 +36,19 @@
                                             {{ $season->name }}
                                         </td>
                                         <td class="text-center">
-                                            @if($season->hasActive('1'))
-                                                <span class="fa fa-check-circle-o text-success" aria-hidden="true"></span>
-                                            @else
-                                                <span class="fa fa-times-circle-o text-danger"
+                                            @if($season->hasActive(true))
+                                                <span class="fa fa-check-circle-o fa-2x text-success"
+                                                      aria-hidden="true"></span>
+                                            @elseif($season->hasActive(false))
+                                                <span class="fa fa-times-circle-o fa-2x text-danger"
                                                       aria-hidden="true"></span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            @if($season->hasActive('1'))
-                                                <span class="fa fa-check-circle-o text-success" aria-hidden="true"></span>
-                                            @else
+                                            @if($season->hasActive(true))
+                                                <span class="fa fa-check-circle-o fa-2x text-success"
+                                                      aria-hidden="true"></span>
+                                            @elseif($season->hasActive(false))
                                                 <a href="{{ route('season.change_active_attribute', $season->id) }}" class="btn btn-primary">Devenir active</a>
                                             @endif
                                         </td>

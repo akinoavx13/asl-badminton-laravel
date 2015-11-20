@@ -69,6 +69,17 @@
 
                 <li>
                     <a href="#">
+                        <i class="fa fa-group"></i>
+                        <span class="nav-label">Joueurs</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="{{ route('player.index') }}"><i class="fa fa-list"></i>Liste des joueurs</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#">
                         <i class="fa fa-star-half-full"></i>
                         <span class="nav-label">Saisons</span>
                         <span class="fa arrow"></span>
@@ -81,6 +92,7 @@
                         </li>
                     </ul>
                 </li>
+
             @endif
 
         </ul>

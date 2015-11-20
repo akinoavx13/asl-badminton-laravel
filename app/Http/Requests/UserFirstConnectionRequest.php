@@ -17,7 +17,7 @@ class UserFirstConnectionRequest extends Request
         $token_first_connection = $this->route()->getParameter('token_first_connection');
         $user = User::where('id', $user_id)->where('token_first_connection', $token_first_connection)->first();
 
-        if ($user !== null && $user->hasFirstConnection('1'))
+        if ($user !== null && $user->hasFirstConnection(true))
         {
             return true;
         }
@@ -43,7 +43,7 @@ class UserFirstConnectionRequest extends Request
             'gender'              => 'required|in:man,woman',
             'state'               => 'required|in:hurt,holiday,active,inactive',
             'lectra_relationship' => 'required|in:lectra,child,conjoint,external,trainee,subcontractor',
-            'newsletter'          => 'required|in:0,1',
+            'newsletter' => 'required|boolean',
             'avatar'              => 'image',
             'ending_holiday'      => 'date_format:d/m/Y|required_if:active,holiday',
             'ending_injury'       => 'date_format:d/m/Y|required_if:active,hurt',

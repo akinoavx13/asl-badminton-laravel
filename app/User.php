@@ -19,18 +19,8 @@ class User extends Model implements AuthenticatableContract,
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'users';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'forname',
@@ -53,12 +43,13 @@ class User extends Model implements AuthenticatableContract,
         'token_first_connection',
     ];
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
     protected $hidden = ['password', 'remember_token'];
+
+    protected $casts = [
+        'active'           => 'boolean',
+        'newsletter'       => 'boolean',
+        'first_connection' => 'boolean',
+    ];
 
     protected $dates = ['created_at', 'updated_at'];
 
@@ -85,6 +76,10 @@ class User extends Model implements AuthenticatableContract,
     {
         return ucfirst($this->forname) . ' ' . ucfirst($this->name);
     }
+
+    /******************/
+    /*      Has       */
+    /******************/
 
     public function hasRole($role)
     {
@@ -126,26 +121,20 @@ class User extends Model implements AuthenticatableContract,
         return $this->first_connect === $firstConnection;
     }
 
+    public function hasAvatar($avatar)
+    {
+        return $this->attributes['avatar'] === $avatar;
+    }
+
+    /******************/
+    /*  GET SET ATT   */
+    /******************/
+
     public function getBirthdayAttribute($birthday)
     {
         $date = Carbon::createFromFormat('Y-m-d', $birthday);
 
         return $date->format('d/m/Y');
-    }
-
-    public function getBirthday()
-    {
-        return Carbon::createFromFormat('Y-m-d', $this->attributes['birthday']);
-    }
-
-    public function getEndingInjury()
-    {
-        return Carbon::createFromFormat('Y-m-d', $this->attributes['ending_injury']);
-    }
-
-    public function getEndingHoliday()
-    {
-        return Carbon::createFromFormat('Y-m-d', $this->attributes['ending_holiday']);
     }
 
     public function setBirthdayAttribute($birthday)
@@ -177,6 +166,16 @@ class User extends Model implements AuthenticatableContract,
         $this->attributes['ending_holiday'] = Carbon::createFromFormat('d/m/Y', $ending_holiday)->format('Y-m-d');
     }
 
+    public function getAvatarAttribute($avatar)
+    {
+        if ($avatar)
+        {
+            return "/img/avatars/{$this->id}.jpg";
+        }
+
+        return false;
+    }
+
     public function setAvatarAttribute($avatar)
     {
         if (is_object($avatar) && $avatar->isValid())
@@ -186,18 +185,22 @@ class User extends Model implements AuthenticatableContract,
         }
     }
 
-    public function getAvatarAttribute()
-    {
-        if ($this->hasAvatar("1"))
-        {
-            return "/img/avatars/{$this->id}.jpg";
-        }
+    /******************/
+    /*     Getters    */
+    /******************/
 
-        return false;
+    public function getBirthday()
+    {
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['birthday']);
     }
 
-    public function hasAvatar($avatar)
+    public function getEndingInjury()
     {
-        return $this->attributes['avatar'] === $avatar;
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['ending_injury']);
+    }
+
+    public function getEndingHoliday()
+    {
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['ending_holiday']);
     }
 }

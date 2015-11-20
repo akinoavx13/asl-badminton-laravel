@@ -167,9 +167,9 @@
                                     <label>Actif:</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @if($user->hasActive('1'))
+                                    @if($user->hasActive(true))
                                         <span class="fa fa-check-circle-o fa-2x text-success" aria-hidden="true"></span>
-                                    @elseif($user->hasActive('0'))
+                                    @elseif($user->hasActive(false))
                                         <span class="fa fa-times-circle-o fa-2x text-warning" aria-hidden="true"></span>
                                     @endif
                                 </div>
@@ -182,9 +182,9 @@
                                     <label>Newsletter:</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @if($user->hasNewsletter('1'))
+                                    @if($user->hasNewsletter(true))
                                         <span class="fa fa-check-circle-o fa-2x text-success" aria-hidden="true"></span>
-                                    @elseif($user->hasNewsletter('0'))
+                                    @elseif($user->hasNewsletter(false))
                                         <span class="fa fa-times-circle-o fa-2x text-warning" aria-hidden="true"></span>
                                     @endif
                                 </div>

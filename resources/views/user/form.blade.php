@@ -208,13 +208,13 @@
                         <div class="col-md-9">
                             <div class="radio-inline">
                                 <label>
-                                    {!! Form::radio('newsletter', '1', $user->exists ? $user->hasNewsletter('1') ? true : false : false, ['required']) !!}
+                                    {!! Form::radio('newsletter', '1', $user->exists ? $user->hasNewsletter(true) ? true : false : false, ['required']) !!}
                                     Oui
                                 </label>
                             </div>
                             <div class="radio-inline">
                                 <label>
-                                    {!! Form::radio('newsletter', '0', $user->exists ? $user->hasNewsletter('0') ? true : false : false, ['required']) !!}
+                                    {!! Form::radio('newsletter', '0', $user->exists ? $user->hasNewsletter(false) ? true : false : false, ['required']) !!}
                                     Non
                                 </label>
                             </div>
@@ -249,13 +249,13 @@
                                     <div class="col-md-9">
                                         <div class="radio-inline">
                                             <label>
-                                                {!! Form::radio('active', '1', $user->exists ? $user->hasActive('1') ? true : false : false, ['required']) !!}
+                                                {!! Form::radio('active', '1', $user->exists ? $user->hasActive(true) ? true : false : false, ['required']) !!}
                                                 Oui
                                             </label>
                                         </div>
                                         <div class="radio-inline">
                                             <label>
-                                                {!! Form::radio('active', '0', $user->exists ? $user->hasActive('0') ? true : false : false, ['required']) !!}
+                                                {!! Form::radio('active', '0', $user->exists ? $user->hasActive(false) ? true : false : false, ['required']) !!}
                                                 Non
                                             </label>
                                         </div>

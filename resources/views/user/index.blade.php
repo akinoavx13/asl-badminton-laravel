@@ -16,7 +16,7 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Prénom</th>
@@ -64,11 +64,11 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            @if($user->hasNewsletter('1'))
-                                                <span class="fa fa-check-circle-o text-success"
+                                            @if($user->hasNewsletter(true))
+                                                <span class="fa fa-check-circle-o fa-2x text-success"
                                                       aria-hidden="true"></span>
-                                            @else
-                                                <span class="fa fa-times-circle-o text-danger"
+                                            @elseif($user->hasNewsletter(false))
+                                                <span class="fa fa-times-circle-o fa-2x text-danger"
                                                       aria-hidden="true"></span>
                                             @endif
                                         </td>
@@ -84,15 +84,15 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            @if($user->hasFirstConnection('1'))
+                                            @if($user->hasFirstConnection(true))
                                                 <div class="text-center">
                                                     <a href="{{ route('user.send_creation_link', $user->id) }}"
                                                        class="btn btn-primary">
                                                         <span class="fa fa-send" aria-hidden="true"></span>
                                                     </a>
                                                 </div>
-                                            @else
-                                                <span class="fa fa-check-circle-o text-success"
+                                            @elseif($user->hasFirstConnection(false))
+                                                <span class="fa fa-check-circle-o fa-2x text-success"
                                                       aria-hidden="true"></span>
                                             @endif
                                         </td>

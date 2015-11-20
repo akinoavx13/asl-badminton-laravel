@@ -127,7 +127,7 @@ class SeasonController extends Controller
 
         foreach ($seasons as $season)
         {
-            if ($season->hasActive('1'))
+            if ($season->hasActive(true))
             {
                 $season->update([
                     'active' => false,
