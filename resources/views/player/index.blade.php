@@ -122,9 +122,7 @@
                                                 @if($player->hasCeState('contribution_payable'))
                                                     <i class="text-danger">Contribution à payer</i>
                                                 @elseif($player->hasCeState('contribution_paid'))
-                                                    i class="text-success">Contribution payée</i>
-                                                @elseif($player->hasCeState('valid'))
-                                                    <i class="text-success">Valide</i>
+                                                    <i class="text-success">Contribution payée</i>
                                                 @endif
                                             </td>
                                             <td class="text-center">
@@ -155,13 +153,14 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                <a href=""
+                                                <a href="{{ route('player.edit', $player->id) }}"
                                                    class="btn btn-info dim">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <a href="" class="btn btn-danger dim">
+                                                <a href="{{ route('player.delete', $player->id) }}"
+                                                   class="btn btn-danger dim">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>
                                             </td>
@@ -185,6 +184,6 @@
 @section('javascript')
     <script src="{{ asset('js/plugins/chosen/chosen.jquery.js') }}"></script>
     <script type="text/javascript">
-        $(".chosen-select").chosen()
+        $(".chosen-select").chosen();
     </script>
 @stop

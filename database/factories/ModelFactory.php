@@ -43,7 +43,7 @@ $factory->define(App\Player::class, function (Faker\Generator $faker)
 {
     return [
         'formula'     => 'fun',
-        'ce_state'    => 'valid',
+        'ce_state' => 'contribution_paid',
         'gbc_state'   => 'valid',
         'simple'      => true,
         'double'      => true,

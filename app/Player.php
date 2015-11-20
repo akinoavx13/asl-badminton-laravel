@@ -9,7 +9,16 @@ class Player extends Model
     protected $table = 'players';
 
     protected $fillable = [
-
+        'formula',
+        'ce_state',
+        'gbc_state',
+        'simple',
+        'double',
+        'mixte',
+        'corpo_man',
+        'corpo_woman',
+        'corpo_mixte',
+        't_shirt',
     ];
 
     protected $casts = [
@@ -23,6 +32,11 @@ class Player extends Model
     ];
 
     protected $dates = ['created_at', 'updated_at'];
+
+    public function __toString()
+    {
+        return $this->user->__toString();
+    }
 
     public function user()
     {

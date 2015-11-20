@@ -31,7 +31,7 @@ class PlayerListRequest extends Request
     public function rules()
     {
         return [
-            //
+            'season_id' => 'exists:seasons,id',
         ];
     }
 }
