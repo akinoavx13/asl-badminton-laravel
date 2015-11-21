@@ -31,7 +31,9 @@ class SeasonUpdateRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|unique:seasons,name',
+            'season_id' => 'required|exists:seasons,id',
+            'name'      => 'required|unique:seasons,name,' . $this->season_id,
+            'active'    => 'required|boolean',
         ];
     }
 }

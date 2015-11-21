@@ -46,8 +46,8 @@
                                         </td>
                                         <td class="text-center">
                                             @if($season->hasActive(true))
-                                                <span class="fa fa-check-circle-o fa-2x text-success"
-                                                      aria-hidden="true"></span>
+                                                <a href="{{ route('season.change_active_attribute', $season->id) }}"
+                                                   class="btn btn-warning">Devenir inactive</a>
                                             @elseif($season->hasActive(false))
                                                 <a href="{{ route('season.change_active_attribute', $season->id) }}" class="btn btn-primary">Devenir active</a>
                                             @endif

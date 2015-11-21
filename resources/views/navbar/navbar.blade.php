@@ -51,6 +51,20 @@
                 </a>
             </li>
 
+            <li>
+                <a href="#">
+                    <i class="fa fa-ticket"></i>
+                    <span class="nav-label">Inscriptions</span>
+                    <span class="fa arrow"></span>
+                </a>
+
+                <ul class="nav nav-second-level">
+                    <li><a href=""><i class="fa fa-list"></i>Voir la liste de mes inscriptions</a></li>
+                    <li><a href="{{ route('player.create') }}"><i class="fa fa-plus"></i>S'inscrire à une saison</a>
+                    </li>
+                </ul>
+            </li>
+
             @if($auth->hasRole('admin'))
                 <li>
                     <a href="#">
@@ -87,10 +101,8 @@
                     </a>
 
                     <ul class="nav nav-second-level">
-                        <li><a href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des saisons</a>
-                        </li>
-                        <li><a href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une saison</a>
-                        </li>
+                        <li><a href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des saisons</a></li>
+                        <li><a href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une saison</a></li>
                     </ul>
                 </li>
 

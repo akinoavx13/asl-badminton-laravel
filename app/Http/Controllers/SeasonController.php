@@ -83,7 +83,8 @@ class SeasonController extends Controller
         $season = Season::findOrFail($season_id);
 
         $season->update([
-            'name' => $request->name,
+            'name'   => $request->name,
+            'active' => $request->active,
         ]);
 
         flash()->success('Sauvegardée !', '');
@@ -112,7 +113,7 @@ class SeasonController extends Controller
     {
         Season::create([
             'name'   => $request->name,
-            'active' => false,
+            'active' => $request->active,
         ]);
 
         flash()->success('Créée !', '');
@@ -122,22 +123,9 @@ class SeasonController extends Controller
 
     public function changeActiveAttribute($season_id)
     {
-
-        $seasons = Season::all();
-
-        foreach ($seasons as $season)
-        {
-            if ($season->hasActive(true))
-            {
-                $season->update([
-                    'active' => false,
-                ]);
-            }
-        }
-
         $season = Season::findOrFail($season_id);
         $season->update([
-            'active' => true,
+            'active' => $season->hasActive(true) ? false : true,
         ]);
 
         flash()->success('Sauvegardée !', '');

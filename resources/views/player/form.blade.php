@@ -10,12 +10,16 @@
             </div>
             <div class="ibox-content">
 
-                {!! Form::open(['route' => ['player.update', $player->id], 'class' => 'form-horizontal']) !!}
+                @if(!$player->exists)
+                    {!! Form::open(['route' => ['player.store'], 'class' => 'form-horizontal']) !!}
+                @else
+                    {!! Form::open(['route' => ['player.update', $player->id], 'class' => 'form-horizontal']) !!}
+                @endif
                 {!! Form::token() !!}
 
                 @if($player->exists && $player->hasCeState('contribution_paid'))
                     <input name="formula" type="hidden" value="{{ $player->formula }}">
-                    <input name="t_shirt" type="hidden" value="{{ $player->t_shirt }}">
+                    <input name="t_shirt" type="hidden" value="{{ $player->hasTShirt(true) ? '1' : '0' }}">
                 @endif
 
                 <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
@@ -27,10 +31,8 @@
                             <i class="text-navy">*</i>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-md-4 col-md-offset-4">
-                                {!! Form::select('season_id', $seasons, $season_id !== null ? $season_id : null,['class' => 'chosen-select', 'style' => 'width: 320px;']) !!}
-                            </div>
+                        <div class="col-md-9">
+                            {!! Form::select('season_id', $seasons, old('season_id'),['class' => 'form-control', 'required']) !!}
                         </div>
                     </div>
                 @endif
@@ -62,7 +64,7 @@
                         </div>
                         <div class="radio-inline">
                             <label>
-                                {!! Form::radio('t_shirt', '0', $player->exists ? $player->hasTShirt(false) ? true : false : false, [$player->exists && $player->hasCeState('contribution_paid') ? 'disabled' : 'required']) !!}
+                                {!! Form::radio('t_shirt', '0', $player->exists ? $player->hasTShirt(false) ? true : false : true, [$player->exists && $player->hasCeState('contribution_paid') ? 'disabled' : 'required']) !!}
                                 Non
                             </label>
                         </div>
@@ -92,7 +94,7 @@
                                 </div>
                                 <div class="radio-inline">
                                     <label>
-                                        {!! Form::radio('simple', '0', $player->exists ? $player->hasSimple(false) ? true : false : false, ['required']) !!}
+                                        {!! Form::radio('simple', '0', $player->exists ? $player->hasSimple(false) ? true : false : true, ['required']) !!}
                                         Non
                                     </label>
                                 </div>
@@ -114,7 +116,7 @@
                                 </div>
                                 <div class="radio-inline">
                                     <label>
-                                        {!! Form::radio('double', '0', $player->exists ? $player->hasDouble(false) ? true : false : false, ['required']) !!}
+                                        {!! Form::radio('double', '0', $player->exists ? $player->hasDouble(false) ? true : false : true, ['required']) !!}
                                         Non
                                     </label>
                                 </div>
@@ -136,7 +138,7 @@
                                 </div>
                                 <div class="radio-inline">
                                     <label>
-                                        {!! Form::radio('mixte', '0', $player->exists ? $player->hasMixte(false) ? true : false : false, ['required']) !!}
+                                        {!! Form::radio('mixte', '0', $player->exists ? $player->hasMixte(false) ? true : false : true, ['required']) !!}
                                         Non
                                     </label>
                                 </div>
@@ -169,7 +171,7 @@
                                 </div>
                                 <div class="radio-inline">
                                     <label>
-                                        {!! Form::radio('corpo_man', '0', $player->exists ? $player->hasCorpoMan(false) ? true : false : false, ['required']) !!}
+                                        {!! Form::radio('corpo_man', '0', $player->exists ? $player->hasCorpoMan(false) ? true : false : true, ['required']) !!}
                                         Non
                                     </label>
                                 </div>
@@ -191,7 +193,7 @@
                                 </div>
                                 <div class="radio-inline">
                                     <label>
-                                        {!! Form::radio('corpo_woman', '0', $player->exists ? $player->hasCorpoWoman(false) ? true : false : false, ['required']) !!}
+                                        {!! Form::radio('corpo_woman', '0', $player->exists ? $player->hasCorpoWoman(false) ? true : false : true, ['required']) !!}
                                         Non
                                     </label>
                                 </div>
@@ -213,7 +215,7 @@
                                 </div>
                                 <div class="radio-inline">
                                     <label>
-                                        {!! Form::radio('corpo_mixte', '0', $player->exists ? $player->hasCorpoMixte(false) ? true : false : false, ['required']) !!}
+                                        {!! Form::radio('corpo_mixte', '0', $player->exists ? $player->hasCorpoMixte(false) ? true : false : true, ['required']) !!}
                                         Non
                                     </label>
                                 </div>

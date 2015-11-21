@@ -30,7 +30,8 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'admin' => \App\Http\Middleware\UserAdmin::class,
-        'owner' => \App\Http\Middleware\Owner::class,
+        'userOwner'   => \App\Http\Middleware\UserOwner::class,
+        'playerOwner' => \App\Http\Middleware\PlayerOwner::class,
         'firstConnection' => \App\Http\Middleware\FirstConnection::class,
     ];
 }

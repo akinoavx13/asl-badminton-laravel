@@ -33,14 +33,14 @@ class UserController extends Controller
 
         //users edit
         $router->get('/edit/{user_id}', [
-            'middleware' => ['auth', 'owner'],
+            'middleware' => ['auth', 'userOwner'],
             'uses'       => 'UserController@edit',
             'as'         => 'user.edit',
         ]);
 
         //users update
         $router->post('/edit/{user_id}', [
-            'middleware' => ['auth', 'owner'],
+            'middleware' => ['auth', 'userOwner'],
             'uses'       => 'UserController@update',
             'as'         => 'user.update',
         ]);

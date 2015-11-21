@@ -31,7 +31,8 @@ class SeasonStoreRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|unique:seasons,name',
+            'name'   => 'required|unique:seasons,name',
+            'active' => 'required|boolean',
         ];
     }
 }

@@ -19,6 +19,7 @@ class Player extends Model
         'corpo_woman',
         'corpo_mixte',
         't_shirt',
+        'user_id',
     ];
 
     protected $casts = [

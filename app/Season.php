@@ -39,4 +39,13 @@ class Season extends Model
         return $this->active === $active;
     }
 
+    /******************/
+    /*      Scope     */
+    /******************/
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
+
 }

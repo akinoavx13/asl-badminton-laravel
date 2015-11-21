@@ -14,6 +14,7 @@
 
                 @if($season->exists)
                     {!! Form::open(['route' => ['season.update', $season->id], 'class' => 'form-horizontal']) !!}
+                    <input name="season_id" type="hidden" value="{{ $season->id }}">
                 @else
                     {!! Form::open(['route' => 'season.store', 'class' => 'form-horizontal']) !!}
                 @endif
@@ -28,6 +29,28 @@
                     </div>
                     <div class="col-md-9">
                         {!! Form::text('name', $season->exists ? $season->name : old('name'), ['class' => 'form-control', 'required']) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('active', 'Active :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="radio-inline">
+                            <label>
+                                {!! Form::radio('active', '1', $season->exists ? $season->hasActive(true) ? true : false : old('active'), ['required']) !!}
+                                Oui
+                            </label>
+                        </div>
+                        <div class="radio-inline">
+                            <label>
+                                {!! Form::radio('active', '0', $season->exists ? $season->hasActive(false) ? true : false : old('active'), ['required']) !!}
+                                Non
+                            </label>
+                        </div>
                     </div>
                 </div>
 
