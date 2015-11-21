@@ -14,6 +14,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 
 // Authentication routes...
@@ -50,4 +51,9 @@ Route::group(['prefix' => 'season'], function () use ($router)
 Route::group(['prefix' => 'player'], function () use ($router)
 {
     PlayerController::routes($router);
+});
+
+Route::group(['prefix' => 'setting'], function () use ($router)
+{
+    SettingController::routes($router);
 });

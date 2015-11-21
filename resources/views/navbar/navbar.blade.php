@@ -44,6 +44,63 @@
                     </ul>
                 </div>
             </li>
+
+            @if($auth->hasRole('admin'))
+
+                <li>
+                    <a href="{{ route('setting.index') }}">
+                        <i class="fa fa-cogs text-success"></i>
+                        <span class="nav-label">Paramètres</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-user text-success"></i>
+                        <span class="nav-label">Utilisateurs</span>
+                        <span class="fa arrow"></span>
+                    </a>
+
+                    <ul class="nav nav-second-level">
+                        <li><a href="{{ route('user.index') }}"><i class="fa fa-list text-success"></i>Liste des
+                                utilisateurs</a>
+                        </li>
+                        <li><a href="{{ route('user.create') }}"><i class="fa fa-user-plus text-success"></i>Créer un
+                                utilisateur</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-group text-success"></i>
+                        <span class="nav-label">Joueurs</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="{{ route('player.index', null) }}"><i class="fa fa-list text-success"></i>Liste des
+                                joueurs</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-star-half-full text-success"></i>
+                        <span class="nav-label">Saisons</span>
+                        <span class="fa arrow"></span>
+                    </a>
+
+                    <ul class="nav nav-second-level">
+                        <li><a href="{{ route('season.index') }}"><i class="fa fa-list text-success"></i>Liste des
+                                saisons</a></li>
+                        <li><a href="{{ route('season.create') }}"><i class="fa fa-plus text-success"></i>Créer une
+                                saison</a></li>
+                    </ul>
+                </li>
+
+            @endif
+
             <li>
                 <a href="{{ route('home.index') }}">
                     <i class="fa fa-home"></i>
@@ -64,49 +121,6 @@
                     </li>
                 </ul>
             </li>
-
-            @if($auth->hasRole('admin'))
-                <li>
-                    <a href="#">
-                        <i class="fa fa-user"></i>
-                        <span class="nav-label">Utilisateurs</span>
-                        <span class="fa arrow"></span>
-                    </a>
-
-                    <ul class="nav nav-second-level">
-                        <li><a href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des utilisateurs</a>
-                        </li>
-                        <li><a href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer un utilisateur</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="#">
-                        <i class="fa fa-group"></i>
-                        <span class="nav-label">Joueurs</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li><a href="{{ route('player.index', null) }}"><i class="fa fa-list"></i>Liste des joueurs</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="#">
-                        <i class="fa fa-star-half-full"></i>
-                        <span class="nav-label">Saisons</span>
-                        <span class="fa arrow"></span>
-                    </a>
-
-                    <ul class="nav nav-second-level">
-                        <li><a href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des saisons</a></li>
-                        <li><a href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une saison</a></li>
-                    </ul>
-                </li>
-
-            @endif
 
         </ul>
     </div>

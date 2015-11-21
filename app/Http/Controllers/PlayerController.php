@@ -7,6 +7,7 @@ use App\Http\Requests\PlayerStoreRequest;
 use App\Http\Requests\PlayerUpdateRequest;
 use App\Player;
 use App\Season;
+use App\Setting;
 use DB;
 
 
@@ -60,27 +61,57 @@ class PlayerController extends Controller
 
         //player create
         $router->get('/create', [
-            'middleware' => 'auth',
+            'middleware' => ['auth', 'enrollOpen'],
             'uses'       => 'PlayerController@create',
             'as'         => 'player.create',
         ]);
 
         //player store
         $router->post('/create', [
-            'middleware' => 'auth',
+            'middleware' => ['auth', 'enrollOpen'],
             'uses'       => 'PlayerController@store',
             'as'         => 'player.store',
+        ]);
+
+        //player change ce_state to contribution_paid
+        $router->get('/ce_state/contribution_paid/{player_id}', [
+            'middleware' => ['auth', 'admin'],
+            'uses'       => 'PlayerController@changeCeStateToContributionPaid',
+            'as'         => 'player.ce_stateTocontribution_paid',
+        ]);
+
+        //player change gbc_state to valid
+        $router->get('/gbc_state/valid/{player_id}', [
+            'middleware' => ['auth', 'admin'],
+            'uses'       => 'PlayerController@changeGbcStateToValid',
+            'as'         => 'player.gbc_stateTocontribution_paid',
         ]);
     }
 
     public function index(PlayerListRequest $request)
     {
+        $season = null;
         $players = [];
-        $season_id = null;
-
         if ($request->exists('season_id'))
         {
-            $season_id = $request->season_id;
+            $season = Season::findOrFail($request->season_id);
+
+            $season_id = $season !== null ? $season->id : null;
+
+            $players = Player::with('user')
+                ->select('players.*')
+                ->season($season_id)
+                ->join('users', 'users.id', '=', 'players.user_id')
+                ->orderBy('users.forname', 'asc')
+                ->orderBy('users.name', 'asc')
+                ->get();
+        }
+        else
+        {
+            $season = Season::active()->first();
+
+            $season_id = $season !== null ? $season->id : null;
+
             $players = Player::with('user')
                 ->select('players.*')
                 ->season($season_id)
@@ -91,7 +122,7 @@ class PlayerController extends Controller
         }
         $seasons = Season::orderBy('created_at', 'desc')->lists('name', 'id');
 
-        return view('player.index', compact('players', 'seasons', 'season_id'));
+        return view('player.index', compact('players', 'seasons', 'season'));
     }
 
     public function delete($player_id)
@@ -99,16 +130,15 @@ class PlayerController extends Controller
         $player = Player::findOrFail($player_id);
         $player->delete();
 
-        flash()->success('Supprimé !', '');
-
-        return redirect()->back();
+        return redirect()->route('player.index')->with('success', "Le joueur $player a été supprimé !");
     }
 
     public function edit($player_id)
     {
         $player = Player::findOrFail($player_id);
+        $setting = Setting::first();
 
-        return view('player.edit', compact('player'));
+        return view('player.edit', compact('player', 'setting'));
     }
 
     public function update(PlayerUpdateRequest $request, $player_id)
@@ -134,23 +164,20 @@ class PlayerController extends Controller
             'corpo_mixte' => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
         ]);
 
-        flash()->success('Sauvegardée !', '');
-
-        return redirect()->route('home.index');
+        return redirect()->route('home.index')->with('success', "Le joueur $player a été modifié !");
     }
 
     public function create()
     {
         $player = new Player();
-
+        $setting = Setting::first();
         $seasons = Season::active()->lists('name', 'id');
 
-        return view('player.create', compact('player', 'seasons'));
+        return view('player.create', compact('player', 'seasons', 'setting'));
     }
 
     public function store(PlayerStoreRequest $request)
     {
-
         $numberOfPlayerForUserInSelectedSeason = Player::select('players.*')
             ->season($request->season_id)
             ->where('user_id', $this->user->id)
@@ -181,9 +208,7 @@ class PlayerController extends Controller
             'season_id' => $request->season_id,
         ]);
 
-        flash()->success('Créée !', '');
-
-        return redirect()->route('home.index');
+        return redirect()->route('home.index')->with('success', "Le joueur $player vient d'être crée !");
     }
 
     private function onPlayerCreateChoseGbc_state($request)
@@ -205,5 +230,38 @@ class PlayerController extends Controller
         }
 
         return 'non_applicable';
+    }
+
+    public function changeCeStateToContributionPaid($player_id)
+    {
+        $player = Player::findOrFail($player_id);
+
+        if ($player->hasCeState('contribution_payable'))
+        {
+            $player->update([
+                'ce_state' => 'contribution_paid',
+            ]);
+
+            return redirect()->route('player.index')->with('success', "Le joueur $player a payé sa cotisation !");
+        }
+
+        return redirect()->route('player.index')->with('error', "Le joueur $player a déjà payé sa cotisation !");
+    }
+
+    public function changeGbcStateToValid($player_id)
+    {
+        $player = Player::findOrFail($player_id);
+
+        if ($player->hasGbcState('entry_must'))
+        {
+            $player->update([
+                'gbc_state' => 'valid',
+            ]);
+
+            return redirect()->route('player.index')->with('success', "Le joueur $player a son dossier GBC valide !");
+        }
+
+        return redirect()->route('player.index')->with('error',
+            "Le joueur $player est non applicable ou il a déjà validé son dossier!");
     }
 }

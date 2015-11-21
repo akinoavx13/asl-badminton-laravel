@@ -1,34 +1,57 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Maxime
- * Date: 14/11/2015
- * Time: 17:45
- */
 
-function flash($title = null, $message = null)
+namespace App;
+
+class Helpers
 {
-    $flash = app('App\Http\Utilities\FlashAlert');
 
-    if (func_num_args() == 0)
+    private static $instance;
+    private $setting;
+
+    public function __construct()
     {
-        return $flash;
+        $this->setting = Setting::first();
     }
 
-    return $flash->info($title, $message);
-}
+    public static function getInstance()
+    {
+        if (self::$instance === null)
+        {
+            self::$instance = new self();
+        }
 
-function canSendMail()
-{
-    return env('APP_ENV') === 'prod' || env('APP_ENV') === 'local';
-}
+        return self::$instance;
+    }
 
-function fromAddressMail()
-{
-    return env('MAIL_FROM_ADDRESS');
-}
+    public function flash($title = null, $message = null)
+    {
+        $flash = app('App\Http\Utilities\FlashAlert');
 
-function fromNameMail()
-{
-    return env('MAIL_FROM_NAME');
+        if (func_num_args() == 0)
+        {
+            return $flash;
+        }
+
+        return $flash->info($title, $message);
+    }
+
+    public function canSendMail()
+    {
+        return env('APP_ENV') === 'prod' || env('APP_ENV') === 'local';
+    }
+
+    public function fromAddressMail()
+    {
+        return $this->setting->web_site_email;
+    }
+
+    public function fromNameMail()
+    {
+        return $this->setting->web_site_name;
+    }
+
+    public function ccMail()
+    {
+        return $this->setting->cc_email;
+    }
 }

@@ -58,13 +58,13 @@
                     <div class="col-md-9">
                         <div class="radio-inline">
                             <label>
-                                {!! Form::radio('t_shirt', '1', $player->exists ? $player->hasTShirt(true) ? true : false : false, [$player->exists && $player->hasCeState('contribution_paid') ? 'disabled' : 'required']) !!}
+                                {!! Form::radio('t_shirt', '1', $player->exists ? $player->hasTShirt(true) ? true : false : false, [$player->exists && $player->hasCeState('contribution_paid') || $setting !== null && $setting->hasBuyTShirt(false) ? 'disabled' : 'required']) !!}
                                 Oui
                             </label>
                         </div>
                         <div class="radio-inline">
                             <label>
-                                {!! Form::radio('t_shirt', '0', $player->exists ? $player->hasTShirt(false) ? true : false : true, [$player->exists && $player->hasCeState('contribution_paid') ? 'disabled' : 'required']) !!}
+                                {!! Form::radio('t_shirt', '0', $player->exists ? $player->hasTShirt(false) ? true : false : true, [$player->exists && $player->hasCeState('contribution_paid') || $setting !== null && $setting->hasBuyTShirt(false) ? 'disabled' : 'required']) !!}
                                 Non
                             </label>
                         </div>

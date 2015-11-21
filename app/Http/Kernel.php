@@ -33,5 +33,7 @@ class Kernel extends HttpKernel
         'userOwner'   => \App\Http\Middleware\UserOwner::class,
         'playerOwner' => \App\Http\Middleware\PlayerOwner::class,
         'firstConnection' => \App\Http\Middleware\FirstConnection::class,
+        'enrollOpen'    => \App\Http\Middleware\EnrollOpen::class,
+        'settingExists' => \App\Http\Middleware\SettingExists::class,
     ];
 }

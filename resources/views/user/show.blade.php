@@ -36,18 +36,6 @@
                     <li>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Anniversaire:</label>
-                            </div>
-                            <div class="col-md-8">
-                                {{ \Jenssegers\Date\Date::create($user->getBirthday()->year, $user->getBirthday()->month, $user->getBirthday()->day)->format('l j F') }}
-                                <i>({{ \Jenssegers\Date\Date::create($user->getBirthday()->year, $user->getBirthday()->month, $user->getBirthday()->day)->age }} ans)</i>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="row">
-                            <div class="col-md-4">
                                 <label>Sexe:</label>
                             </div>
                             <div class="col-md-8">
@@ -104,7 +92,36 @@
                         </div>
                     </li>
 
+                    <li>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Téléphone:</label>
+                            </div>
+                            <div class="col-md-8">
+                                @if($user->phone !== null)
+                                    {{ $user->phone }}
+                                @else
+                                    <i class="text-warning">Non renseigné</i>
+                                @endif
+                            </div>
+                        </div>
+                    </li>
+
                     @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
+
+                        <li>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Anniversaire:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    {{ \Jenssegers\Date\Date::create($user->getBirthday()->year, $user->getBirthday()->month, $user->getBirthday()->day)->format('l j F') }}
+                                    <i>({{ \Jenssegers\Date\Date::create($user->getBirthday()->year, $user->getBirthday()->month, $user->getBirthday()->day)->age }}
+                                        ans)</i>
+                                </div>
+                            </div>
+                        </li>
+
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
@@ -115,21 +132,6 @@
                                         {{ $user->address }}
                                     @else
                                         <i class="text-warning">Non renseignée</i>
-                                    @endif
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label>Contact:</label>
-                                </div>
-                                <div class="col-md-8">
-                                    @if($user->phone !== null)
-                                        {{ $user->phone }}
-                                    @else
-                                        <i class="text-warning">Non renseigné</i>
                                     @endif
                                 </div>
                             </div>

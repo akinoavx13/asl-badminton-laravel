@@ -16,7 +16,7 @@
 
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-4">
-                    {!! Form::select('season_id', $seasons, $season_id !== null ? $season_id : null,['class' => 'chosen-select', 'style' => 'width: 320px;']) !!}
+                    {!! Form::select('season_id', $seasons, $season !== null ? $season->id : null,['class' => 'chosen-select', 'style' => 'width: 320px;']) !!}
                 </div>
             </div>
 
@@ -31,10 +31,10 @@
         </div>
     </div>
 
-    @if($season_id !== null)
+    @if($season !== null)
         <hr>
 
-        <h1 class="text-center">Liste des joueurs</h1>
+        <h1 class="text-center">Liste des joueurs en {{ $season }}</h1>
 
         <hr>
 
@@ -120,16 +120,18 @@
                                             </td>
                                             <td class="text-center">
                                                 @if($player->hasCeState('contribution_payable'))
-                                                    <i class="text-danger">Contribution à payer</i>
+                                                    <a href="{{ route('player.ce_stateTocontribution_paid', $player->id) }}"
+                                                       class="btn btn-success">Contribution à payer</a>
                                                 @elseif($player->hasCeState('contribution_paid'))
                                                     <i class="text-success">Contribution payée</i>
                                                 @endif
                                             </td>
                                             <td class="text-center">
                                                 @if($player->hasGbcState('non_applicable'))
-                                                    <i class="text-center">Non applicable</i>
+                                                    <i class="text-danger">Non applicable</i>
                                                 @elseif($player->hasGbcState('entry_must'))
-                                                    <i class="text-danger">Dossier à remettre</i>
+                                                    <a href="{{ route('player.gbc_stateTocontribution_paid', $player->id) }}"
+                                                       class="btn btn-success">Dossier à remettre</a>
                                                 @elseif($player->hasGbcState('valid'))
                                                     <i class="text-success">Valide</i>
                                                 @endif

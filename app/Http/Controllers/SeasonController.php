@@ -86,9 +86,7 @@ class SeasonController extends Controller
             'name'   => $request->name,
         ]);
 
-        flash()->success('Sauvegardée !', '');
-
-        return redirect()->route('season.index');
+        return redirect()->route('season.index')->with('success', "La saison $season vient d'être modifiée !");
     }
 
     public function delete($season_id)
@@ -96,9 +94,7 @@ class SeasonController extends Controller
         $season = Season::findOrFail($season_id);
         $season->delete();
 
-        flash()->success('Supprimée !', '');
-
-        return redirect()->back();
+        return redirect()->route('season.index')->with('success', "La saison $season vient d'être supprimée !");
     }
 
     public function create()
@@ -110,14 +106,12 @@ class SeasonController extends Controller
 
     public function store(SeasonStoreRequest $request)
     {
-        Season::create([
+        $season = Season::create([
             'name'   => $request->name,
             'active' => false,
         ]);
 
-        flash()->success('Créée !', '');
-
-        return redirect()->route('season.index');
+        return redirect()->route('season.index')->with('success', "La saison $season vient d'être créée !");
     }
 
     public function changeActiveAttribute($season_id)
@@ -138,9 +132,7 @@ class SeasonController extends Controller
             'active' => true,
         ]);
 
-        flash()->success('Sauvegardée !', '');
-
-        return redirect()->route('season.index');
+        return redirect()->route('season.index')->with('success', "La saison $season vient d'être active !");
     }
 
 }

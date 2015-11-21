@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers;
 use App\Http\Requests;
 use App\Http\Requests\UserFirstConnectionRequest;
 use App\Http\Requests\UserStoreRequest;
@@ -68,7 +69,7 @@ class UserController extends Controller
 
         //users store
         $router->post('/store', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['auth', 'admin', 'settingExists'],
             'uses'       => 'UserController@store',
             'as'         => 'user.store',
         ]);
@@ -89,7 +90,7 @@ class UserController extends Controller
 
         //users send creation link again
         $router->get('/send_creation_link/{user_id}', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['auth', 'admin', 'settingExists'],
             'uses'       => 'UserController@sendCreationLink',
             'as'         => 'user.send_creation_link',
         ]);
@@ -166,9 +167,7 @@ class UserController extends Controller
             ]);
         }
 
-        flash()->success('Sauvegardé !', '');
-
-        return redirect()->route('home.index');
+        return redirect()->route('user.show', $user->id)->with('success', "L'utilisateur $user vient d'être modifié !");
     }
 
     public function delete($user_id)
@@ -176,9 +175,7 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
         $user->delete();
 
-        flash()->success('Supprimé !', '');
-
-        return redirect()->back();
+        return redirect()->back()->with('success', "L'utilisateur $user vient d'être supprimé !");
     }
 
     public function show($user_id)
@@ -208,19 +205,17 @@ class UserController extends Controller
             'ending_holiday' => Carbon::now()->format('d/m/Y'),
         ]);
 
-        if (canSendMail())
+        if (Helpers::getInstance()->canSendMail())
         {
             Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
             {
-                $message->from(fromAddressMail(), fromNameMail());
+                $message->from(Helpers::getInstance()->fromAddressMail(), Helpers::getInstance()->fromNameMail());
                 $message->to($user->email, $user)
-                    ->subject('Création de compte AS Lectra Badminton')->cc('c.maheo@lectra.com');
+                    ->subject('Création de compte AS Lectra Badminton')->cc(Helpers::getInstance()->ccMail());
             });
         }
 
-        flash()->success('Crée !', 'Un email lui a été envoyé.');
-
-        return redirect()->route('home.index');
+        return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");
     }
 
     public function getFirstConnection($user_id, $token_first_connection)
@@ -290,9 +285,7 @@ class UserController extends Controller
 
             Auth::login($user);
 
-            flash()->success('Compte crée !', "Le compte viens d'être crée avec sucèss");
-
-            return redirect()->route('home.index');
+            return redirect()->route('home.index')->with('success', "L'utilisateur $user vient d'être crée !");
         }
 
         abort(401, 'Unauthorized action.');
@@ -302,18 +295,16 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        if (canSendMail())
+        if (Helpers::getInstance()->canSendMail())
         {
             Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
             {
-                $message->from(fromAddressMail(), fromNameMail());
+                $message->from(Helpers::getInstance()->fromAddressMail(), Helpers::getInstance()->fromNameMail());
                 $message->to($user->email, $user)
-                    ->subject('Création de compte AS Lectra Badminton')->cc('c.maheo@lectra.com');
+                    ->subject('Création de compte AS Lectra Badminton')->cc(Helpers::getInstance()->ccMail());
             });
         }
 
-        flash()->success('Crée !', 'Un email lui a été envoyé.');
-
-        return redirect()->back();
+        return redirect()->back()->with('success', "Un autre email vient d'être envoyé à $user !");
     }
 }
