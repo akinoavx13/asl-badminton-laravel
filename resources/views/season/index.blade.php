@@ -22,7 +22,6 @@
                                 <tr>
                                     <th class="text-center">Nom</th>
                                     <th class="text-center">Actif</th>
-                                    <th class="text-center">Modification</th>
                                     <th class="text-center">Editer</th>
                                     <th class="text-center">Supprimer</th>
                                 </tr>
@@ -40,16 +39,8 @@
                                                 <span class="fa fa-check-circle-o fa-2x text-success"
                                                       aria-hidden="true"></span>
                                             @elseif($season->hasActive(false))
-                                                <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                      aria-hidden="true"></span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            @if($season->hasActive(true))
                                                 <a href="{{ route('season.change_active_attribute', $season->id) }}"
-                                                   class="btn btn-warning">Devenir inactive</a>
-                                            @elseif($season->hasActive(false))
-                                                <a href="{{ route('season.change_active_attribute', $season->id) }}" class="btn btn-primary">Devenir active</a>
+                                                   class="btn btn-primary">Devenir active</a>
                                             @endif
                                         </td>
                                         <td class="text-center">

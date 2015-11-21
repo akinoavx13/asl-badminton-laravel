@@ -32,28 +32,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="col-md-3">
-                        {!! Form::label('active', 'Active :', ['class' => 'control-label']) !!}
-                        <i class="text-navy">*</i>
-                    </div>
-
-                    <div class="col-md-9">
-                        <div class="radio-inline">
-                            <label>
-                                {!! Form::radio('active', '1', $season->exists ? $season->hasActive(true) ? true : false : old('active'), ['required']) !!}
-                                Oui
-                            </label>
-                        </div>
-                        <div class="radio-inline">
-                            <label>
-                                {!! Form::radio('active', '0', $season->exists ? $season->hasActive(false) ? true : false : old('active'), ['required']) !!}
-                                Non
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
                 @if($season->exists)
                     <div class="form-group text-center">
                         {!! Form::submit('Sauvegarder', ['class' => 'btn btn-primary']) !!}

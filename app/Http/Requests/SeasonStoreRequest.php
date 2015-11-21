@@ -32,7 +32,6 @@ class SeasonStoreRequest extends Request
     {
         return [
             'name'   => 'required|unique:seasons,name',
-            'active' => 'required|boolean',
         ];
     }
 }
