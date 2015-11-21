@@ -61,7 +61,7 @@
                     {!! Form::email('email', old('email'), ['placeholder' => 'Email', 'class' => 'form-control', 'required']) !!}
                 </div>
 
-                <div class="form-group">
+                <div class="form-group text-center">
                     {!! Form::submit('Envoyer le lien de réinitialisation', ['class' => 'btn btn-primary']) !!}
                 </div>
 

@@ -57,7 +57,8 @@
 
                 {!! Form::open(['url' => '/password/reset', 'class' => 'form-horizontal']) !!}
 
-                {!! Form::token() !!}
+                {!! csrf_field() !!}
+                <input type="hidden" name="token" value="{{ $token }}">
 
                 <div class="form-group">
                     <div class="col-md-3">
