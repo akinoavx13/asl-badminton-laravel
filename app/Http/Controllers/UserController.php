@@ -248,7 +248,7 @@ class UserController extends Controller
                 'state'               => $request->state,
                 'lectra_relationship' => $request->lectra_relationship,
                 'newsletter'          => $request->newsletter,
-                'password'            => $request->password,
+                'password' => bcrypt($request->password),
                 'avatar'              => $request->avatar,
                 'first_connect'       => false,
             ]);

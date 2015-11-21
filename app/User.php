@@ -41,14 +41,15 @@ class User extends Model implements AuthenticatableContract,
         'ending_holiday',
         'ending_injury',
         'token_first_connection',
+        'first_connect',
     ];
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
-        'active'           => 'boolean',
-        'newsletter'       => 'boolean',
-        'first_connection' => 'boolean',
+        'active'        => 'boolean',
+        'newsletter'    => 'boolean',
+        'first_connect' => 'boolean',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
