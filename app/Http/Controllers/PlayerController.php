@@ -54,7 +54,7 @@ class PlayerController extends Controller
 
         //player update
         $router->post('/edit/{player_id}', [
-            'middleware' => ['auth', 'playerOwner', 'settingExists'],
+            'middleware' => ['auth', 'playerOwner', 'buyTshirtClose'],
             'uses'       => 'PlayerController@update',
             'as'         => 'player.update',
         ]);
@@ -68,7 +68,7 @@ class PlayerController extends Controller
 
         //player store
         $router->post('/create', [
-            'middleware' => ['auth', 'enrollOpen', 'settingExists'],
+            'middleware' => ['auth', 'enrollOpen', 'buyTshirtClose'],
             'uses'       => 'PlayerController@store',
             'as'         => 'player.store',
         ]);
@@ -138,12 +138,6 @@ class PlayerController extends Controller
     public function update(PlayerUpdateRequest $request, $player_id)
     {
         $player = Player::findOrFail($player_id);
-        $setting = Setting::first();
-
-        if ($setting->hasBuyTShirt(false) && $player->t_shirt != $request->t_shirt)
-        {
-            return redirect()->back()->with('error', "Vous ne pouve plus demander de t-shirt !");
-        }
 
         if ($this->user->hasRole('admin'))
         {
@@ -178,13 +172,6 @@ class PlayerController extends Controller
     public function store(PlayerStoreRequest $request)
     {
         $seasonActive = Season::active()->first();
-
-        $setting = Setting::first();
-
-        if ($setting->hasBuyTShirt(false) && $request->t_shirt == '1')
-        {
-            return redirect()->back()->with('error', "Vous ne pouve plus demander de t-shirt !");
-        }
 
         $numberOfPlayerForUserInSelectedSeason = Player::select('players.id')
             ->season($seasonActive->id)
