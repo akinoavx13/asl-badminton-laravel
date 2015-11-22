@@ -19,14 +19,5 @@ class SeasonTableSeeder extends Seeder
                 'active' => $i === 0 ? true : false,
             ]);
         }
-
-        for ($i = 1; $i <= 10; $i++)
-        {
-            DB::table('player_season')->insert([
-                'player_id' => $i,
-                'season_id' => 1,
-            ]);
-        }
-
     }
 }

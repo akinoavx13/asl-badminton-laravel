@@ -33,6 +33,9 @@ class CreatePlayersTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
+            $table->integer('season_id')->unsigned()->index();
+            $table->foreign('season_id')->references('id')->on('seasons')->onDelete('cascade')->onUpdate('cascade');
+
             $table->timestamps();
         });
     }

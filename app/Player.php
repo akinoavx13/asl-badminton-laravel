@@ -20,6 +20,7 @@ class Player extends Model
         'corpo_mixte',
         't_shirt',
         'user_id',
+        'season_id',
     ];
 
     protected $casts = [
@@ -44,9 +45,9 @@ class Player extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function seasons()
+    public function season()
     {
-        return $this->belongsToMany('App\Season');
+        return $this->belongsTo('App\Season');
     }
 
     /******************/
@@ -109,9 +110,7 @@ class Player extends Model
 
     public function scopeSeason($query, $season_id)
     {
-        $query->join('player_season', 'player_season.player_id', '=', 'players.id')
-            ->join('seasons', 'seasons.id', '=', 'player_season.season_id')
-            ->where('seasons.id', $season_id);
+        $query->where('season_id', $season_id);
     }
 
     public function scopeOrderByForname($query)

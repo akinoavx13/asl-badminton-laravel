@@ -8,7 +8,6 @@ use App\Http\Requests\PlayerUpdateRequest;
 use App\Player;
 use App\Season;
 use App\Setting;
-use DB;
 
 
 class PlayerController extends Controller
@@ -196,10 +195,6 @@ class PlayerController extends Controller
             'user_id'     => $this->user->id,
             'ce_state'    => $this->user->hasRole('admin') ? $request->ce_state : 'contribution_payable',
             'gbc_state'   => $this->onPlayerCreateChoseGbc_state($request),
-        ]);
-
-        DB::table('player_season')->insert([
-            'player_id' => $player->id,
             'season_id' => $seasonActive->id,
         ]);
 

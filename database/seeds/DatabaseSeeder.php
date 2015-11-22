@@ -16,13 +16,9 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
         $this->call(UserTableSeeder::class);
-
-        factory(App\User::class, 10)->create()->each(function ($user)
-        {
-            $user->players()->save(factory(App\Player::class)->make());
-        });
-
         $this->call(SeasonTableSeeder::class);
+        $this->call(PlayerTableSeeder::class);
+        $this->call(SettingTableSeeder::class);
 
         Model::reguard();
     }

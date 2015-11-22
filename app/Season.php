@@ -27,7 +27,7 @@ class Season extends Model
 
     public function players()
     {
-        return $this->belongsToMany('App\Player');
+        return $this->hasMany('App\Player');
     }
 
     /******************/
