@@ -5,7 +5,7 @@
                 @if($player->exists)
                     <h2 class="text-center">Modification du joueur {{ $player }}</h2>
                 @else
-                    <h2 class="text-center">Inscription à une saison</h2>
+                    <h2 class="text-center">Inscription</h2>
                 @endif
             </div>
             <div class="ibox-content">
@@ -19,23 +19,12 @@
 
                 @if($player->exists && $player->hasCeState('contribution_paid'))
                     <input name="formula" type="hidden" value="{{ $player->formula }}">
-                    <input name="t_shirt" type="hidden" value="{{ $player->hasTShirt(true) ? '1' : '0' }}">
+                    @elseif($player->exists && $player->hasCeState('contribution_paid') || $setting !== null && $setting->hasBuyTShirt(false))
+                        <input name="t_shirt" type="hidden"
+                               value="{{ $player->exists && $player->hasTShirt(true) ? '1' : '0' }}">
                 @endif
 
                 <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
-
-                @if(!$player->exists)
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            {!! Form::label('season_id', 'Saison :', ['class' => 'control-label']) !!}
-                            <i class="text-navy">*</i>
-                        </div>
-
-                        <div class="col-md-9">
-                            {!! Form::select('season_id', $seasons, old('season_id'),['class' => 'form-control', 'required']) !!}
-                        </div>
-                    </div>
-                @endif
 
                 <div class="form-group">
                     <div class="col-md-3">

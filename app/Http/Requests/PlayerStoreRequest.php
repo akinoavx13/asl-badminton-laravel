@@ -22,7 +22,6 @@ class PlayerStoreRequest extends Request
     public function rules()
     {
         return [
-            'season_id'   => 'required|exists:seasons,id',
             'formula'     => 'required|in:leisure,fun,performance,corpo,competition',
             't_shirt'     => 'required_if:formula,leisure,fun,performance',
             'simple'      => 'required_if:formula,fun,performance,corpo,competition|boolean',

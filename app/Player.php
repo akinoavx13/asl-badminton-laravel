@@ -114,4 +114,11 @@ class Player extends Model
             ->where('seasons.id', $season_id);
     }
 
+    public function scopeOrderByForname($query)
+    {
+        $query->with('user')
+            ->join('users', 'users.id', '=', 'players.user_id')
+            ->orderBy('users.forname', 'asc');
+    }
+
 }

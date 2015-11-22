@@ -98,12 +98,9 @@ class PlayerController extends Controller
 
             $season_id = $season !== null ? $season->id : null;
 
-            $players = Player::with('user')
+            $players = Player::orderByForname()
                 ->select('players.*')
                 ->season($season_id)
-                ->join('users', 'users.id', '=', 'players.user_id')
-                ->orderBy('users.forname', 'asc')
-                ->orderBy('users.name', 'asc')
                 ->get();
         }
         else
@@ -112,12 +109,9 @@ class PlayerController extends Controller
 
             $season_id = $season !== null ? $season->id : null;
 
-            $players = Player::with('user')
+            $players = Player::orderByForname()
                 ->select('players.*')
                 ->season($season_id)
-                ->join('users', 'users.id', '=', 'players.user_id')
-                ->orderBy('users.forname', 'asc')
-                ->orderBy('users.name', 'asc')
                 ->get();
         }
         $seasons = Season::orderBy('created_at', 'desc')->lists('name', 'id');
@@ -171,22 +165,23 @@ class PlayerController extends Controller
     {
         $player = new Player();
         $setting = Setting::first();
-        $seasons = Season::active()->lists('name', 'id');
 
-        return view('player.create', compact('player', 'seasons', 'setting'));
+        return view('player.create', compact('player', 'setting'));
     }
 
     public function store(PlayerStoreRequest $request)
     {
+        $seasonActive = Season::active()->first();
+
         $numberOfPlayerForUserInSelectedSeason = Player::select('players.*')
-            ->season($request->season_id)
+            ->season($seasonActive->id)
             ->where('user_id', $this->user->id)
             ->count();
 
         if ($numberOfPlayerForUserInSelectedSeason >= 1)
         {
             return redirect()->back()->with('error',
-                "Vous êtes est déjà inscrit dans cette saison.")->withInput($request->input());
+                "Vous êtes est déjà inscrit !")->withInput($request->input());
         }
 
         $player = Player::create([
@@ -205,7 +200,7 @@ class PlayerController extends Controller
 
         DB::table('player_season')->insert([
             'player_id' => $player->id,
-            'season_id' => $request->season_id,
+            'season_id' => $seasonActive->id,
         ]);
 
         return redirect()->route('home.index')->with('success', "Le joueur $player vient d'être crée !");
