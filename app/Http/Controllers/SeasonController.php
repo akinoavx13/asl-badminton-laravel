@@ -82,11 +82,12 @@ class SeasonController extends Controller
     {
         $season = Season::findOrFail($season_id);
 
+        //on ne peut pas choisir si elle est active ou pas
         $season->update([
             'name'   => $request->name,
         ]);
 
-        return redirect()->route('season.index')->with('success', "La saison $season vient d'être modifiée !");
+        return redirect()->route('season.index')->with('success', "Les modifications sont bien prise en compte !");
     }
 
     public function delete($season_id)
@@ -118,21 +119,19 @@ class SeasonController extends Controller
     {
         $seasonSelected = Season::findOrFail($season_id);
 
-        foreach (Season::all() as $season)
+        //on prend toutes les saison active
+        foreach (Season::active()->get() as $season)
         {
-            if ($season->hasActive(true))
-            {
-                $season->update([
-                    'active' => false,
-                ]);
-            }
+            $season->update([
+                'active' => false,
+            ]);
         }
 
         $seasonSelected->update([
             'active' => true,
         ]);
 
-        return redirect()->route('season.index')->with('success', "La saison $season vient d'être active !");
+        return redirect()->route('season.index')->with('success', "La saison $season est active !");
     }
 
 }

@@ -91,6 +91,8 @@ class PlayerController extends Controller
     {
         $season = null;
         $players = [];
+
+        //si on a choisit une saison
         if ($request->exists('season_id'))
         {
             $season = Season::findOrFail($request->season_id);
@@ -102,6 +104,7 @@ class PlayerController extends Controller
                 ->season($season_id)
                 ->get();
         }
+        //on a par default la saison active
         else
         {
             $season = Season::active()->first();
@@ -138,6 +141,7 @@ class PlayerController extends Controller
     {
         $player = Player::findOrFail($player_id);
 
+        //si on est admin on peut mettre à jour les 2 champs
         if ($this->user->hasRole('admin'))
         {
             $player->update([
@@ -157,7 +161,7 @@ class PlayerController extends Controller
             'corpo_mixte' => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
         ]);
 
-        return redirect()->route('home.index')->with('success', "Le joueur $player a été modifié !");
+        return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
     }
 
     public function create()
@@ -170,20 +174,29 @@ class PlayerController extends Controller
 
     public function store(PlayerStoreRequest $request)
     {
+        //on s'inscrit dans la saison active
         $seasonActive = Season::active()->first();
 
+        //si il y a pas encore de saison
+        if ($seasonActive === null)
+        {
+            return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouverte !");
+        }
+
+        //compte le nombre d'inscription dans lesquels on est inscrit
         $numberOfPlayerForUserInSelectedSeason = Player::select('players.id')
             ->season($seasonActive->id)
             ->where('user_id', $this->user->id)
             ->count();
 
+        //si on a plus de 1 inscription
         if ($numberOfPlayerForUserInSelectedSeason >= 1)
         {
             return redirect()->back()->with('error',
                 "Vous êtes est déjà inscrit !")->withInput($request->input());
         }
 
-        $player = Player::create([
+        Player::create([
             'formula'     => $request->formula,
             't_shirt'     => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
             'simple'      => $request->formula !== 'leisure' ? $request->simple : false,
@@ -198,21 +211,24 @@ class PlayerController extends Controller
             'season_id' => $seasonActive->id,
         ]);
 
-        return redirect()->route('home.index')->with('success', "Le joueur $player vient d'être crée !");
+        return redirect()->route('home.index')->with('success', "Vous êtes bien inscrit !");
     }
 
     private function onPlayerCreateChoseGbc_state($request)
     {
+        //on est l'admin, on peut choisir le champ
         if ($this->user->hasRole('admin'))
         {
             return $request->gbc_state;
         }
         else
         {
+            //si on a choisit la formule loisir, fun, ou performance, on ne peut pas etre a GBC
             if ($request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance')
             {
                 return 'non_applicable';
             }
+            //si on esy en corpo ou competition on doit remettre notre dossier
             elseif ($request->formula === 'corpo' || $request->formula === 'competition')
             {
                 return 'entry_must';

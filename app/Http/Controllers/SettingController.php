@@ -74,6 +74,6 @@ class SettingController extends Controller
             'can_enroll'         => $request->can_enroll,
         ]);
 
-        return redirect()->route('setting.index')->with('success', "Les paramètres sont modifiés !");
+        return redirect()->route('setting.index')->with('success', "Les modifications sont bien prises en compte !");
     }
 }

@@ -99,8 +99,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::orderBy('forname', 'asc')
-            ->get();
+        $users = User::orderBy('forname', 'asc')->get();
 
         return view('user.index', compact('users'));
     }
@@ -132,6 +131,7 @@ class UserController extends Controller
             'avatar'   => $request->avatar,
         ]);
 
+        //si la date de fin de blessure est antèrieur à aujourd'hui
         if ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y', $request->ending_injury) <= Carbon::now())
         {
             return redirect()->back()->with('error',
@@ -144,6 +144,7 @@ class UserController extends Controller
             ]);
         }
 
+        //si la date de fin de vacances est antèrieur à aujourd'hui
         if ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y', $request->ending_holiday) <= Carbon::now())
         {
             return redirect()->back()->with('error',
@@ -166,7 +167,8 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->route('user.show', $user->id)->with('success', "L'utilisateur $user vient d'être modifié !");
+        return redirect()->route('user.show', $user->id)->with('success',
+            "Les modifications sont bien prises en compte !");
     }
 
     public function delete($user_id)
