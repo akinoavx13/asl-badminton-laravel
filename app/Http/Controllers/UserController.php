@@ -7,6 +7,8 @@ use App\Http\Requests;
 use App\Http\Requests\UserFirstConnectionRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Player;
+use App\Season;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -131,6 +133,22 @@ class UserController extends Controller
             'avatar'   => $request->avatar,
         ]);
 
+        $this->ifInjuryHolidayAreAfterNow($user, $request);
+
+        if ($this->user->hasRole('admin'))
+        {
+            $user->update([
+                'active' => $request->active,
+                'role'   => $request->role,
+            ]);
+        }
+
+        return redirect()->route('user.show', $user->id)->with('success',
+            "Les modifications sont bien prises en compte !");
+    }
+
+    private function ifInjuryHolidayAreAfterNow($user, $request)
+    {
         //si la date de fin de blessure est antèrieur à aujourd'hui
         if ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y', $request->ending_injury) <= Carbon::now())
         {
@@ -158,17 +176,6 @@ class UserController extends Controller
                 'ending_holiday' => $request->ending_holiday,
             ]);
         }
-
-        if ($this->user->hasRole('admin'))
-        {
-            $user->update([
-                'active' => $request->active,
-                'role'   => $request->role,
-            ]);
-        }
-
-        return redirect()->route('user.show', $user->id)->with('success',
-            "Les modifications sont bien prises en compte !");
     }
 
     public function delete($user_id)
@@ -183,7 +190,10 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        return view('user.show', compact('user'));
+        $activeSeason = Season::active()->first();
+        $player = Player::withUser($user_id)->withSeason($activeSeason->id)->first();
+
+        return view('user.show', compact('user', 'player'));
     }
 
     public function create()
@@ -254,35 +264,7 @@ class UserController extends Controller
                 'first_connect'       => false,
             ]);
 
-            if ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y', $request->ending_injury) <= Carbon::now())
-            {
-                return redirect()->back()->with('error',
-                    "La date de fin de blessure doit supérieur à aujourd'hui")->withInput($request->all());
-            }
-            elseif ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y',
-                    $request->ending_injury) > Carbon::now()
-            )
-            {
-                $user->update([
-                    'ending_injury' => $request->ending_injury,
-                ]);
-            }
-
-            if ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y',
-                    $request->ending_holiday) <= Carbon::now()
-            )
-            {
-                return redirect()->back()->with('error',
-                    "La date de fin de vacances doit supérieur à aujourd'hui")->withInput($request->all());
-            }
-            elseif ($user->hasState('holiday') && Carbon::createFromFormat('d/m/Y',
-                    $request->ending_holiday) > Carbon::now()
-            )
-            {
-                $user->update([
-                    'ending_holiday' => $request->ending_holiday,
-                ]);
-            }
+            $this->ifInjuryHolidayAreAfterNow($user, $request);
 
             Auth::login($user);
 
@@ -309,3 +291,5 @@ class UserController extends Controller
         return redirect()->back()->with('success', "Un autre email vient d'être envoyé à $user !");
     }
 }
+
+

@@ -101,7 +101,7 @@ class PlayerController extends Controller
 
             $players = Player::orderByForname()
                 ->select('players.*')
-                ->season($season_id)
+                ->withSeason($season_id)
                 ->get();
         }
         //on a par default la saison active
@@ -113,7 +113,7 @@ class PlayerController extends Controller
 
             $players = Player::orderByForname()
                 ->select('players.*')
-                ->season($season_id)
+                ->withSeason($season_id)
                 ->get();
         }
         $seasons = Season::orderBy('created_at', 'desc')->lists('name', 'id');
@@ -185,7 +185,7 @@ class PlayerController extends Controller
 
         //compte le nombre d'inscription dans lesquels on est inscrit
         $numberOfPlayerForUserInSelectedSeason = Player::select('players.id')
-            ->season($seasonActive->id)
+            ->withSeason($seasonActive->id)
             ->where('user_id', $this->user->id)
             ->count();
 

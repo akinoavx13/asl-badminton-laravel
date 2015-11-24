@@ -21,9 +21,9 @@ class UserTableSeeder extends Seeder
         for ($i = 0; $i <= 10; $i++)
         {
             User::create([
-                'name'                => 'Maheo' . $i,
-                'forname'             => 'Maxime' . $i,
-                'email'               => 'imaxame' . $i . '@gmail.com',
+                'name'    => $i == 0 ? 'Maheo' : 'Maheo' . $i,
+                'forname' => $i == 0 ? 'Maxime' : 'Maxime' . $i,
+                'email'   => $i == 0 ? 'imaxame@gmail.com' : 'imaxame' . $i . '@gmail.com',
                 'birthday'            => Carbon::create(1996, 9, 20)->format('d/m/Y'),
                 'tshirt_size'         => 'M',
                 'gender'              => 'man',
@@ -37,7 +37,7 @@ class UserTableSeeder extends Seeder
                 'lectra_relationship' => 'child',
                 'newsletter'          => true,
                 'avatar'              => false,
-                'role'                => 'admin',
+                'role'    => $i == 0 ? 'admin' : 'user',
                 'first_connect'       => false,
                 'password'            => bcrypt('mmmmmm'),
                 'created_at'          => Carbon::now(),
