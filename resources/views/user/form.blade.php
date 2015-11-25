@@ -235,7 +235,7 @@
                                     </div>
 
                                     <div class="col-md-9">
-                                        {!! Form::select('role', ['admin' => 'Administrateur', 'user' => 'Utilisateur'],
+                                        {!! Form::select('role', ['admin' => 'Administrateur', 'user' => 'Utilisateur', 'ce' => 'CE'],
                                         $user->exists ? $user->role : old('role'), ['class' => 'form-control', 'required']) !!}
                                     </div>
                                 </div>
@@ -315,7 +315,7 @@
                         </div>
 
                         <div class="col-md-9">
-                            {!! Form::select('role', ['user' => 'Utilisateur', 'admin' => 'Administrateur'], old('role'), ['class' => 'form-control', 'required']) !!}
+                            {!! Form::select('role', ['user' => 'Utilisateur', 'admin' => 'Administrateur', 'ce' => 'CE'], old('role'), ['class' => 'form-control', 'required']) !!}
                         </div>
                     </div>
 

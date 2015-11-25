@@ -29,49 +29,48 @@ class UserController extends Controller
 
         //user list
         $router->get('/index', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['admin'],
             'uses'       => 'UserController@index',
             'as'         => 'user.index',
         ]);
 
         //users edit
         $router->get('/edit/{user_id}', [
-            'middleware' => ['auth', 'userOwner'],
+            'middleware' => ['userOwner'],
             'uses'       => 'UserController@edit',
             'as'         => 'user.edit',
         ]);
 
         //users update
         $router->post('/edit/{user_id}', [
-            'middleware' => ['auth', 'userOwner'],
+            'middleware' => ['userOwner'],
             'uses'       => 'UserController@update',
             'as'         => 'user.update',
         ]);
 
         //users delete
         $router->get('/delete/{user_id}', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['admin'],
             'uses'       => 'UserController@delete',
             'as'         => 'user.delete',
         ]);
 
         //users show
         $router->get('/show/{user_id}', [
-            'middleware' => 'auth',
             'uses'       => 'UserController@show',
             'as'         => 'user.show',
         ]);
 
         //users create
         $router->get('/create', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['admin'],
             'uses'       => 'UserController@create',
             'as'         => 'user.create',
         ]);
 
         //users store
         $router->post('/store', [
-            'middleware' => ['auth', 'admin', 'settingExists'],
+            'middleware' => ['admin', 'settingExists'],
             'uses'       => 'UserController@store',
             'as'         => 'user.store',
         ]);
@@ -92,7 +91,7 @@ class UserController extends Controller
 
         //users send creation link again
         $router->get('/send_creation_link/{user_id}', [
-            'middleware' => ['auth', 'admin', 'settingExists'],
+            'middleware' => ['admin', 'settingExists'],
             'uses'       => 'UserController@sendCreationLink',
             'as'         => 'user.send_creation_link',
         ]);

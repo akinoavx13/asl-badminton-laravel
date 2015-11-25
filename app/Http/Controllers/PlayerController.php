@@ -25,63 +25,63 @@ class PlayerController extends Controller
 
         //player list
         $router->get('/index', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['admin'],
             'uses'       => 'PlayerController@index',
             'as'         => 'player.index',
         ]);
 
         //player list with season
         $router->post('/index', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['admin'],
             'uses'       => 'PlayerController@index',
             'as'         => 'player.index',
         ]);
 
         //player delete
         $router->get('/delete/{player_id}', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['admin'],
             'uses'       => 'PlayerController@delete',
             'as'         => 'player.delete',
         ]);
 
         //player edit
         $router->get('/edit/{player_id}', [
-            'middleware' => ['auth', 'playerOwner'],
+            'middleware' => ['playerOwner'],
             'uses'       => 'PlayerController@edit',
             'as'         => 'player.edit',
         ]);
 
         //player update
         $router->post('/edit/{player_id}', [
-            'middleware' => ['auth', 'playerOwner', 'buyTshirtClose'],
+            'middleware' => ['playerOwner', 'buyTshirtClose'],
             'uses'       => 'PlayerController@update',
             'as'         => 'player.update',
         ]);
 
         //player create
         $router->get('/create', [
-            'middleware' => ['auth', 'enrollOpen'],
+            'middleware' => ['enrollOpen'],
             'uses'       => 'PlayerController@create',
             'as'         => 'player.create',
         ]);
 
         //player store
         $router->post('/create', [
-            'middleware' => ['auth', 'enrollOpen', 'buyTshirtClose'],
+            'middleware' => ['enrollOpen', 'buyTshirtClose'],
             'uses'       => 'PlayerController@store',
             'as'         => 'player.store',
         ]);
 
         //player change ce_state to contribution_paid
         $router->get('/ce_state/contribution_paid/{player_id}', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['admin'],
             'uses'       => 'PlayerController@changeCeStateToContributionPaid',
             'as'         => 'player.ce_stateTocontribution_paid',
         ]);
 
         //player change gbc_state to valid
         $router->get('/gbc_state/valid/{player_id}', [
-            'middleware' => ['auth', 'admin'],
+            'middleware' => ['admin'],
             'uses'       => 'PlayerController@changeGbcStateToValid',
             'as'         => 'player.gbc_stateTocontribution_paid',
         ]);

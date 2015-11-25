@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
                 ['lectra', 'child', 'conjoint', 'external', 'trainee', 'subcontractor']);
             $table->boolean('newsletter')->default(false);
             $table->boolean('avatar')->default(false);
-            $table->enum('role', ['user', 'admin']);
+            $table->enum('role', ['user', 'admin', 'ce']);
             $table->boolean('first_connect')->default(true);
             $table->string('password', 60);
             $table->string('token_first_connection');

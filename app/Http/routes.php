@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\CeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SeasonController;
@@ -34,26 +35,32 @@ Route::get('/', function () {
     return redirect('/home');
 });
 
-Route::group(['prefix' => 'home'], function () use ($router) {
+Route::group(['prefix' => 'home', 'middleware' => ['notCE', 'auth']], function () use ($router)
+{
     HomeController::routes($router);
 });
 
-Route::group(['prefix' => 'user'], function () use ($router)
+Route::group(['prefix' => 'user', 'middleware' => ['notCE', 'auth']], function () use ($router)
 {
     UserController::routes($router);
 });
 
-Route::group(['prefix' => 'season'], function () use ($router)
+Route::group(['prefix' => 'season', 'middleware' => ['notCE', 'auth', 'admin']], function () use ($router)
 {
     SeasonController::routes($router);
 });
 
-Route::group(['prefix' => 'player'], function () use ($router)
+Route::group(['prefix' => 'player', 'middleware' => ['notCE', 'auth']], function () use ($router)
 {
     PlayerController::routes($router);
 });
 
-Route::group(['prefix' => 'setting'], function () use ($router)
+Route::group(['prefix' => 'setting', 'middleware' => ['notCE', 'auth', 'admin']], function () use ($router)
 {
     SettingController::routes($router);
+});
+
+Route::group(['prefix' => 'ce', 'middleware' => 'notUser'], function () use ($router)
+{
+    CeController::routes($router);
 });

@@ -4,21 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 
-
-class HomeController extends Controller
+class CeController extends Controller
 {
-
     public static function routes($router)
     {
-        //home page
+        //ce home
         $router->get('/', [
-            'uses' => 'HomeController@index',
-            'as' => 'home.index',
+            'uses' => 'CeController@index',
+            'as'   => 'ce.index',
         ]);
     }
 
     public function index()
     {
-        return view('home.index');
+        return view('ce.index');
     }
 }

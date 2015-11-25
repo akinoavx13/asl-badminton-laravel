@@ -34,7 +34,7 @@ class UserStoreRequest extends Request
             'name'    => 'required',
             'forname' => 'required',
             'email'   => 'unique:users,email|email',
-            'role'    => 'required|in:user,admin',
+            'role' => 'required|in:user,admin,ce',
             'active' => 'required|boolean',
         ];
     }

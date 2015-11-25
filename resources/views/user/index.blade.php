@@ -74,13 +74,11 @@
                                         </td>
                                         <td class="text-center">
                                             @if($user->hasRole('admin'))
-                                                <span class="badge badge-danger">
-                                            Administrateur
-                                        </span>
+                                                <span class="badge badge-danger">Administrateur</span>
                                             @elseif($user->hasRole('user'))
-                                                <span class="badge badge-primary">
-                                            Utilisateur
-                                        </span>
+                                                <span class="badge badge-primary">Utilisateur</span>
+                                            @elseif($user->hasRole('ce'))
+                                                <span class="badge badge-warning">CE</span>
                                             @endif
                                         </td>
                                         <td class="text-center">

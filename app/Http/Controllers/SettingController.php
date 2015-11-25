@@ -15,21 +15,18 @@ class SettingController extends Controller
 
         //setting list
         $router->get('/index', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SettingController@index',
             'as'         => 'setting.index',
         ]);
 
         //setting store
         $router->get('/store', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SettingController@store',
             'as'         => 'setting.store',
         ]);
 
         //setting store
         $router->post('/update/{setting_id}', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SettingController@update',
             'as'         => 'setting.update',
         ]);

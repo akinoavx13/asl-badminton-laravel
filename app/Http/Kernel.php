@@ -36,5 +36,7 @@ class Kernel extends HttpKernel
         'enrollOpen'    => \App\Http\Middleware\EnrollOpen::class,
         'settingExists' => \App\Http\Middleware\SettingExists::class,
         'buyTshirtClose' => \App\Http\Middleware\BuyTshirtClose::class,
+        'notCE'   => \App\Http\Middleware\NotCE::class,
+        'notUser' => \App\Http\Middleware\NotUser::class,
     ];
 }

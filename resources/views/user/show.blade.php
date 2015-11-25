@@ -329,7 +329,34 @@
                                         </div>
                                     </li>
 
-                                    <li>
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    Corpo :
+                                                </div>
+                                                <div class="col-md-8">
+                                                    @if($player->hasCorpoMan(true))
+                                                        Homme
+                                                        <br>
+                                                    @endif
+                                                    @if($player->hasCorpoWoman(true))
+                                                        Femme
+                                                        <br>
+                                                    @endif
+                                                    @if($player->hasCorpoMixte(true))
+                                                        Mixte
+                                                        <br>
+                                                    @endif
+                                                    @if($player->hasCorpoMan(false) && $player->hasCorpoWoman(false) && $player->hasCorpoMixte(false))
+                                                        <span class="fa fa-times-circle-o fa-2x text-warning"
+                                                              aria-hidden="true"></span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
+                                            <li>
                                         <div class="row">
                                             <div class="col-md-4">
                                                 Statue CE :
@@ -361,33 +388,7 @@
                                         </div>
                                     </li>
 
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Corpo :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasCorpoMan(true))
-                                                    Homme
-                                                    <br>
-                                                @endif
-                                                @if($player->hasCorpoWoman(true))
-                                                    Femme
-                                                    <br>
-                                                @endif
-                                                @if($player->hasCorpoMixte(true))
-                                                    Mixte
-                                                    <br>
-                                                @endif
-                                                @if($player->hasCorpoMan(false) && $player->hasCorpoWoman(false) && $player->hasCorpoMixte(false))
-                                                    <span class="fa fa-times-circle-o fa-2x text-warning"
-                                                          aria-hidden="true"></span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
                                 </ul>
-                                @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
                                     <div class="text-center">
                                         <a href="{{ route('player.edit', $user->id) }}"
                                            class="btn btn-info">Modifier</a>

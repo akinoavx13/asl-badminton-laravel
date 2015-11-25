@@ -16,49 +16,42 @@ class SeasonController extends Controller
 
         //season list
         $router->get('/index', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SeasonController@index',
             'as'         => 'season.index',
         ]);
 
         //season edit
         $router->get('/edit/{season_id}', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SeasonController@edit',
             'as'         => 'season.edit',
         ]);
 
         //season update
         $router->post('/edit/{season_id}', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SeasonController@update',
             'as'         => 'season.update',
         ]);
 
         //season delete
         $router->get('/delete/{season_id}', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SeasonController@delete',
             'as'         => 'season.delete',
         ]);
 
         //season create
         $router->get('/create', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SeasonController@create',
             'as'         => 'season.create',
         ]);
 
         //season store
         $router->post('/store', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SeasonController@store',
             'as'         => 'season.store',
         ]);
 
         //season change active attribute
         $router->get('/change_active_attribute/{season_id}', [
-            'middleware' => ['auth', 'admin'],
             'uses'       => 'SeasonController@changeActiveAttribute',
             'as'         => 'season.change_active_attribute',
         ]);
