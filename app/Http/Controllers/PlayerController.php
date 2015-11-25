@@ -248,10 +248,10 @@ class PlayerController extends Controller
                 'ce_state' => 'contribution_paid',
             ]);
 
-            return redirect()->route('player.index')->with('success', "Le joueur $player a payé sa cotisation !");
+            return redirect()->back()->with('success', "Le joueur $player a payé sa cotisation !");
         }
 
-        return redirect()->route('player.index')->with('error', "Le joueur $player a déjà payé sa cotisation !");
+        return redirect()->back()->with('error', "Le joueur $player a déjà payé sa cotisation !");
     }
 
     public function changeGbcStateToValid($player_id)
@@ -264,10 +264,10 @@ class PlayerController extends Controller
                 'gbc_state' => 'valid',
             ]);
 
-            return redirect()->route('player.index')->with('success', "Le joueur $player a son dossier GBC valide !");
+            return redirect()->back()->with('success', "Le joueur $player a son dossier GBC valide !");
         }
 
-        return redirect()->route('player.index')->with('error',
+        return redirect()->back()->with('error',
             "Le joueur $player est non applicable ou il a déjà validé son dossier!");
     }
 }

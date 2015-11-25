@@ -19,7 +19,8 @@
 
                 @if($player->exists && $player->hasCeState('contribution_paid'))
                     <input name="formula" type="hidden" value="{{ $player->formula }}">
-                    @elseif($player->exists && $player->hasCeState('contribution_paid') || $setting !== null && $setting->hasBuyTShirt(false))
+                    @endif
+                    @if($player->exists && $player->hasCeState('contribution_paid') || $setting !== null && $setting->hasBuyTShirt(false))
                         <input name="t_shirt" type="hidden"
                                value="{{ $player->exists && $player->hasTShirt(true) ? '1' : '0' }}">
                 @endif

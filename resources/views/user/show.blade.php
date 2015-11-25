@@ -256,7 +256,7 @@
                                                     Corpo
                                                 @elseif($player->hasFormula('competition'))
                                                     Competition
-                                                @endif
+                                    @endif
                                             </div>
                                         </div>
                                     </li>
@@ -329,74 +329,74 @@
                                         </div>
                                     </li>
 
+                                    <li>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                Corpo :
+                                            </div>
+                                            <div class="col-md-8">
+                                                @if($player->hasCorpoMan(true))
+                                                    Homme
+                                                    <br>
+                                                @endif
+                                                @if($player->hasCorpoWoman(true))
+                                                    Femme
+                                                    <br>
+                                                @endif
+                                                @if($player->hasCorpoMixte(true))
+                                                    Mixte
+                                                    <br>
+                                                @endif
+                                                @if($player->hasCorpoMan(false) && $player->hasCorpoWoman(false) && $player->hasCorpoMixte(false))
+                                                    <span class="fa fa-times-circle-o fa-2x text-warning"
+                                                          aria-hidden="true"></span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
                                         <li>
                                             <div class="row">
                                                 <div class="col-md-4">
-                                                    Corpo :
+                                                    Statue CE :
                                                 </div>
                                                 <div class="col-md-8">
-                                                    @if($player->hasCorpoMan(true))
-                                                        Homme
-                                                        <br>
-                                                    @endif
-                                                    @if($player->hasCorpoWoman(true))
-                                                        Femme
-                                                        <br>
-                                                    @endif
-                                                    @if($player->hasCorpoMixte(true))
-                                                        Mixte
-                                                        <br>
-                                                    @endif
-                                                    @if($player->hasCorpoMan(false) && $player->hasCorpoWoman(false) && $player->hasCorpoMixte(false))
-                                                        <span class="fa fa-times-circle-o fa-2x text-warning"
-                                                              aria-hidden="true"></span>
+                                                    @if($player->hasCeState('contribution_payable'))
+                                                        <i class="text-warning">Contribution à payer</i>
+                                                    @elseif($player->hasCeState('contribution_paid'))
+                                                        <i class="text-navy">Contribution payée</i>
                                                     @endif
                                                 </div>
                                             </div>
                                         </li>
 
-                                        @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
-                                            <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Statue CE :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasCeState('contribution_payable'))
-                                                    <i class="text-warning">Contribution à payer</i>
-                                                @elseif($player->hasCeState('contribution_paid'))
-                                                    <i class="text-success">Contribution payée</i>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Statue GBC :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasGbcState('non_applicable'))
-                                                    <i class="text-warning">Non applicable</i>
-                                                @elseif($player->hasGbcState('entry_must'))
-                                                    <i class="text-warning">Dossier à remettre</i>
-                                                @elseif($player->hasGbcState('valid'))
-                                                    <i class="text-navy">Valide</i>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    Statue GBC :
+                                                </div>
+                                                <div class="col-md-8">
+                                                    @if($player->hasGbcState('non_applicable'))
+                                                        <i class="text-warning">Non applicable</i>
+                                                    @elseif($player->hasGbcState('entry_must'))
+                                                        <i class="text-warning">Dossier à remettre</i>
+                                                    @elseif($player->hasGbcState('valid'))
+                                                        <i class="text-navy">Valide</i>
+                                                    @endif
+                                                </div>
+                            </div>
+                                        </li>
 
                                 </ul>
-                                    <div class="text-center">
-                                        <a href="{{ route('player.edit', $user->id) }}"
-                                           class="btn btn-info">Modifier</a>
-                                    </div>
-                                @endif
+                                <div class="text-center">
+                                    <a href="{{ route('player.edit', $user->id) }}"
+                                       class="btn btn-info">Modifier</a>
+                        </div>
+                    @endif
                             </div>
                         </div>
                     @endif
-
+            </div>
     </div>
 @stop
