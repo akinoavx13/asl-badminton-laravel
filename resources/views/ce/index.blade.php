@@ -125,8 +125,8 @@
                                 <th class="text-center">Contacter</th>
                                 <th class="text-center">Formule</th>
                                 <th class="text-center">T-shirt</th>
-                                <th class="text-center">Statut CE</th>
                                 <th class="text-center">Total à payer</th>
+                                <th class="text-center">Statut CE</th>
                             </tr>
                             </thead>
 
@@ -163,17 +163,17 @@
                                     </td>
                                     <td class="text-center">
                                         @if($player->hasCeState('contribution_payable'))
-                                            <a href="{{ route('player.ce_stateTocontribution_paid', $player->id) }}"
-                                               class="btn btn-success">Contribution à payer</a>
-                                        @elseif($player->hasCeState('contribution_paid'))
-                                            <i class="text-success">Contribution payée</i>
+                                            <i class="text-danger">{{ $price = $player->getTotalPrice($setting) }} €</i>
+                                        @else
+                                            <i class="text-navy">{{ $price = $player->getTotalPrice($setting) }} €</i>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         @if($player->hasCeState('contribution_payable'))
-                                            <i class="text-danger">{{ $price = $player->getTotalPrice($setting) }} €</i>
-                                        @else
-                                            <i class="text-navy">{{ $price = $player->getTotalPrice($setting) }} €</i>
+                                            <a href="{{ route('player.ce_stateTocontribution_paid', $player->id) }}"
+                                               class="btn btn-success">Contribution à payer</a>
+                                        @elseif($player->hasCeState('contribution_paid'))
+                                            <i class="text-success">Contribution payée</i>
                                         @endif
                                     </td>
                                 </tr>
