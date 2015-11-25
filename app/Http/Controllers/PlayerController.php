@@ -46,28 +46,28 @@ class PlayerController extends Controller
 
         //player edit
         $router->get('/edit/{player_id}', [
-            'middleware' => ['playerOwner'],
+            'middleware' => ['playerOwner', 'settingExists'],
             'uses'       => 'PlayerController@edit',
             'as'         => 'player.edit',
         ]);
 
         //player update
         $router->post('/edit/{player_id}', [
-            'middleware' => ['playerOwner', 'buyTshirtClose'],
+            'middleware' => ['playerOwner', 'buyTshirtClose', 'settingExists'],
             'uses'       => 'PlayerController@update',
             'as'         => 'player.update',
         ]);
 
         //player create
         $router->get('/create', [
-            'middleware' => ['enrollOpen'],
+            'middleware' => ['enrollOpen', 'settingExists'],
             'uses'       => 'PlayerController@create',
             'as'         => 'player.create',
         ]);
 
         //player store
         $router->post('/create', [
-            'middleware' => ['enrollOpen', 'buyTshirtClose'],
+            'middleware' => ['enrollOpen', 'buyTshirtClose', 'settingExists'],
             'uses'       => 'PlayerController@store',
             'as'         => 'player.store',
         ]);

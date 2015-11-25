@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Player;
 use App\Season;
+use App\Setting;
 
 class CeController extends Controller
 {
@@ -12,15 +13,17 @@ class CeController extends Controller
     {
         //ce home
         $router->get('/', [
-            'uses' => 'CeController@index',
-            'as'   => 'ce.index',
+            'middleware' => 'settingExists',
+            'uses'       => 'CeController@index',
+            'as'         => 'ce.index',
         ]);
     }
 
     public function index()
     {
-
         $season = Season::active()->first();
+
+        $setting = Setting::first();
 
         $players = Player::orderByForname()
             ->select('players.*')
@@ -47,58 +50,65 @@ class CeController extends Controller
 
         $contributionUnPaid['number'] = 0;
 
+        $totalPayable = 0;
+        $totalPaid = 0;
+
         foreach ($players as $player)
         {
-            //calculate t-shirt but not corpo and competition player
-            if ($player->hasTShirt(true) && ! $player->hasFormula('corpo') && ! $player->hasFormula('competition'))
+
+            $playerPrice = $player->totalPrice($setting);
+
+            $tShirt['price'] += $playerPrice['t_shirt'];
+            $tShirt['number'] += $playerPrice['t_shirt'] !== 0 ? 1 : 0;
+
+            $totalPayable += $playerPrice['t_shirt'] + $playerPrice['formula'];
+
+            if ($player->hasCeState('contribution_payable'))
             {
-                $tShirt['price'] += 25;
-                $tShirt['number']++;
+                $contributionUnPaid['number']++;
+            }
+            elseif ($player->hasCeState('contribution_paid'))
+            {
+                $totalPaid += $playerPrice['t_shirt'] + $playerPrice['formula'];
             }
 
             //calculate leisure formula
             if ($player->hasFormula('leisure'))
             {
-                $leisure['price'] += $player->user->hasLectraRelation('external') ? 100 : 10;
                 $leisure['number']++;
+                $leisure['price'] += $playerPrice['formula'];
             }
 
             //calculate fun formula
-            if ($player->hasFormula('fun'))
+            elseif ($player->hasFormula('fun'))
             {
-                $fun['price'] += $player->user->hasLectraRelation('external') ? 100 : 20;
                 $fun['number']++;
+                $fun['price'] += $playerPrice['formula'];
             }
 
             //calculate performance formula
-            if ($player->hasFormula('performance'))
+            elseif ($player->hasFormula('performance'))
             {
-                $performance['price'] += $player->user->hasLectraRelation('external') ? 100 : 30;
                 $performance['number']++;
+                $performance['price'] += $playerPrice['formula'];
             }
 
             //calculate corpo formula
-            if ($player->hasFormula('corpo'))
+            elseif ($player->hasFormula('corpo'))
             {
-                $corpo['price'] += $player->user->hasLectraRelation('external') ? 100 : 40;
                 $corpo['number']++;
+                $corpo['price'] += $playerPrice['formula'];
             }
 
             //calculate competition formula
-            if ($player->hasFormula('competition'))
+            elseif ($player->hasFormula('competition'))
             {
-                $competition['price'] += $player->user->hasLectraRelation('external') ? 200 : 80;
                 $competition['number']++;
-            }
-
-            //contribution paid
-            if ($player->hasCeState('contribution_payable'))
-            {
-                $contributionUnPaid['number']++;
+                $competition['price'] += $playerPrice['formula'];
             }
         }
 
         return view('ce.index', compact('players', 'tShirt', 'leisure', 'fun', 'performance', 'corpo', 'competition',
-            'contributionUnPaid'));
+            'contributionUnPaid', 'setting', 'totalPayable', 'totalPaid'));
     }
 }

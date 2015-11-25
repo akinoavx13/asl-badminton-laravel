@@ -117,7 +117,7 @@
                 <li>
                     <a href="{{ route('ce.index') }}">
                         <i class="fa fa-money"></i>
-                        <span class="nav-label">Informations pour le CE</span>
+                        <span class="nav-label">Budget</span>
                     </a>
                 </li>
             @endif

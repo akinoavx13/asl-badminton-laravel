@@ -16,8 +16,16 @@
 
     <div class="row">
         <div class="col-md-12">
+            <div class="alert alert-info text-center">
+                {{ $totalPaid }} € payé sur un total de {{ $totalPayable }} €
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
             <h2 class="text-center">
-                Informations pour le CE
+                Budget
             </h2>
         </div>
     </div>
@@ -31,7 +39,12 @@
                 <tr>
                     <td>
                         <button type="button" class="btn btn-danger m-r-sm">{{ $tShirt['number'] }}</button>
-                        t-shirt : <i class="text-danger">{{ $tShirt['price'] }} €</i>
+                        @if($tShirt['number'] > 1)
+                            t-shirts :
+                        @else
+                            t-shirt :
+                        @endif
+                        <i class="text-danger">{{ $tShirt['price'] }} €</i>
                     </td>
                     <td>
                         <button type="button" class="btn btn-primary m-r-sm">{{ $leisure['number'] }}</button>
@@ -82,6 +95,7 @@
                     </td>
                 </tr>
                 <tr>
+                    <td></td>
                     <td>
                         <button type="button"
                                 class="btn btn-warning m-r-sm">{{ $contributionUnPaid['number'] }}</button>
@@ -91,6 +105,7 @@
                             <i class="text-danger">cotisation non payée sur {{ count($players) }}</i>
                         @endif
                     </td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>
@@ -156,9 +171,9 @@
                                     </td>
                                     <td class="text-center">
                                         @if($player->hasCeState('contribution_payable'))
-                                            <i class="text-danger">{{ $player->totalPrice() }} €</i>
+                                            <i class="text-danger">{{ $price = $player->getTotalPrice($setting) }} €</i>
                                         @else
-                                            <i class="text-navy">{{ $player->totalPrice() }} €</i>
+                                            <i class="text-navy">{{ $price = $player->getTotalPrice($setting) }} €</i>
                                         @endif
                                     </td>
                                 </tr>

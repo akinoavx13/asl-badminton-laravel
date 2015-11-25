@@ -42,7 +42,7 @@
                 <div class="form-group" id="t_shirt">
                     <div class="col-md-3">
                         {!! Form::label('t_shirt', 'T-shirt :', ['class' => 'control-label']) !!}
-                        <i class="text-navy">(25€) *</i>
+                        <i class="text-navy">({{ $setting->t_shirt_price }}€) *</i>
                     </div>
 
                     <div class="col-md-9">
@@ -274,9 +274,9 @@
                     </div>
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external'))
-                            <h4 class="text-center"><strong>100€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->leisure_external_price }}€</strong></h4>
                         @else
-                            <h4 class="text-center"><strong>10€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->leisure_price }}€</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -317,9 +317,9 @@
                     </div>
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external'))
-                            <h4 class="text-center"><strong>100€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->fun_external_price }}€</strong></h4>
                         @else
-                            <h4 class="text-center"><strong>20€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->fun_price }}€</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -360,9 +360,9 @@
                     </div>
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external'))
-                            <h4 class="text-center"><strong>100€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->performance_external_price }}€</strong></h4>
                         @else
-                            <h4 class="text-center"><strong>30€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->performance_price }}€</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -403,9 +403,9 @@
                     </div>
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external'))
-                            <h4 class="text-center"><strong>100€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->corpo_external_price }}€</strong></h4>
                         @else
-                            <h4 class="text-center"><strong>40€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->corpo_price }}€</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -447,9 +447,9 @@
                     </div>
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external'))
-                            <h4 class="text-center"><strong>200€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->competition_external_price }}€</strong></h4>
                         @else
-                            <h4 class="text-center"><strong>80€</strong></h4>
+                            <h4 class="text-center"><strong>{{ $setting->competition_price }}€</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
