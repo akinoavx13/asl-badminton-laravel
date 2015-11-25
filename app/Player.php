@@ -69,11 +69,6 @@ class Player extends Model
         return $this->mixte === $mixte;
     }
 
-    public function hasFormula($formula)
-    {
-        return $this->formula === $formula;
-    }
-
     public function hasCeState($ce_state)
     {
         return $this->ce_state === $ce_state;
@@ -99,15 +94,6 @@ class Player extends Model
         return $this->corpo_mixte === $corpo_mixte;
     }
 
-    public function hasTShirt($t_shirt)
-    {
-        return $this->t_shirt === $t_shirt;
-    }
-
-    /******************/
-    /*      Scope     */
-    /******************/
-
     public function scopeWithSeason($query, $season_id)
     {
         $query->where('season_id', $season_id);
@@ -118,11 +104,72 @@ class Player extends Model
         $query->where('user_id', $user_id);
     }
 
+    /******************/
+    /*      Scope     */
+    /******************/
+
     public function scopeOrderByForname($query)
     {
         $query->with('user')
             ->join('users', 'users.id', '=', 'players.user_id')
             ->orderBy('users.forname', 'asc');
+    }
+
+    public function totalPrice()
+    {
+        $price = 0;
+
+        //calculate t-shirt but not corpo and competition player
+        if ($this->hasTShirt(true) && ! $this->hasFormula('corpo') && ! $this->hasFormula('competition'))
+        {
+            $price += 25;
+        }
+
+        //calculate leisure formula
+        if ($this->hasFormula('leisure'))
+        {
+            $price += $this->user->hasLectraRelation('external') ? 100 : 10;
+        }
+
+        //calculate fun formula
+        if ($this->hasFormula('fun'))
+        {
+            $price += $this->user->hasLectraRelation('external') ? 100 : 20;
+        }
+
+        //calculate performance formula
+        if ($this->hasFormula('performance'))
+        {
+            $price += $this->user->hasLectraRelation('external') ? 100 : 30;
+        }
+
+        //calculate corpo formula
+        if ($this->hasFormula('corpo'))
+        {
+            $price += $this->user->hasLectraRelation('external') ? 100 : 40;
+        }
+
+        //calculate competition formula
+        if ($this->hasFormula('competition'))
+        {
+            $price += $this->user->hasLectraRelation('external') ? 200 : 80;
+        }
+
+        return $price;
+    }
+
+    public function hasTShirt($t_shirt)
+    {
+        return $this->t_shirt === $t_shirt;
+    }
+
+    /******************/
+    /*    Functions   */
+    /******************/
+
+    public function hasFormula($formula)
+    {
+        return $this->formula === $formula;
     }
 
 }

@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="alert alert-danger">
+            <div class="alert alert-danger text-center">
                 Les prix indiqués si dessous ne contiennent pas les 10 € de l'ASL !
             </div>
         </div>
@@ -86,18 +86,10 @@
                         <button type="button"
                                 class="btn btn-warning m-r-sm">{{ $contributionUnPaid['number'] }}</button>
                         @if($contributionUnPaid['number'] > 1)
-                            <i class="text-danger">cotisations non payées</i>
+                            <i class="text-danger">cotisations non payées sur {{ count($players) }}</i>
                         @else
-                            <i class="text-danger">cotisation non payée</i>
+                            <i class="text-danger">cotisation non payée sur {{ count($players) }}</i>
                         @endif
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-default m-r-sm">40</button>
-                        Groups
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-warning m-r-sm">30</button>
-                        Permissions
                     </td>
                 </tr>
                 </tbody>
@@ -163,7 +155,11 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        À faire
+                                        @if($player->hasCeState('contribution_payable'))
+                                            <i class="text-danger">{{ $player->totalPrice() }} €</i>
+                                        @else
+                                            <i class="text-navy">{{ $player->totalPrice() }} €</i>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

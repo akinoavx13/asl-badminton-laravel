@@ -6,11 +6,8 @@
 
 @section('content')
     <div class="row">
-        @if($player !== null)
-            <div class="col-md-6">
-                @else
-        <div class="col-md-push-3 col-md-6">
-            @endif
+        <div class={!! $player === null ? "\"col-md-push-3 " : "\""!!}col-md-6">
+
             <div class="widget navy-bg p-xl">
                 <p class="text-center">
                     @if($user->avatar)
@@ -24,12 +21,13 @@
                 <br>
 
                 <h2 class="text-center">{{ $user }}</h2>
+
                 <ul class="list-unstyled m-t-md">
 
                     <li>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Email: </label>
+                                <label>Email:</label>
                             </div>
                             <div class="col-md-8">
                                 {{ $user->email }}
@@ -40,7 +38,7 @@
                     <li>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Sexe:</label>
+                                <label>Sexe :</label>
                             </div>
                             <div class="col-md-8">
                                 @if($user->hasGender('man'))
@@ -55,7 +53,7 @@
                     <li>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Lectra:</label>
+                                <label>Lectra :</label>
                             </div>
                             <div class="col-md-8">
                                 @if($user->hasLectraRelation('lectra'))
@@ -78,7 +76,7 @@
                     <li>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Etat:</label>
+                                <label>Etat :</label>
                             </div>
                             <div class="col-md-8">
                                 @if($user->hasState('holiday'))
@@ -99,7 +97,7 @@
                     <li>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Téléphone:</label>
+                                <label>Téléphone :</label>
                             </div>
                             <div class="col-md-8">
                                 @if($user->phone !== null)
@@ -112,11 +110,10 @@
                     </li>
 
                     @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
-
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label>Anniversaire:</label>
+                                    <label>Anniversaire :</label>
                                 </div>
                                 <div class="col-md-8">
                                     {{ \Jenssegers\Date\Date::create($user->getBirthday()->year, $user->getBirthday()->month, $user->getBirthday()->day)->format('l j F') }}
@@ -129,7 +126,7 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label>Adresse:</label>
+                                    <label>Adresse :</label>
                                 </div>
                                 <div class="col-md-8">
                                     @if($user->address !== null)
@@ -144,7 +141,7 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label>Licence:</label>
+                                    <label>Licence :</label>
                                 </div>
                                 <div class="col-md-8">
                                     @if($user->license !== null)
@@ -159,7 +156,7 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label>Taille de t-shirt:</label>
+                                    <label>Taille de t-shirt :</label>
                                 </div>
                                 <div class="col-md-8">
                                     {{ $user->tshirt_size }}
@@ -170,7 +167,7 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label>Actif:</label>
+                                    <label>Actif :</label>
                                 </div>
                                 <div class="col-md-8">
                                     @if($user->hasActive(true))
@@ -185,7 +182,7 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label>Newsletter:</label>
+                                    <label>Newsletter :</label>
                                 </div>
                                 <div class="col-md-8">
                                     @if($user->hasNewsletter(true))
@@ -196,207 +193,183 @@
                                 </div>
                             </div>
                         </li>
-                    </ul>
+                    @endif
+                </ul>
 
+                @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
                     <div class="text-center">
                         <a href="{{ route('user.edit', $user->id) }}" class="btn btn-info">Modifier</a>
                     </div>
-
                 @else
                     <br>
                     <div class="text-center">
                         <a href="mailto:{{ $user->email }}" class="btn btn-info">Envoyer un mail</a>
                     </div>
                 @endif
-
             </div>
         </div>
 
-                    @if($player !== null)
-                        <div class="col-md-6">
-                            <div class="widget blue-bg p-xl">
-                                <h2 class="text-center">Inscription en {{ $player->season }}</h2>
-                                <ul class="list-unstyled m-t-md">
+        @if($player !== null)
+            <div class="col-md-6">
+                <div class="widget blue-bg p-xl">
+                    <h2 class="text-center">Inscription en {{ $player->season }}</h2>
 
+                    <ul class="list-unstyled m-t-md">
+                        <li>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Formule :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @if($player->hasFormula('leisure'))
+                                        Loisir
+                                    @elseif($player->hasFormula('fun'))
+                                        Fun
+                                    @elseif($player->hasFormula('performance'))
+                                        Performance
+                                    @elseif($player->hasFormula('corpo'))
+                                        Corpo
+                                    @elseif($player->hasFormula('competition'))
+                                        Competition
+                                    @endif
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Simple :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @if($player->hasSimple(true))
+                                        <span class="fa fa-check-circle-o fa-2x text-navy"
+                                              aria-hidden="true"></span>
+                                    @else
+                                        <span class="fa fa-times-circle-o fa-2x text-warning"
+                                              aria-hidden="true"></span>
+                                    @endif
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Double :</label>
+                                </div>
+                                <div class="col-md-8">
                                     @if($player->hasDouble(true))
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    Double :
-                                                </div>
-                                                <div class="col-md-8">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @elseif($player->hasMixte(true))
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    Mixte :
-                                                </div>
-                                                <div class="col-md-8">
-                                                </div>
-                                            </div>
-                                        </li>
+                                        <span class="fa fa-check-circle-o fa-2x text-navy"
+                                              aria-hidden="true"></span>
+                                    @else
+                                        <span class="fa fa-times-circle-o fa-2x text-warning"
+                                              aria-hidden="true"></span>
                                     @endif
-
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Formule :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasFormula('leisure'))
-                                                    Loisir
-                                                @elseif($player->hasFormula('fun'))
-                                                    Fun
-                                                @elseif($player->hasFormula('performance'))
-                                                    Performance
-                                                @elseif($player->hasFormula('corpo'))
-                                                    Corpo
-                                                @elseif($player->hasFormula('competition'))
-                                                    Competition
-                                    @endif
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Simple :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasSimple(true))
-                                                    <span class="fa fa-check-circle-o fa-2x text-navy"
-                                                          aria-hidden="true"></span>
-                                                @else
-                                                    <span class="fa fa-times-circle-o fa-2x text-warning"
-                                                          aria-hidden="true"></span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Double :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasDouble(true))
-                                                    <span class="fa fa-check-circle-o fa-2x text-navy"
-                                                          aria-hidden="true"></span>
-                                                @else
-                                                    <span class="fa fa-times-circle-o fa-2x text-warning"
-                                                          aria-hidden="true"></span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Mixte :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasMixte(true))
-                                                    <span class="fa fa-check-circle-o fa-2x text-navy"
-                                                          aria-hidden="true"></span>
-                                                @else
-                                                    <span class="fa fa-times-circle-o fa-2x text-warning"
-                                                          aria-hidden="true"></span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                T-shirt :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasTShirt(true))
-                                                    <span class="fa fa-check-circle-o fa-2x text-navy"
-                                                          aria-hidden="true"></span>
-                                                @else
-                                                    <span class="fa fa-times-circle-o fa-2x text-warning"
-                                                          aria-hidden="true"></span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Corpo :
-                                            </div>
-                                            <div class="col-md-8">
-                                                @if($player->hasCorpoMan(true))
-                                                    Homme
-                                                    <br>
-                                                @endif
-                                                @if($player->hasCorpoWoman(true))
-                                                    Femme
-                                                    <br>
-                                                @endif
-                                                @if($player->hasCorpoMixte(true))
-                                                    Mixte
-                                                    <br>
-                                                @endif
-                                                @if($player->hasCorpoMan(false) && $player->hasCorpoWoman(false) && $player->hasCorpoMixte(false))
-                                                    <span class="fa fa-times-circle-o fa-2x text-warning"
-                                                          aria-hidden="true"></span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    Statue CE :
-                                                </div>
-                                                <div class="col-md-8">
-                                                    @if($player->hasCeState('contribution_payable'))
-                                                        <i class="text-warning">Contribution à payer</i>
-                                                    @elseif($player->hasCeState('contribution_paid'))
-                                                        <i class="text-navy">Contribution payée</i>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    Statue GBC :
-                                                </div>
-                                                <div class="col-md-8">
-                                                    @if($player->hasGbcState('non_applicable'))
-                                                        <i class="text-warning">Non applicable</i>
-                                                    @elseif($player->hasGbcState('entry_must'))
-                                                        <i class="text-warning">Dossier à remettre</i>
-                                                    @elseif($player->hasGbcState('valid'))
-                                                        <i class="text-navy">Valide</i>
-                                                    @endif
-                                                </div>
+                                </div>
                             </div>
-                                        </li>
+                        </li>
 
-                                </ul>
-                                <div class="text-center">
-                                    <a href="{{ route('player.edit', $user->id) }}"
-                                       class="btn btn-info">Modifier</a>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Mixte :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @if($player->hasMixte(true))
+                                        <span class="fa fa-check-circle-o fa-2x text-navy"
+                                              aria-hidden="true"></span>
+                                    @else
+                                        <span class="fa fa-times-circle-o fa-2x text-warning"
+                                              aria-hidden="true"></span>
+                                    @endif
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>T-shirt :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @if($player->hasTShirt(true))
+                                        <span class="fa fa-check-circle-o fa-2x text-navy"
+                                              aria-hidden="true"></span>
+                                    @else
+                                        <span class="fa fa-times-circle-o fa-2x text-warning"
+                                              aria-hidden="true"></span>
+                                    @endif
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Corpo :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @if($player->hasCorpoMan(true))
+                                        Homme
+                                        <br>
+                                    @endif
+                                    @if($player->hasCorpoWoman(true))
+                                        Femme
+                                        <br>
+                                    @endif
+                                    @if($player->hasCorpoMixte(true))
+                                        Mixte
+                                        <br>
+                                    @endif
+                                    @if($player->hasCorpoMan(false) && $player->hasCorpoWoman(false) && $player->hasCorpoMixte(false))
+                                        <span class="fa fa-times-circle-o fa-2x text-warning"
+                                              aria-hidden="true"></span>
+                                    @endif
+                                </div>
+                            </div>
+                        </li>
+                        @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Statue CE :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @if($player->hasCeState('contribution_payable'))
+                                            <i class="text-warning">Contribution à payer</i>
+                                        @elseif($player->hasCeState('contribution_paid'))
+                                            <i class="text-navy">Contribution payée</i>
+                                        @endif
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Statue GBC :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @if($player->hasGbcState('non_applicable'))
+                                            <i class="text-warning">Non applicable</i>
+                                        @elseif($player->hasGbcState('entry_must'))
+                                            <i class="text-warning">Dossier à remettre</i>
+                                        @elseif($player->hasGbcState('valid'))
+                                            <i class="text-navy">Valide</i>
+                                        @endif
+                                    </div>
+                                </div>
+                            </li>
+                        @endif
+                    </ul>
+                    @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
+                        <div class="text-center">
+                            <a href="{{ route('player.edit', $user->id) }}" class="btn btn-info">Modifier</a>
                         </div>
                     @endif
-                            </div>
-                        </div>
-                    @endif
+                </div>
             </div>
+        @endif
     </div>
 @stop

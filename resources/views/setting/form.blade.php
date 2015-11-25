@@ -96,6 +96,116 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('leisure_price', 'Prix loisir :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('leisure_price', $setting->exists ? $setting->leisure_price : old('leisure_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('leisure_external_price', 'Prix loisir externe :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('leisure_external_price', $setting->exists ? $setting->leisure_external_price : old('leisure_external_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('fun_price', 'Prix fun :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('fun_price', $setting->exists ? $setting->fun_price : old('fun_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('fun_external_price', 'Prix fun externe :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('fun_external_price', $setting->exists ? $setting->fun_external_price : old('fun_external_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('performance_price', 'Prix performance :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('performance_price', $setting->exists ? $setting->performance_price : old('performance_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('performance_external_price', 'Prix performance externe :') !!}<i
+                                class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('performance_external_price', $setting->exists ? $setting->performance_external_price : old('performance_external_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('corpo_price', 'Prix corpo :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('corpo_price', $setting->exists ? $setting->corpo_price : old('corpo_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('corpo_external_price', 'Prix corpo externe :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('corpo_external_price', $setting->exists ? $setting->corpo_external_price : old('corpo_external_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('competition_price', 'Prix compétition :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('competition_price', $setting->exists ? $setting->competition_price : old('competition_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('competition_external_price', 'Prix compétition externe :') !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('competition_external_price', $setting->exists ? $setting->competition_external_price : old('competition_external_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('t_shirt_price', 'Prix t-shirt :', ['class' => 'control-label']) !!}
+                        <i class="text-navy">*</i>
+                    </div>
+                    <div class="col-md-9">
+                        {!! Form::number('t_shirt_price', $setting->exists ? $setting->t_shirt_price : old('t_shirt_price'), ['class' => 'form-control', 'required', 'min' => 0]) !!}
+                    </div>
+                </div>
+
                 <div class="form-group text-center">
                     {!! Form::submit('Sauvegarder', ['class' => 'btn btn-primary']) !!}
                 </div>

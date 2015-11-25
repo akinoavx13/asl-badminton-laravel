@@ -15,6 +15,17 @@ class Setting extends Model
         'cc_email',
         'can_buy_t_shirt',
         'can_enroll',
+        'leisure_price',
+        'fun_price',
+        'performance_price',
+        'corpo_price',
+        'competition_price',
+        'leisure_external_price',
+        'fun_external_price',
+        'performance_external_price',
+        'corpo_external_price',
+        'competition_external_price',
+        't_shirt_price',
     ];
 
     protected $dates = ['created_at', 'updated_at'];

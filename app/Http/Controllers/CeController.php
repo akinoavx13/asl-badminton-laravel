@@ -49,8 +49,8 @@ class CeController extends Controller
 
         foreach ($players as $player)
         {
-            //calculate t-shirt
-            if ($player->hasTShirt(true))
+            //calculate t-shirt but not corpo and competition player
+            if ($player->hasTShirt(true) && ! $player->hasFormula('corpo') && ! $player->hasFormula('competition'))
             {
                 $tShirt['price'] += 25;
                 $tShirt['number']++;
