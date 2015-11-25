@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    CE
+    Budget
 @stop
 
 @section('content')
