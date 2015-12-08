@@ -8,6 +8,7 @@ use App\Http\Requests\PlayerUpdateRequest;
 use App\Player;
 use App\Season;
 use App\Setting;
+use App\Team;
 
 
 class PlayerController extends Controller
@@ -138,7 +139,10 @@ class PlayerController extends Controller
         $player = Player::findOrFail($player_id);
         $setting = Setting::first();
 
-        return view('player.edit', compact('player', 'setting'));
+        $double_partner = [];
+        $mixte_partner = [];
+
+        return view('player.edit', compact('player', 'setting', 'double_partner', 'mixte_partner'));
     }
 
     public function update(PlayerUpdateRequest $request, $player_id)
@@ -172,9 +176,31 @@ class PlayerController extends Controller
     {
         $player = new Player();
         $setting = Setting::first();
+        $activeSeason = Season::active()->first();
 
-        $double_partner = [];
-        $mixte_partner = [];
+        /*
+         * Players double
+         */
+        $playersDouble = Player::player('double', $activeSeason, $this->user)->get();
+
+        $double_partner['search'] = 'En recherche';
+
+        foreach($playersDouble as $playerDouble)
+        {
+            $double_partner[$playerDouble->id] = $playerDouble->__toString();
+        }
+
+        /*
+         * Players mixte
+         */
+        $playersMixte = Player::player('mixte', $activeSeason, $this->user)->get();
+
+        $mixte_partner['search'] = 'En recherche';
+
+        foreach($playersMixte as $playerMixte)
+        {
+            $mixte_partner[$playerMixte->id] = $playerMixte->__toString();
+        }
 
         return view('player.create', compact('player', 'setting', 'double_partner', 'mixte_partner'));
     }

@@ -50,6 +50,16 @@ class Player extends Model
         return $this->belongsTo('App\Season');
     }
 
+    public function teamsPlayerOne()
+    {
+        return $this->hasMany('App\Team', 'player_one');
+    }
+
+    public function teamsPlayerTwo()
+    {
+        return $this->hasMany('App\Team', 'player_two');
+    }
+
     /******************/
     /*      Has       */
     /******************/
@@ -123,6 +133,32 @@ class Player extends Model
     public function scopeOrderByForname($query)
     {
         $query->orderBy('users.forname', 'asc');
+    }
+
+    public function scopePlayer($query, $type, $activeSeason, $auth)
+    {
+        if($type === 'double')
+        {
+            $query->select('users.name', 'users.forname', 'players.*')
+                ->with('user')
+                ->join('users', 'users.id', '=', 'players.user_id')
+                ->withSeason($activeSeason->id)
+                ->where('users.id', '!=', $auth->id)
+                ->where('users.gender', $auth->gender == 'man' ? 'man' : 'woman')
+                ->where('players.' . $type, true)
+                ->orderByForname();
+        }
+        elseif($type === 'mixte')
+        {
+            $query->select('users.name', 'users.forname', 'players.*')
+                ->with('user')
+                ->join('users', 'users.id', '=', 'players.user_id')
+                ->withSeason($activeSeason->id)
+                ->where('users.id', '!=', $auth->id)
+                ->where('users.gender', $auth->gender == 'man' ? 'woman' : 'man')
+                ->where('players.' . $type, true)
+                ->orderByForname();
+        }
     }
 
     /******************/
