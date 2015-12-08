@@ -94,6 +94,22 @@ class Player extends Model
         return $this->corpo_mixte === $corpo_mixte;
     }
 
+    public function hasTShirt($t_shirt)
+    {
+        return $this->t_shirt === $t_shirt;
+    }
+
+    public function hasFormula($formula)
+    {
+        return $this->formula === $formula;
+    }
+
+
+
+    /******************/
+    /*      Scope     */
+    /******************/
+
     public function scopeWithSeason($query, $season_id)
     {
         $query->where('season_id', $season_id);
@@ -104,16 +120,14 @@ class Player extends Model
         $query->where('user_id', $user_id);
     }
 
-    /******************/
-    /*      Scope     */
-    /******************/
-
     public function scopeOrderByForname($query)
     {
-        $query->with('user')
-            ->join('users', 'users.id', '=', 'players.user_id')
-            ->orderBy('users.forname', 'asc');
+        $query->orderBy('users.forname', 'asc');
     }
+
+    /******************/
+    /*    Functions   */
+    /******************/
 
     public function getTotalPrice($setting)
     {
@@ -164,20 +178,6 @@ class Player extends Model
         }
 
         return $price;
-    }
-
-    /******************/
-    /*    Functions   */
-    /******************/
-
-    public function hasTShirt($t_shirt)
-    {
-        return $this->t_shirt === $t_shirt;
-    }
-
-    public function hasFormula($formula)
-    {
-        return $this->formula === $formula;
     }
 
 }

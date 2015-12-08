@@ -25,8 +25,10 @@ class CeController extends Controller
 
         $setting = Setting::first();
 
-        $players = Player::orderByForname()
-            ->select('players.*')
+        $players = Player::select('players.*')
+            ->with('user')
+            ->join('users', 'users.id', '=', 'players.user_id')
+            ->orderByForname()
             ->withSeason($season->id)
             ->get();
 

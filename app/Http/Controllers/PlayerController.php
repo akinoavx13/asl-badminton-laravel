@@ -99,8 +99,10 @@ class PlayerController extends Controller
 
             $season_id = $season !== null ? $season->id : null;
 
-            $players = Player::orderByForname()
-                ->select('players.*')
+            $players = Player::select('players.*')
+                ->with('user')
+                ->join('users', 'users.id', '=', 'players.user_id')
+                ->orderByForname()
                 ->withSeason($season_id)
                 ->get();
         }
@@ -111,8 +113,10 @@ class PlayerController extends Controller
 
             $season_id = $season !== null ? $season->id : null;
 
-            $players = Player::orderByForname()
-                ->select('players.*')
+            $players = Player::select('players.*')
+                ->with('user')
+                ->join('users', 'users.id', '=', 'players.user_id')
+                ->orderByForname()
                 ->withSeason($season_id)
                 ->get();
         }

@@ -204,4 +204,13 @@ class User extends Model implements AuthenticatableContract,
     {
         return Carbon::createFromFormat('Y-m-d', $this->attributes['ending_holiday']);
     }
+
+    /******************/
+    /*     Scopes    */
+    /******************/
+
+    public function scopeOrderByForname($query)
+    {
+        $query->orderBy('forname', 'asc');
+    }
 }

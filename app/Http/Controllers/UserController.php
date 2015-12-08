@@ -100,7 +100,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::orderBy('forname', 'asc')->get();
+        $users = User::OrderByForname()->get();
 
         return view('user.index', compact('users'));
     }
