@@ -14,7 +14,6 @@
 
                 @if($user->exists)
                     {!! Form::open(['route' => ['user.update', $user->id], 'class' => 'form-horizontal', 'files' => true]) !!}
-                    {!! Form::token() !!}
 
                     <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 
@@ -356,8 +355,8 @@
 </div>
 
 @section('javascript')
-        <!-- Mask -->
-<script src="{{ asset('js/plugins/jasny/jasny-bootstrap.min.js') }}"></script>
+
+<script src="{{ asset('js/app.min.js') }}"></script>
 
 <script>
 

@@ -18,7 +18,6 @@
                 @else
                     {!! Form::open(['route' => 'season.store', 'class' => 'form-horizontal']) !!}
                 @endif
-                {!! Form::token() !!}
 
                 <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 

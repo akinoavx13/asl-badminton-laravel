@@ -184,7 +184,6 @@
 @stop
 
 @section('javascript')
-    <script src="{{ asset('js/plugins/chosen/chosen.jquery.js') }}"></script>
     <script type="text/javascript">
         $(".chosen-select").chosen();
     </script>

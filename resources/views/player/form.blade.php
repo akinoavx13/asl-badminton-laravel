@@ -15,7 +15,6 @@
                 @else
                     {!! Form::open(['route' => ['player.update', $player->id], 'class' => 'form-horizontal']) !!}
                 @endif
-                {!! Form::token() !!}
 
                 @if($player->exists && $player->hasCeState('contribution_paid'))
                     <input name="formula" type="hidden" value="{{ $player->formula }}">

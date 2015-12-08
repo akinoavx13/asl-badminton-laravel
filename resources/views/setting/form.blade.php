@@ -8,7 +8,6 @@
             <div class="ibox-content">
 
                 {!! Form::open(['route' => ['setting.update', $setting->id], 'class' => 'form-horizontal']) !!}
-                {!! Form::token() !!}
 
                 <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 

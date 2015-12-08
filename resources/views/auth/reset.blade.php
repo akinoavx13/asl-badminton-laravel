@@ -8,11 +8,7 @@
 
     <title>Réinitialiser le mot de passe</title>
 
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('font-awesome/css/font-awesome.css') }}" rel="stylesheet">
-
-    <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.min.css') }}" rel="stylesheet">
 
 </head>
 
@@ -100,10 +96,7 @@
     </div>
 </div>
 
-
-<!-- Mainly scripts -->
-<script src="{{ asset('js/jquery-2.1.1.js') }}"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/app.min.js') }}"></script>
 
 </body>
 

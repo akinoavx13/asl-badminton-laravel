@@ -59,6 +59,7 @@ return [
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
             'strict' => false,
+            'unix_socket'   => env('DB_SOCKET', ''),
         ],
         'pgsql' => [
             'driver' => 'pgsql',
