@@ -11,7 +11,16 @@ class PlayerStoreRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        $user = $this->user();
+
+        if (!$user->hasRole('ce'))
+        {
+            return true;
+        }
+
+        abort(401, 'Unauthorized action.');
+
+        return false;
     }
 
     /**
@@ -30,6 +39,8 @@ class PlayerStoreRequest extends Request
             'corpo_man'   => 'required_if:formula,corpo,competition|boolean',
             'corpo_woman' => 'required_if:formula,corpo,competition|boolean',
             'corpo_mixte' => 'required_if:formula,corpo,competition|boolean',
+            'double_partner' => 'required_if:double,1',
+            'mixte_partner' => 'required_if:mixte,1',
         ];
     }
 }

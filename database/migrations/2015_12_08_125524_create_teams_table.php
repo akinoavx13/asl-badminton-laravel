@@ -25,9 +25,9 @@ class CreateTeamsTable extends Migration
             $table->integer('season_id')->unsigned()->index();
             $table->foreign('season_id')->references('id')->on('seasons')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->boolean('simple');
-            $table->boolean('double');
             $table->boolean('mixte');
+            $table->boolean('double');
+            $table->boolean('enable');
         });
     }
 

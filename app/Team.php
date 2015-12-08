@@ -14,13 +14,13 @@ class Team extends Model
         'season_id',
         'simple',
         'double',
-        'mixte',
+        'enable',
     ];
 
     protected $casts = [
         'simple'      => 'boolean',
         'double'      => 'boolean',
-        'mixte'       => 'boolean',
+        'enable'       => 'boolean',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -30,7 +30,7 @@ class Team extends Model
         $string = $this->playerOne->__toString();
         if($this->playerTwo !== null)
         {
-            $string .= $this->playerTwo->__toString();
+            $string .= ' & <br>' . $this->playerTwo->__toString();
         }
         return $string;
     }
@@ -43,6 +43,19 @@ class Team extends Model
     public function playerTwo()
     {
         return $this->belongsTo('App\Player', 'player_two');
+    }
+
+    /******************/
+    /*      Scope     */
+    /******************/
+
+    public function scopeSimple($query, $player, $activeSeason)
+    {
+        $query->where('player_one', $player->id)
+            ->whereNull('player_two')
+            ->where('double', false)
+            ->where('mixte', false)
+            ->where('season_id', $activeSeason->id);
     }
 
 }

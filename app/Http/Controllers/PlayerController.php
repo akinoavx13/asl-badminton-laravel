@@ -208,17 +208,17 @@ class PlayerController extends Controller
     public function store(PlayerStoreRequest $request)
     {
         //on s'inscrit dans la saison active
-        $seasonActive = Season::active()->first();
+        $activeSeason = Season::active()->first();
 
         //si il y a pas encore de saison
-        if ($seasonActive === null)
+        if ($activeSeason === null)
         {
             return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouverte !");
         }
 
         //compte le nombre d'inscription dans lesquels on est inscrit
         $numberOfPlayerForUserInSelectedSeason = Player::select('players.id')
-            ->withSeason($seasonActive->id)
+            ->withSeason($activeSeason->id)
             ->where('user_id', $this->user->id)
             ->count();
 
@@ -229,7 +229,7 @@ class PlayerController extends Controller
                 "Vous êtes est déjà inscrit !")->withInput($request->input());
         }
 
-        Player::create([
+        $player = Player::create([
             'formula'     => $request->formula,
             't_shirt'     => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
             'simple'      => $request->formula !== 'leisure' ? $request->simple : false,
@@ -241,8 +241,38 @@ class PlayerController extends Controller
             'user_id'     => $this->user->id,
             'ce_state'    => $this->user->hasRole('admin') ? $request->ce_state : 'contribution_payable',
             'gbc_state'   => $this->onPlayerCreateChoseGbc_state($request),
-            'season_id' => $seasonActive->id,
+            'season_id' => $activeSeason->id,
         ]);
+
+        /*
+         * Si je joue en simple
+         */
+        if($player->hasSimple(true))
+        {
+            //on cherche si l'équipe éxiste déjà
+            $myTeamSimple = Team::simple($player, $activeSeason)->first();
+
+            //si on a déjà une, on la passe active
+            if ($myTeamSimple != null)
+            {
+                $myTeamSimple->update([
+                   'enable' => true,
+                ]);
+            }
+
+            //sinon il faut créer une équipe
+            else
+            {
+                Team::create([
+                    'player_one' => $player->id,
+                    'player_two' => null,
+                    'double' => false,
+                    'mixte' => false,
+                    'enable' => true,
+                    'season_id' => $activeSeason->id
+                ]);
+            }
+        }
 
         return redirect()->route('home.index')->with('success', "Vous êtes bien inscrit !");
     }
