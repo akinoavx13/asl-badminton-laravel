@@ -112,6 +112,17 @@
                             </div>
                         </div>
 
+                        <div class="form-group" id="double_partner" style="display: none;">
+                            <div class="col-md-3">
+                                {!! Form::label('formula', 'Partenaire :', ['class' => 'control-label']) !!}
+                                <i class="text-navy">*</i>
+                            </div>
+
+                            <div class="col-md-9">
+                                {!! Form::select('double_partner', $double_partner, old('double_partner'), ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <div class="col-md-3">
                                 {!! Form::label('mixte', 'Mixte :', ['class' => 'control-label']) !!}
@@ -131,6 +142,17 @@
                                         Non
                                     </label>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="mixte_partner" style="display: none;">
+                            <div class="col-md-3">
+                                {!! Form::label('formula', 'Partenaire :', ['class' => 'control-label']) !!}
+                                <i class="text-navy">*</i>
+                            </div>
+
+                            <div class="col-md-9">
+                                {!! Form::select('mixte_partner', $mixte_partner, old('mixte_partner'), ['class' => 'form-control']) !!}
                             </div>
                         </div>
 
@@ -490,16 +512,16 @@
 
         function showPartner() {
             if ($('input[type=radio][name=double]:checked').attr('value') == 1) {
-                $('#double-partner').fadeIn(200);
+                $('#double_partner').fadeIn(200);
             }
             else {
-                $('#double-partner').fadeOut(200);
+                $('#double_partner').fadeOut(200);
             }
             if ($('input[type=radio][name=mixte]:checked').attr('value') == 1) {
-                $('#mixte-partner').fadeIn(200);
+                $('#mixte_partner').fadeIn(200);
             }
             else {
-                $('#mixte-partner').fadeOut(200);
+                $('#mixte_partner').fadeOut(200);
             }
         }
 

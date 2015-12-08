@@ -173,7 +173,10 @@ class PlayerController extends Controller
         $player = new Player();
         $setting = Setting::first();
 
-        return view('player.create', compact('player', 'setting'));
+        $double_partner = [];
+        $mixte_partner = [];
+
+        return view('player.create', compact('player', 'setting', 'double_partner', 'mixte_partner'));
     }
 
     public function store(PlayerStoreRequest $request)
