@@ -138,9 +138,67 @@ class PlayerController extends Controller
     {
         $player = Player::findOrFail($player_id);
         $setting = Setting::first();
+        $activeSeason = Season::active()->first();
 
-        $double_partner = [];
-        $mixte_partner = [];
+        /*
+         * Players double
+         */
+        $playersDouble = Player::player('double', $activeSeason, $this->user)->get();
+
+        //on prend notre équipe de double
+        $parterDouble = Team::doubleEnable($player, $activeSeason)->first();
+
+        //si on en a une il faut la mettre en premier dans le select
+        if ($parterDouble !== null)
+        {
+            //si je suis le premier joueur, mon partenaire est le deuxième joueur
+            if ($parterDouble->player_one === $player->id)
+            {
+                $double_partner[$parterDouble->player_two] = $parterDouble->playerTwo->__toString();
+            }
+            //si je suis le deuxième joueur, mon partenaire est le premier joueur
+            elseif ($parterDouble->player_two === $player->id)
+            {
+                $double_partner[$parterDouble->player_one] = $parterDouble->playerOne->__toString();
+            }
+        }
+
+        $double_partner['search'] = 'En recherche';
+
+        foreach ($playersDouble as $playerDouble)
+        {
+            $double_partner[$playerDouble->id] = $playerDouble->__toString();
+        }
+
+        /*
+         * Players mixte
+         */
+        $playersMixte = Player::player('mixte', $activeSeason, $this->user)->get();
+
+        //on prend notre équipe de mixte
+        $parterMixte = Team::mixteEnable($player, $activeSeason)->first();
+
+        //si on en a une il faut la mettre en premier dans le select
+        if ($parterMixte !== null)
+        {
+            //si je suis le premier joueur, mon partenaire est le deuxième joueur
+            if ($parterMixte->player_one === $player->id)
+            {
+                $mixte_partner[$parterMixte->player_two] = $parterMixte->playerTwo->__toString();
+            }
+            //si je suis le deuxième joueur, mon partenaire est le premier joueur
+            elseif ($parterMixte->player_two === $player->id)
+            {
+                $mixte_partner[$parterMixte->player_one] = $parterMixte->playerOne->__toString();
+            }
+        }
+
+        $mixte_partner['search'] = 'En recherche';
+
+        foreach ($playersMixte as $playerMixte)
+        {
+            $mixte_partner[$playerMixte->id] = $playerMixte->__toString();
+        }
 
         return view('player.edit', compact('player', 'setting', 'double_partner', 'mixte_partner'));
     }
@@ -148,6 +206,7 @@ class PlayerController extends Controller
     public function update(PlayerUpdateRequest $request, $player_id)
     {
         $player = Player::findOrFail($player_id);
+        $activeSeason = Season::active()->first();
 
         //si on est admin on peut mettre à jour les 2 champs
         if ($this->user->hasRole('admin'))
@@ -169,6 +228,8 @@ class PlayerController extends Controller
             'corpo_mixte' => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
         ]);
 
+        $this->createTeams($player, $activeSeason, $request->double_partner, $request->mixte_partner);
+
         return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
     }
 
@@ -185,7 +246,7 @@ class PlayerController extends Controller
 
         $double_partner['search'] = 'En recherche';
 
-        foreach($playersDouble as $playerDouble)
+        foreach ($playersDouble as $playerDouble)
         {
             $double_partner[$playerDouble->id] = $playerDouble->__toString();
         }
@@ -197,7 +258,7 @@ class PlayerController extends Controller
 
         $mixte_partner['search'] = 'En recherche';
 
-        foreach($playersMixte as $playerMixte)
+        foreach ($playersMixte as $playerMixte)
         {
             $mixte_partner[$playerMixte->id] = $playerMixte->__toString();
         }
@@ -241,38 +302,10 @@ class PlayerController extends Controller
             'user_id'     => $this->user->id,
             'ce_state'    => $this->user->hasRole('admin') ? $request->ce_state : 'contribution_payable',
             'gbc_state'   => $this->onPlayerCreateChoseGbc_state($request),
-            'season_id' => $activeSeason->id,
+            'season_id'   => $activeSeason->id,
         ]);
 
-        /*
-         * Si je joue en simple
-         */
-        if($player->hasSimple(true))
-        {
-            //on cherche si l'équipe éxiste déjà
-            $myTeamSimple = Team::simple($player, $activeSeason)->first();
-
-            //si on a déjà une, on la passe active
-            if ($myTeamSimple != null)
-            {
-                $myTeamSimple->update([
-                   'enable' => true,
-                ]);
-            }
-
-            //sinon il faut créer une équipe
-            else
-            {
-                Team::create([
-                    'player_one' => $player->id,
-                    'player_two' => null,
-                    'double' => false,
-                    'mixte' => false,
-                    'enable' => true,
-                    'season_id' => $activeSeason->id
-                ]);
-            }
-        }
+        $this->createTeams($player, $activeSeason, $request->double_partner, $request->mixte_partner);
 
         return redirect()->route('home.index')->with('success', "Vous êtes bien inscrit !");
     }
@@ -332,5 +365,132 @@ class PlayerController extends Controller
 
         return redirect()->back()->with('error',
             "Le joueur $player est non applicable ou il a déjà validé son dossier!");
+    }
+
+    private function createTeams($player, $activeSeason, $double_partner, $mixte_partner)
+    {
+        //Mon équipe de simple
+        $myTeamSimple = Team::simple($player, $activeSeason)->first();
+        //Mon équipe de double avec ce partenanire
+        $myTeamDouble = Team::double($player, $activeSeason, $double_partner)->first();
+        //Mon équipe de mixte avec partenaire
+        $myTeamMixte = Team::mixte($player, $activeSeason, $mixte_partner)->first();
+
+        /*
+         * Simple
+         */
+        //je joue en simple
+        if ($player->hasSimple(true))
+        {
+            //si on a déjà une équipe de simple, on la passe active
+            if ($myTeamSimple !== null)
+            {
+                $myTeamSimple->update([
+                    'enable' => true,
+                ]);
+            }
+
+            //sinon il faut créer une équipe
+            else
+            {
+                Team::create([
+                    'player_one' => $player->id,
+                    'player_two' => null,
+                    'simple'     => true,
+                    'double'     => false,
+                    'mixte'      => false,
+                    'enable'     => true,
+                    'season_id'  => $activeSeason->id,
+                ]);
+            }
+        }
+        //je ne joue pas en simple
+        elseif ($player->hasSimple(false))
+        {
+            //si on a une équipe de simple, on la passe inactive
+            if ($myTeamSimple !== null)
+            {
+                $myTeamSimple->update([
+                    'enable' => false,
+                ]);
+            }
+        }
+
+        /*
+         * Double
+         */
+
+        //on désactive toutes mes équipes de double
+        foreach (Team::double($player, $activeSeason)->get() as $teamDouble)
+        {
+            $teamDouble->update([
+                'enable' => false,
+            ]);
+        }
+
+        //je joue en double avec un partenaire
+        if ($player->hasDouble(true) && $double_partner !== 'search')
+        {
+            //si j'ai une équipe de double avec le partenaire choisit, on l'active
+            if ($myTeamDouble !== null)
+            {
+                $myTeamDouble->update([
+                    'enable' => true,
+                ]);
+            }
+
+            //sinon il faut en créer une
+            else
+            {
+                Team::create([
+                    'player_one' => $player->id,
+                    'player_two' => $double_partner,
+                    'simple'     => false,
+                    'double'     => true,
+                    'mixte'      => false,
+                    'enable'     => true,
+                    'season_id'  => $activeSeason->id,
+                ]);
+            }
+        }
+
+        /*
+         * Mixte
+         */
+
+        //on désactive toutes mes équipes de mixte
+        foreach (Team::mixte($player, $activeSeason)->get() as $teamMixte)
+        {
+            $teamMixte->update([
+                'enable' => false,
+            ]);
+        }
+
+        //si on joue en mixte avec un partenaire
+        if ($player->hasMixte(true) && $mixte_partner !== 'search')
+        {
+            //si j'ai une équipe de mixte avec le partenaire choisit, on l'active
+            if ($myTeamMixte !== null)
+            {
+                $myTeamMixte->update([
+                    'enable' => true,
+                ]);
+            }
+
+            //sinon il faut en créer une
+            else
+            {
+                Team::create([
+                    'player_one' => $player->id,
+                    'player_two' => $mixte_partner,
+                    'simple'     => false,
+                    'double'     => false,
+                    'mixte'      => true,
+                    'enable'     => true,
+                    'season_id'  => $activeSeason->id,
+                ]);
+            }
+        }
+
     }
 }

@@ -112,14 +112,14 @@
                             </div>
                         </div>
 
-                        <div class="form-group" id="double_partner" style="display: none;">
+                        <div class="form-group" id="double_partner">
                             <div class="col-md-3">
                                 {!! Form::label('formula', 'Partenaire :', ['class' => 'control-label']) !!}
                                 <i class="text-navy">*</i>
                             </div>
 
                             <div class="col-md-9">
-                                {!! Form::select('double_partner', $double_partner, old('double_partner'), ['class' => 'form-control',
+                                {!! Form::select('double_partner', $double_partner, old('double_partner'), ['class' => 'chosen-select', 'style' => 'width: 100%;',
                                 $player->exists && $player->hasDouble(true) ? 'required' : '']) !!}
                             </div>
                         </div>
@@ -146,14 +146,14 @@
                             </div>
                         </div>
 
-                        <div class="form-group" id="mixte_partner" style="display: none;">
+                        <div class="form-group" id="mixte_partner">
                             <div class="col-md-3">
                                 {!! Form::label('formula', 'Partenaire :', ['class' => 'control-label']) !!}
                                 <i class="text-navy">*</i>
                             </div>
 
                             <div class="col-md-9">
-                                {!! Form::select('mixte_partner', $mixte_partner, old('mixte_partner'), ['class' => 'form-control',
+                                {!! Form::select('mixte_partner', $mixte_partner, old('mixte_partner'), ['class' => 'chosen-select', 'style' => 'width: 100%;',
                                 $player->exists && $player->hasMixte(true) ? 'required' : '']) !!}
                             </div>
                         </div>
@@ -597,5 +597,9 @@
             $('input[name=mixte]').on('change', showPartner);
             showPartner();
         });
+    </script>
+
+    <script type="text/javascript">
+        $(".chosen-select").chosen();
     </script>
 @stop

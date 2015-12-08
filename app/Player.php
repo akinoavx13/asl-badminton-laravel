@@ -122,12 +122,12 @@ class Player extends Model
 
     public function scopeWithSeason($query, $season_id)
     {
-        $query->where('season_id', $season_id);
+        $query->where('players.season_id', $season_id);
     }
 
     public function scopeWithUser($query, $user_id)
     {
-        $query->where('user_id', $user_id);
+        $query->where('players.user_id', $user_id);
     }
 
     public function scopeOrderByForname($query)

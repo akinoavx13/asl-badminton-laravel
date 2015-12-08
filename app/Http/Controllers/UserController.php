@@ -57,8 +57,8 @@ class UserController extends Controller
 
         //users show
         $router->get('/show/{user_id}', [
-            'uses'       => 'UserController@show',
-            'as'         => 'user.show',
+            'uses' => 'UserController@show',
+            'as'   => 'user.show',
         ]);
 
         //users create
@@ -122,14 +122,14 @@ class UserController extends Controller
             'birthday'            => $request->birthday,
             'tshirt_size'         => $request->tshirt_size,
             'gender'              => $request->gender,
-            'address'  => $request->address !== "" ? $request->address : null,
-            'phone'    => $request->phone !== "" ? $request->phone : null,
-            'license'  => $request->license !== "" ? $request->license : null,
+            'address'             => $request->address !== "" ? $request->address : null,
+            'phone'               => $request->phone !== "" ? $request->phone : null,
+            'license'             => $request->license !== "" ? $request->license : null,
             'state'               => $request->state,
             'lectra_relationship' => $request->lectra_relationship,
             'newsletter'          => $request->newsletter,
-            'password' => $request->password !== "" ? bcrypt($request->password) : $user->password,
-            'avatar'   => $request->avatar,
+            'password'            => $request->password !== "" ? bcrypt($request->password) : $user->password,
+            'avatar'              => $request->avatar,
         ]);
 
         $this->ifInjuryHolidayAreAfterNow($user, $request);
@@ -211,8 +211,8 @@ class UserController extends Controller
             'role'                   => $request->role,
             'active'                 => $request->active,
             'token_first_connection' => str_random(60),
-            'ending_injury'  => Carbon::now()->format('d/m/Y'),
-            'ending_holiday' => Carbon::now()->format('d/m/Y'),
+            'ending_injury'          => Carbon::now()->format('d/m/Y'),
+            'ending_holiday'         => Carbon::now()->format('d/m/Y'),
         ]);
 
         if (Helpers::getInstance()->canSendMail())
@@ -258,7 +258,7 @@ class UserController extends Controller
                 'state'               => $request->state,
                 'lectra_relationship' => $request->lectra_relationship,
                 'newsletter'          => $request->newsletter,
-                'password' => bcrypt($request->password),
+                'password'            => bcrypt($request->password),
                 'avatar'              => $request->avatar,
                 'first_connect'       => false,
             ]);

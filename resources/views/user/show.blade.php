@@ -365,7 +365,7 @@
                     </ul>
                     @if($auth->hasRole('admin') || $auth->hasOwner($user->id))
                         <div class="text-center">
-                            <a href="{{ route('player.edit', $user->id) }}" class="btn btn-info">Modifier</a>
+                            <a href="{{ route('player.edit', $player->id) }}" class="btn btn-info">Modifier</a>
                         </div>
                     @endif
                 </div>
