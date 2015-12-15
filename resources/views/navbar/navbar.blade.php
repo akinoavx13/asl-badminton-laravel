@@ -43,6 +43,10 @@
                         </li>
                     </ul>
                 </div>
+                <div class="logo-element">
+                    <img src="{{ asset('img/logoWhite.png') }}"
+                         class="img-circle" alt="logo" width="40" height="40"/>
+                </div>
             </li>
 
             @if($auth->hasRole('user') || $auth->hasRole('admin'))
