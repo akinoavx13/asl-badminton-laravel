@@ -21,16 +21,14 @@
                                     {{ $auth }}
                                 </strong>
                             </span>
-                            <span class="text-muted text-xs block">
-                                <span>
-                                    @if($auth->hasRole('admin'))
-                                        Administrateur
-                                    @elseif($auth->hasRole('user'))
-                                        Utilisateur
-                                    @elseif($auth->hasRole('ce'))
-                                        CE
-                                    @endif
-                                </span>
+                            <span class="text-muted block">
+                                @if($auth->hasRole('admin'))
+                                    Administrateur
+                                @elseif($auth->hasRole('user'))
+                                    Utilisateur
+                                @elseif($auth->hasRole('ce'))
+                                    CE
+                                @endif
                                 <b class="caret"></b>
                             </span>
                         </span>
@@ -49,7 +47,7 @@
 
             @if($auth->hasRole('user') || $auth->hasRole('admin'))
 
-                <li>
+                <li class="{{ Request::is('home') ? 'active' : '' }}">
                     <a href="{{ route('home.index') }}">
                         <i class="fa fa-home"></i>
                         <span class="nav-label">Accueil</span>
@@ -58,14 +56,14 @@
 
                 @if($auth->hasRole('admin'))
 
-                    <li>
+                    <li class="{{ Request::is('setting*') ? 'active' : '' }}">
                         <a href="{{ route('setting.index') }}">
                             <i class="fa fa-cogs"></i>
                             <span class="nav-label">Paramètres</span>
                         </a>
                     </li>
 
-                    <li>
+                    <li class="{{ Request::is('user*') ? 'active' : '' }}">
                         <a href="#">
                             <i class="fa fa-user"></i>
                             <span class="nav-label">Utilisateurs</span>
@@ -82,14 +80,14 @@
                         </ul>
                     </li>
 
-                    <li>
+                    <li class="{{ Request::is('player/index') ? 'active' : '' }}">
                         <a href="{{ route('player.index') }}">
                             <i class="fa fa-group"></i>
                             <span class="nav-label">Liste des joueurs</span>
                         </a>
                     </li>
 
-                    <li>
+                    <li class="{{ Request::is('season*') ? 'active' : '' }}">
                         <a href="#">
                             <i class="fa fa-star-half-full"></i>
                             <span class="nav-label">Saisons</span>
@@ -106,7 +104,7 @@
 
                 @endif
 
-                <li>
+                <li class="{{ Request::is('player/create') ? 'active' : '' }}">
                     <a href="{{ route('player.create') }}">
                         <i class="fa fa-ticket"></i>
                         <span class="nav-label">S'inscrire à une saison</span>
@@ -114,7 +112,7 @@
                 </li>
             @endif
             @if($auth->hasRole('ce') || $auth->hasRole('admin'))
-                <li>
+                <li class="{{ Request::is('ce') ? 'active' : '' }}">
                     <a href="{{ route('ce.index') }}">
                         <i class="fa fa-money"></i>
                         <span class="nav-label">Budget</span>

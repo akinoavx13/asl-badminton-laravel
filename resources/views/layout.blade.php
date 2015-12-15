@@ -15,7 +15,7 @@
 
 </head>
 
-<body>
+<body class="md-skin">
 
 <div id="wrapper">
     @include('navbar.navbar')
