@@ -17,7 +17,7 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped table-hover display" id="seasonList">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Nom</th>
@@ -67,4 +67,12 @@
         <h2 class="text-center text-danger">Pas de saison</h2>
 
     @endif
+@stop
+
+@section('javascript')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#seasonList').DataTable();
+        } );
+    </script>
 @stop

@@ -44,7 +44,7 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-content">
                             <div class="table-responsive">
-                                <table class="table table-striped table-hover">
+                                <table class="table table-striped table-hover display" id="playerList">
                                     <thead>
                                     <tr>
                                         <th class="text-center">Prénom</th>
@@ -186,5 +186,9 @@
 @section('javascript')
     <script type="text/javascript">
         $(".chosen-select").chosen();
+
+        $(document).ready(function() {
+            $('#playerList').DataTable();
+        } );
     </script>
 @stop

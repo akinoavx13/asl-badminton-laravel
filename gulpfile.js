@@ -18,7 +18,10 @@ elixir(function(mix) {
   'sweetalert.css',
   'animate.css',
   'style.css',
-  'plugins/chosen/chosen.css'
+  'plugins/chosen/chosen.css',
+  'plugins/dataTables/dataTables.bootstrap.css',
+  'plugins/dataTables/dataTables.responsive.css',
+  'plugins/dataTables/dataTables.tableTools.min.css'
  ], 'public/css/app.min.css');
 
  mix.scripts([
@@ -30,6 +33,10 @@ elixir(function(mix) {
   'plugins/jasny/jasny-bootstrap.min.js',
   'plugins/metisMenu/jquery.metisMenu.js',
   'plugins/slimscroll/jquery.slimscroll.min.js',
-  'plugins/chosen/chosen.jquery.js'
+  'plugins/chosen/chosen.jquery.js',
+  'plugins/dataTables/jquery.dataTables.js',
+  'plugins/dataTables/dataTables.bootstrap.js',
+  'plugins/dataTables/dataTables.responsive.js',
+  'plugins/dataTables/dataTables.tableTools.min.js'
  ], 'public/js/app.min.js')
 });

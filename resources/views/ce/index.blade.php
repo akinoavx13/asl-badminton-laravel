@@ -117,7 +117,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover display" id="ceList">
                             <thead>
                             <tr>
                                 <th class="text-center">Prénom</th>
@@ -185,4 +185,12 @@
             </div>
         </div>
     </div>
+@stop
+
+@section('javascript')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#ceList').DataTable();
+        } );
+    </script>
 @stop

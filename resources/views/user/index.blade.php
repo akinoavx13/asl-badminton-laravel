@@ -16,7 +16,7 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover display" id="userList">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Prénom</th>
@@ -118,4 +118,12 @@
         <h2 class="text-center text-danger">Pas d'utilisateur</h2>
 
     @endif
+@stop
+
+@section('javascript')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#userList').DataTable();
+        } );
+    </script>
 @stop
