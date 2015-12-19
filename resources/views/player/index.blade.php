@@ -15,17 +15,15 @@
             {!! Form::token() !!}
 
             <div class="form-group">
-                <div class="col-md-4 col-md-offset-4">
-                    {!! Form::select('season_id', $seasons, $season !== null ? $season->id : null,['class' => 'chosen-select', 'style' => 'width: 320px;']) !!}
+                <div class="col-md-2 col-md-offset-5">
+                    {!! Form::select('season_id', $seasons, $season !== null ? $season->id : null,['class' => 'chosen-select', 'style' => 'width: 100%;']) !!}
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-4 col-md-offset-5">
-                    <button type="submit" class="btn btn-success">
-                        Choisir cette saison
-                    </button>
-                </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-success">
+                    Choisir cette saison
+                </button>
             </div>
             {!! Form::close() !!}
         </div>
