@@ -79,28 +79,28 @@
                                             <td class="text-center">
                                                 @if($player->hasSimple(true))
                                                     <span class="fa fa-check-circle-o fa-2x text-success"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>simple</span></span>
                                                 @elseif($player->hasSimple(false))
                                                     <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>pas simple</span></span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
                                                 @if($player->hasDouble(true))
                                                     <span class="fa fa-check-circle-o fa-2x text-success"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>double</span></span>
                                                 @elseif($player->hasDouble(false))
                                                     <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>pas double</span></span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
                                                 @if($player->hasMixte(true))
                                                     <span class="fa fa-check-circle-o fa-2x text-success"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>mixte</span></span>
                                                 @elseif($player->hasMixte(false))
                                                     <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>pas mixte</span></span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
@@ -137,19 +137,19 @@
                                             <td class="text-center">
                                                 @if($player->hasCorpoMan(true) || $player->hasCorpoWoman(true) || $player->hasCorpoMixte(true))
                                                     <span class="fa fa-check-circle-o fa-2x text-success"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>corpo</span></span>
                                                 @else
                                                     <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>pas corpo</span></span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
                                                 @if($player->hasTShirt(true))
                                                     <span class="fa fa-check-circle-o fa-2x text-success"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>polo</span></span>
                                                 @else
                                                     <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                          aria-hidden="true"></span>
+                                                          aria-hidden="true"><span hidden>pas polo</span></span>
                                                 @endif
                                             </td>
                                             <td class="text-center">

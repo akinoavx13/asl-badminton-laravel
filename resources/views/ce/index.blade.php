@@ -155,10 +155,10 @@
                                     <td class="text-center">
                                         @if($player->hasTShirt(true))
                                             <span class="fa fa-check-circle-o fa-2x text-success"
-                                                  aria-hidden="true"></span>
+                                                  aria-hidden="true"><span hidden>t_shirt</span></span>
                                         @else
                                             <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                  aria-hidden="true"></span>
+                                                  aria-hidden="true"><span hidden>pas t_shirt</span></span>
                                         @endif
                                     </td>
                                     <td class="text-center">

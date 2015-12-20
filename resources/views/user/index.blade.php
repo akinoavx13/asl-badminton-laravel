@@ -66,10 +66,10 @@
                                         <td class="text-center">
                                             @if($user->hasNewsletter(true))
                                                 <span class="fa fa-check-circle-o fa-2x text-success"
-                                                      aria-hidden="true"></span>
+                                                      aria-hidden="true"><span hidden>newsletter</span></span>
                                             @elseif($user->hasNewsletter(false))
                                                 <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                      aria-hidden="true"></span>
+                                                      aria-hidden="true"><span hidden>pas newsletter</span></span>
                                             @endif
                                         </td>
                                         <td class="text-center">
@@ -86,12 +86,12 @@
                                                 <div class="text-center">
                                                     <a href="{{ route('user.send_creation_link', $user->id) }}"
                                                        class="btn btn-primary">
-                                                        <span class="fa fa-send" aria-hidden="true"></span>
+                                                        <span class="fa fa-send" aria-hidden="true"><span hidden>première connection</span></span>
                                                     </a>
                                                 </div>
                                             @elseif($user->hasFirstConnection(false))
                                                 <span class="fa fa-check-circle-o fa-2x text-success"
-                                                      aria-hidden="true"></span>
+                                                      aria-hidden="true"><span hidden>pas première connection</span></span>
                                             @endif
                                         </td>
                                         <td class="text-center">
