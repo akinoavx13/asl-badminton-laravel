@@ -132,7 +132,7 @@ class UserController extends Controller
             'avatar'              => $request->avatar,
         ]);
 
-        $this->ifInjuryHolidayAreAfterNow($user, $request);
+        $this->updateIfInjuryHolidayAreAfterNow($user, $request);
 
         if ($this->user->hasRole('admin'))
         {
@@ -146,7 +146,7 @@ class UserController extends Controller
             "Les modifications sont bien prises en compte !");
     }
 
-    private function ifInjuryHolidayAreAfterNow($user, $request)
+    private function updateIfInjuryHolidayAreAfterNow($user, $request)
     {
         //si la date de fin de blessure est antèrieur à aujourd'hui
         if ($user->hasState('hurt') && Carbon::createFromFormat('d/m/Y', $request->ending_injury) <= Carbon::now())
@@ -263,7 +263,7 @@ class UserController extends Controller
                 'first_connect'       => false,
             ]);
 
-            $this->ifInjuryHolidayAreAfterNow($user, $request);
+            $this->updateIfInjuryHolidayAreAfterNow($user, $request);
 
             Auth::login($user);
 

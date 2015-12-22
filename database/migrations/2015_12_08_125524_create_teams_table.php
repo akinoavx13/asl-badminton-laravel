@@ -25,8 +25,10 @@ class CreateTeamsTable extends Migration
             $table->integer('season_id')->unsigned()->index();
             $table->foreign('season_id')->references('id')->on('seasons')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->boolean('simple');
-            $table->boolean('double');
+            $table->boolean('simple_man');
+            $table->boolean('simple_woman');
+            $table->boolean('double_man');
+            $table->boolean('double_woman');
             $table->boolean('mixte');
             $table->boolean('enable');
         });

@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    /**
+    /**w
      * Register any application services.
      *
      * @return void

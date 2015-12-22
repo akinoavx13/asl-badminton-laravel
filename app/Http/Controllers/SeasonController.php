@@ -112,7 +112,7 @@ class SeasonController extends Controller
     {
         $seasonSelected = Season::findOrFail($season_id);
 
-        //on prend toutes les saison active
+        //on prend toutes les saisons actives
         foreach (Season::active()->get() as $season)
         {
             $season->update([

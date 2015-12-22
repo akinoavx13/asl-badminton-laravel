@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers;
 use App\Http\Requests;
 use App\Http\Requests\SettingUpdateRequest;
 use App\Setting;
@@ -34,7 +35,7 @@ class SettingController extends Controller
 
     public function index()
     {
-        $setting = Setting::first();
+        $setting = Helpers::getInstance()->setting();
 
         return view('setting.index', compact('setting'));
     }

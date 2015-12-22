@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers;
 use App\Player;
 use App\Setting;
 use Closure;
@@ -17,7 +18,7 @@ class BuyTshirtClose
      */
     public function handle($request, Closure $next)
     {
-        $setting = Setting::first();
+        $setting = Helpers::getInstance()->setting();
         $player_id = $request->player_id;
         $player = null;
         if ($player_id != null)

@@ -119,7 +119,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                {!! Form::select('double_partner', $double_partner, old('double_partner'), ['class' => 'chosen-select', 'style' => 'width: 100%;',
+                                {!! Form::select('double_partner', $listPartnerAvailable['double'], old('double_partner'), ['class' => 'chosen-select', 'style' => 'width: 100%;',
                                 $player->exists && $player->hasDouble(true) ? 'required' : '']) !!}
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                {!! Form::select('mixte_partner', $mixte_partner, old('mixte_partner'), ['class' => 'chosen-select', 'style' => 'width: 100%;',
+                                {!! Form::select('mixte_partner', $listPartnerAvailable['mixte'], old('mixte_partner'), ['class' => 'chosen-select', 'style' => 'width: 100%;',
                                 $player->exists && $player->hasMixte(true) ? 'required' : '']) !!}
                             </div>
                         </div>

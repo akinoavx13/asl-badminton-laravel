@@ -15,7 +15,7 @@
             {!! Form::token() !!}
 
             <div class="form-group">
-                <div class="col-md-2 col-md-offset-5">
+                <div class="col-md-4 col-md-offset-4">
                     {!! Form::select('season_id', $seasons, $season !== null ? $season->id : null,['class' => 'chosen-select', 'style' => 'width: 100%;']) !!}
                 </div>
             </div>

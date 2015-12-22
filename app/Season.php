@@ -30,6 +30,11 @@ class Season extends Model
         return $this->hasMany('App\Player');
     }
 
+    public function teams()
+    {
+        return $this->hasMany('App\Team');
+    }
+
     /******************/
     /*      Has       */
     /******************/

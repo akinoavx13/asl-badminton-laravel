@@ -24,13 +24,13 @@ class Player extends Model
     ];
 
     protected $casts = [
-        'simple'      => 'boolean',
-        'double'      => 'boolean',
-        'mixte'       => 'boolean',
-        'corpo_man'   => 'boolean',
-        'corpo_woman' => 'boolean',
-        'corpo_mixte' => 'boolean',
-        't_shirt'     => 'boolean',
+        'simple'   => 'boolean',
+        'double' => 'boolean',
+        'mixte'        => 'boolean',
+        'corpo_man'    => 'boolean',
+        'corpo_woman'  => 'boolean',
+        'corpo_mixte'  => 'boolean',
+        't_shirt'      => 'boolean',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -137,7 +137,7 @@ class Player extends Model
 
     public function scopePlayer($query, $type, $activeSeason, $auth)
     {
-        if($type === 'double')
+        if ($type === 'double')
         {
             $query->select('users.name', 'users.forname', 'players.*')
                 ->with('user')
@@ -148,7 +148,7 @@ class Player extends Model
                 ->where('players.' . $type, true)
                 ->orderByForname();
         }
-        elseif($type === 'mixte')
+        elseif ($type === 'mixte')
         {
             $query->select('users.name', 'users.forname', 'players.*')
                 ->with('user')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers;
 use App\Http\Requests;
 use App\Player;
 use App\Season;
@@ -23,7 +24,7 @@ class CeController extends Controller
     {
         $season = Season::active()->first();
 
-        $setting = Setting::first();
+        $setting = Helpers::getInstance()->setting();
 
         $players = Player::select('players.*')
             ->with('user')
@@ -110,7 +111,8 @@ class CeController extends Controller
             }
         }
 
-        return view('ce.index', compact('players', 'tShirt', 'leisure', 'fun', 'performance', 'corpo', 'competition',
-            'contributionUnPaid', 'setting', 'totalPayable', 'totalPaid'));
+        return view('ce.index',
+            compact('players', 'tShirt', 'leisure', 'fun', 'performance', 'corpo', 'competition', 'contributionUnPaid',
+                'setting', 'totalPayable', 'totalPaid'));
     }
 }

@@ -12,12 +12,14 @@ class SeasonTableSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 3; $i++)
-        {
-            Season::create([
-                'name'   => '2015-2016-' . $i,
-                'active' => $i === 0 ? true : false,
-            ]);
-        }
+        Season::create([
+            'name'   => '2014-2015',
+            'active' => false,
+        ]);
+
+        Season::create([
+            'name'   => '2015-2016',
+            'active' => true,
+        ]);
     }
 }

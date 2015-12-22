@@ -10,7 +10,10 @@ class Helpers
 
     public function __construct()
     {
-        $this->setting = Setting::first();
+        if ($this->setting == null)
+        {
+            $this->setting = Setting::first();
+        }
     }
 
     public static function getInstance()
@@ -53,5 +56,10 @@ class Helpers
     public function ccMail()
     {
         return $this->setting->cc_email;
+    }
+
+    public function setting()
+    {
+        return $this->setting;
     }
 }
