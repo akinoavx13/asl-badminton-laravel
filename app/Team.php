@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Team extends Model
@@ -61,44 +62,6 @@ class Team extends Model
     /*      Scope     */
     /******************/
 
-    public function scopeListPartner($query, $type, $gender)
-    {
-        $query->join('seasons', 'teams.season_id', '=', 'seasons.id')
-            ->join('players', 'players.id', '=', 'teams.player_one')
-            ->join('users', 'users.id', '=', 'players.user_id')
-            ->where('seasons.active', true)
-            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-            ->where('teams.enable', true)
-            ->where('users.gender', $gender)
-            ->whereNull('teams.player_two')
-            ->orderBy('users.forname', 'asc');
-    }
-
-    public function scopeMyTeamSimple($query, $gender, $player_id)
-    {
-        $query->join('seasons', 'seasons.id', '=', 'teams.season_id')
-            ->where('seasons.active', true)
-            ->where('teams.enable', true)
-            ->where('teams.simple_' . $gender, true)
-            ->where('teams.player_one', $player_id)
-            ->whereNull('teams.player_two');
-    }
-
-    public function scopeMyTeamDoubleOrMixte($query, $type, $gender, $player_id)
-    {
-        $query->join('seasons', 'seasons.id', '=', 'teams.season_id')
-            ->where('seasons.active', true)
-            ->where('teams.enable', true)
-            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-            ->where('teams.player_one', $player_id)
-            ->orWhere(function ($query) use ($type, $gender, $player_id)
-            {
-                $query->where('seasons.active', true)
-                    ->where('teams.enable', true)
-                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-                    ->where('teams.player_two', $player_id);
-            });
-    }
 
     public function scopeAllMySimpleTeams($query, $gender, $player_id, $season_id)
     {
@@ -108,18 +71,88 @@ class Team extends Model
             ->whereNull('teams.player_two');
     }
 
-    public function scopeAllMyDoubleOrMixteTeams($query, $type, $gender, $player_id, $season_id)
+    public function scopeAllMyDoubleOrMixteActiveTeams($query, $type, $gender, $player_id, $season_id)
     {
         $query->where('teams.season_id', $season_id)
             ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
             ->where('teams.player_one', $player_id)
+            ->where('teams.enable', true)
             ->orWhere(function ($query) use ($type, $gender, $player_id, $season_id)
             {
                 $query->where('teams.season_id', $season_id)
                     ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+                    ->where('teams.player_two', $player_id)
+                    ->where('teams.enable', true);
+            });
+    }
+
+    public function scopeMyDoubleOrMixteTeamsWithPartner($query, $type, $gender, $player_id, $partner_id, $season_id)
+    {
+        $query->where('teams.season_id', $season_id)
+            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+            ->where('teams.player_one', $player_id)
+            ->where('teams.player_two', $partner_id)
+            ->orWhere(function ($query) use ($type, $gender, $player_id, $partner_id, $season_id)
+            {
+                $query->where('teams.season_id', $season_id)
+                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+                    ->where('teams.player_one', $partner_id)
                     ->where('teams.player_two', $player_id);
             });
     }
+
+
+//    public function scopeMyTeamSimple($query, $gender, $player_id)
+//    {
+//        $query->join('seasons', 'seasons.id', '=', 'teams.season_id')
+//            ->where('seasons.active', true)
+//            ->where('teams.enable', true)
+//            ->where('teams.simple_' . $gender, true)
+//            ->where('teams.player_one', $player_id)
+//            ->whereNull('teams.player_two');
+//    }
+//
+//    public function scopeMyTeamDoubleOrMixte($query, $type, $gender, $player_id)
+//    {
+//        $query->join('seasons', 'seasons.id', '=', 'teams.season_id')
+//            ->where('seasons.active', true)
+//            ->where('teams.enable', true)
+//            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+//            ->where('teams.player_one', $player_id)
+//            ->orWhere(function ($query) use ($type, $gender, $player_id)
+//            {
+//                $query->where('seasons.active', true)
+//                    ->where('teams.enable', true)
+//                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+//                    ->where('teams.player_two', $player_id);
+//            });
+//    }
+//
+//    public function scopeMyCompleteTeamDoubleOrMixte($query, $type, $gender, $player_id)
+//    {
+//        $query->join('seasons', 'seasons.id', '=', 'teams.season_id')
+//            ->where('seasons.active', true)
+//            ->where('teams.enable', true)
+//            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+//            ->where('teams.player_one', $player_id)
+//            ->whereNotNull('teams.player_two')
+//            ->orWhere(function ($query) use ($type, $gender, $player_id)
+//            {
+//                $query->where('seasons.active', true)
+//                    ->where('teams.enable', true)
+//                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+//                    ->where('teams.player_two', $player_id)
+//                    ->whereNotNull('teams.player_one');
+//            });
+//    }
+//
+//    public function scopeDoubleOrMixteTeamsWithPartnerIncomplete($query, $type, $gender, $player_id, $season_id)
+//    {
+//        $query->where('teams.season_id', $season_id)
+//            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+//            ->where('teams.player_one', $player_id)
+//            ->whereNull('teams.player_two');
+//    }
 
     /******************/
     /*       Has      */
@@ -143,49 +176,5 @@ class Team extends Model
     /******************/
     /*     Function   */
     /******************/
-
-    public static function listParnterAvailable($type, $gender, $player_id = null)
-    {
-
-        if ($player_id !== null)
-        {
-            //je recherche mon équipe de $type dans laquelle je suis pour cette saison
-            $myTeam[$type] = Team::select('teams.player_one', 'teams.player_two')
-                ->myTeamDoubleOrMixte($type, $gender, $player_id)
-                ->first();
-
-            //si j'ai une équipe de $type, alors je la met en premier dans le champ select
-            if ($myTeam[$type] !== null)
-            {
-                //si je suis le premier joueur alors il faut prendre les valeurs du second joueur dans le select
-                if ($myTeam[$type]->player_one === $player_id)
-                {
-                    $listPartner[$myTeam[$type]->player_two] = $myTeam[$type]->playerTwo->user->__toString();
-                }
-                //sinon si je suis le deuxime joueur, il faut mettre le premier joueur dans le select
-                else
-                {
-                    if ($myTeam[$type]->player_two === $player_id)
-                    {
-                        $listPartner[$myTeam[$type]->player_one] = $myTeam[$type]->playerOne->user->__toString();
-                    }
-                }
-            }
-        }
-
-        $listPartner['search'] = 'En recherche';
-
-        $listParnterAvailable = Team::select('teams.player_one')
-            ->distinct()
-            ->listPartner($type, $gender)
-            ->get();
-
-        foreach ($listParnterAvailable as $parnterAvailable)
-        {
-            $listPartner[$parnterAvailable->player_one] = $parnterAvailable->playerOne->user->__toString();
-        }
-
-        return $listPartner;
-    }
 
 }

@@ -212,7 +212,7 @@
         @if($player !== null)
             <div class="col-md-6">
                 <div class="widget blue-bg p-xl">
-                    <h2 class="text-center">Inscription en {{ $player->season }}</h2>
+                    <h2 class="text-center">Inscrit en {{ $player->season }}</h2>
 
                     <ul class="list-unstyled m-t-md">
                         <li>

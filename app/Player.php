@@ -15,6 +15,8 @@ class Player extends Model
         'simple',
         'double',
         'mixte',
+        'search_double',
+        'search_mixte',
         'corpo_man',
         'corpo_woman',
         'corpo_mixte',
@@ -24,13 +26,15 @@ class Player extends Model
     ];
 
     protected $casts = [
-        'simple'   => 'boolean',
-        'double' => 'boolean',
-        'mixte'        => 'boolean',
-        'corpo_man'    => 'boolean',
-        'corpo_woman'  => 'boolean',
-        'corpo_mixte'  => 'boolean',
-        't_shirt'      => 'boolean',
+        'simple'        => 'boolean',
+        'double'        => 'boolean',
+        'mixte'         => 'boolean',
+        'search_double' => 'boolean',
+        'search_mixte'  => 'boolean',
+        'corpo_man'     => 'boolean',
+        'corpo_woman'   => 'boolean',
+        'corpo_mixte'   => 'boolean',
+        't_shirt'       => 'boolean',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -135,30 +139,9 @@ class Player extends Model
         $query->orderBy('users.forname', 'asc');
     }
 
-    public function scopePlayer($query, $type, $activeSeason, $auth)
+    public function scopePlayerResearchByType($query, $type)
     {
-        if ($type === 'double')
-        {
-            $query->select('users.name', 'users.forname', 'players.*')
-                ->with('user')
-                ->join('users', 'users.id', '=', 'players.user_id')
-                ->withSeason($activeSeason->id)
-                ->where('users.id', '!=', $auth->id)
-                ->where('users.gender', $auth->gender == 'man' ? 'man' : 'woman')
-                ->where('players.' . $type, true)
-                ->orderByForname();
-        }
-        elseif ($type === 'mixte')
-        {
-            $query->select('users.name', 'users.forname', 'players.*')
-                ->with('user')
-                ->join('users', 'users.id', '=', 'players.user_id')
-                ->withSeason($activeSeason->id)
-                ->where('users.id', '!=', $auth->id)
-                ->where('users.gender', $auth->gender == 'man' ? 'woman' : 'man')
-                ->where('players.' . $type, true)
-                ->orderByForname();
-        }
+        $query->where('players.search_' . $type, true);
     }
 
     /******************/
@@ -214,6 +197,42 @@ class Player extends Model
         }
 
         return $price;
+    }
+
+    public static function listPartnerAvailable($type, $gender, $user_id, $player_id = null)
+    {
+        if ($player_id !== null)
+        {
+            $activeSeason = Season::active()->first();
+
+            $myTeam = Team::allMyDoubleOrMixteActiveTeams($type, $gender, $player_id, $activeSeason->id)
+                ->first();
+
+            if ($myTeam !== null)
+            {
+                $partnerId = $myTeam->player_one === $player_id ? $myTeam->player_two : $myTeam->player_one;
+
+                $partner = Player::findOrFail($partnerId);
+
+                $listPartnerAvailable[$partnerId] = $partner->user->__toString();
+            }
+        }
+
+        $playersResarch = Player::select('players.id', 'users.name', 'users.forname')
+            ->join('users', 'users.id', '=', 'players.user_id')
+            ->where('users.id', '!=', $user_id)
+            ->playerResearchByType($type)
+            ->orderByForname()
+            ->get();
+
+        $listPartnerAvailable['search'] = 'En recherche';
+
+        foreach ($playersResarch as $player)
+        {
+            $listPartnerAvailable[$player->id] = $player->forname . ' ' . $player->name;
+        }
+
+        return $listPartnerAvailable;
     }
 
 }

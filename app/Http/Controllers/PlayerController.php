@@ -132,10 +132,10 @@ class PlayerController extends Controller
         $player = Player::findOrFail($player_id);
         $setting = Helpers::getInstance()->setting();
 
-        $listPartnerAvailable['double'] = Team::listParnterAvailable('double',
-            $this->user->hasGender('man') ? 'man' : 'woman', $player_id);
-        $listPartnerAvailable['mixte'] = Team::listParnterAvailable('mixte',
-            $this->user->hasGender('man') ? 'woman' : 'man', $player_id);
+        $gender = $this->user->gender;
+
+        $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id, $player_id);
+        $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id, $player_id);
 
         return view('player.edit', compact('player', 'setting', 'listPartnerAvailable'));
     }
@@ -155,18 +155,21 @@ class PlayerController extends Controller
         }
 
         $player->update([
-            'formula'     => $request->formula,
+            'formula'       => $request->formula,
             // tshirt inclus dans les formules competition et corpo, pas dans les autres
-            't_shirt'     => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
-            'simple'      => $request->formula !== 'leisure' ? $request->simple : false,
-            'double'      => $request->formula !== 'leisure' ? $request->double : false,
-            'mixte'       => $request->formula !== 'leisure' ? $request->mixte : false,
-            'corpo_man'   => ($request->formula === 'corpo' || $request->formula === 'competition') && $player->user->hasGender('man') ? $request->corpo_man : false,
-            'corpo_woman' => ($request->formula === 'corpo' || $request->formula === 'competition') && $player->user->hasGender('woman') ? $request->corpo_woman : false,
-            'corpo_mixte' => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
+            't_shirt'       => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
+            'simple'        => $request->formula !== 'leisure' ? $request->simple : false,
+            'double'        => $request->formula !== 'leisure' ? $request->double : false,
+            'mixte'         => $request->formula !== 'leisure' ? $request->mixte : false,
+            'corpo_man'     => ($request->formula === 'corpo' || $request->formula === 'competition') && $player->user->hasGender('man') ? $request->corpo_man : false,
+            'corpo_woman'   => ($request->formula === 'corpo' || $request->formula === 'competition') && $player->user->hasGender('woman') ? $request->corpo_woman : false,
+            'corpo_mixte'   => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
+            'search_double' => $request->double && $request->double_partner === 'search' ? true : false,
+            'search_mixte'  => $request->mixte && $request->mixte_partner === 'search' ? true : false,
         ]);
 
         $this->createSimpleTeams($player, $activeSeason);
+        $this->createDoubleTeams($player, $activeSeason, $request->double_partner);
 
         return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
     }
@@ -176,10 +179,10 @@ class PlayerController extends Controller
         $player = new Player();
         $setting = Helpers::getInstance()->setting();
 
-        $listPartnerAvailable['double'] = Team::listParnterAvailable('double',
-            $this->user->hasGender('man') ? 'man' : 'woman');
-        $listPartnerAvailable['mixte'] = Team::listParnterAvailable('mixte',
-            $this->user->hasGender('man') ? 'woman' : 'man');
+        $gender = $this->user->gender;
+
+        $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id);
+        $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id);
 
         return view('player.create', compact('player', 'setting', 'listPartnerAvailable'));
     }
@@ -209,22 +212,25 @@ class PlayerController extends Controller
         }
 
         $player = Player::create([
-            'formula'     => $request->formula,
+            'formula'       => $request->formula,
             // tshirt inclus dans les formules competition et corpo, pas dans les autres
-            't_shirt'     => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
-            'simple'      => $request->formula !== 'leisure' ? $request->simple : false,
-            'double'      => $request->formula !== 'leisure' ? $request->double : false,
-            'mixte'       => $request->formula !== 'leisure' ? $request->mixte : false,
-            'corpo_man'   => ($request->formula === 'corpo' || $request->formula === 'competition') && $this->user->hasGender('man') ? $request->corpo_man : false,
-            'corpo_woman' => ($request->formula === 'corpo' || $request->formula === 'competition') && $this->user->hasGender('woman') ? $request->corpo_woman : false,
-            'corpo_mixte' => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
-            'user_id'     => $this->user->id,
-            'ce_state'    => $this->user->hasRole('admin') ? $request->ce_state : 'contribution_payable',
-            'gbc_state'   => $this->onPlayerCreateChoseGbc_state($request),
-            'season_id'   => $activeSeason->id,
+            't_shirt'       => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
+            'simple'        => $request->formula !== 'leisure' ? $request->simple : false,
+            'double'        => $request->formula !== 'leisure' ? $request->double : false,
+            'mixte'         => $request->formula !== 'leisure' ? $request->mixte : false,
+            'corpo_man'     => ($request->formula === 'corpo' || $request->formula === 'competition') && $this->user->hasGender('man') ? $request->corpo_man : false,
+            'corpo_woman'   => ($request->formula === 'corpo' || $request->formula === 'competition') && $this->user->hasGender('woman') ? $request->corpo_woman : false,
+            'corpo_mixte'   => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
+            'user_id'       => $this->user->id,
+            'ce_state'      => $this->user->hasRole('admin') ? $request->ce_state : 'contribution_payable',
+            'gbc_state'     => $this->onPlayerCreateChoseGbc_state($request),
+            'season_id'     => $activeSeason->id,
+            'search_double' => $request->double && $request->double_partner === 'search' ? true : false,
+            'search_mixte'  => $request->mixte && $request->mixte_partner === 'search' ? true : false,
         ]);
 
         $this->createSimpleTeams($player, $activeSeason);
+        $this->createDoubleTeams($player, $activeSeason, $request->double_partner);
 
         return redirect()->route('home.index')->with('success', "Vous êtes bien inscrit !");
     }
@@ -318,22 +324,75 @@ class PlayerController extends Controller
         }
     }
 
-    private function createDoubleTeams($player, $activeSeason)
+    private function createDoubleTeams($player, $activeSeason, $partner_id)
     {
         /*
-         * pour simple, double et mixte, il faut en premier lieu chercher si l'equipe existe ou pas
-         * (y compris les equipes qui ne sont pas 'enable'). Si elle existe on la passe à 'enable' sinon on la crée
+         * Dans tous les cas on cherche si il y a une equipe enable avec ce joueur.
+         *      Si il y a en une on la passe à disable et le deuxième joueur de cette l'équipe passe en recherche
          *
-         * pour les equipes double et mixte, il faudra mettre à 'disable' les equipes du partenaire précédent
+         * Si partenaire = 'search', l equipe n'est pa complete donc on ne cree pas l'équipe => on ne fait rien
          *
-         * a la fin il faut s'assurer que pour la saison en cours il n'y a qu'une seule equipe 'enable' par type
-         * pour ce joueur
+         *  Si partenaire n'est pas 'search', l'équipe est complète. Il faut l'activer ou la créer.
+         *      On s'assure que le champ 'search' est à faux pour le partenaire
+         *      On cherche l'équipe avec le joueur et son partenaire.
+         *          Si l'équipe existe on la passe à enable
+         *          Si l'équipe n'existe pas on crée l'équipe. Note dans une équipe le joueur 1 est le premier par ordre alphabétique du prénom. En mixte le premier joueur et toujours la femme.
          */
 
-        //toutes mes équipe de double, active ou pas
-        $allMyDoubleTeams = Team::allMyDoubleOrMixteTeams('double', $this->user->hasGender('man') ? 'man' : 'woman',
-            $player->id, $activeSeason->id)
-            ->get();
+        $gender = $this->user->hasGender('man') ? 'man' : 'woman';
 
+        //toutes mes équipe de double, active
+        $allMyDoubleTeams = Team::allMyDoubleOrMixteActiveTeams('double', $gender, $player->id, $activeSeason->id)
+            ->first();
+
+        //on désactive toutes les équipes de double
+        if ($allMyDoubleTeams !== null)
+        {
+            $allMyDoubleTeams->update([
+                'enable' => false,
+            ]);
+
+            $partner = Player::findOrFail($allMyDoubleTeams->player_one === $player->id ? $allMyDoubleTeams->player_two : $allMyDoubleTeams->player_one);
+
+            $partner->update([
+                'search_double' => true,
+            ]);
+        }
+
+        if ($player->double && $partner_id !== 'search')
+        {
+            $partner = Player::findOrFail($partner_id);
+
+            $partner->update([
+                'search_double' => false,
+            ]);
+
+            $myTeam = Team::myDoubleOrMixteTeamsWithPartner('double', $gender, $player->id, $partner_id, $activeSeason->id)->first();
+            if ($myTeam !== null)
+            {
+                $myTeam->update([
+                    'enable' => true,
+                ]);
+            }
+            else
+            {
+                $partner = Player::findOrFail($partner_id);
+
+                $userOne = $player->user->__toString();
+                $userTwo = $partner->user->__toString();
+
+                Team::create([
+                    'player_one'   => $userOne < $userTwo ? $player->id : $partner_id,
+                    'player_two'   => $userOne < $userTwo ? $partner_id : $player->id,
+                    'season_id'    => $activeSeason->id,
+                    'simple_man'   => false,
+                    'simple_woman' => false,
+                    'double_man'   => $gender === 'man' ? true : false,
+                    'double_woman' => $gender === 'woman' ? true : false,
+                    'mixte'        => false,
+                    'enable'       => true,
+                ]);
+            }
+        }
     }
 }

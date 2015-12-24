@@ -20,15 +20,18 @@ class CreatePlayersTable extends Migration
             $table->enum('ce_state', ['contribution_payable', 'contribution_paid']);
             $table->enum('gbc_state', ['non_applicable', 'entry_must', 'valid']);
 
-            $table->boolean('simple');
-            $table->boolean('double');
-            $table->boolean('mixte');
+            $table->boolean('simple')->default(false);
+            $table->boolean('double')->default(false);
+            $table->boolean('mixte')->default(false);
 
-            $table->boolean('corpo_man');
-            $table->boolean('corpo_woman');
-            $table->boolean('corpo_mixte');
+            $table->boolean('corpo_man')->default(false);
+            $table->boolean('corpo_woman')->default(false);
+            $table->boolean('corpo_mixte')->default(false);
 
             $table->boolean('t_shirt')->default(false);
+
+            $table->boolean('search_double')->default(false);
+            $table->boolean('search_mixte')->default(false);
 
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
