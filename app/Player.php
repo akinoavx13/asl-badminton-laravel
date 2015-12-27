@@ -220,7 +220,8 @@ class Player extends Model
 
         $playersResarch = Player::select('players.id', 'users.name', 'users.forname')
             ->join('users', 'users.id', '=', 'players.user_id')
-            ->where('users.id', '!=', $user_id)
+            ->where('users.id', '<>', $user_id)
+            ->where('users.gender', '=', $type === 'mixte' ? $gender === 'man' ? 'woman' : 'man' : $gender)
             ->playerResearchByType($type)
             ->orderByForname()
             ->get();

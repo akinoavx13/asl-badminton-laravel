@@ -101,59 +101,6 @@ class Team extends Model
             });
     }
 
-
-//    public function scopeMyTeamSimple($query, $gender, $player_id)
-//    {
-//        $query->join('seasons', 'seasons.id', '=', 'teams.season_id')
-//            ->where('seasons.active', true)
-//            ->where('teams.enable', true)
-//            ->where('teams.simple_' . $gender, true)
-//            ->where('teams.player_one', $player_id)
-//            ->whereNull('teams.player_two');
-//    }
-//
-//    public function scopeMyTeamDoubleOrMixte($query, $type, $gender, $player_id)
-//    {
-//        $query->join('seasons', 'seasons.id', '=', 'teams.season_id')
-//            ->where('seasons.active', true)
-//            ->where('teams.enable', true)
-//            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-//            ->where('teams.player_one', $player_id)
-//            ->orWhere(function ($query) use ($type, $gender, $player_id)
-//            {
-//                $query->where('seasons.active', true)
-//                    ->where('teams.enable', true)
-//                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-//                    ->where('teams.player_two', $player_id);
-//            });
-//    }
-//
-//    public function scopeMyCompleteTeamDoubleOrMixte($query, $type, $gender, $player_id)
-//    {
-//        $query->join('seasons', 'seasons.id', '=', 'teams.season_id')
-//            ->where('seasons.active', true)
-//            ->where('teams.enable', true)
-//            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-//            ->where('teams.player_one', $player_id)
-//            ->whereNotNull('teams.player_two')
-//            ->orWhere(function ($query) use ($type, $gender, $player_id)
-//            {
-//                $query->where('seasons.active', true)
-//                    ->where('teams.enable', true)
-//                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-//                    ->where('teams.player_two', $player_id)
-//                    ->whereNotNull('teams.player_one');
-//            });
-//    }
-//
-//    public function scopeDoubleOrMixteTeamsWithPartnerIncomplete($query, $type, $gender, $player_id, $season_id)
-//    {
-//        $query->where('teams.season_id', $season_id)
-//            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-//            ->where('teams.player_one', $player_id)
-//            ->whereNull('teams.player_two');
-//    }
-
     /******************/
     /*       Has      */
     /******************/

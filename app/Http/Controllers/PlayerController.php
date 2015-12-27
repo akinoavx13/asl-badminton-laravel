@@ -169,7 +169,8 @@ class PlayerController extends Controller
         ]);
 
         $this->createSimpleTeams($player, $activeSeason);
-        $this->createDoubleTeams($player, $activeSeason, $request->double_partner);
+        $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
+        $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
 
         return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
     }
@@ -230,7 +231,8 @@ class PlayerController extends Controller
         ]);
 
         $this->createSimpleTeams($player, $activeSeason);
-        $this->createDoubleTeams($player, $activeSeason, $request->double_partner);
+        $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
+        $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
 
         return redirect()->route('home.index')->with('success', "Vous êtes bien inscrit !");
     }
@@ -324,7 +326,7 @@ class PlayerController extends Controller
         }
     }
 
-    private function createDoubleTeams($player, $activeSeason, $partner_id)
+    private function createDoubleOrMixteTeams($player, $activeSeason, $partner_id, $type)
     {
         /*
          * Dans tous les cas on cherche si il y a une equipe enable avec ce joueur.
@@ -342,32 +344,37 @@ class PlayerController extends Controller
         $gender = $this->user->hasGender('man') ? 'man' : 'woman';
 
         //toutes mes équipe de double, active
-        $allMyDoubleTeams = Team::allMyDoubleOrMixteActiveTeams('double', $gender, $player->id, $activeSeason->id)
+        $allMyDoubleOrMixteTeams = Team::allMyDoubleOrMixteActiveTeams($type, $gender, $player->id, $activeSeason->id)
             ->first();
 
-        //on désactive toutes les équipes de double
-        if ($allMyDoubleTeams !== null)
+        //on désactive toutes les équipes
+        if ($allMyDoubleOrMixteTeams !== null)
         {
-            $allMyDoubleTeams->update([
+            $allMyDoubleOrMixteTeams->update([
                 'enable' => false,
             ]);
 
-            $partner = Player::findOrFail($allMyDoubleTeams->player_one === $player->id ? $allMyDoubleTeams->player_two : $allMyDoubleTeams->player_one);
+            $partner = Player::findOrFail($allMyDoubleOrMixteTeams->player_one === $player->id ? $allMyDoubleOrMixteTeams->player_two : $allMyDoubleOrMixteTeams->player_one);
 
             $partner->update([
-                'search_double' => true,
+                'search_double' => $type === 'double' ? true : $partner->search_double,
+                'search_mixte'  => $type === 'mixte' ? true : $partner->search_mixte,
             ]);
         }
 
-        if ($player->double && $partner_id !== 'search')
+        $type === 'double' ?  $mixteOrDouble = $player->double : $mixteOrDouble = $player->mixte;
+
+        if ($mixteOrDouble && $partner_id !== 'search')
         {
             $partner = Player::findOrFail($partner_id);
 
             $partner->update([
-                'search_double' => false,
+                'search_double' => $type === 'double' ? false : $partner->search_double,
+                'search_mixte'  => $type === 'mixte' ? false : $partner->search_mixte,
             ]);
 
-            $myTeam = Team::myDoubleOrMixteTeamsWithPartner('double', $gender, $player->id, $partner_id, $activeSeason->id)->first();
+            $myTeam = Team::myDoubleOrMixteTeamsWithPartner($type, $gender, $player->id, $partner_id,
+                $activeSeason->id)->first();
             if ($myTeam !== null)
             {
                 $myTeam->update([
@@ -381,17 +388,34 @@ class PlayerController extends Controller
                 $userOne = $player->user->__toString();
                 $userTwo = $partner->user->__toString();
 
-                Team::create([
-                    'player_one'   => $userOne < $userTwo ? $player->id : $partner_id,
-                    'player_two'   => $userOne < $userTwo ? $partner_id : $player->id,
-                    'season_id'    => $activeSeason->id,
-                    'simple_man'   => false,
-                    'simple_woman' => false,
-                    'double_man'   => $gender === 'man' ? true : false,
-                    'double_woman' => $gender === 'woman' ? true : false,
-                    'mixte'        => false,
-                    'enable'       => true,
-                ]);
+                if($type === 'double')
+                {
+                    Team::create([
+                        'player_one'   => $userOne < $userTwo ? $player->id : $partner_id,
+                        'player_two'   => $userOne < $userTwo ? $partner_id : $player->id,
+                        'season_id'    => $activeSeason->id,
+                        'simple_man'   => false,
+                        'simple_woman' => false,
+                        'double_man'   => $gender === 'man' ? true : false,
+                        'double_woman' => $gender === 'woman' ? true : false,
+                        'mixte'        => false,
+                        'enable'       => true,
+                    ]);
+                }
+                else
+                {
+                    Team::create([
+                        'player_one'   => $gender === 'woman' ? $player->id : $partner_id,
+                        'player_two'   => $gender === 'woman' ? $partner_id : $player->id,
+                        'season_id'    => $activeSeason->id,
+                        'simple_man'   => false,
+                        'simple_woman' => false,
+                        'double_man'   => false,
+                        'double_woman' => false,
+                        'mixte'        => true,
+                        'enable'       => true,
+                    ]);
+                }
             }
         }
     }
