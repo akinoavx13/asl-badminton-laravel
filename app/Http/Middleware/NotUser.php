@@ -7,7 +7,7 @@ use Closure;
 class NotUser
 {
     /**
-     * Handle an incoming request.
+     * Forbid the users to have access for some pages
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next

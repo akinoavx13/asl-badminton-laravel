@@ -14,17 +14,29 @@ use Auth;
 use Carbon\Carbon;
 use Mail;
 
+/**
+ * Manage users
+ *
+ * Class UserController
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller
 {
 
+    /**
+     * UserController constructor.
+     */
     public function __construct()
     {
         parent::__constructor();
     }
 
+    /**
+     * @param $router
+     */
     public static function routes($router)
     {
-        //paterns
+        //pattern
         $router->pattern('user_id', '[0-9]+');
 
         //user list
@@ -98,6 +110,11 @@ class UserController extends Controller
 
     }
 
+    /**
+     * View all users
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         $users = User::OrderByForname()->get();
@@ -105,6 +122,72 @@ class UserController extends Controller
         return view('user.index', compact('users'));
     }
 
+    /**
+     * Form to create user
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create()
+    {
+        $user = new User();
+
+        return view('user.create', compact('user'));
+    }
+
+    /**
+     * Store the user created
+     *
+     * @param UserStoreRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(UserStoreRequest $request)
+    {
+        $user = User::create([
+            'name'                   => $request->name,
+            'forname'                => $request->forname,
+            'email'                  => $request->email,
+            'role'                   => $request->role,
+            'active'                 => $request->active,
+            'token_first_connection' => str_random(60),
+            'ending_injury'          => Carbon::now()->format('d/m/Y'),
+            'ending_holiday'         => Carbon::now()->format('d/m/Y'),
+        ]);
+
+        if (Helpers::getInstance()->canSendMail())
+        {
+            Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
+            {
+                $message->from(Helpers::getInstance()->fromAddressMail(), Helpers::getInstance()->fromNameMail());
+                $message->to($user->email, $user)
+                    ->subject('Création de compte AS Lectra Badminton')->cc(Helpers::getInstance()->ccMail());
+            });
+        }
+
+        return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");
+    }
+
+    /**
+     * Show the profile of the user, also the players profile
+     *
+     * @param $user_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        $activeSeason = Season::active()->first();
+        $player = Player::withUser($user_id)->withSeason($activeSeason->id)->first();
+
+        return view('user.show', compact('user', 'player'));
+    }
+
+    /**
+     * Form to update user
+     *
+     * @param $user_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edit($user_id)
     {
         $user = User::findOrFail($user_id);
@@ -112,6 +195,13 @@ class UserController extends Controller
         return view('user.edit', compact('user'));
     }
 
+    /**
+     * Update the user edited
+     *
+     * @param UserUpdateRequest $request
+     * @param $user_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(UserUpdateRequest $request, $user_id)
     {
         $user = User::findOrFail($user_id);
@@ -146,6 +236,28 @@ class UserController extends Controller
             "Les modifications sont bien prises en compte !");
     }
 
+    /**
+     * Delete the selected user
+     *
+     * @param $user_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($user_id)
+    {
+        $user = User::findOrFail($user_id);
+        $user->delete();
+
+        return redirect()->back()->with('success', "L'utilisateur $user vient d'être supprimé !");
+    }
+
+    /**
+     * Helpfull to determined the date of his holiday or his injury
+     * Check if the date chosen is after today
+     *
+     * @param $user
+     * @param $request
+     * @return $this
+     */
     private function updateIfInjuryHolidayAreAfterNow($user, $request)
     {
         //si la date de fin de blessure est antèrieur à aujourd'hui
@@ -177,60 +289,18 @@ class UserController extends Controller
         }
     }
 
-    public function delete($user_id)
-    {
-        $user = User::findOrFail($user_id);
-        $user->delete();
-
-        return redirect()->back()->with('success', "L'utilisateur $user vient d'être supprimé !");
-    }
-
-    public function show($user_id)
-    {
-        $user = User::findOrFail($user_id);
-
-        $activeSeason = Season::active()->first();
-        $player = Player::withUser($user_id)->withSeason($activeSeason->id)->first();
-
-        return view('user.show', compact('user', 'player'));
-    }
-
-    public function create()
-    {
-        $user = new User();
-
-        return view('user.create', compact('user'));
-    }
-
-    public function store(UserStoreRequest $request)
-    {
-        $user = User::create([
-            'name'                   => $request->name,
-            'forname'                => $request->forname,
-            'email'                  => $request->email,
-            'role'                   => $request->role,
-            'active'                 => $request->active,
-            'token_first_connection' => str_random(60),
-            'ending_injury'          => Carbon::now()->format('d/m/Y'),
-            'ending_holiday'         => Carbon::now()->format('d/m/Y'),
-        ]);
-
-        if (Helpers::getInstance()->canSendMail())
-        {
-            Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
-            {
-                $message->from(Helpers::getInstance()->fromAddressMail(), Helpers::getInstance()->fromNameMail());
-                $message->to($user->email, $user)
-                    ->subject('Création de compte AS Lectra Badminton')->cc(Helpers::getInstance()->ccMail());
-            });
-        }
-
-        return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");
-    }
-
+    /**
+     * Return the view to fill his informations because is the first time is conects
+     *
+     * @param $user_id
+     * @param $token_first_connection
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getFirstConnection($user_id, $token_first_connection)
     {
-        $user = User::where('id', $user_id)->where('token_first_connection', $token_first_connection)->first();
+        $user = User::where('id', $user_id)
+            ->where('token_first_connection', $token_first_connection)
+            ->first();
 
         if ($user !== null)
         {
@@ -240,9 +310,19 @@ class UserController extends Controller
         abort(401, 'Unauthorized action.');
     }
 
+    /**
+     * Update informations of the early connected user
+     *
+     * @param UserFirstConnectionRequest $request
+     * @param $user_id
+     * @param $token_first_connection
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postFirstConnection(UserFirstConnectionRequest $request, $user_id, $token_first_connection)
     {
-        $user = User::where('id', $user_id)->where('token_first_connection', $token_first_connection)->first();
+        $user = User::where('id', $user_id)
+            ->where('token_first_connection', $token_first_connection)
+            ->first();
 
         if ($user !== null)
         {
@@ -273,6 +353,12 @@ class UserController extends Controller
         abort(401, 'Unauthorized action.');
     }
 
+    /**
+     * Send the creation link again
+     *
+     * @param $user_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function sendCreationLink($user_id)
     {
         $user = User::findOrFail($user_id);

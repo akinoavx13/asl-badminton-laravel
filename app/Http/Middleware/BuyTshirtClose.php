@@ -10,7 +10,7 @@ use Closure;
 class BuyTshirtClose
 {
     /**
-     * Handle an incoming request.
+     * Check if the player can buy a t-shirt
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next

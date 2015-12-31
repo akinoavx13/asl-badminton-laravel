@@ -118,8 +118,6 @@ class Player extends Model
         return $this->formula === $formula;
     }
 
-
-
     /******************/
     /*      Scope     */
     /******************/
@@ -219,6 +217,7 @@ class Player extends Model
         }
 
         $playersResarch = Player::select('players.id', 'users.name', 'users.forname')
+            ->with('user')
             ->join('users', 'users.id', '=', 'players.user_id')
             ->where('users.id', '<>', $user_id)
             ->where('users.gender', '=', $type === 'mixte' ? $gender === 'man' ? 'woman' : 'man' : $gender)

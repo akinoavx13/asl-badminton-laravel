@@ -7,8 +7,17 @@ use App\Http\Requests;
 use App\Http\Requests\SettingUpdateRequest;
 use App\Setting;
 
+/**
+ * Manage settings
+ *
+ * Class SettingController
+ * @package App\Http\Controllers
+ */
 class SettingController extends Controller
 {
+    /**
+     * @param $router
+     */
     public static function routes($router)
     {
         //paterns
@@ -26,13 +35,18 @@ class SettingController extends Controller
             'as'   => 'setting.store',
         ]);
 
-        //setting store
+        //setting update
         $router->post('/update/{setting_id}', [
             'uses' => 'SettingController@update',
             'as'   => 'setting.update',
         ]);
     }
 
+    /**
+     * View setting, it's also the form to create or update settings
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         $setting = Helpers::getInstance()->setting();
@@ -40,6 +54,11 @@ class SettingController extends Controller
         return view('setting.index', compact('setting'));
     }
 
+    /**
+     * Store the setting if they are no setting created
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store()
     {
         if (Setting::all()->count() <= 0)
@@ -70,6 +89,13 @@ class SettingController extends Controller
         return redirect()->route('setting.index')->with('error', "Les paramètres existe déjà !");
     }
 
+    /**
+     * Update the setting
+     *
+     * @param SettingUpdateRequest $request
+     * @param $setting_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(SettingUpdateRequest $request, $setting_id)
     {
         $setting = Setting::findOrFail($setting_id);

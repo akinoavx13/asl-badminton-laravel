@@ -8,7 +8,7 @@ use Closure;
 class PlayerOwner
 {
     /**
-     * Handle an incoming request.
+     * Check if the player is yours
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next

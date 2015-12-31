@@ -8,11 +8,20 @@ use App\Player;
 use App\Season;
 use App\Setting;
 
+/**
+ * Manage Lectra budget
+ *
+ * Class CeController
+ * @package App\Http\Controllers
+ */
 class CeController extends Controller
 {
+    /**
+     * @param $router
+     */
     public static function routes($router)
     {
-        //ce home
+        //Lectra budget
         $router->get('/', [
             'middleware' => 'settingExists',
             'uses'       => 'CeController@index',
@@ -20,6 +29,11 @@ class CeController extends Controller
         ]);
     }
 
+    /**
+     * View Lectra budget
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         $season = Season::active()->first();
@@ -58,7 +72,6 @@ class CeController extends Controller
 
         foreach ($players as $player)
         {
-
             $playerPrice = $player->totalPrice($setting);
 
             $tShirt['price'] += $playerPrice['t_shirt'];

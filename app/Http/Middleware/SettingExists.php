@@ -9,7 +9,7 @@ use Closure;
 class SettingExists
 {
     /**
-     * Handle an incoming request.
+     * Check if they is a setting
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next

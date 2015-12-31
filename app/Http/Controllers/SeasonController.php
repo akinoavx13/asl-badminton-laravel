@@ -7,8 +7,17 @@ use App\Http\Requests\SeasonStoreRequest;
 use App\Http\Requests\SeasonUpdateRequest;
 use App\Season;
 
+/**
+ * Manage seasons
+ *
+ * Class SeasonController
+ * @package App\Http\Controllers
+ */
 class SeasonController extends Controller
 {
+    /**
+     * @param $router
+     */
     public static function routes($router)
     {
         //paterns
@@ -57,6 +66,11 @@ class SeasonController extends Controller
         ]);
     }
 
+    /**
+     * View all seasons
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         $seasons = Season::all();
@@ -64,6 +78,40 @@ class SeasonController extends Controller
         return view('season.index', compact('seasons'));
     }
 
+    /**
+     * View form to create the season
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create()
+    {
+        $season = new Season();
+
+        return view('season.create', compact('season'));
+    }
+
+    /**
+     * Store the season created
+     *
+     * @param SeasonStoreRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(SeasonStoreRequest $request)
+    {
+        $season = Season::create([
+            'name'   => $request->name,
+            'active' => false,
+        ]);
+
+        return redirect()->route('season.index')->with('success', "La saison $season vient d'être créée !");
+    }
+
+    /**
+     * View form to edit the season
+     *
+     * @param $season_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edit($season_id)
     {
         $season = Season::findOrFail($season_id);
@@ -71,6 +119,13 @@ class SeasonController extends Controller
         return view('season.edit', compact('season'));
     }
 
+    /**
+     * Update the season edited
+     *
+     * @param SeasonUpdateRequest $request
+     * @param $season_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(SeasonUpdateRequest $request, $season_id)
     {
         $season = Season::findOrFail($season_id);
@@ -83,6 +138,12 @@ class SeasonController extends Controller
         return redirect()->route('season.index')->with('success', "Les modifications sont bien prise en compte !");
     }
 
+    /**
+     * Delete one season
+     *
+     * @param $season_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function delete($season_id)
     {
         $season = Season::findOrFail($season_id);
@@ -91,23 +152,12 @@ class SeasonController extends Controller
         return redirect()->route('season.index')->with('success', "La saison $season vient d'être supprimée !");
     }
 
-    public function create()
-    {
-        $season = new Season();
-
-        return view('season.create', compact('season'));
-    }
-
-    public function store(SeasonStoreRequest $request)
-    {
-        $season = Season::create([
-            'name'   => $request->name,
-            'active' => false,
-        ]);
-
-        return redirect()->route('season.index')->with('success', "La saison $season vient d'être créée !");
-    }
-
+    /**
+     * Change season to active, just one season can be active
+     *
+     * @param $season_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function changeActiveAttribute($season_id)
     {
         $seasonSelected = Season::findOrFail($season_id);

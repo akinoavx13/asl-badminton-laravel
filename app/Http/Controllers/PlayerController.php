@@ -11,18 +11,28 @@ use App\Season;
 use App\Setting;
 use App\Team;
 
-
+/**
+ * Manage players
+ *
+ * Class PlayerController
+ * @package App\Http\Controllers
+ */
 class PlayerController extends Controller
 {
 
+    /**
+     * PlayerController constructor.
+     */
     public function __construct()
     {
         parent::__constructor();
     }
 
+    /**
+     * @param $router
+     */
     public static function routes($router)
     {
-        //paterns
         $router->pattern('player_id', '[0-9]+');
 
         //player list
@@ -89,6 +99,12 @@ class PlayerController extends Controller
         ]);
     }
 
+    /**
+     * View all players on current season or specific season
+     *
+     * @param PlayerListRequest $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(PlayerListRequest $request)
     {
         $season = null;
@@ -119,62 +135,11 @@ class PlayerController extends Controller
         return view('player.index', compact('players', 'seasons', 'season'));
     }
 
-    public function delete($player_id)
-    {
-        $player = Player::findOrFail($player_id);
-        $player->delete();
-
-        return redirect()->route('player.index')->with('success', "Le joueur $player a été supprimé !");
-    }
-
-    public function edit($player_id)
-    {
-        $player = Player::findOrFail($player_id);
-        $setting = Helpers::getInstance()->setting();
-
-        $gender = $this->user->gender;
-
-        $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id, $player_id);
-        $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id, $player_id);
-
-        return view('player.edit', compact('player', 'setting', 'listPartnerAvailable'));
-    }
-
-    public function update(PlayerUpdateRequest $request, $player_id)
-    {
-        $player = Player::findOrFail($player_id);
-        $activeSeason = Season::active()->first();
-
-        //si on est admin on peut mettre à jour les 2 champs
-        if ($this->user->hasRole('admin'))
-        {
-            $player->update([
-                'ce_state'  => $request->ce_state,
-                'gbc_state' => $request->gbc_state,
-            ]);
-        }
-
-        $player->update([
-            'formula'       => $request->formula,
-            // tshirt inclus dans les formules competition et corpo, pas dans les autres
-            't_shirt'       => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
-            'simple'        => $request->formula !== 'leisure' ? $request->simple : false,
-            'double'        => $request->formula !== 'leisure' ? $request->double : false,
-            'mixte'         => $request->formula !== 'leisure' ? $request->mixte : false,
-            'corpo_man'     => ($request->formula === 'corpo' || $request->formula === 'competition') && $player->user->hasGender('man') ? $request->corpo_man : false,
-            'corpo_woman'   => ($request->formula === 'corpo' || $request->formula === 'competition') && $player->user->hasGender('woman') ? $request->corpo_woman : false,
-            'corpo_mixte'   => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
-            'search_double' => $request->double && $request->double_partner === 'search' ? true : false,
-            'search_mixte'  => $request->mixte && $request->mixte_partner === 'search' ? true : false,
-        ]);
-
-        $this->createSimpleTeams($player, $activeSeason);
-        $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
-        $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
-
-        return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
-    }
-
+    /**
+     * Form to create one player
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create()
     {
         $player = new Player();
@@ -188,6 +153,12 @@ class PlayerController extends Controller
         return view('player.create', compact('player', 'setting', 'listPartnerAvailable'));
     }
 
+    /**
+     * Store the player created
+     *
+     * @param PlayerStoreRequest $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function store(PlayerStoreRequest $request)
     {
         //on s'inscrit dans la saison active
@@ -237,6 +208,87 @@ class PlayerController extends Controller
         return redirect()->route('home.index')->with('success', "Vous êtes bien inscrit !");
     }
 
+    /**
+     * Form to edit player
+     *
+     * @param $player_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($player_id)
+    {
+        $player = Player::findOrFail($player_id);
+        $setting = Helpers::getInstance()->setting();
+
+        $gender = $this->user->gender;
+
+        $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id, $player_id);
+        $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id, $player_id);
+
+        return view('player.edit', compact('player', 'setting', 'listPartnerAvailable'));
+    }
+
+    /**
+     * Update the player updated
+     *
+     * @param PlayerUpdateRequest $request
+     * @param $player_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(PlayerUpdateRequest $request, $player_id)
+    {
+        $player = Player::findOrFail($player_id);
+        $activeSeason = Season::active()->first();
+
+        //si on est admin on peut mettre à jour les 2 champs
+        if ($this->user->hasRole('admin'))
+        {
+            $player->update([
+                'ce_state'  => $request->ce_state,
+                'gbc_state' => $request->gbc_state,
+            ]);
+        }
+
+        $player->update([
+            'formula'       => $request->formula,
+            // tshirt inclus dans les formules competition et corpo, pas dans les autres
+            't_shirt'       => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
+            'simple'        => $request->formula !== 'leisure' ? $request->simple : false,
+            'double'        => $request->formula !== 'leisure' ? $request->double : false,
+            'mixte'         => $request->formula !== 'leisure' ? $request->mixte : false,
+            'corpo_man'     => ($request->formula === 'corpo' || $request->formula === 'competition') && $player->user->hasGender('man') ? $request->corpo_man : false,
+            'corpo_woman'   => ($request->formula === 'corpo' || $request->formula === 'competition') && $player->user->hasGender('woman') ? $request->corpo_woman : false,
+            'corpo_mixte'   => $request->formula === 'corpo' || $request->formula === 'competition' ? $request->corpo_mixte : false,
+            'search_double' => $request->double && $request->double_partner === 'search' ? true : false,
+            'search_mixte'  => $request->mixte && $request->mixte_partner === 'search' ? true : false,
+        ]);
+
+        $this->createSimpleTeams($player, $activeSeason);
+        $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
+        $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
+
+        return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
+    }
+
+    /**
+     * Delete the player
+     *
+     * @param $player_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($player_id)
+    {
+        $player = Player::findOrFail($player_id);
+        $player->delete();
+
+        return redirect()->route('player.index')->with('success', "Le joueur $player a été supprimé !");
+    }
+
+    /**
+     * Helpfull to determined the gbc state with his formula
+     *
+     * @param $request
+     * @return string
+     */
     private function onPlayerCreateChoseGbc_state($request)
     {
         //on est l'admin, on peut choisir le champ
@@ -261,6 +313,12 @@ class PlayerController extends Controller
         return 'non_applicable';
     }
 
+    /**
+     * Used by CE or admin to change the ce state to paid
+     *
+     * @param $player_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function changeCeStateToContributionPaid($player_id)
     {
         $player = Player::findOrFail($player_id);
@@ -277,6 +335,11 @@ class PlayerController extends Controller
         return redirect()->back()->with('error', "Le joueur $player a déjà payé sa cotisation !");
     }
 
+    /**
+     * Used by admin to change the gbc state to valid
+     * @param $player_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function changeGbcStateToValid($player_id)
     {
         $player = Player::findOrFail($player_id);
@@ -294,6 +357,13 @@ class PlayerController extends Controller
             "Le joueur $player est non applicable ou il a déjà validé son dossier!");
     }
 
+    /**
+     * Helpfull to create simple teams for one player
+     * This also update teams when he updated his profile
+     *
+     * @param $player
+     * @param $activeSeason
+     */
     private function createSimpleTeams($player, $activeSeason)
     {
         //Toutes les équipes de simple, active ou pas. On met first parce qu'il ne peut y en avoir qu'une seule
@@ -326,6 +396,15 @@ class PlayerController extends Controller
         }
     }
 
+    /**
+     * Helpfull to create mixte and double teams of one player
+     * This also update teams when he updated his profile
+     *
+     * @param $player
+     * @param $activeSeason
+     * @param $partner_id
+     * @param $type
+     */
     private function createDoubleOrMixteTeams($player, $activeSeason, $partner_id, $type)
     {
         /*

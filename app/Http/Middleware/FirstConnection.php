@@ -8,7 +8,7 @@ use Closure;
 class FirstConnection
 {
     /**
-     * Handle an incoming request.
+     * Check if this is the first time that the user connect to the site
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next

@@ -7,7 +7,7 @@ use Closure;
 class UserOwner
 {
     /**
-     * Handle an incoming request.
+     * Check if this user is yours
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next

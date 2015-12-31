@@ -8,7 +8,7 @@ use Closure;
 class NotCE
 {
     /**
-     * Handle an incoming request.
+     * Forbid the CE users to have access for some pages
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next

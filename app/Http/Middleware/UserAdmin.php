@@ -7,7 +7,7 @@ use Closure;
 class UserAdmin
 {
     /**
-     * Handle an incoming request.
+     * Check if you're an admin
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
