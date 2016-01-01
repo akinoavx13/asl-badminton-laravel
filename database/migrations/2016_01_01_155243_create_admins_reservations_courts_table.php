@@ -16,11 +16,12 @@ class CreateAdminsReservationsCourtsTable extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->integer('admins_reservation_id')->unsigned()->index();
-            $table->foreign('admins_reservation_id')->references('id')->on('admins_reservations')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('admins_reservations_id')->unsigned()->index();
+            $table->foreign('admins_reservations_id')->references('id')->on('admins_reservations')->onDelete
+            ('cascade')->onUpdate('cascade');
 
-            $table->integer('court_id')->unsigned()->index();
-            $table->foreign('court_id')->references('id')->on('courts')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('courts_id')->unsigned()->index();
+            $table->foreign('courts_id')->references('id')->on('courts')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
