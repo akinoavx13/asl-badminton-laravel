@@ -12,10 +12,12 @@
 */
 
 use App\Http\Controllers\CeController;
+use App\Http\Controllers\CourtController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TimeSlotController;
 use App\Http\Controllers\UserController;
 
 // Authentication routes...
@@ -55,7 +57,7 @@ Route::group(['prefix' => 'player', 'middleware' => ['notCE', 'auth']], function
     PlayerController::routes($router);
 });
 
-Route::group(['prefix' => 'setting', 'middleware' => ['notCE', 'auth', 'admin']], function () use ($router)
+Route::group(['prefix' => 'setting', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
 {
     SettingController::routes($router);
 });
@@ -63,4 +65,14 @@ Route::group(['prefix' => 'setting', 'middleware' => ['notCE', 'auth', 'admin']]
 Route::group(['prefix' => 'ce', 'middleware' => 'notUser'], function () use ($router)
 {
     CeController::routes($router);
+});
+
+Route::group(['prefix' => 'court', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    CourtController::routes($router);
+});
+
+Route::group(['prefix' => 'timeSlot', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    TimeSlotController::routes($router);
 });

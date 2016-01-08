@@ -25,4 +25,18 @@ class Court extends Model
         return $this->belongsToMany('App\AdminsReservation');
     }
 
+    public function __toString()
+    {
+        return $this->number;
+    }
+
+    /******************/
+    /*      Has       */
+    /******************/
+
+    public function hasType($type)
+    {
+        return $this->type === $type;
+    }
+
 }

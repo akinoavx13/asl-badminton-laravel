@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Paramètres
+    Paramètre global
 @stop
 
 @section('content')
 
-    <h1 class="text-center">Paramètres</h1>
+    <h1 class="text-center">Paramètre global</h1>
     <hr>
 
     @if($setting === null)

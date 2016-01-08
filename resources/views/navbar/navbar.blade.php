@@ -60,11 +60,21 @@
 
                 @if($auth->hasRole('admin'))
 
-                    <li class="{{ Request::is('setting*') ? 'active' : '' }}">
-                        <a href="{{ route('setting.index') }}">
+                    <li class="{{ Request::is('setting*') || Request::is('court*') ? 'active' : '' }}">
+                        <a href="#">
                             <i class="fa fa-cogs"></i>
                             <span class="nav-label">Paramètres</span>
+                            <span class="fa arrow"></span>
                         </a>
+
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="{{ route('setting.index') }}"><i class="fa fa-cogs"></i>Global</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('court.index') }}"><i class="fa fa-cogs"></i>Court</a>
+                            </li>
+                        </ul>
                     </li>
 
                     <li class="{{ Request::is('user*') ? 'active' : '' }}">
