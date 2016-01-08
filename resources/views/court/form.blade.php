@@ -23,7 +23,7 @@
                         <i class="text-navy">*</i>
                     </div>
                     <div class="col-md-9">
-                        {!! Form::text('number', $court->exists ? $court->number : old('number'), ['class' => 'form-control', 'required']) !!}
+                        {!! Form::number('number', $court->exists ? $court->number : old('number'), ['class' => 'form-control', 'required']) !!}
                     </div>
                 </div>
 
