@@ -34,7 +34,7 @@ class CourtUpdateRequest extends Request
     {
         return [
             'type'   => 'required|in:simple,double',
-            'number' => 'required|integer',
+            'number' => 'required|integer|unique:courts,number,' . $this->route()->getParameter('court_id') . ',id',
         ];
     }
 }

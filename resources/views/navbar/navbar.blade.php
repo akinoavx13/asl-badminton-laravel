@@ -74,6 +74,9 @@
                             <li>
                                 <a href="{{ route('court.index') }}"><i class="fa fa-cogs"></i>Court</a>
                             </li>
+                            <li>
+                                <a href="{{ route('timeSlot.index') }}"><i class="fa fa-cogs"></i>Créneaux</a>
+                            </li>
                         </ul>
                     </li>
 

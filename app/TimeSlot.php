@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class TimeSlot extends Model
@@ -23,6 +24,50 @@ class TimeSlot extends Model
     public function adminsReservations()
     {
         return $this->belongsToMany('App\AdminsReservation');
+    }
+
+    public function __toString()
+    {
+        return $this->start . ' - ' . $this->end;
+    }
+
+    /******************/
+    /*  GET SET ATT   */
+    /******************/
+
+    public function getStartAttribute($start)
+    {
+        $startExplode = explode(':', $start);
+
+        $hours = $startExplode[0];
+        $minutes = $startExplode[1];
+
+        return $hours . ':' . $minutes;
+    }
+
+    public function setStartAttribute($start)
+    {
+        $startExplode = explode(':', $start);
+
+        $this->attributes['start'] = Carbon::createFromTime($startExplode[0], $startExplode[1], 0);
+    }
+
+    public function getEndAttribute($end)
+    {
+        $endExplode = explode(':', $end);
+
+        $hours = $endExplode[0];
+        $minutes = $endExplode[1];
+
+        return $hours . ':' . $minutes;
+    }
+
+    public function setEndAttribute($end)
+    {
+        $endExplode = explode(':', $end);
+
+        $this->attributes['end'] = Carbon::createFromTime($endExplode[0], $endExplode[1], 0);
+
     }
 
 }

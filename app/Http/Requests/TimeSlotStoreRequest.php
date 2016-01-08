@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class CourtStoreRequest extends Request
+class TimeSlotStoreRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,8 +33,8 @@ class CourtStoreRequest extends Request
     public function rules()
     {
         return [
-            'type'   => 'required|in:simple,double',
-            'number' => 'required|integer|unique:courts,number,' . $this->route()->getParameter('court_id') . ',id',
+            'start' => 'required|size:5',
+            'end'   => 'required|size:5|after:start',
         ];
     }
 }

@@ -17,7 +17,7 @@ class CreateCourtsTable extends Migration
             $table->timestamps();
 
             $table->enum('type', ['double', 'simple']);
-            $table->integer('number')->unsigned();
+            $table->integer('number')->unsigned()->unique();
         });
     }
 

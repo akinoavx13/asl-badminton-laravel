@@ -1,9 +1,9 @@
 @extends('layout')
 
 @section('title')
-    Modification du n° {{ $court }}
+    Création d'un crénaux
 @stop
 
 @section('content')
-    @include('court.form')
+    @include('timeSlot.form')
 @stop
