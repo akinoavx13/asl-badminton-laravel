@@ -60,7 +60,7 @@
 
                 @if($auth->hasRole('admin'))
 
-                    <li class="{{ Request::is('setting*') || Request::is('court*') ? 'active' : '' }}">
+                    <li class="{{ Request::is('setting*') || Request::is('court*') || Request::is('timeSlot*') ? 'active' : '' }}">
                         <a href="#">
                             <i class="fa fa-cogs"></i>
                             <span class="nav-label">Paramètres</span>
@@ -68,13 +68,13 @@
                         </a>
 
                         <ul class="nav nav-second-level">
-                            <li>
+                            <li class="{{ Request::getRequestUri() === '/setting/index' ? 'active' : '' }}">
                                 <a href="{{ route('setting.index') }}"><i class="fa fa-cogs"></i>Global</a>
                             </li>
-                            <li>
+                            <li class="{{ Request::getRequestUri() === '/court/index' ? 'active' : '' }}">
                                 <a href="{{ route('court.index') }}"><i class="fa fa-cogs"></i>Court</a>
                             </li>
-                            <li>
+                            <li class="{{ Request::getRequestUri() === '/timeSlot/index' ? 'active' : '' }}">
                                 <a href="{{ route('timeSlot.index') }}"><i class="fa fa-cogs"></i>Créneaux</a>
                             </li>
                         </ul>
@@ -88,10 +88,10 @@
                         </a>
 
                         <ul class="nav nav-second-level">
-                            <li><a href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des
+                            <li class="{{ Request::getRequestUri() === '/user/index' ? 'active' : '' }}"><a href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des
                                     utilisateurs</a>
                             </li>
-                            <li><a href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer un
+                            <li class="{{ Request::getRequestUri() === '/user/create' ? 'active' : '' }}"><a href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer un
                                     utilisateur</a>
                             </li>
                         </ul>
@@ -112,9 +112,9 @@
                         </a>
 
                         <ul class="nav nav-second-level">
-                            <li><a href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des
+                            <li class="{{ Request::getRequestUri() === '/season/index' ? 'active' : '' }}"><a href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des
                                     saisons</a></li>
-                            <li><a href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une
+                            <li class="{{ Request::getRequestUri() === '/season/create' ? 'active' : '' }}"><a href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une
                                     saison</a></li>
                         </ul>
                     </li>
