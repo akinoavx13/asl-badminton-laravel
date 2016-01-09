@@ -15,6 +15,7 @@ use App\Http\Controllers\CeController;
 use App\Http\Controllers\CourtController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TimeSlotController;
@@ -75,4 +76,9 @@ Route::group(['prefix' => 'court', 'middleware' => ['auth', 'notCE', 'admin']], 
 Route::group(['prefix' => 'timeSlot', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
 {
     TimeSlotController::routes($router);
+});
+
+Route::group(['prefix' => 'reservation', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    ReservationController::routes($router);
 });
