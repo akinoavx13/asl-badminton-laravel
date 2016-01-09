@@ -14,7 +14,11 @@
             <a href="{{ route('setting.store') }}" class="btn btn-primary">Créer la page paramètre</a>
         </div>
     @else
-        @include('setting.form')
+        <div class="row">
+            <div class="col-md-push-1 col-md-10">
+                @include('setting.form')
+            </div>
+        </div>
     @endif
 
 @stop

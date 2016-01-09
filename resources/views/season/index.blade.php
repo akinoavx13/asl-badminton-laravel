@@ -16,48 +16,46 @@
             <div class="col-md-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover display" id="seasonList">
-                                <thead>
+                        <table class="table table-striped table-hover display" id="seasonList">
+                            <thead>
+                            <tr>
+                                <th class="text-center">Nom</th>
+                                <th class="text-center">Actif</th>
+                                <th class="text-center">Editer</th>
+                                <th class="text-center">Supprimer</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            @foreach($seasons as $season)
                                 <tr>
-                                    <th class="text-center">Nom</th>
-                                    <th class="text-center">Actif</th>
-                                    <th class="text-center">Editer</th>
-                                    <th class="text-center">Supprimer</th>
+                                    <td class="text-center">
+                                        {{ $season->name }}
+                                    </td>
+                                    <td class="text-center">
+                                        @if($season->hasActive(true))
+                                            <span class="fa fa-check-circle-o fa-2x text-success"
+                                                  aria-hidden="true"></span>
+                                        @elseif($season->hasActive(false))
+                                            <a href="{{ route('season.change_active_attribute', $season->id) }}"
+                                               class="btn btn-primary">Devenir active</a>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('season.edit', $season->id) }}" class="btn btn-info dim">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('season.delete', $season->id) }}" class="btn btn-danger dim">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
                                 </tr>
-                                </thead>
-
-                                <tbody>
-
-                                @foreach($seasons as $season)
-                                    <tr>
-                                        <td class="text-center">
-                                            {{ $season->name }}
-                                        </td>
-                                        <td class="text-center">
-                                            @if($season->hasActive(true))
-                                                <span class="fa fa-check-circle-o fa-2x text-success"
-                                                      aria-hidden="true"></span>
-                                            @elseif($season->hasActive(false))
-                                                <a href="{{ route('season.change_active_attribute', $season->id) }}"
-                                                   class="btn btn-primary">Devenir active</a>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('season.edit', $season->id) }}" class="btn btn-info dim">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('season.delete', $season->id) }}" class="btn btn-danger dim">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

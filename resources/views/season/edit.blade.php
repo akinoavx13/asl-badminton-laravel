@@ -5,5 +5,9 @@
 @stop
 
 @section('content')
-    @include('season.form')
+    <div class="row">
+        <div class="col-md-push-1 col-md-10">
+            @include('season.form')
+        </div>
+    </div>
 @stop

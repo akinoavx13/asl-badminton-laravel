@@ -11,59 +11,56 @@
 
     <div class="row">
         <div class="col-md-offset-5 col-md-2">
-            <a href="{{ route('timeSlot.create') }}" class="btn btn-primary btn-block">Ajouter un créneau <span
-                        class="fa fa-plus"></span></a>
+            <a href="{{ route('timeSlot.create') }}" class="btn btn-primary btn-block">Ajouter un créneau <span class="fa fa-plus"></span></a>
         </div>
     </div>
 
     <br>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-offset-1 col-md-10">
             @if(count($timeSlots) > 0)
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover display" id="timeSlotsList">
-                            <thead>
-                            <tr>
-                                <th class="text-center">Heure début</th>
-                                <th class="text-center">Heure fin</th>
-                                <th class="text-center">Editer</th>
-                                <th class="text-center">Supprimer</th>
-                            </tr>
-                            </thead>
+                    <table class="table table-striped table-hover display" id="timeSlotsList">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Heure début</th>
+                            <th class="text-center">Heure fin</th>
+                            <th class="text-center">Editer</th>
+                            <th class="text-center">Supprimer</th>
+                        </tr>
+                        </thead>
 
-                            <tbody>
-                                @foreach($timeSlots as $timeSlot)
-                                    <tr class="text-center">
-                                        <td>
-                                            {{ $timeSlot->start }}
-                                        </td>
-                                        <td>
-                                            {{ $timeSlot->end }}
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('timeSlot.edit', $timeSlot->id) }}" class="btn btn-info dim">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('timeSlot.delete', $timeSlot->id) }}" class="btn btn-danger dim">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                        @else
-                        <h2 class="text-center text-danger">
-                            Pas de créneau
-                        </h2>
+                        <tbody>
+                            @foreach($timeSlots as $timeSlot)
+                                <tr class="text-center">
+                                    <td>
+                                        {{ $timeSlot->start }}
+                                    </td>
+                                    <td>
+                                        {{ $timeSlot->end }}
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('timeSlot.edit', $timeSlot->id) }}" class="btn btn-info dim">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('timeSlot.delete', $timeSlot->id) }}" class="btn btn-danger dim">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
+            @else
+                <h2 class="text-center text-danger">
+                    Pas de créneau
+                </h2>
             @endif
         </div>
     </div>

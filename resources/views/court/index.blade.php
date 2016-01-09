@@ -18,53 +18,51 @@
     <br>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-offset-1 col-md-10">
             @if(count($courts) > 0)
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover display" id="courtsList">
-                            <thead>
-                            <tr>
-                                <th class="text-center">Type</th>
-                                <th class="text-center">Numero</th>
-                                <th class="text-center">Editer</th>
-                                <th class="text-center">Supprimer</th>
-                            </tr>
-                            </thead>
+                    <table class="table table-striped table-hover display" id="courtsList">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Type</th>
+                            <th class="text-center">Numero</th>
+                            <th class="text-center">Editer</th>
+                            <th class="text-center">Supprimer</th>
+                        </tr>
+                        </thead>
 
-                            <tbody>
-                                @foreach($courts as $court)
-                                    <tr class="text-center">
-                                        <td>
-                                            @if($court->hasType('double'))
-                                                Double
-                                            @else
-                                                Simple
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $court->number }}
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('court.edit', $court->id) }}" class="btn btn-info dim">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('court.delete', $court->id) }}" class="btn btn-danger dim">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                        @else
-                        <h2 class="text-center text-danger">
-                            Pas de court
-                        </h2>
+                        <tbody>
+                            @foreach($courts as $court)
+                                <tr class="text-center">
+                                    <td>
+                                        @if($court->hasType('double'))
+                                            Double
+                                        @else
+                                            Simple
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $court->number }}
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('court.edit', $court->id) }}" class="btn btn-info dim">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('court.delete', $court->id) }}" class="btn btn-danger dim">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    @else
+                    <h2 class="text-center text-danger">
+                        Pas de court
+                    </h2>
                 </div>
             </div>
             @endif
