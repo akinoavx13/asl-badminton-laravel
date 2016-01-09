@@ -84,16 +84,16 @@
  *  v0.6   flot 0.8 compatibility and some bug fixes
  */
 
-(function ($) {
+(function($) {
 
     var options = {
-        series: {
-            curvedLines: {
-                active: false,
+        series : {
+            curvedLines : {
+                active : false,
                 apply: false,
-                fit: false,
-                curvePointFactor: 20,
-                fitPointDist: undefined
+                fit : false,
+                curvePointFactor : 20,
+                fitPointDist : undefined
             }
         }
     };
@@ -118,7 +118,7 @@
                 if (series.lines.fill) {
 
                     var pointsTop = calculateCurvePoints(datapoints, series.curvedLines, 1)
-                        , pointsBottom = calculateCurvePoints(datapoints, series.curvedLines, 2); //flot makes sure for us that we've got a second y point if fill is true !
+                        ,pointsBottom = calculateCurvePoints(datapoints, series.curvedLines, 2); //flot makes sure for us that we've got a second y point if fill is true !
 
                     //Merge top and bottom curve
                     datapoints.pointsize = 3;
@@ -138,11 +138,11 @@
                         } else if (pointsTop[i] < pointsBottom[j]) {
                             datapoints.points[k] = pointsTop[i];
                             datapoints.points[k + 1] = pointsTop[i + 1];
-                            datapoints.points[k + 2] = k > 0 ? datapoints.points[k - 1] : null;
+                            datapoints.points[k + 2] = k > 0 ? datapoints.points[k-1] : null;
                             i += ps;
                         } else {
                             datapoints.points[k] = pointsBottom[j];
-                            datapoints.points[k + 1] = k > 1 ? datapoints.points[k - 2] : null;
+                            datapoints.points[k + 1] = k > 1 ? datapoints.points[k-2] : null;
                             datapoints.points[k + 2] = pointsBottom[j + 1];
                             j += ps;
                         }
@@ -162,8 +162,8 @@
             var points = datapoints.points, ps = datapoints.pointsize;
             var num = curvedLinesOptions.curvePointFactor * (points.length / ps);
 
-            var xdata = [];
-            var ydata = [];
+            var xdata = new Array;
+            var ydata = new Array;
 
             var curX = -1;
             var curY = -1;
@@ -174,10 +174,10 @@
                 //to have a max,min at the data point.
 
                 var fpDist;
-                if (typeof curvedLinesOptions.fitPointDist == 'undefined') {
+                if(typeof curvedLinesOptions.fitPointDist == 'undefined') {
                     //estimate it
                     var minX = points[0];
-                    var maxX = points[points.length - ps];
+                    var maxX = points[points.length-ps];
                     fpDist = (maxX - minX) / (500 * 100); //x range / (estimated pixel length of placeholder * factor)
                 } else {
                     //use user defined value
@@ -230,8 +230,8 @@
 
             var n = xdata.length;
 
-            var y2 = [];
-            var delta = [];
+            var y2 = new Array();
+            var delta = new Array();
             y2[0] = 0;
             y2[n - 1] = 0;
             delta[0] = 0;
@@ -257,9 +257,9 @@
             //   xmax  - xmin  / #points
             var step = (xdata[n - 1] - xdata[0]) / (num - 1);
 
-            var xnew = [];
-            var ynew = [];
-            var result = [];
+            var xnew = new Array;
+            var ynew = new Array;
+            var result = new Array;
 
             xnew[0] = xdata[0];
             ynew[0] = ydata[0];
@@ -267,7 +267,7 @@
             result.push(xnew[0]);
             result.push(ynew[0]);
 
-            for (j = 1; j < num; ++j) {
+            for ( j = 1; j < num; ++j) {
                 //new x point (sampling point for the created curve)
                 xnew[j] = xnew[0] + j * step;
 
@@ -306,10 +306,10 @@
     }//end init
 
     $.plot.plugins.push({
-        init: init,
-        options: options,
-        name: 'curvedLines',
-        version: '0.5'
+        init : init,
+        options : options,
+        name : 'curvedLines',
+        version : '0.5'
     });
 
 })(jQuery);

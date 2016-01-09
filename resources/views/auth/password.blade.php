@@ -1,75 +1,34 @@
-<!DOCTYPE html>
-<html>
+@extends('auth.layout')
 
-<head>
+@section('title')
+    Mot de passe oublié
+@stop
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('contentTitle')
+    <span class="help-block">merci de compléter les informations suivantes pour réinitialiser votre mot de passe</span>
+@stop
 
-    <title>Mot de passe oublié</title>
-
-    <link href="{{ asset('css/app.min.css') }}" rel="stylesheet">
-
-</head>
-
-<body class="gray-bg">
-
-<br>
-<br>
-
-<div class="row">
-    <div class="col-md-2 col-md-push-5">
-        <img class="img-responsive" src="{{ asset('img/logo.png') }}" alt="logo"/>
-    </div>
-</div>
-
-<br>
-
-<div class="row">
-
-    <div class="col-md-6 col-md-push-3">
-        <h2 class="text-center">
-            Bienvenue sur le site de l'AS Lectra Badminton
-        </h2>
-        <span class="help-block text-center">merci de compléter les informations suivantes pour réinitialiser votre mot de passe</span>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-center">
-                    @include('flash.flash-session')
-                </div>
-            </div>
+@section('contentBody')
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="text-center">
+                Mot de passe oublié
+            </h2>
         </div>
+        <div class="panel-body">
 
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="text-center">
-                    Mot de passe oublié
-                </h3>
+            {!! Form::open(['url' => '/password/email']) !!}
+
+            <div class="form-group">
+                {!! Form::email('email', old('email'), ['placeholder' => 'Email', 'class' => 'form-control', 'required']) !!}
             </div>
-            <div class="panel-body">
 
-                {!! Form::open(['url' => '/password/email']) !!}
-
-                {!! Form::token() !!}
-
-                <div class="form-group">
-                    {!! Form::email('email', old('email'), ['placeholder' => 'Email', 'class' => 'form-control', 'required']) !!}
-                </div>
-
-                <div class="form-group text-center">
-                    {!! Form::submit('Envoyer le lien de réinitialisation', ['class' => 'btn btn-primary']) !!}
-                </div>
-
-                {!! Form::close() !!}
-
+            <div class="form-group text-center">
+                {!! Form::submit('Envoyer le lien de réinitialisation', ['class' => 'btn btn-primary']) !!}
             </div>
+
+            {!! Form::close() !!}
+
         </div>
     </div>
-</div>
-
-<script src="{{ asset('js/app.min.js') }}"></script>
-
-</body>
-
-</html>
+@stop
