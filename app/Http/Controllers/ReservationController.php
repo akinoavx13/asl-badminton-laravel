@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Court;
+use App\Http\Utilities\Calendar;
 use App\TimeSlot;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class ReservationController extends Controller
 {
@@ -28,10 +28,12 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $timeSlots = TimeSlot::all();
-        $courts = Court::all();
+        $timeSlots = TimeSlot::orderBy('start')->get();
+        $courts = Court::orderBy('number')->get();
 
-        return view('reservation.index', compact('timeSlots', 'courts'));
+        $allDays = Calendar::getAllDaysMonth();
+
+        return view('reservation.index', compact('timeSlots', 'courts', 'allDays'));
     }
 
     /**
