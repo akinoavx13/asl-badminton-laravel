@@ -22,7 +22,8 @@ elixir(function(mix) {
   'plugins/dataTables/dataTables.bootstrap.css',
   'plugins/dataTables/dataTables.responsive.css',
   'plugins/dataTables/dataTables.tableTools.min.css',
-  'plugins/clockpicker/clockpicker.css'
+  'plugins/clockpicker/clockpicker.css',
+  'perso.css'
  ], 'public/css/app.min.css');
 
  mix.scripts([

@@ -10,15 +10,19 @@
         Réserver un court
     </h1>
 
+    <div class="row">
+        <div class="col-md-offset-5 col-md-2">
+            <a href="#{{ \Carbon\Carbon::today()->format('Y-m-d') }}" class="btn btn-primary btn-block">Voir les réservations d'aujourd'hui</a>
+        </div>
+    </div>
 
+    <br>
 
     <div class="row">
-        <div class="col-md-offset-1 col-md-10">
-
+        <div class="col-md-12">
             @if(count($timeSlots) > 0 || count($courts) > 0)
-            <div class="ibox float-e-margins">
-                <div class="ibox-content">
-                    <table class="table table-striped table-hover display" id="daysList">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped reservation">
                         <thead>
                         <tr>
                             <th rowspan="{{ count($timeSlots) }}" class="text-center">Jour</th>
@@ -32,7 +36,8 @@
                         <tbody>
                         @foreach($allDays as $day)
                             <tr class="text-center">
-                                <td rowspan="{{ count($timeSlots) }}">
+                                <td rowspan="{{ count($timeSlots) }}" style="background: #fbfcfc;" id="{{
+                                $day->format('Y-m-d') }}" class="{{ $day->format('Y-m-d') == \Carbon\Carbon::today()->format('Y-m-d') ? 'today' : '' }}">
                                     {{ ucfirst($day->format('l j F Y')) }}
                                 </td>
                                 <td>
@@ -41,7 +46,7 @@
                                 @foreach($courts as $court)
                                     <td>
                                         @if(\Carbon\Carbon::today() > $day)
-                                            <span class="fa fa-clock-o"></span>
+                                            <span class="fa fa-clock-o reservation-text-out"></span>
                                         @else
                                             <a href="">Réserver</a>
                                         @endif
@@ -56,7 +61,7 @@
                                             @foreach($courts as $court)
                                                 <td>
                                                     @if(\Carbon\Carbon::today() > $day)
-                                                        <span class="fa fa-clock-o"></span>
+                                                        <span class="fa fa-clock-o reservation-text-out"></span>
                                                     @else
                                                         <a href="">Réserver</a>
                                                     @endif
@@ -70,7 +75,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
             @else
                 <h1 class="text-danger text-center">
                     Pas de réservation disponible pour le moment
@@ -79,37 +83,4 @@
         </div>
     </div>
 
-@stop
-
-@section('javascript')
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#daysList').DataTable( {
-                paging: false,
-                ordering:  false,
-                language: {
-                    processing:     "Traitement en cours...",
-                    search:         "Rechercher&nbsp;:",
-                    lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
-                    info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                    infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-                    infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                    infoPostFix:    "",
-                    loadingRecords: "Chargement en cours...",
-                    zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                    emptyTable:     "Aucune donnée disponible dans le tableau",
-                    paginate: {
-                        first:      "Premier",
-                        previous:   "Pr&eacute;c&eacute;dent",
-                        next:       "Suivant",
-                        last:       "Dernier"
-                    },
-                    aria: {
-                        sortAscending:  ": activer pour trier la colonne par ordre croissant",
-                        sortDescending: ": activer pour trier la colonne par ordre décroissant"
-                    }
-                }
-            } );
-        } );
-    </script>
 @stop

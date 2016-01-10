@@ -1,0 +1,16 @@
+.reservation > tbody > tr:nth-child(2n+1) > td, .reservation > tbody > tr:nth-child(2n+1) > th {
+    background-color: #C3E0F6;
+}
+
+.reservation > tbody > tr:nth-child(2n) > td, .reservation > tbody > tr:nth-child(2n) > th {
+    background-color: #97BFD8;
+}
+
+.today {
+    color: red;
+}
+
+.reservation-text-out{
+    font-size: 15px;
+    color: #c25d1f;
+}
