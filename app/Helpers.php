@@ -86,4 +86,16 @@ class Helpers
     {
         return $this->myPlayer;
     }
+
+    public function getTeamName($fornameOne, $nameOne, $fornameTwo = null, $nameTwo = null)
+    {
+        if($fornameTwo === null && $nameTwo === null)
+        {
+            return $fornameOne . ' ' . $nameOne;
+        }
+        else
+        {
+            return $fornameOne . ' ' . $nameOne . ' & ' . $fornameTwo . ' ' . $nameTwo;
+        }
+    }
 }

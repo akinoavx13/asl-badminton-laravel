@@ -71,9 +71,21 @@ class Team extends Model
             ->whereNull('teams.player_two');
     }
 
+    public function scopeMySimpleTeams($query, $gender, $player_id, $season_id)
+    {
+        $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
+            ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+            ->where('teams.season_id', $season_id)
+            ->where('teams.simple_' . $gender, true)
+            ->where('teams.player_one', $player_id)
+            ->whereNull('teams.player_two');
+    }
+
     public function scopeAllSimpleTeamsWithoutMe($query, $gender, $player_id, $season_id)
     {
-        $query->where('teams.season_id', $season_id)
+        $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
+            ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+            ->where('teams.season_id', $season_id)
             ->where('teams.simple_' . $gender, true)
             ->where('teams.player_one', '<>', $player_id)
             ->whereNull('teams.player_two');
@@ -94,9 +106,32 @@ class Team extends Model
             });
     }
 
+    public function scopeMyDoubleOrMixteActiveTeams($query, $type, $gender, $player_id, $season_id)
+    {
+        $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
+            ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
+            ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+            ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.user_id')
+            ->where('teams.season_id', $season_id)
+            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+            ->where('teams.player_one', $player_id)
+            ->where('teams.enable', true)
+            ->orWhere(function ($query) use ($type, $gender, $player_id, $season_id)
+            {
+                $query->where('teams.season_id', $season_id)
+                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+                    ->where('teams.player_two', $player_id)
+                    ->where('teams.enable', true);
+            });
+    }
+
     public function scopeAllDoubleOrMixteActiveTeams($query, $type, $gender, $season_id)
     {
-        $query->where('teams.season_id', $season_id)
+        $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
+            ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
+            ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+            ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.user_id')
+            ->where('teams.season_id', $season_id)
             ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
             ->where('teams.enable', true)
             ->orWhere(function ($query) use ($type, $gender, $season_id)

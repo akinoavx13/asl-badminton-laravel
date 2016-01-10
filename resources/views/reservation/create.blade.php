@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Réservation d'un court
+    Réservation du court de {{ $court->type }} n° {{ $court }}
 @stop
 
 @section('content')
