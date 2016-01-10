@@ -3,9 +3,9 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 @if($player->exists)
-                    <h2 class="text-center">Modification du joueur {{ $player }}</h2>
+                    <h1 class="text-center">Modification du joueur {{ $player }}</h1>
                 @else
-                    <h2 class="text-center">Inscription</h2>
+                    <h1 class="text-center">Inscription</h1>
                 @endif
             </div>
             <div class="ibox-content">

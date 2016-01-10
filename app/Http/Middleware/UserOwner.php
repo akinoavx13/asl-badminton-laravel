@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers;
 use Closure;
 
 class UserOwner
@@ -17,7 +18,7 @@ class UserOwner
     {
 
         $user_id = $request->route()->getParameter('user_id');
-        $user = $request->user();
+        $user = Helpers::getInstance()->auth();
 
         if ($user->hasOwner($user_id) || $user->hasRole('admin'))
         {

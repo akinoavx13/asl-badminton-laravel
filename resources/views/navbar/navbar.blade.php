@@ -128,12 +128,14 @@
                     </a>
                 </li>
 
-                <li class="{{ Request::is('reservation/index') ? 'active' : '' }}">
-                    <a href="{{ route('reservation.index') }}">
-                        <i class="fa fa-calendar"></i>
-                        <span class="nav-label">Réservation</span>
-                    </a>
-                </li>
+                @if($myPlayer !== null && $myPlayer->formula !== 'leisure')
+                    <li class="{{ Request::is('reservation/index') || Request::is('reservation/create*') ? 'active' : '' }}">
+                        <a href="{{ route('reservation.index') }}">
+                            <i class="fa fa-calendar"></i>
+                            <span class="nav-label">Réservation</span>
+                        </a>
+                    </li>
+                @endif
             @endif
             @if($auth->hasRole('ce') || $auth->hasRole('admin'))
                 <li class="{{ Request::is('ce') ? 'active' : '' }}">

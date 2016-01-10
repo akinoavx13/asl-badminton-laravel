@@ -2,9 +2,9 @@
 <div class="ibox float-e-margins">
     <div class="ibox-title">
         @if($court->exists)
-            <h2 class="text-center">Modification du court n° {{ $court }}</h2>
+            <h1 class="text-center">Modification du court n° {{ $court }}</h1>
         @else
-            <h2 class="text-center">Création d'un court</h2>
+            <h1 class="text-center">Création d'un court</h1>
         @endif
     </div>
     <div class="ibox-content">

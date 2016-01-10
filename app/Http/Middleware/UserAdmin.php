@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers;
 use Closure;
 
 class UserAdmin
@@ -15,7 +16,7 @@ class UserAdmin
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()->hasRole('admin')) {
+        if (Helpers::getInstance()->auth()->hasRole('admin')) {
             return $next($request);
         } else {
             abort(401, 'Unauthorized action.');

@@ -1,9 +1,9 @@
 <div class="ibox float-e-margins">
     <div class="ibox-title">
         @if($timeSlot->exists)
-            <h2 class="text-center">Modification du crénau {{ $timeSlot }}</h2>
+            <h1 class="text-center">Modification du crénau {{ $timeSlot }}</h1>
         @else
-            <h2 class="text-center">Création d'un créneau</h2>
+            <h1 class="text-center">Création d'un créneau</h1>
         @endif
     </div>
     <div class="ibox-content">

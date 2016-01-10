@@ -1,11 +1,9 @@
-
-
 <div class="ibox float-e-margins">
     <div class="ibox-title">
         @if($season->exists)
-            <h2 class="text-center">Modification de {{ $season }}</h2>
+            <h1 class="text-center">Modification de {{ $season }}</h1>
         @else
-            <h2 class="text-center">Création d'une saison</h2>
+            <h1 class="text-center">Création d'une saison</h1>
         @endif
     </div>
     <div class="ibox-content">

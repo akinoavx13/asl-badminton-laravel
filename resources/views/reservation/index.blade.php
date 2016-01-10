@@ -48,7 +48,7 @@
                                         @if(\Carbon\Carbon::today() > $day)
                                             <span class="fa fa-clock-o reservation-text-out"></span>
                                         @else
-                                            <a href="">Réserver</a>
+                                            <a href="{{ route('reservation.create', [$day->format('Y-m-d'), $court->id, $timeSlots[0]->id]) }}">Réserver</a>
                                         @endif
                                     </td>
                                 @endforeach
@@ -63,7 +63,7 @@
                                                     @if(\Carbon\Carbon::today() > $day)
                                                         <span class="fa fa-clock-o reservation-text-out"></span>
                                                     @else
-                                                        <a href="">Réserver</a>
+                                                        <a href="{{ route('reservation.create', [$day->format('Y-m-d'), $court->id, $timeSlot->id]) }}">Réserver</a>
                                                     @endif
                                                 </td>
                                             @endforeach

@@ -12,7 +12,6 @@
             <h1 class="text-center">Choisir une saison</h1>
 
             {!! Form::open(['route' => 'player.index', 'class' => 'form-horizontal']) !!}
-            {!! Form::token() !!}
 
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-4">

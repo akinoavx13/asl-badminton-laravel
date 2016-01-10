@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers;
 use App\Player;
 use Closure;
 
@@ -20,7 +21,7 @@ class PlayerOwner
         $player = Player::findOrFail($player_id);
         $user_id = $player->user->id;
 
-        $user = $request->user();
+        $user = Helpers::getInstance()->auth();
 
         if ($user->hasOwner($user_id) || $user->hasRole('admin'))
         {

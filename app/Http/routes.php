@@ -78,7 +78,7 @@ Route::group(['prefix' => 'timeSlot', 'middleware' => ['auth', 'notCE', 'admin']
     TimeSlotController::routes($router);
 });
 
-Route::group(['prefix' => 'reservation', 'middleware' => ['auth', 'notCE']], function () use ($router)
+Route::group(['prefix' => 'reservation', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
 {
     ReservationController::routes($router);
 });

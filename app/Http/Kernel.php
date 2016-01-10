@@ -38,5 +38,6 @@ class Kernel extends HttpKernel
         'buyTshirtClose' => \App\Http\Middleware\BuyTshirtClose::class,
         'notCE'   => \App\Http\Middleware\NotCE::class,
         'notUser' => \App\Http\Middleware\NotUser::class,
+        'notLeisure' => \App\Http\Middleware\NotLeisure::class,
     ];
 }

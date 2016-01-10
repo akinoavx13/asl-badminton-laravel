@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers;
 use Auth;
 use Closure;
 
@@ -16,7 +17,7 @@ class NotCE
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::user();
+        $user = Helpers::getInstance()->auth();
 
         if ($user !== null && $user->hasRole('ce'))
         {

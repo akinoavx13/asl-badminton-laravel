@@ -37,7 +37,7 @@ class Team extends Model
         $string = $this->playerOne->__toString();
         if ($this->playerTwo !== null)
         {
-            $string .= ' & <br>' . $this->playerTwo->__toString();
+            $string .= ' & ' . $this->playerTwo->__toString();
         }
 
         return $string;
@@ -71,6 +71,14 @@ class Team extends Model
             ->whereNull('teams.player_two');
     }
 
+    public function scopeAllSimpleTeamsWithoutMe($query, $gender, $player_id, $season_id)
+    {
+        $query->where('teams.season_id', $season_id)
+            ->where('teams.simple_' . $gender, true)
+            ->where('teams.player_one', '<>', $player_id)
+            ->whereNull('teams.player_two');
+    }
+
     public function scopeAllMyDoubleOrMixteActiveTeams($query, $type, $gender, $player_id, $season_id)
     {
         $query->where('teams.season_id', $season_id)
@@ -82,6 +90,19 @@ class Team extends Model
                 $query->where('teams.season_id', $season_id)
                     ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
                     ->where('teams.player_two', $player_id)
+                    ->where('teams.enable', true);
+            });
+    }
+
+    public function scopeAllDoubleOrMixteActiveTeams($query, $type, $gender, $season_id)
+    {
+        $query->where('teams.season_id', $season_id)
+            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+            ->where('teams.enable', true)
+            ->orWhere(function ($query) use ($type, $gender, $season_id)
+            {
+                $query->where('teams.season_id', $season_id)
+                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
                     ->where('teams.enable', true);
             });
     }

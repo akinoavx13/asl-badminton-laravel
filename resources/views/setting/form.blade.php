@@ -1,5 +1,3 @@
-
-
 <div class="ibox float-e-margins">
     <div class="ibox-title">
     </div>

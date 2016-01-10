@@ -20,7 +20,7 @@ class SeasonController extends Controller
      */
     public static function routes($router)
     {
-        //paterns
+        //patterns
         $router->pattern('season_id', '[0-9]+');
 
         //season list

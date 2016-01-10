@@ -19,23 +19,23 @@
 
 <body>
 
-<div id="wrapper">
-    @include('navbar.navbar')
-    <div id="page-wrapper" class="gray-bg dashbard-1">
-        <div class="row border-bottom">
-            @include('navbar.navbar-top')
-        </div>
-        @include('flash.flash-session')
-        <div class="wrapper wrapper-content animated fadeInRight">
-            @yield('content')
+    <div id="wrapper">
+        @include('navbar.navbar')
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+            <div class="row border-bottom">
+                @include('navbar.navbar-top')
+            </div>
+            @include('flash.flash-session')
+            <div class="wrapper wrapper-content animated fadeInRight">
+                @yield('content')
+            </div>
         </div>
     </div>
-</div>
 
-<script src="{{ asset('js/app.min.js') }}"></script>
+    <script src="{{ asset('js/app.min.js') }}"></script>
 
-@yield('javascript')
-@include('flash.flash-alert')
+    @yield('javascript')
+    @include('flash.flash-alert')
 
 </body>
 

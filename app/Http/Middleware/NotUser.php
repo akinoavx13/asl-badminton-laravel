@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers;
 use Closure;
 
 class NotUser
@@ -15,9 +16,9 @@ class NotUser
      */
     public function handle($request, Closure $next)
     {
-        $user = $request->user();
+        $user = Helpers::getInstance()->auth();
 
-        if ($user !== null & $user->hasRole('user'))
+        if ($user !== null && $user->hasRole('user'))
         {
             abort(401, 'Unauthorized action.');
         }

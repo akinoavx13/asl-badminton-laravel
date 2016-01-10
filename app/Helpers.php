@@ -2,17 +2,31 @@
 
 namespace App;
 
+use Auth;
+
 class Helpers
 {
 
     private static $instance;
     private $setting;
+    private $auth;
+    private $myPlayer;
 
     public function __construct()
     {
-        if ($this->setting == null)
+        if ($this->setting === null)
         {
             $this->setting = Setting::first();
+        }
+
+        if ($this->auth === null)
+        {
+            $this->auth = Auth::user();
+        }
+
+        if ($this->myPlayer === null && $this->auth !== null)
+        {
+            $this->myPlayer = User::select('players.*')->myPlayerInActiveSeason($this->auth->id)->first();
         }
     }
 
@@ -61,5 +75,15 @@ class Helpers
     public function setting()
     {
         return $this->setting;
+    }
+
+    public function auth()
+    {
+        return $this->auth;
+    }
+
+    public function myPlayer()
+    {
+        return $this->myPlayer;
     }
 }

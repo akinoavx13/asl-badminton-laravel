@@ -1,9 +1,9 @@
 <div class="ibox float-e-margins">
     <div class="ibox-title">
         @if($user->exists)
-            <h2 class="text-center">Modification de {{ $user }}</h2>
+            <h1 class="text-center">Modification de {{ $user }}</h1>
         @else
-            <h2 class="text-center">Création d'un utilisateur</h2>
+            <h1 class="text-center">Création d'un utilisateur</h1>
         @endif
     </div>
     <div class="ibox-content">
