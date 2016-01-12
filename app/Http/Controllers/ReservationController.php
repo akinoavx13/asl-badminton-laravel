@@ -62,10 +62,16 @@ class ReservationController extends Controller
 
         $allDays = Calendar::getAllDaysMonth();
 
-        $firstDayMonth = new Date('first day of this month');
-        $lastDayMonth = new Date('last day of this month');
+        $firstDay = new Carbon('first day of this month');
 
-        $playerReservations = PlayersReservation::where('date', '>=', $firstDayMonth)
+        if($firstDay < Carbon::today())
+        {
+            $firstDay = Carbon::today();
+        }
+
+        $lastDayMonth = new Carbon('last day of this month');
+
+        $playerReservations = PlayersReservation::where('date', '>=', $firstDay)
             ->where('date', '<=', $lastDayMonth)
             ->orderBy('date')
             ->get();
@@ -86,7 +92,7 @@ class ReservationController extends Controller
                     {
                         foreach ($playerReservations as $index => $playerReservation)
                         {
-                            if ($dispo == true)
+                            if ($dispo)
                             {
                                 if ($playerReservation->date === $day->format('Y-m-d') && $playerReservation->time_slot_id === $timeSlot->id
                                     && $playerReservation->court_id === $court->id
@@ -105,7 +111,7 @@ class ReservationController extends Controller
                                                 $query->where('teams.id', $playerReservation->second_team);
                                             })
                                             ->take(2)
-                                            ->first();
+                                            ->get();
 
                                         if(count($simpleTeams) === 2)
                                         {
@@ -137,7 +143,6 @@ class ReservationController extends Controller
                                             })
                                             ->take(2)
                                             ->get();
-
                                         if(count($doubleOrMixteTeams) === 2)
                                         {
                                             $firstTeam = $doubleOrMixteTeams[0];
@@ -190,7 +195,7 @@ class ReservationController extends Controller
             if ($court !== null && $court->hasType('simple'))
             {
                 //mon équipe de simple
-                $mySimpleTeam = Team::select('users.forname', 'users.name', 'players.id')
+                $mySimpleTeam = Team::select('users.forname', 'users.name', 'teams.id')
                     ->mySimpleTeams($user->gender, $myPlayer->id, $seasonActive->id)->first();
                 if ($mySimpleTeam !== null)
                 {
@@ -230,7 +235,7 @@ class ReservationController extends Controller
                     'userTwo.forname AS fornameTwo',
                     'userTwo.name AS nameTwo',
                     'teams.id')
-                    ->myDoubleOrMixteActiveTeams('mixte', $user->gender === 'man' ? 'woman' :
+                    ->myDoubleOrMixteActiveTeams('mixte', $user->hasGender('man') ? 'woman' :
                         'man', $myPlayer->id, $seasonActive->id)->first();
                 if ($myMixteTeam !== null)
                 {
@@ -239,15 +244,18 @@ class ReservationController extends Controller
                         $myMixteTeam->fornameTwo, $myMixteTeam->nameTwo);
                 }
 
-                //toutes les équipes de double dame
-                $teams['Double dame'] = $this->listTeams('woman', 'double', $myPlayer->id, $seasonActive->id);
+                if($myDoubleTeam !== null && $myMixteTeam !== null)
+                {
+                    //toutes les équipes de double dame
+                    $teams['Double dame'] = $this->listTeams('woman', 'double', $myPlayer->id, $seasonActive->id, $user->hasGender('man') ? null : $myDoubleTeam->id);
 
-                //toutes les équipes de double homme
-                $teams['Double homme'] = $this->listTeams('man', 'double', $myPlayer->id, $seasonActive->id);
+                    //toutes les équipes de double homme
+                    $teams['Double homme'] = $this->listTeams('man', 'double', $myPlayer->id, $seasonActive->id, $user->hasGender('woman') ? null : $myDoubleTeam->id);
 
-                //toutes les équipes de double mixte
-                $teams['Double mixte'] = $this->listTeams($user->gender === 'man' ? 'woman' : 'man', 'mixte',
-                    $myPlayer->id, $seasonActive->id);
+                    //toutes les équipes de double mixte
+                    $teams['Double mixte'] = $this->listTeams($user->gender === 'man' ? 'woman' : 'man', 'mixte',
+                        $myPlayer->id, $seasonActive->id, $myMixteTeam->id);
+                }
             }
         }
 
@@ -322,7 +330,7 @@ class ReservationController extends Controller
         //
     }
 
-    private function listTeams($gender, $type, $player_id, $season_id)
+    private function listTeams($gender, $type, $player_id, $season_id, $myDoubleOrMixteTeam_id = null)
     {
         $teams = [];
         $allTeams = null;
@@ -335,13 +343,30 @@ class ReservationController extends Controller
         }
         else
         {
-            $allTeams = Team::select('userOne.forname AS fornameOne',
-                'userOne.name AS nameOne',
-                'userTwo.forname AS fornameTwo',
-                'userTwo.name AS nameTwo',
-                'teams.id')
-                ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
-                ->get();
+            if($myDoubleOrMixteTeam_id === null)
+            {
+                $allTeams = Team::select('userOne.forname AS fornameOne',
+                    'userOne.name AS nameOne',
+                    'userTwo.forname AS fornameTwo',
+                    'userTwo.name AS nameTwo',
+                    'teams.id')
+                    ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
+                    ->get();
+            }
+            else
+            {
+                $allTeams = Team::select('userOne.forname AS fornameOne',
+                    'userOne.name AS nameOne',
+                    'userTwo.forname AS fornameTwo',
+                    'userTwo.name AS nameTwo',
+                    'teams.id')
+                    ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
+                    ->get();
+
+                $allTeams = $allTeams->reject(function ($item) use($myDoubleOrMixteTeam_id) {
+                    return $item->id == $myDoubleOrMixteTeam_id;
+                });
+            }
         }
 
         if (count($allTeams) > 0)

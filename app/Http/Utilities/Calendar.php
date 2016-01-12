@@ -26,7 +26,7 @@ class Calendar
         for($dayNumber = 1; $dayNumber <= $daysNumber; $dayNumber++)
         {
             $date = Date::createFromDate($firstDayMonth->year, $firstDayMonth->month, $dayNumber);
-            if(!$date->isWeekend())
+            if(!$date->isWeekend() && $date >= Date::today())
             {
                 $allDays[] = Date::createFromDate($firstDayMonth->year, $firstDayMonth->month, $dayNumber);
             }

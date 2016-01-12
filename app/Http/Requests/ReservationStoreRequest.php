@@ -37,7 +37,7 @@ class ReservationStoreRequest extends Request
     {
         return [
             'first_team'  => 'required|exists:teams,id',
-            'second_team' => 'required|exists:teams,id',
+            'second_team' => 'required|exists:teams,id|different:first_team',
         ];
     }
 }
