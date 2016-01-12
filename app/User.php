@@ -224,12 +224,4 @@ class User extends Model implements AuthenticatableContract,
         $query->orderBy('forname', 'asc');
     }
 
-    public function scopeMyPlayerInActiveSeason($query, $user_id)
-    {
-        $query->join('players', 'players.user_id', '=', 'users.id')
-            ->join('seasons', 'seasons.id', '=', 'players.season_id')
-            ->where('users.id', $user_id)
-            ->where('seasons.active', true);
-    }
-
 }

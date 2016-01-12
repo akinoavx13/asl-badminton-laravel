@@ -142,6 +142,13 @@ class Player extends Model
         $query->where('players.search_' . $type, true);
     }
 
+    public function scopeMyPlayerInActiveSeason($query, $user_id)
+    {
+        $query->join('seasons', 'seasons.id', '=', 'players.season_id')
+            ->where('user_id', $user_id)
+            ->where('seasons.active', true);
+    }
+
     /******************/
     /*    Functions   */
     /******************/

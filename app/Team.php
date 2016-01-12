@@ -73,8 +73,8 @@ class Team extends Model
 
     public function scopeMySimpleTeams($query, $gender, $player_id, $season_id)
     {
-        $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
-            ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+        $query->join('players', 'players.id', '=', 'teams.player_one')
+            ->join('users', 'users.id', '=', 'players.user_id')
             ->where('teams.season_id', $season_id)
             ->where('teams.simple_' . $gender, true)
             ->where('teams.player_one', $player_id)
@@ -83,8 +83,8 @@ class Team extends Model
 
     public function scopeAllSimpleTeamsWithoutMe($query, $gender, $player_id, $season_id)
     {
-        $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
-            ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+        $query->join('players', 'players.id', '=', 'teams.player_one')
+            ->join('users', 'users.id', '=', 'players.user_id')
             ->where('teams.season_id', $season_id)
             ->where('teams.simple_' . $gender, true)
             ->where('teams.player_one', '<>', $player_id)

@@ -11,7 +11,7 @@
     </h1>
 
     <div class="row">
-        <div class="col-md-offset-5 col-md-2">
+        <div class="col-md-offset-4 col-md-4">
             <a href="#{{ \Carbon\Carbon::today()->format('Y-m-d') }}" class="btn btn-primary btn-block">Voir les réservations d'aujourd'hui</a>
         </div>
     </div>
@@ -48,7 +48,7 @@
                                         @if(\Carbon\Carbon::today() > $day)
                                             <span class="fa fa-clock-o reservation-text-out"></span>
                                         @else
-                                            <a href="{{ route('reservation.create', [$day->format('Y-m-d'), $court->id, $timeSlots[0]->id]) }}">Réserver</a>
+                                            {!! $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id] !!}
                                         @endif
                                     </td>
                                 @endforeach
@@ -63,7 +63,7 @@
                                                     @if(\Carbon\Carbon::today() > $day)
                                                         <span class="fa fa-clock-o reservation-text-out"></span>
                                                     @else
-                                                        <a href="{{ route('reservation.create', [$day->format('Y-m-d'), $court->id, $timeSlot->id]) }}">Réserver</a>
+                                                        {!!  $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id] !!}
                                                     @endif
                                                 </td>
                                             @endforeach

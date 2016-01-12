@@ -11,8 +11,8 @@ class NotLeisure
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -23,9 +23,9 @@ class NotLeisure
         {
             $player = Helpers::getInstance()->myPlayer();
 
-            if($player !== null)
+            if ($player !== null)
             {
-                if($player->formula !== 'leisure')
+                if (! $player->hasFormula('leisure'))
                 {
                     return $next($request);
                 }

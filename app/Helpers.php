@@ -26,7 +26,8 @@ class Helpers
 
         if ($this->myPlayer === null && $this->auth !== null)
         {
-            $this->myPlayer = User::select('players.*')->myPlayerInActiveSeason($this->auth->id)->first();
+            $this->myPlayer = Player::select('players.*')
+                ->myPlayerInActiveSeason($this->auth->id)->first();
         }
     }
 

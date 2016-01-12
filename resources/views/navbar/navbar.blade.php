@@ -88,10 +88,12 @@
                         </a>
 
                         <ul class="nav nav-second-level">
-                            <li class="{{ Request::is('user/index') ? 'active' : '' }}"><a href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des
+                            <li class="{{ Request::is('user/index') ? 'active' : '' }}"><a
+                                        href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des
                                     utilisateurs</a>
                             </li>
-                            <li class="{{ Request::is('user/create') ? 'active' : '' }}"><a href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer un
+                            <li class="{{ Request::is('user/create') ? 'active' : '' }}"><a
+                                        href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer un
                                     utilisateur</a>
                             </li>
                         </ul>
@@ -112,9 +114,11 @@
                         </a>
 
                         <ul class="nav nav-second-level">
-                            <li class="{{ Request::is('season/index') ? 'active' : '' }}"><a href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des
+                            <li class="{{ Request::is('season/index') ? 'active' : '' }}"><a
+                                        href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des
                                     saisons</a></li>
-                            <li class="{{ Request::is('season/create') ? 'active' : '' }}"><a href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une
+                            <li class="{{ Request::is('season/create') ? 'active' : '' }}"><a
+                                        href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une
                                     saison</a></li>
                         </ul>
                     </li>
@@ -128,7 +132,7 @@
                     </a>
                 </li>
 
-                @if($myPlayer !== null && $myPlayer->formula !== 'leisure')
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
                     <li class="{{ Request::is('reservation/index') || Request::is('reservation/create*') ? 'active' : '' }}">
                         <a href="{{ route('reservation.index') }}">
                             <i class="fa fa-calendar"></i>
