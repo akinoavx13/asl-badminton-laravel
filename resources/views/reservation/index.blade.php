@@ -10,13 +10,7 @@
         Réserver un court
     </h1>
 
-    <div class="row">
-        <div class="col-md-offset-4 col-md-4">
-            <a href="#{{ \Carbon\Carbon::today()->format('Y-m-d') }}" class="btn btn-primary btn-block">Voir les réservations d'aujourd'hui</a>
-        </div>
-    </div>
-
-    <br>
+    <hr>
 
     <div class="row">
         <div class="col-md-12">
@@ -38,7 +32,7 @@
                             <tr class="text-center">
                                 <td rowspan="{{ count($timeSlots) }}" style="background: #fbfcfc;" id="{{
                                 $day->format('Y-m-d') }}" class="{{ $day->format('Y-m-d') == \Carbon\Carbon::today()->format('Y-m-d') ? 'today' : '' }}">
-                                    {{ ucfirst($day->format('l j F Y')) }}
+                                    {!! $day->format('Y-m-d') == \Carbon\Carbon::today()->format('Y-m-d') ? ucfirst($day->format('l j F Y')) . '<br>Aujourd\'hui' : ucfirst($day->format('l j F Y')) !!}
                                 </td>
                                 <td>
                                     {{ $timeSlots[0] }}

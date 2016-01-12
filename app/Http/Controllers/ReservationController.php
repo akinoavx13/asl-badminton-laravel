@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Collection;
 use Jenssegers\Date\Date;
 
 class ReservationController extends Controller
@@ -247,14 +248,15 @@ class ReservationController extends Controller
                 if($myDoubleTeam !== null && $myMixteTeam !== null)
                 {
                     //toutes les équipes de double dame
-                    $teams['Double dame'] = $this->listTeams('woman', 'double', $myPlayer->id, $seasonActive->id, $user->hasGender('man') ? null : $myDoubleTeam->id);
+                    $teams['Double dame'] = $this->listTeams('woman', 'double', $myPlayer->id, $seasonActive->id, $user->hasGender('man') ? null : $myDoubleTeam);
 
                     //toutes les équipes de double homme
-                    $teams['Double homme'] = $this->listTeams('man', 'double', $myPlayer->id, $seasonActive->id, $user->hasGender('woman') ? null : $myDoubleTeam->id);
+                    $teams['Double homme'] = $this->listTeams('man', 'double', $myPlayer->id, $seasonActive->id, $user->hasGender('woman') ? null : $myDoubleTeam);
 
                     //toutes les équipes de double mixte
                     $teams['Double mixte'] = $this->listTeams($user->gender === 'man' ? 'woman' : 'man', 'mixte',
-                        $myPlayer->id, $seasonActive->id, $myMixteTeam->id);
+                        $myPlayer->id, $seasonActive->id, $myMixteTeam);
+
                 }
             }
         }
@@ -330,7 +332,7 @@ class ReservationController extends Controller
         //
     }
 
-    private function listTeams($gender, $type, $player_id, $season_id, $myDoubleOrMixteTeam_id = null)
+    private function listTeams($gender, $type, $player_id, $season_id, $myDoubleOrMixteTeam = null)
     {
         $teams = [];
         $allTeams = null;
@@ -343,7 +345,7 @@ class ReservationController extends Controller
         }
         else
         {
-            if($myDoubleOrMixteTeam_id === null)
+            if($myDoubleOrMixteTeam === null)
             {
                 $allTeams = Team::select('userOne.forname AS fornameOne',
                     'userOne.name AS nameOne',
@@ -363,8 +365,8 @@ class ReservationController extends Controller
                     ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
                     ->get();
 
-                $allTeams = $allTeams->reject(function ($item) use($myDoubleOrMixteTeam_id) {
-                    return $item->id == $myDoubleOrMixteTeam_id;
+                $allTeams = $allTeams->reject(function ($item) use ($myDoubleOrMixteTeam) {
+                    return $item->id == $myDoubleOrMixteTeam->id;
                 });
             }
         }
