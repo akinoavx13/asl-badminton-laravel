@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AdminsReservation;
 use App\Court;
 use App\Helpers;
 use App\Http\Requests\ReservationStoreRequest;
@@ -79,16 +80,28 @@ class ReservationController extends Controller
 
         $reservations = [];
 
+        $courtSimpleAvailable = 0;
+        $courtDoubleAvailable = 0;
+
         foreach ($allDays as $day)
         {
             foreach ($timeSlots as $timeSlot)
             {
                 foreach ($courts as $court)
                 {
+                    if($court->hasType('simple'))
+                    {
+                        $courtSimpleAvailable ++;
+                    }
+                    else
+                    {
+                        $courtDoubleAvailable ++;
+                    }
+
                     $dispo = true;
                     $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id] =
                         "<a href=\"" . route('reservation.create',
-                            [$day->format('Y-m-d'), $court->id, $timeSlot->id]) . "\">Réserver</a>";
+                            [$day->format('Y-m-d'), $court->id, $timeSlot->id]) . "\" class=\"text-white\">Réserver</a>";
                     if (count($playerReservations) > 0)
                     {
                         foreach ($playerReservations as $index => $playerReservation)
@@ -104,6 +117,7 @@ class ReservationController extends Controller
                                     //si c'est du simple, je prend que le premier joueur des 2 équipes
                                     if ($court->hasType('simple'))
                                     {
+                                        $courtSimpleAvailable --;
                                         $simpleTeams = Team::select('users.forname', 'users.name')
                                             ->join('players', 'players.id', '=', 'teams.player_one')
                                             ->join('users', 'users.id', '=', 'players.user_id')
@@ -130,6 +144,7 @@ class ReservationController extends Controller
                                     //si c'est du double ou du mixte, je prends le premier et le deuxième joueur des 2 équipes
                                     else
                                     {
+                                        $courtDoubleAvailable --;
                                         $doubleOrMixteTeams = Team::select('userOne.forname AS fornameOne',
                                             'userOne.name AS nameOne',
                                             'userTwo.forname AS fornameTwo',
@@ -169,7 +184,7 @@ class ReservationController extends Controller
             }
         }
 
-        return view('reservation.index', compact('timeSlots', 'courts', 'allDays', 'reservations'));
+        return view('reservation.index', compact('timeSlots', 'courts', 'allDays', 'reservations', 'courtSimpleAvailable', 'courtDoubleAvailable'));
     }
 
     /**
@@ -275,16 +290,27 @@ class ReservationController extends Controller
     {
         $date = Carbon::createFromFormat('Y-m-d', $date);
 
-        PlayersReservation::create([
-            'date'         => $date,
-            'first_team'   => $request->first_team,
-            'second_team'  => $request->second_team,
-            'user_id'      => $this->user->id,
-            'time_slot_id' => $timeSlot_id,
-            'court_id'     => $court_id,
-        ]);
+        $playerReservationAtThisDay = PlayersReservation::where('date', $date)
+            ->where('time_slot_id', $timeSlot_id)
+            ->where('court_id', $court_id)
+            ->first();
 
-        return redirect()->route('reservation.index')->with('success', "La réservation a été enregistrée !");
+        if($playerReservationAtThisDay === null)
+        {
+            PlayersReservation::create([
+                'date'         => $date,
+                'first_team'   => $request->first_team,
+                'second_team'  => $request->second_team,
+                'user_id'      => $this->user->id,
+                'time_slot_id' => $timeSlot_id,
+                'court_id'     => $court_id,
+            ]);
+
+            return redirect()->route('reservation.index')->with('success', "La réservation a été enregistrée !");
+        }
+
+        return redirect()->back()->with('error', "La réservation n'est plus disponible !");
+
     }
 
     /**

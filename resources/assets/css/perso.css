@@ -1,9 +1,9 @@
 .reservation > tbody > tr:nth-child(2n+1) > td, .reservation > tbody > tr:nth-child(2n+1) > th {
-    background-color: #C3E0F6;
+    background-color: rgba(33, 194, 164, 0.6);
 }
 
 .reservation > tbody > tr:nth-child(2n) > td, .reservation > tbody > tr:nth-child(2n) > th {
-    background-color: #97BFD8;
+    background-color: rgba(21, 150, 136, 0.61);
 }
 
 .today {
