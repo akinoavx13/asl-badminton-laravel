@@ -62,11 +62,18 @@ class ReservationController extends Controller
         $timeSlots = TimeSlot::orderBy('start')->get();
         $courts = Court::orderBy('number')->get();
 
+        $courtType = [];
+
+        foreach ($courts as $court)
+        {
+            $court->hasType('simple') ? $courtType[$court->id] = 'simple' : $courtType[$court->id] = 'double';
+        }
+
         $allDays = Calendar::getAllDaysMonth();
 
         $firstDay = new Carbon('first day of this month');
 
-        if($firstDay < Carbon::today())
+        if ($firstDay < Carbon::today())
         {
             $firstDay = Carbon::today();
         }
@@ -83,108 +90,116 @@ class ReservationController extends Controller
         $courtSimpleAvailable = 0;
         $courtDoubleAvailable = 0;
 
-        foreach ($allDays as $day)
+        if (count($playerReservations) > 0)
         {
-            foreach ($timeSlots as $timeSlot)
+            foreach ($playerReservations as $index => $playerReservation)
             {
-                foreach ($courts as $court)
+                //si c'est du simple, je prend que le premier joueur des 2 équipes
+                if ($courtType[$playerReservation->court_id] === 'simple')
                 {
-                    if($court->hasType('simple'))
-                    {
-                        $courtSimpleAvailable ++;
-                    }
-                    else
-                    {
-                        $courtDoubleAvailable ++;
-                    }
-
-                    $dispo = true;
-                    $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id] =
-                        "<a href=\"" . route('reservation.create',
-                            [$day->format('Y-m-d'), $court->id, $timeSlot->id]) . "\" class=\"text-white\">Réserver</a>";
-                    if (count($playerReservations) > 0)
-                    {
-                        foreach ($playerReservations as $index => $playerReservation)
+                    $courtSimpleAvailable--;
+                    $simpleTeams = Team::select('users.forname', 'users.name')
+                        ->join('players', 'players.id', '=', 'teams.player_one')
+                        ->join('users', 'users.id', '=', 'players.user_id')
+                        ->where('teams.id', $playerReservation->first_team)
+                        ->orWhere(function ($query) use ($playerReservation)
                         {
-                            if ($dispo)
-                            {
-                                if ($playerReservation->date === $day->format('Y-m-d') && $playerReservation->time_slot_id === $timeSlot->id
-                                    && $playerReservation->court_id === $court->id
-                                )
-                                {
-                                    $dispo = false;
+                            $query->where('teams.id', $playerReservation->second_team);
+                        })
+                        ->take(2)
+                        ->get();
 
-                                    //si c'est du simple, je prend que le premier joueur des 2 équipes
-                                    if ($court->hasType('simple'))
-                                    {
-                                        $courtSimpleAvailable --;
-                                        $simpleTeams = Team::select('users.forname', 'users.name')
-                                            ->join('players', 'players.id', '=', 'teams.player_one')
-                                            ->join('users', 'users.id', '=', 'players.user_id')
-                                            ->where('teams.id', $playerReservation->first_team)
-                                            ->orWhere(function($query) use($playerReservation){
-                                                $query->where('teams.id', $playerReservation->second_team);
-                                            })
-                                            ->take(2)
-                                            ->get();
-
-                                        if(count($simpleTeams) === 2)
-                                        {
-                                            $firstTeam = $simpleTeams[0];
-                                            $secondTeam = $simpleTeams[1];
-                                            if ($firstTeam !== null && $secondTeam !== null)
-                                            {
-                                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id] =
-                                                    Helpers::getInstance()->getTeamName($firstTeam->forname, $firstTeam->name) . '
-                                        <br> VS <br> ' . Helpers::getInstance()->getTeamName($secondTeam->forname,
-                                                        $secondTeam->name);
-                                            }
-                                        }
-                                    }
-                                    //si c'est du double ou du mixte, je prends le premier et le deuxième joueur des 2 équipes
-                                    else
-                                    {
-                                        $courtDoubleAvailable --;
-                                        $doubleOrMixteTeams = Team::select('userOne.forname AS fornameOne',
-                                            'userOne.name AS nameOne',
-                                            'userTwo.forname AS fornameTwo',
-                                            'userTwo.name AS nameTwo')
-                                            ->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
-                                            ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
-                                            ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
-                                            ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.user_id')
-                                            ->where('teams.id', $playerReservation->first_team)
-                                            ->orWhere(function($query) use($playerReservation){
-                                                $query->where('teams.id', $playerReservation->second_team);
-                                            })
-                                            ->take(2)
-                                            ->get();
-                                        if(count($doubleOrMixteTeams) === 2)
-                                        {
-                                            $firstTeam = $doubleOrMixteTeams[0];
-                                            $secondTeam = $doubleOrMixteTeams[1];
-                                            if($firstTeam !== null && $secondTeam !== null)
-                                            {
-                                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id] =
-                                                    Helpers::getInstance()->getTeamName($firstTeam->fornameOne,
-                                                        $firstTeam->nameOne,
-                                                        $firstTeam->fornameTwo, $firstTeam->nameTwo, true) .
-                                                    ' <br> VS <br> ' . Helpers::getInstance()->getTeamName($secondTeam->fornameOne,
-                                                        $secondTeam->nameOne,
-                                                        $secondTeam->fornameTwo, $secondTeam->nameTwo, true);
-                                            }
-                                        }
-                                    }
-                                    unset($playerReservations[$index]);
-                                }
-                            }
+                    if (count($simpleTeams) === 2)
+                    {
+                        $firstTeam = $simpleTeams[0];
+                        $secondTeam = $simpleTeams[1];
+                        if ($firstTeam !== null && $secondTeam !== null)
+                        {
+                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id] =
+                                Helpers::getInstance()->getTeamName($firstTeam->forname, $firstTeam->name) . '
+                                <br> VS <br> ' . Helpers::getInstance()->getTeamName($secondTeam->forname,
+                                    $secondTeam->name);
+                        }
+                    }
+                }
+                //si c'est du double ou du mixte, je prends le premier et le deuxième joueur des 2 équipes
+                else
+                {
+                    $courtDoubleAvailable--;
+                    $doubleOrMixteTeams = Team::select('userOne.forname AS fornameOne',
+                        'userOne.name AS nameOne',
+                        'userTwo.forname AS fornameTwo',
+                        'userTwo.name AS nameTwo')
+                        ->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
+                        ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
+                        ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+                        ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.user_id')
+                        ->where('teams.id', $playerReservation->first_team)
+                        ->orWhere(function ($query) use ($playerReservation)
+                        {
+                            $query->where('teams.id', $playerReservation->second_team);
+                        })
+                        ->take(2)
+                        ->get();
+                    if (count($doubleOrMixteTeams) === 2)
+                    {
+                        $firstTeam = $doubleOrMixteTeams[0];
+                        $secondTeam = $doubleOrMixteTeams[1];
+                        if ($firstTeam !== null && $secondTeam !== null)
+                        {
+                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id] =
+                                Helpers::getInstance()->getTeamName($firstTeam->fornameOne,
+                                    $firstTeam->nameOne,
+                                    $firstTeam->fornameTwo, $firstTeam->nameTwo, true) .
+                                ' <br> VS <br> ' . Helpers::getInstance()->getTeamName($secondTeam->fornameOne,
+                                    $secondTeam->nameOne,
+                                    $secondTeam->fornameTwo, $secondTeam->nameTwo, true);
                         }
                     }
                 }
             }
         }
 
-        return view('reservation.index', compact('timeSlots', 'courts', 'allDays', 'reservations', 'courtSimpleAvailable', 'courtDoubleAvailable'));
+        foreach ($allDays as $day)
+        {
+            foreach ($timeSlots as $timeSlot)
+            {
+                foreach ($courts as $court)
+                {
+                    $court->hasType('simple') ? $courtSimpleAvailable++ : $courtDoubleAvailable++;
+
+                    $indexDay = false;
+                    $indexTimeSlot = false;
+                    $indexCourt = false;
+                    if (array_key_exists($day->format('Y-m-d'), $reservations))
+                    {
+                        $indexDay = true;
+                        if (array_key_exists($timeSlot->id, $reservations[$day->format('Y-m-d')]))
+                        {
+                            $indexTimeSlot = true;
+                            if (array_key_exists($court->id, $reservations[$day->format('Y-m-d')][$timeSlot->id]))
+                            {
+                                $indexCourt = true;
+                            }
+                        }
+                    }
+
+                    if (! $indexDay || ! $indexTimeSlot || ! $indexCourt)
+                    {
+                        $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id] =
+                            "<a href=\"" . route('reservation.create',
+                                [
+                                    $day->format('Y-m-d'),
+                                    $court->id,
+                                    $timeSlot->id,
+                                ]) . "\" class=\"text-white\">Réserver</a>";
+                    }
+                }
+            }
+        }
+
+        return view('reservation.index',
+            compact('timeSlots', 'courts', 'allDays', 'reservations', 'courtSimpleAvailable', 'courtDoubleAvailable'));
     }
 
     /**
@@ -260,13 +275,15 @@ class ReservationController extends Controller
                         $myMixteTeam->fornameTwo, $myMixteTeam->nameTwo);
                 }
 
-                if($myDoubleTeam !== null && $myMixteTeam !== null)
+                if ($myDoubleTeam !== null && $myMixteTeam !== null)
                 {
                     //toutes les équipes de double dame
-                    $teams['Double dame'] = $this->listTeams('woman', 'double', $myPlayer->id, $seasonActive->id, $user->hasGender('man') ? null : $myDoubleTeam);
+                    $teams['Double dame'] = $this->listTeams('woman', 'double', $myPlayer->id, $seasonActive->id,
+                        $user->hasGender('man') ? null : $myDoubleTeam);
 
                     //toutes les équipes de double homme
-                    $teams['Double homme'] = $this->listTeams('man', 'double', $myPlayer->id, $seasonActive->id, $user->hasGender('woman') ? null : $myDoubleTeam);
+                    $teams['Double homme'] = $this->listTeams('man', 'double', $myPlayer->id, $seasonActive->id,
+                        $user->hasGender('woman') ? null : $myDoubleTeam);
 
                     //toutes les équipes de double mixte
                     $teams['Double mixte'] = $this->listTeams($user->gender === 'man' ? 'woman' : 'man', 'mixte',
@@ -295,7 +312,7 @@ class ReservationController extends Controller
             ->where('court_id', $court_id)
             ->first();
 
-        if($playerReservationAtThisDay === null)
+        if ($playerReservationAtThisDay === null)
         {
             PlayersReservation::create([
                 'date'         => $date,
@@ -371,7 +388,7 @@ class ReservationController extends Controller
         }
         else
         {
-            if($myDoubleOrMixteTeam === null)
+            if ($myDoubleOrMixteTeam === null)
             {
                 $allTeams = Team::select('userOne.forname AS fornameOne',
                     'userOne.name AS nameOne',
@@ -391,7 +408,8 @@ class ReservationController extends Controller
                     ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
                     ->get();
 
-                $allTeams = $allTeams->reject(function ($item) use ($myDoubleOrMixteTeam) {
+                $allTeams = $allTeams->reject(function ($item) use ($myDoubleOrMixteTeam)
+                {
                     return $item->id == $myDoubleOrMixteTeam->id;
                 });
             }
