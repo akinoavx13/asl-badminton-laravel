@@ -53,7 +53,10 @@
                                         </td>
                                         @foreach($courts as $court)
                                             <td>
-                                                {!! $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id] !!}
+                                                {!! $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation'] !!}
+                                                @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] == $auth->id || ($auth->hasRole('admin') && $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] != null))
+                                                    <p><a href="{{ route('reservation.edit', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}" class="text-white"><span class="fa fa-edit"></span></a></p>
+                                                @endif
                                             </td>
                                         @endforeach
                                     </tr>
@@ -64,7 +67,10 @@
                                                     <td>{{ $timeSlot }}</td>
                                                     @foreach($courts as $court)
                                                         <td>
-                                                            {!!  $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id] !!}
+                                                            {!! $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation'] !!}
+                                                            @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin') && $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] !== null))
+                                                                <p><a href="{{ route('reservation.edit', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id'] ) }}" class="text-white"><span class="fa fa-edit"></span></a></p>
+                                                            @endif
                                                         </td>
                                                     @endforeach
                                                 </tr>
