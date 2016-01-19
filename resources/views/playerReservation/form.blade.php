@@ -4,9 +4,10 @@
     </div>
     <div class="ibox-content">
         @if($reservation->exists)
-            {!! Form::open(['route' => ['reservation.update', $date, $court->id, $timeSlot_id], 'class' => 'form-horizontal']) !!}
+            {!! Form::open(['route' => ['playerReservation.update', $date, $court->id, $timeSlot_id], 'class' =>
+            'form-horizontal']) !!}
         @else
-            {!! Form::open(['route' => ['reservation.store', $date, $court->id, $timeSlot_id], 'class' => 'form-horizontal']) !!}
+            {!! Form::open(['route' => ['playerReservation.store', $date, $court->id, $timeSlot_id], 'class' => 'form-horizontal']) !!}
         @endif
 
         <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>

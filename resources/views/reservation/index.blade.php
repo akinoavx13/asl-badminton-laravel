@@ -20,11 +20,11 @@
                         <div class="row">
                             <div class="col-md-6 text-center text-navy">
                                 <h2>Courts de simple libres</h2>
-                                {{ $courtSimpleAvailable }} jusqu'au 20 mars 2016
+                                {{ $courtSimpleAvailable }} jusqu'au {{ $lastDayMonth->format('l j F Y') }}
                             </div>
                             <div class="col-md-6 text-center text-info">
                                 <h2>Courts de double libres</h2>
-                                {{ $courtDoubleAvailable }} jusqu'au 20 mars 2016
+                                {{ $courtDoubleAvailable }} jusqu'au {{ $lastDayMonth->format('l j F Y') }}
                             </div>
                         </div>
                         <hr>
@@ -53,7 +53,11 @@
                                         </td>
                                         @foreach($courts as $court)
                                             <td>
-                                                {!! $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id] !!}
+                                                {!! $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_name'] !!}
+                                                @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')))
+                                                    <p><a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa
+                                                    fa-times"></span></a></p>
+                                                @endif
                                             </td>
                                         @endforeach
                                     </tr>
@@ -64,7 +68,10 @@
                                                     <td>{{ $timeSlot }}</td>
                                                     @foreach($courts as $court)
                                                         <td>
-                                                            {!!  $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id] !!}
+                                                            {!!  $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_name'] !!}
+                                                            @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')))
+                                                                <p><a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa fa-times"></span></a></p>
+                                                            @endif
                                                         </td>
                                                     @endforeach
                                                 </tr>
