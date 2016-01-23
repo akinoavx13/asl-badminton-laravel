@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AdminsReservation;
 use App\Court;
 use App\Helpers;
 use App\Http\Utilities\Calendar;
@@ -63,10 +64,28 @@ class ReservationController extends Controller
             ->orderBy('date')
             ->get();
 
+        $adminReservations = AdminsReservation::where('start', '>=', $firstDay)
+            ->orderBy('start')
+            ->get();
+
         $reservations = [];
 
         $courtSimpleAvailable = 0;
         $courtDoubleAvailable = 0;
+
+        if (count($adminReservations) > 0)
+        {
+            foreach ($adminReservations as $adminReservation)
+            {
+                foreach ($adminReservation->courts as $court)
+                {
+                    foreach ($adminReservation->timeSlots as $timeSlot)
+                    {
+                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['reservation_name'] = $adminReservation->title;
+                    }
+                }
+            }
+        }
 
         if (count($playerReservations) > 0)
         {

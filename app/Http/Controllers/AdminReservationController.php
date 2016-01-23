@@ -82,17 +82,17 @@ class AdminReservationController extends Controller
 
         foreach ($request->court_id as $court_id)
         {
-            DB::table('admins_reservations_courts')->insert([
-                'admins_reservations_id' => $adminReservation->id,
-                'courts_id'              => $court_id,
+            DB::table('admins_reservation_court')->insert([
+                'admins_reservation_id' => $adminReservation->id,
+                'court_id'              => $court_id,
             ]);
         }
 
         foreach ($request->timeSlot_id as $timeSlot_id)
         {
-            DB::table('admins_reservations_time_slots')->insert([
-                'admins_reservations_id' => $adminReservation->id,
-                'time_slots_id'          => $timeSlot_id,
+            DB::table('admins_reservation_time_slot')->insert([
+                'admins_reservation_id' => $adminReservation->id,
+                'time_slot_id'          => $timeSlot_id,
             ]);
         }
 
