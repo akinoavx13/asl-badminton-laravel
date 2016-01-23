@@ -17,16 +17,21 @@ class CreateAdminsReservationsTable extends Migration
             $table->timestamps();
 
             $table->date('start');
-            $table->date('end');
+            $table->date('end')->nullable();
 
             $table->string('title');
             $table->text('comment')->nullable();
 
             $table->boolean('recurring')->default(false);
-            $table->string('day')->nullable();
 
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+
+            $table->boolean('monday')->nullable()->default(false);
+            $table->boolean('tuesday')->nullable()->default(false);
+            $table->boolean('wednesday')->nullable()->default(false);
+            $table->boolean('thursday')->nullable()->default(false);
+            $table->boolean('friday')->nullable()->default(false);
         });
     }
 

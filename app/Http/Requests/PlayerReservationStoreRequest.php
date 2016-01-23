@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers;
 use App\Http\Requests\Request;
 
-class ReservationStoreRequest extends Request
+class PlayerReservationStoreRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -36,7 +36,7 @@
                                     <th rowspan="{{ count($timeSlots) }}" class="text-center">Jour</th>
                                     <th class="text-center">Crénaux</th>
                                     @foreach($courts as $court)
-                                        <th class="text-center">{{ ucfirst($court->type) }} {{ $court }}</th>
+                                        <th class="text-center">{{ $court }}</th>
                                     @endforeach
                                 </tr>
                                 </thead>

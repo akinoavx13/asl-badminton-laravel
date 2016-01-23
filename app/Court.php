@@ -27,7 +27,7 @@ class Court extends Model
 
     public function __toString()
     {
-        return $this->number;
+        return ucfirst($this->type) . ' ' . $this->number ;
     }
 
     /******************/

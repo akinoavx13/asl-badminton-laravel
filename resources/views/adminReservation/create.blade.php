@@ -1,13 +1,13 @@
 @extends('layout')
 
 @section('title')
-    Réservation du court {{ $court }}
+    Bloquer une réservation un jour
 @stop
 
 @section('content')
     <div class="row">
         <div class="col-md-offset-1 col-md-10">
-            @include('playerReservation.form')
+            @include('adminReservation.form')
         </div>
     </div>
 @stop

@@ -10,7 +10,7 @@
     <hr>
 
     <div class="row">
-        <div class="col-md-offset-5 col-md-2">
+        <div class="col-md-offset-4 col-md-4">
             <a href="{{ route('timeSlot.create') }}" class="btn btn-primary btn-block">Ajouter un créneau <span class="fa fa-plus"></span></a>
         </div>
     </div>

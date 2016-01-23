@@ -123,6 +123,25 @@
                         </ul>
                     </li>
 
+                    <li class="{{ Request::is('reservation/index') || Request::is('playerReservation*') || Request::is('adminReservation/create') ? 'active' : '' }}">
+                        <a href="#">
+                            <i class="fa fa-calendar"></i>
+                            <span class="nav-label">Réservation</span>
+                            <span class="fa arrow"></span>
+                        </a>
+
+                        <ul class="nav nav-second-level">
+                            <li class="{{ Request::is('reservation/index') ? 'active' : '' }}"><a
+                                        href="{{ route('reservation.index') }}"><i class="fa fa-plus"></i>Réserver
+                                    un terrain</a>
+                            </li>
+                            <li class="{{ Request::is('adminReservation/create') ? 'active' : '' }}"><a
+                                        href="{{ route('adminReservation.create') }}"><i class="fa
+                                        fa-times"></i>Bloquer une réservation</a>
+                            </li>
+                        </ul>
+                    </li>
+
                 @endif
 
                 <li class="{{ Request::is('player/create') ? 'active' : '' }}">
@@ -132,7 +151,7 @@
                     </a>
                 </li>
 
-                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure') && ! $auth->hasRole('admin'))
                     <li class="{{ Request::is('reservation/index') || Request::is('playerReservation*') ? 'active' : '' }}">
                         <a href="{{ route('reservation.index') }}">
                             <i class="fa fa-calendar"></i>
@@ -141,6 +160,7 @@
                     </li>
                 @endif
             @endif
+
             @if($auth->hasRole('ce') || $auth->hasRole('admin'))
                 <li class="{{ Request::is('ce') ? 'active' : '' }}">
                     <a href="{{ route('ce.index') }}">

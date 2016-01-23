@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Court;
 use App\Helpers;
+use App\Http\Requests\PlayerReservationStoreRequest;
 use App\Http\Requests\ReservationStoreRequest;
 use App\PlayersReservation;
 use App\Season;
@@ -150,13 +151,13 @@ class PlayerReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param ReservationStoreRequest|Request $request
+     * @param PlayerReservationStoreRequest $request
      * @param $date
      * @param $court_id
      * @param $timeSlot_id
      * @return \Illuminate\Http\Response
      */
-    public function store(ReservationStoreRequest $request, $date, $court_id, $timeSlot_id)
+    public function store(PlayerReservationStoreRequest $request, $date, $court_id, $timeSlot_id)
     {
         $date = Carbon::createFromFormat('Y-m-d', $date);
 

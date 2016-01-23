@@ -99,7 +99,8 @@
                     </div>
                     <div class="radio-inline">
                         <label>
-                            {!! Form::radio('gender', 'woman', $user->exists ? $user->hasGender('woman') ? true : false : false, ['required']) !!}
+                            {!! Form::radio('gender', 'woman', $user->exists ? $user->hasGender('woman') ? true :
+                            false : true, ['required']) !!}
                             Femme
                         </label>
                     </div>
