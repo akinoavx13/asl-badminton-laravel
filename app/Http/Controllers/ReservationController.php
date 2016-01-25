@@ -65,6 +65,10 @@ class ReservationController extends Controller
             ->get();
 
         $adminReservations = AdminsReservation::where('start', '>=', $firstDay)
+            ->orWhere(function ($query) use ($lastDayMonth)
+            {
+                $query->where('end', '<=', $lastDayMonth);
+            })
             ->orderBy('start')
             ->get();
 
@@ -72,20 +76,6 @@ class ReservationController extends Controller
 
         $courtSimpleAvailable = 0;
         $courtDoubleAvailable = 0;
-
-        if (count($adminReservations) > 0)
-        {
-            foreach ($adminReservations as $adminReservation)
-            {
-                foreach ($adminReservation->courts as $court)
-                {
-                    foreach ($adminReservation->timeSlots as $timeSlot)
-                    {
-                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['reservation_name'] = $adminReservation->title;
-                    }
-                }
-            }
-        }
 
         if (count($playerReservations) > 0)
         {
@@ -112,12 +102,13 @@ class ReservationController extends Controller
                         $secondTeam = $simpleTeams[1];
                         if ($firstTeam !== null && $secondTeam !== null)
                         {
-                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['reservation_name'] =
-                                Helpers::getInstance()->getTeamName($firstTeam->forname, $firstTeam->name) . '
-                                <br> VS <br> ' . Helpers::getInstance()->getTeamName($secondTeam->forname,
-                                    $secondTeam->name);
+                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['first_team'] = Helpers::getInstance()->getTeamName
+                            ($firstTeam->forname, $firstTeam->name);
+                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['second_team'] = Helpers::getInstance()->getTeamName($secondTeam->forname,
+                                $secondTeam->name);
                             $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['user_id'] = $playerReservation->user_id;
                             $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['reservation_id'] = $playerReservation->id;
+                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['type'] = 'simple';
                         }
                     }
                 }
@@ -146,15 +137,14 @@ class ReservationController extends Controller
                         $secondTeam = $doubleOrMixteTeams[1];
                         if ($firstTeam !== null && $secondTeam !== null)
                         {
-                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['reservation_name'] =
-                                Helpers::getInstance()->getTeamName($firstTeam->fornameOne,
-                                    $firstTeam->nameOne,
-                                    $firstTeam->fornameTwo, $firstTeam->nameTwo, true) .
-                                ' <br> VS <br> ' . Helpers::getInstance()->getTeamName($secondTeam->fornameOne,
-                                    $secondTeam->nameOne,
-                                    $secondTeam->fornameTwo, $secondTeam->nameTwo, true);
+                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['first_team'] =
+                                Helpers::getInstance()->getTeamName($firstTeam->fornameOne, $firstTeam->nameOne,
+                                    $firstTeam->fornameTwo, $firstTeam->nameTwo, true);
+                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['second_team'] = Helpers::getInstance()->getTeamName($secondTeam->fornameOne,
+                                $secondTeam->nameOne, $secondTeam->fornameTwo, $secondTeam->nameTwo, true);
                             $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['user_id'] = $playerReservation->user_id;
                             $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['reservation_id'] = $playerReservation->id;
+                            $reservations[$playerReservation->date][$playerReservation->time_slot_id][$playerReservation->court_id]['type'] = 'double';
                         }
                     }
                 }
@@ -187,16 +177,35 @@ class ReservationController extends Controller
 
                     if (! $indexDay || ! $indexTimeSlot || ! $indexCourt)
                     {
-                        $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_name'] =
-                            "<a href=\"" . route('playerReservation.create',
-                                [
-                                    $day->format('Y-m-d'),
-                                    $court->id,
-                                    $timeSlot->id,
-                                ]) . "\" class=\"text-white\">Réserver</a>";
+                        $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['day'] = $day->format('Y-m-d');
+                        $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['court_id'] = $court->id;
+                        $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['timeSlot_id'] = $timeSlot->id;
                         $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] = null;
                         $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id'] = null;
+                        $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] = 'free';
 
+                    }
+                }
+            }
+        }
+
+        if (count($adminReservations) > 0)
+        {
+            foreach ($adminReservations as $adminReservation)
+            {
+                foreach ($adminReservation->courts as $court)
+                {
+                    foreach ($adminReservation->timeSlots as $timeSlot)
+                    {
+                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['name'] = $adminReservation->title;
+                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['content'] =
+                            $adminReservation->comment;
+                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['user_id'] =
+                            $adminReservation->user_id;
+                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['reservation_id'] =
+                            $adminReservation->id;
+                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['type'] =
+                            'admin';
                     }
                 }
             }
@@ -204,6 +213,6 @@ class ReservationController extends Controller
 
         return view('reservation.index',
             compact('timeSlots', 'courts', 'allDays', 'reservations', 'courtSimpleAvailable', 'courtDoubleAvailable',
-            'lastDayMonth'));
+                'lastDayMonth'));
     }
 }

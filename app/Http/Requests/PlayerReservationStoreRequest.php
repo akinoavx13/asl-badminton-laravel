@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers;
 use App\Http\Requests\Request;
 
 class PlayerReservationStoreRequest extends Request
