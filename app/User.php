@@ -155,9 +155,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function getEndingInjuryAttribute($ending_injury)
     {
-        $date = Carbon::createFromFormat('Y-m-d', $ending_injury);
-
-        return $date->format('d/m/Y');
+        return Carbon::createFromFormat('Y-m-d', $ending_injury)->format('d/m/Y');
     }
 
     public function setEndingInjuryAttribute($ending_injury)
@@ -167,9 +165,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function getEndingHolidayAttribute($ending_holiday)
     {
-        $date = Carbon::createFromFormat('Y-m-d', $ending_holiday);
-
-        return $date->format('d/m/Y');
+        return Carbon::createFromFormat('Y-m-d', $ending_holiday)->format('d/m/Y');
     }
 
     public function setEndingHolidayAttribute($ending_holiday)

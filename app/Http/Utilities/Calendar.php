@@ -9,6 +9,8 @@
 namespace App\Http\Utilities;
 
 
+use App\Period;
+use App\Season;
 use Carbon\Carbon;
 use Jenssegers\Date\Date;
 
@@ -17,18 +19,31 @@ class Calendar
 
     public static function getAllDaysMonth()
     {
-        $firstDayMonth = new Date('first day of this month');
 
-        $daysNumber = $firstDayMonth->daysInMonth;
+        $season = Season::active()->first();
+
+        $lastDay = new Carbon('last day of this month');
+
+        if($season !== null)
+        {
+            $period = Period::current($season->id)->first();
+            if($period !== null)
+            {
+                $lastDay = $period->end;
+            }
+        }
 
         $allDays = [];
 
-        for($dayNumber = 1; $dayNumber <= $daysNumber; $dayNumber++)
+        $day = Carbon::today();
+
+        while($day <= $lastDay)
         {
-            $date = Date::createFromDate($firstDayMonth->year, $firstDayMonth->month, $dayNumber);
+            $date = Date::createFromDate($day->year, $day->month, $day->day);
+            $day->addDay();
             if(!$date->isWeekend() && $date >= Date::today())
             {
-                $allDays[] = Date::createFromDate($firstDayMonth->year, $firstDayMonth->month, $dayNumber);
+                $allDays[] = $date;
             }
         }
 

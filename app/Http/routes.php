@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\AdminReservationController;
 use App\Http\Controllers\CeController;
+use App\Http\Controllers\ChampionshipController;
 use App\Http\Controllers\CourtController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
@@ -95,4 +96,9 @@ Route::group(['prefix' => 'adminReservation', 'middleware' => ['auth', 'admin', 
 ($router)
 {
     AdminReservationController::routes($router);
+});
+
+Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    ChampionshipController::routes($router);
 });

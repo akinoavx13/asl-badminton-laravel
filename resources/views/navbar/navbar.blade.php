@@ -123,6 +123,20 @@
                         </ul>
                     </li>
 
+                    <li class="{{ Request::is('championship*') ? 'active' : '' }}">
+                        <a href="#">
+                            <i class="fa fa-trophy"></i>
+                            <span class="nav-label">Championnat</span>
+                            <span class="fa arrow"></span>
+                        </a>
+
+                        <ul class="nav nav-second-level">
+                            <li class="{{ Request::is('championship/create') ? 'active' : '' }}"><a
+                                        href="{{ route('championship.create') }}"><i class="fa fa-plus"></i>Créer un
+                                    championnat</a></li>
+                        </ul>
+                    </li>
+
                     <li class="{{ Request::is('reservation/index') || Request::is('playerReservation*') || Request::is('adminReservation/create') ? 'active' : '' }}">
                         <a href="#">
                             <i class="fa fa-calendar"></i>

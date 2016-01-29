@@ -18,7 +18,7 @@
                 <i class="text-navy">*</i>
             </div>
             <div class="col-md-9">
-                {!! Form::text('start', $adminReservation->exists ? $adminReservation->start : old('start'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'required']) !!}
+                {!! Form::text('start', $adminReservation->exists ? $adminReservation->start : old('start'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'placeholder' => 'dd/mm/yyyy', 'required']) !!}
             </div>
         </div>
 
@@ -105,7 +105,7 @@
                 <i class="text-navy">*</i>
             </div>
             <div class="col-md-9">
-                {!! Form::text('end', $adminReservation->exists ? $adminReservation->end : old('end'), ['class' => 'form-control', 'data-mask' => '99/99/9999']) !!}
+                {!! Form::text('end', $adminReservation->exists ? $adminReservation->end : old('end'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'placeholder' => 'dd/mm/yyyy']) !!}
             </div>
         </div>
 

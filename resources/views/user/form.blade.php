@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="col-md-9">
-                    {!! Form::text('birthday', $user->exists ? $user->birthday : old('birthday'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'required']) !!}
+                    {!! Form::text('birthday', $user->exists ? $user->birthday : old('birthday'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'placeholder' => 'dd/mm/yyyy', 'required']) !!}
                 </div>
             </div>
 
@@ -166,7 +166,7 @@
                 </div>
 
                 <div class="col-md-9">
-                    {!! Form::text('ending_injury', $user->exists ? $user->ending_injury : old('ending_injury'), ['class' => 'form-control', 'data-mask' => '99/99/9999']) !!}
+                    {!! Form::text('ending_injury', $user->exists ? $user->ending_injury : old('ending_injury'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'placeholder' => 'dd/mm/yyyy']) !!}
                 </div>
             </div>
 
@@ -177,7 +177,7 @@
                 </div>
 
                 <div class="col-md-9">
-                    {!! Form::text('ending_holiday', $user->exists ? $user->ending_holiday : old('ending_holiday'), ['class' => 'form-control', 'data-mask' => '99/99/9999']) !!}
+                    {!! Form::text('ending_holiday', $user->exists ? $user->ending_holiday : old('ending_holiday'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'placeholder' => 'dd/mm/yyyy']) !!}
                 </div>
             </div>
 
