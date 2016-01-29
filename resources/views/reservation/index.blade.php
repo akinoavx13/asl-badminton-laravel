@@ -55,8 +55,8 @@
                                             <td>
                                                 @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'simple' || $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'double')
                                                     {{ $reservations[$day->format('Y-m-d')
-                                                    ][$timeSlot->id][$court->id]['type'] }} <br> VS <br> {{
-                                                                $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] }}
+                                                    ][$timeSlots[0]->id][$court->id]['first_team'] }} <br> VS <br> {{
+                                                                $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['second_team'] }}
                                                 @elseif($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'free')
                                                     <a href="{{ route('playerReservation.create', [$reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['day'], $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['court_id'], $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['timeSlot_id']]) }}"
                                                        class="text-white">Réserver</a>
@@ -110,8 +110,8 @@
                                                         <td>
                                                             @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'simple' || $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'double')
                                                                 {{ $reservations[$day->format('Y-m-d')
-                                                                ][$timeSlot->id][$court->id]['type'] }} <br> VS <br> {{
-                                                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] }}
+                                                                ][$timeSlot->id][$court->id]['first_team'] }} <br> VS <br> {{
+                                                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['second_team'] }}
                                                             @elseif($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'free')
                                                                 <a href="{{ route('playerReservation.create', [$reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['day'], $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['court_id'], $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['timeSlot_id']]) }}"
                                                                    class="text-white">Réserver</a>
