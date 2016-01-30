@@ -70,6 +70,7 @@ class ChampionshipController extends Controller
                 'start'     => $request->start,
                 'end'       => $request->end,
                 'season_id' => $season->id,
+                'type'      => 'championship',
             ]);
 
             return redirect()->route('home.index')->with('success', "Le championnat vient d'être créé !");

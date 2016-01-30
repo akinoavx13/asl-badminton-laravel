@@ -21,6 +21,8 @@ class CreatePeriodsTable extends Migration
 
             $table->integer('season_id')->unsigned()->index();
             $table->foreign('season_id')->references('id')->on('seasons')->onDelete('cascade')->onUpdate('cascade');
+
+            $table->enum('type', ['championship', 'tournament']);
         });
     }
 

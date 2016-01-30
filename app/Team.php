@@ -58,6 +58,11 @@ class Team extends Model
         return $this->belongsTo('App\Season');
     }
 
+    public function championshipRanks()
+    {
+        return $this->hasMany('App\ChampionshipRanking');
+    }
+
     /******************/
     /*      Scope     */
     /******************/

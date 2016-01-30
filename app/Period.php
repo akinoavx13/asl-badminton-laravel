@@ -13,6 +13,7 @@ class Period extends Model
         'start',
         'end',
         'season_id',
+        'type',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -20,6 +21,11 @@ class Period extends Model
     public function season()
     {
         return $this->belongsTo('App\Season');
+    }
+
+    public function pools()
+    {
+        return $this->hasMany('App\ChampionshipPool');
     }
 
     /******************/
