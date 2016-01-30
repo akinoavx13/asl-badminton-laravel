@@ -5,10 +5,9 @@
 @stop
 
 @section('content')
-
     <div class="row">
         <div class="col-md-12">
-            @if(count($timeSlots) > 0 || count($courts) > 0)
+            @if((count($timeSlots) > 0 || count($courts) > 0) && $lastDayMonth)
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h1 class="text-center">

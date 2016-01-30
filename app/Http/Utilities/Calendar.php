@@ -26,7 +26,7 @@ class Calendar
 
         if($season !== null)
         {
-            $period = Period::current($season->id)->first();
+            $period = Period::current($season->id, 'championship')->first();
             if($period !== null)
             {
                 $lastDay = $period->end;

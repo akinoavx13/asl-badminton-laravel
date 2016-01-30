@@ -56,11 +56,20 @@ class Period extends Model
     /*     scopes     */
     /******************/
 
-    public function scopeCurrent($query, $season_id)
+    public function scopeCurrent($query, $season_id, $type)
     {
         $today = Carbon::today();
-        $query->where('season_id', $season_id)
+        $query->where('type', $type)
+            ->where('season_id', $season_id)
             ->where('start', '<=', $today)
             ->where('end', '>=', $today);
+    }
+
+    public function scopeLasted($query, $season_id, $type)
+    {
+        $today = Carbon::today();
+        $query->where('type', $type)
+            ->where('season_id', $season_id)
+            ->where('end', '<', $today);
     }
 }
