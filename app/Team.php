@@ -63,6 +63,11 @@ class Team extends Model
         return $this->hasMany('App\ChampionshipRanking');
     }
 
+    public function scores()
+    {
+        return $this->hasMany('App\Score');
+    }
+
     /******************/
     /*      Scope     */
     /******************/
