@@ -17,7 +17,8 @@ class CreateChampionshipPoolsTable extends Migration
             $table->timestamps();
 
             $table->integer('number');
-            $table->enum('type', ['simple_man', 'simple_woman', 'double_man', 'double_woman', 'mixte']);
+            $table->enum('type', ['simple', 'simple_man', 'simple_woman', 'double', 'double_man', 'double_woman',
+            'mixte']);
 
             $table->integer('period_id')->unsigned()->index();
             $table->foreign('period_id')->references('id')->on('periods')->onDelete('cascade')->onUpdate('cascade');

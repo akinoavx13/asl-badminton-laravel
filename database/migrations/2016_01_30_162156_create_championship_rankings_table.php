@@ -17,19 +17,19 @@ class CreateChampionshipRankingsTable extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->integer('match_played');
-            $table->integer('match_to_play');
-            $table->integer('match_won');
-            $table->integer('match_lost');
-            $table->integer('match_unplayed');
-            $table->integer('match_won_by_wo');
-            $table->integer('match_lost_by_wo');
+            $table->integer('match_played')->default(0);
+            $table->integer('match_to_play')->default(0);
+            $table->integer('match_won')->default(0);
+            $table->integer('match_lost')->default(0);
+            $table->integer('match_unplayed')->default(0);
+            $table->integer('match_won_by_wo')->default(0);
+            $table->integer('match_lost_by_wo')->default(0);
 
-            $table->integer('total_difference_set');
-            $table->integer('total_difference_points');
-            $table->integer('total_points');
+            $table->integer('total_difference_set')->default(0);
+            $table->integer('total_difference_points')->default(0);
+            $table->integer('total_points')->default(0);
 
-            $table->integer('rank');
+            $table->integer('rank')->default(0);
 
             $table->integer('championship_pool_id')->unsigned()->index();
             $table->foreign('championship_pool_id')->references('id')->on('championship_pools')->onDelete('cascade')

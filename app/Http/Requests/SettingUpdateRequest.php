@@ -48,6 +48,8 @@ class SettingUpdateRequest extends Request
             'corpo_external_price'       => 'required|integer|min:0',
             'competition_external_price' => 'required|integer|min:0',
             't_shirt_price'              => 'required|integer|min:0',
+            'championship_simple_woman'  => 'required|boolean',
+            'championship_double_woman'  => 'required|boolean',
         ];
     }
 }

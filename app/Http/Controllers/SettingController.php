@@ -81,6 +81,8 @@ class SettingController extends Controller
                 'corpo_external_price'       => 100,
                 'competition_external_price' => 200,
                 't_shirt_price'              => 25,
+                'championship_simple_woman'  => false,
+                'championship_double_woman'  => false,
             ]);
 
             return redirect()->route('setting.index')->with('success', "Les paramètres sont crées !");
@@ -118,6 +120,8 @@ class SettingController extends Controller
             'corpo_external_price'       => $request->corpo_external_price,
             'competition_external_price' => $request->competition_external_price,
             't_shirt_price'              => $request->t_shirt_price,
+            'championship_simple_woman'  => $request->championship_simple_woman,
+            'championship_double_woman'  => $request->championship_double_woman,
         ]);
 
         return redirect()->route('setting.index')->with('success', "Les modifications sont bien prises en compte !");

@@ -36,6 +36,9 @@ class CreateSettingsTable extends Migration
 
             $table->integer('t_shirt_price');
 
+            $table->boolean('championship_simple_woman');
+            $table->boolean('championship_double_woman');
+
             $table->timestamps();
         });
     }

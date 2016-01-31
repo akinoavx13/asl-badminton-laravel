@@ -201,6 +201,62 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('championship_simple_woman', 'Championnat simple femme :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('championship_simple_woman', '1', $setting->exists ? $setting->hasChampionshipSimpleWoman(true) ?
+                        true :
+                        false :
+                        false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('championship_simple_woman', '0', $setting->exists ? $setting->hasChampionshipSimpleWoman
+                        (false)
+                        ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('championship_double_woman', 'Championnat double femme :', ['class' => 'control-label'])
+                 !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('championship_double_woman', '1', $setting->exists ? $setting->hasChampionshipDoubleWoman(true) ?
+                        true :
+                        false :
+                        false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('championship_double_woman', '0', $setting->exists ?
+                        $setting->hasChampionshipDoubleWoman
+                        (false)
+                        ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group text-center">
             {!! Form::submit('Sauvegarder', ['class' => 'btn btn-primary']) !!}
         </div>
