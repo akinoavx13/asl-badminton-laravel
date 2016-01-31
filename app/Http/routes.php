@@ -21,6 +21,7 @@ use App\Http\Controllers\PlayerReservationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TimeSlotController;
 use App\Http\Controllers\UserController;
 
@@ -101,4 +102,9 @@ Route::group(['prefix' => 'adminReservation', 'middleware' => ['auth', 'admin', 
 Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
 {
     ChampionshipController::routes($router);
+});
+
+Route::group(['prefix' => 'testimonial', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    TestimonialController::routes($router);
 });

@@ -165,6 +165,13 @@
                     </a>
                 </li>
 
+                <li class="{{ Request::is('testimonial/index') ? 'active' : '' }}">
+                    <a href="{{ route('testimonial.index') }}">
+                        <i class="fa fa-bookmark"></i>
+                        <span class="nav-label">Témoignages</span>
+                    </a>
+                </li>
+
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure') && ! $auth->hasRole('admin'))
                     <li class="{{ Request::is('reservation/index') || Request::is('playerReservation*') ? 'active' : '' }}">
                         <a href="{{ route('reservation.index') }}">

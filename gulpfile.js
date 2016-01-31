@@ -23,7 +23,8 @@ elixir(function(mix) {
   'plugins/dataTables/dataTables.responsive.css',
   'plugins/dataTables/dataTables.tableTools.min.css',
   'plugins/clockpicker/clockpicker.css',
-  'perso.css'
+  'perso.css',
+  'plugins/summernote/summernote.css'
  ], 'public/css/app.min.css');
 
  mix.scripts([
@@ -40,6 +41,7 @@ elixir(function(mix) {
   'plugins/dataTables/dataTables.bootstrap.js',
   'plugins/dataTables/dataTables.responsive.js',
   'plugins/dataTables/dataTables.tableTools.min.js',
-  'plugins/clockpicker/clockpicker.js'
+  'plugins/clockpicker/clockpicker.js',
+  'plugins/summernote/summernote.min.js'
  ], 'public/js/app.min.js')
 });
