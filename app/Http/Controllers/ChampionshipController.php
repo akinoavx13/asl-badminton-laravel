@@ -7,6 +7,7 @@ use App\ChampionshipRanking;
 use App\Helpers;
 use App\Http\Requests\ChampionshipStoreRequest;
 use App\Period;
+use App\Score;
 use App\Season;
 use App\Team;
 use Carbon\Carbon;
@@ -90,7 +91,6 @@ class ChampionshipController extends Controller
                 {
                     $teams['double'] = array_merge($this->getDoubleTeams($activeSeason->id, 'double', 'man', true),
                         $this->getDoubleTeams($activeSeason->id, 'double', 'woman', true));
-
                     sort($teams['double']);
                 }
 
@@ -163,183 +163,59 @@ class ChampionshipController extends Controller
 
             if ($championshipSimpleWoman)
             {
-                $pools['simple_man'] = [];
-                $pools['simple_woman'] = [];
+                $pools['simple_man'] = $this->initPoolsTable($request->pool_number_simple_man, $request->exists('pool_number_simple_man'));
 
-                if ($request->exists('pool_number_simple_man'))
-                {
-                    foreach ($request->pool_number_simple_man as $team_id => $pool_number)
-                    {
-                        $pools['simple_man'][$pool_number][] = $team_id;
-                    }
-                }
-
-                if ($request->exists('pool_number_simple_woman'))
-                {
-                    foreach ($request->pool_number_simple_woman as $team_id => $pool_number)
-                    {
-                        $pools['simple_woman'][$pool_number][] = $team_id;
-                    }
-                }
+                $pools['simple_woman'] = $this->initPoolsTable($request->pool_number_simple_woman, $request->exists('pool_number_simple_woman'));
             }
             else
             {
-                $pools['simple'] = [];
-                if ($request->exists('pool_number_simple'))
-                {
-                    foreach ($request->pool_number_simple as $team_id => $pool_number)
-                    {
-                        $pools['simple'][$pool_number][] = $team_id;
-                    }
-                }
+                $pools['simple'] = $this->initPoolsTable($request->pool_number_simple, $request->exists('pool_number_simple'));
             }
 
             if ($championshipDoubleWoman)
             {
-                $pools['double_man'] = [];
-                $pools['double_woman'] = [];
-                if ($request->exists('pool_number_double_man'))
-                {
-                    foreach ($request->pool_number_double_man as $team_id => $pool_number)
-                    {
-                        $pools['double_man'][$pool_number][] = $team_id;
-                    }
-                }
+                $pools['double_man'] = $this->initPoolsTable($request->pool_number_double_man, $request->exists('pool_number_double_man'));
 
-                if ($request->exists('pool_number_double_woman'))
-                {
-                    foreach ($request->pool_number_double_woman as $team_id => $pool_number)
-                    {
-                        $pools['double_woman'][$pool_number][] = $team_id;
-                    }
-                }
+                $pools['double_woman'] = [];
+                $this->initPoolsTable($request->pool_number_double_woman, $request->exists('pool_number_double_woman'));
             }
             else
             {
-                $pools['double'] = [];
-                if ($request->exists('pool_number_double'))
-                {
-                    foreach ($request->pool_number_double as $team_id => $pool_number)
-                    {
-                        $pools['double'][$pool_number][] = $team_id;
-                    }
-                }
+                $pools['double'] = $this->initPoolsTable($request->pool_number_double, $request->exists('pool_number_double'));
             }
 
-            $pools['mixte'] = [];
-            if ($request->exists('pool_number_mixte'))
-            {
-                foreach ($request->pool_number_mixte as $team_id => $pool_number)
-                {
-                    $pools['mixte'][$pool_number][] = $team_id;
-                }
-            }
+            $pools['mixte'] = $this->initPoolsTable($request->pool_number_mixte, $request->exists('pool_number_mixte'));
 
-            if($championshipSimpleWoman)
+            if ($championshipSimpleWoman)
             {
                 foreach (['simple_man', 'simple_woman'] as $gender)
                 {
-                    foreach ($pools[$gender] as $pool_number => $teams_id)
-                    {
-                        $pool = ChampionshipPool::create([
-                            'number' => $pool_number,
-                            'type'   => $gender,
-                            'period_id' => $period->id,
-                        ]);
-
-                        foreach ($teams_id as $team_id)
-                        {
-                            ChampionshipRanking::create([
-                                'match_to_play'        => count($pools[$gender][$pool_number]) - 1,
-                                'team_id'              => $team_id,
-                                'championship_pool_id' => $pool->id,
-                            ]);
-                        }
-                    }
+                    $this->createPoolsAndRanks($pools[$gender], $gender, $period->id);
+                    $this->createScores($pools[$gender]);
                 }
             }
             else
             {
-                foreach ($pools['simple'] as $pool_number => $teams_id)
-                {
-                    $pool = ChampionshipPool::create([
-                        'number' => $pool_number,
-                        'type'   => 'simple',
-                        'period_id' => $period->id,
-                    ]);
-
-                    foreach ($teams_id as $team_id)
-                    {
-                        ChampionshipRanking::create([
-                            'match_to_play'        => count($pools['simple'][$pool_number]) - 1,
-                            'team_id'              => $team_id,
-                            'championship_pool_id' => $pool->id,
-                        ]);
-                    }
-                }
+                $this->createPoolsAndRanks($pools['simple'], 'simple', $period->id);
+                $this->createScores($pools['simple']);
             }
 
-            if($championshipDoubleWoman)
+            if ($championshipDoubleWoman)
             {
                 foreach (['double_man', 'double_woman'] as $gender)
                 {
-                    foreach ($pools[$gender] as $pool_number => $teams_id)
-                    {
-                        $pool = ChampionshipPool::create([
-                            'number' => $pool_number,
-                            'type'   => $gender,
-                            'period_id' => $period->id,
-                        ]);
-
-                        foreach ($teams_id as $team_id)
-                        {
-                            ChampionshipRanking::create([
-                                'match_to_play'        => count($pools[$gender][$pool_number]) - 1,
-                                'team_id'              => $team_id,
-                                'championship_pool_id' => $pool->id,
-                            ]);
-                        }
-                    }
+                    $this->createPoolsAndRanks($pools[$gender], $gender, $period->id);
+                    $this->createScores($pools[$gender]);
                 }
             }
             else
             {
-                foreach ($pools['double'] as $pool_number => $teams_id)
-                {
-                    $pool = ChampionshipPool::create([
-                        'number' => $pool_number,
-                        'type'   => 'double',
-                        'period_id' => $period->id,
-                    ]);
-
-                    foreach ($teams_id as $team_id)
-                    {
-                        ChampionshipRanking::create([
-                            'match_to_play'        => count($pools['double'][$pool_number]) - 1,
-                            'team_id'              => $team_id,
-                            'championship_pool_id' => $pool->id,
-                        ]);
-                    }
-                }
+                $this->createPoolsAndRanks($pools['double'], 'double', $period->id);
+                $this->createScores($pools['double']);
             }
 
-            foreach ($pools['mixte'] as $pool_number => $teams_id)
-            {
-                $pool = ChampionshipPool::create([
-                    'number' => $pool_number,
-                    'type'   => 'mixte',
-                    'period_id' => $period->id,
-                ]);
-
-                foreach ($teams_id as $team_id)
-                {
-                    ChampionshipRanking::create([
-                        'match_to_play'        => count($pools['mixte'][$pool_number]) - 1,
-                        'team_id'              => $team_id,
-                        'championship_pool_id' => $pool->id,
-                    ]);
-                }
-            }
+            $this->createPoolsAndRanks($pools['mixte'], 'mixte', $period->id);
+            $this->createScores($pools['mixte']);
 
             return redirect()->route('home.index')->with('success', "Le championnat vient d'être créé !");
         }
@@ -465,5 +341,61 @@ class ChampionshipController extends Controller
         }
 
         return $players;
+    }
+
+    private function createPoolsAndRanks($pools, $gender, $period_id)
+    {
+        foreach ($pools as $pool_number => $teams_id)
+        {
+            $pool = ChampionshipPool::create([
+                'number'    => $pool_number,
+                'type'      => $gender,
+                'period_id' => $period_id,
+            ]);
+
+            foreach ($teams_id as $team_id)
+            {
+                ChampionshipRanking::create([
+                    'match_to_play'        => count($pools[$pool_number]) - 1,
+                    'team_id'              => $team_id,
+                    'championship_pool_id' => $pool->id,
+                ]);
+            }
+        }
+    }
+
+    private function initPoolsTable($teams, $exist)
+    {
+        $pools = [];
+
+        if ($exist)
+        {
+            foreach ($teams as $team_id => $pool_number)
+            {
+                $pools[$pool_number][] = $team_id;
+            }
+        }
+
+        return $pools;
+    }
+
+    private function createScores($pools)
+    {
+        foreach ($pools as $pool_number => $pool)
+        {
+            foreach ($pool as $first_index => $first_team_id)
+            {
+                foreach ($pool as $second_index => $second_team_id)
+                {
+                    if($first_index <= $second_index && $first_team_id !== $second_team_id)
+                    {
+                        Score::create([
+                            'first_team_id' => $first_team_id,
+                            'second_team_id' => $second_team_id,
+                        ]);
+                    }
+                }
+            }
+        }
     }
 }
