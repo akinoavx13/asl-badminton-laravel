@@ -74,9 +74,11 @@
                                     </td>
                                     <td>
                                         @if($simpleTeam['rank'] == 'new')
-                                            <i class="text-danger">Nouveau</i>
+                                            <i class="text-danger">Nouveau !</i>
                                         @else
-                                            <i class="text-navy">{{ $simpleTeam['rank'] }}</i>
+                                            <i class="text-navy">{{ $simpleTeam['pool_number'] }} /
+                                                {{ $simpleTeam['rank'] }}
+                                            </i>
                                         @endif
                                     </td>
                                     <td>
@@ -122,9 +124,10 @@
                                 </td>
                                 <td>
                                     @if($simpleTeam['rank'] == 'new')
-                                        <i class="text-danger">Nouveau</i>
+                                        <i class="text-danger">Nouveau !</i>
                                     @else
-                                        <i class="text-navy">{{ $simpleTeam['rank'] }}</i>
+                                        <i class="text-navy">{{ $simpleTeam['pool_number'] }} /
+                                            {{ $simpleTeam['rank'] }}</i>
                                     @endif
                                 </td>
                                 <td>
@@ -181,9 +184,10 @@
                                     </td>
                                     <td>
                                         @if($doubleTeam['rank'] == 'new')
-                                            <i class="text-danger">Nouveau</i>
+                                            <i class="text-danger">Nouveau !</i>
                                         @else
-                                            <i class="text-navy">{{ $doubleTeam['rank'] }}</i>
+                                            <i class="text-navy">{{ $doubleTeam['pool_number'] }} /
+                                                {{ $doubleTeam['rank'] }}</i>
                                         @endif
                                     </td>
                                     <td>
@@ -238,9 +242,10 @@
                                 </td>
                                 <td>
                                     @if($doubleTeam['rank'] == 'new')
-                                        <i class="text-danger">Nouveau</i>
+                                        <i class="text-danger">Nouveau !</i>
                                     @else
-                                        <i class="text-navy">{{ $doubleTeam['rank'] }}</i>
+                                        <i class="text-navy">{{ $doubleTeam['pool_number'] }} /
+                                            {{ $doubleTeam['rank'] }}</i>
                                     @endif
                                 </td>
                                 <td>
@@ -295,9 +300,10 @@
                             </td>
                             <td>
                                 @if($mixteTeam['rank'] == 'new')
-                                    <i class="text-danger">Nouveau</i>
+                                    <i class="text-danger">Nouveau !</i>
                                 @else
-                                    <i class="text-navy">{{ $mixteTeam['rank'] }}</i>
+                                    <i class="text-navy">{{ $mixteTeam['pool_number'] }} /
+                                        {{ $mixteTeam['rank'] }}</i>
                                 @endif
                             </td>
                             <td>
