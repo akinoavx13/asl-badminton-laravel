@@ -108,7 +108,7 @@ class ChampionshipController extends Controller
                     ->join('championship_rankings', 'teams.id', '=', 'championship_rankings.team_id')
                     ->join('championship_pools', 'championship_rankings.championship_pool_id', '=',
                         'championship_pools.id')
-                    ->where('championship_pools.id', $lastedPeriod->id)
+                    ->where('championship_pools.period_id', $lastedPeriod->id)
                     ->where('teams.season_id', $activeSeason->id)
                     ->where('teams.simple_man', true)
                     ->whereNotNull('teams.player_one')
@@ -116,7 +116,7 @@ class ChampionshipController extends Controller
                     ->where('teams.enable', true)
                     ->orWhere(function ($query) use ($lastedPeriod, $activeSeason)
                     {
-                        $query->where('championship_pools.id', $lastedPeriod->id)
+                        $query->where('championship_pools.period_id', $lastedPeriod->id)
                             ->where('teams.season_id', $activeSeason->id)
                             ->where('teams.simple_woman', true)
                             ->whereNotNull('teams.player_one')
@@ -273,13 +273,7 @@ class ChampionshipController extends Controller
     {
         $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
             'users.ending_injury', 'teams.id')
-            ->join('players', 'players.id', '=', 'teams.player_one')
-            ->join('users', 'players.user_id', '=', 'users.id')
-            ->whereNotNull('teams.player_one')
-            ->whereNull('teams.player_two')
-            ->where('teams.simple_' . $gender, true)
-            ->where('teams.enable', true)
-            ->where('teams.season_id', $season_id)
+            ->allSimpleTeams($gender, $season_id)
             ->orderBy('users.forname', 'asc')
             ->orderBy('users.name', 'asc')
             ->get();

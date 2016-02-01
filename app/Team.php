@@ -81,6 +81,17 @@ class Team extends Model
             ->whereNull('teams.player_two');
     }
 
+    public function scopeAllSimpleTeams($query, $gender, $season_id)
+    {
+        $query->join('players', 'players.id', '=', 'teams.player_one')
+            ->join('users', 'players.user_id', '=', 'users.id')
+            ->whereNotNull('teams.player_one')
+            ->whereNull('teams.player_two')
+            ->where('teams.simple_' . $gender, true)
+            ->where('teams.enable', true)
+            ->where('teams.season_id', $season_id);
+    }
+
     public function scopeMySimpleTeams($query, $gender, $player_id, $season_id)
     {
         $query->join('players', 'players.id', '=', 'teams.player_one')
