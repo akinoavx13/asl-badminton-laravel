@@ -68,31 +68,45 @@ class ChampionshipController extends Controller
             $lastedPeriod = Period::lasted($activeSeason->id, 'championship')->first();
 
             $teams = [];
+            $poolsNumber = [];
             if ($setting->hasChampionshipSimpleWoman(true))
             {
                 $teams['simple']['man'] = $this->getSimpleTeams($activeSeason->id, 'man');
+                $poolsNumber['simple']['man'] = $this->getNumberOfPool($teams['simple']['man']);
+
                 $teams['simple']['woman'] = $this->getSimpleTeams($activeSeason->id, 'woman');
+                $poolsNumber['simple']['woman'] = $this->getNumberOfPool($teams['simple']['woman']);
+
             }
             else
             {
                 $teams['simple'] = array_merge($this->getSimpleTeams($activeSeason->id, 'man'),
                     $this->getSimpleTeams($activeSeason->id, 'woman'));
                 sort($teams['simple']);
+                $poolsNumber['simple'] = $this->getNumberOfPool($teams['simple']);
+
             }
 
             if ($setting->hasChampionshipDoubleWoman(true))
             {
                 $teams['double']['man'] = $this->getDoubleTeams($activeSeason->id, 'double', 'man');
+                $poolsNumber['double']['man'] = $this->getNumberOfPool($teams['double']['man']);
+
                 $teams['double']['woman'] = $this->getDoubleTeams($activeSeason->id, 'double', 'woman');
+                $poolsNumber['double']['woman'] = $this->getNumberOfPool($teams['double']['woman']);
+
             }
             else
             {
                 $teams['double'] = array_merge($this->getDoubleTeams($activeSeason->id, 'double', 'man'),
                     $this->getDoubleTeams($activeSeason->id, 'double', 'woman'));
                 sort($teams['double']);
+                $poolsNumber['double'] = $this->getNumberOfPool($teams['double']);
+
             }
 
             $teams['mixte'] = $this->getDoubleTeams($activeSeason->id, 'mixte', '');
+            $poolsNumber['mixte'] = $this->getNumberOfPool($teams['mixte']);
 
             if ($lastedPeriod !== null)
             {
@@ -101,14 +115,20 @@ class ChampionshipController extends Controller
                 {
                     $teams['simple']['man'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
                         $teams['simple']['man'], 'simple', 'man');
+                    $poolsNumber['simple']['man'] = $this->getNumberOfPool($teams['simple']['man']);
+
 
                     $teams['simple']['woman'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
                         $teams['simple']['woman'], 'simple', 'woman');
+                    $poolsNumber['simple']['woman'] = $this->getNumberOfPool($teams['simple']['woman']);
+
                 }
                 else
                 {
                     $teams['simple'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
                         $teams['simple'], 'simple', '', true);
+                    $poolsNumber['simple'] = $this->getNumberOfPool($teams['simple']);
+
                 }
 
                 if ($setting->hasChampionshipDoubleWoman(true))
@@ -116,21 +136,28 @@ class ChampionshipController extends Controller
 
                     $teams['double']['man'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
                         $teams['double']['man'], 'double', 'man');
+                    $poolsNumber['double']['woman'] = $this->getNumberOfPool($teams['double']['woman']);
 
                     $teams['double']['woman'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
                         $teams['double']['woman'], 'double', 'woman');
+                    $poolsNumber['double']['woman'] = $this->getNumberOfPool($teams['double']['woman']);
+
                 }
                 else
                 {
                     $teams['double'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
                         $teams['double'], 'double', '', true);
+                    $poolsNumber['double'] = $this->getNumberOfPool($teams['double']);
+
                 }
 
                 $teams['mixte'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
                     $teams['mixte'], 'mixte', '');
+                $poolsNumber['mixte'] = $this->getNumberOfPool($teams['mixte']);
+
             }
 
-            return view('championship.create', compact('period', 'teams', 'setting'));
+            return view('championship.create', compact('period', 'teams', 'setting', 'poolsNumber'));
         }
 
         return redirect()->route('season.index')->with('error', "Le championnat ne peut pas être créé car il n'y a
@@ -557,5 +584,22 @@ class ChampionshipController extends Controller
         }
 
         return $new_array;
+    }
+
+    private function getNumberOfPool($teams)
+    {
+        $numberOfPlayers = count($teams);
+        $quotient = floor($numberOfPlayers / 3);
+        $rest = $numberOfPlayers % 3;
+
+        $numberPoolsOf4 = $rest + floor(($quotient - $rest) / 4) * 3;
+        $numberPoolsOf3 = ($quotient - $rest) % 4;
+
+        $number = [
+            '3' => $numberPoolsOf3,
+            '4' => $numberPoolsOf4,
+        ];
+
+        return $number;
     }
 }

@@ -47,6 +47,18 @@
                         <h1 class="text-center">Equipe de simple {{ $gender == 'man' ? 'homme' : 'femme'  }}</h1>
                     </div>
                     <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="text-center">
+                                    Nombre de poule de 3 : <span class="text-navy">{{ $poolsNumber['simple'][$gender]['3'] }}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-center">
+                                    Nombre de poule de 4 : <span class="text-navy">{{ $poolsNumber['simple'][$gender]['4'] }}</span>
+                                </p>
+                            </div>
+                        </div>
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
@@ -97,6 +109,18 @@
                     <h1 class="text-center">Equipe de simple</h1>
                 </div>
                 <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-center">
+                                Nombre de poule de 3 : <span class="text-navy">{{ $poolsNumber['simple']['3'] }}</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-center">
+                                Nombre de poule de 4 : <span class="text-navy">{{ $poolsNumber['simple']['4'] }}</span>
+                            </p>
+                        </div>
+                    </div>
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
@@ -148,6 +172,18 @@
                         <h1 class="text-center">Equipe de double {{ $gender == 'man' ? 'homme' : 'femme' }}</h1>
                     </div>
                     <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="text-center">
+                                    Nombre de poule de 3 : <span class="text-navy">{{ $poolsNumber['double'][$gender]['3'] }}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-center">
+                                    Nombre de poule de 4 : <span class="text-navy">{{ $poolsNumber['double'][$gender]['4'] }}</span>
+                                </p>
+                            </div>
+                        </div>
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
@@ -206,6 +242,18 @@
                     <h1 class="text-center">Equipe de double</h1>
                 </div>
                 <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-center">
+                                Nombre de poule de 3 : <span class="text-navy">{{ $poolsNumber['double']['3'] }}</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-center">
+                                Nombre de poule de 4 : <span class="text-navy">{{ $poolsNumber['double']['4'] }}</span>
+                            </p>
+                        </div>
+                    </div>
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
@@ -264,6 +312,18 @@
                 <h1 class="text-center">Equipe de mixte</h1>
             </div>
             <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="text-center">
+                            Nombre de poule de 3 : <span class="text-navy">{{ $poolsNumber['mixte']['3'] }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-center">
+                            Nombre de poule de 4 : <span class="text-navy">{{ $poolsNumber['mixte']['4'] }}</span>
+                        </p>
+                    </div>
+                </div>
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
