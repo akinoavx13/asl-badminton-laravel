@@ -19,15 +19,24 @@ use Jenssegers\Date\Date;
 
 class ChampionshipController extends Controller
 {
-
+    public function __construct()
+    {
+        parent::__constructor();
+    }
     /**
      * @param $router
      */
     public static function routes($router)
     {
-
         //championship index
         $router->get('index', [
+            'middleware' => 'settingExists',
+            'uses'       => 'ChampionshipController@index',
+            'as'         => 'championship.index',
+        ]);
+
+        //championship index
+        $router->post('index', [
             'middleware' => 'settingExists',
             'uses'       => 'ChampionshipController@index',
             'as'         => 'championship.index',
@@ -51,18 +60,32 @@ class ChampionshipController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-
         $activeSeason = Season::active()->first();
+
+        $championships = [];
+
+        foreach (Period::all() as $period)
+        {
+            $championships[$period->id] = 'Du ' . $period->start->format('l j F Y') . ' au ' . $period->end->format('l j F Y');
+        }
 
         if ($activeSeason !== null)
         {
             $setting = Helpers::getInstance()->setting();
 
-            $championship = Period::current($activeSeason->id, 'championship')->first();
+            if($request->isMethod('GET'))
+            {
+                $championship = Period::current($activeSeason->id, 'championship')->first();
+            }
+            elseif($request->isMethod('POST'))
+            {
+                $championship = Period::findOrFail($request->period_id);
+            }
 
             $teams = [];
 
@@ -93,7 +116,7 @@ class ChampionshipController extends Controller
 
                 $teams['mixte'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id, 'mixte', '');
 
-                return view('championship.index', compact('championship', 'teams', 'setting'));
+                return view('championship.index', compact('championship', 'teams', 'setting', 'championships'));
             }
             else
             {
@@ -518,19 +541,22 @@ class ChampionshipController extends Controller
     {
         foreach ($pools as $pool_number => $teams_id)
         {
-            $pool = ChampionshipPool::create([
-                'number'    => $pool_number,
-                'type'      => $gender,
-                'period_id' => $period_id,
-            ]);
-
-            foreach ($teams_id as $team_id)
+            if($pool_number != 0)
             {
-                ChampionshipRanking::create([
-                    'match_to_play'        => count($pools[$pool_number]) - 1,
-                    'team_id'              => $team_id,
-                    'championship_pool_id' => $pool->id,
+                $pool = ChampionshipPool::create([
+                    'number'    => $pool_number,
+                    'type'      => $gender,
+                    'period_id' => $period_id,
                 ]);
+
+                foreach ($teams_id as $team_id)
+                {
+                    ChampionshipRanking::create([
+                        'match_to_play'        => count($pools[$pool_number]) - 1,
+                        'team_id'              => $team_id,
+                        'championship_pool_id' => $pool->id,
+                    ]);
+                }
             }
         }
     }
@@ -554,16 +580,19 @@ class ChampionshipController extends Controller
     {
         foreach ($pools as $pool_number => $pool)
         {
-            foreach ($pool as $first_index => $first_team_id)
+            if($pool_number !== "")
             {
-                foreach ($pool as $second_index => $second_team_id)
+                foreach ($pool as $first_index => $first_team_id)
                 {
-                    if ($first_index <= $second_index && $first_team_id !== $second_team_id)
+                    foreach ($pool as $second_index => $second_team_id)
                     {
-                        Score::create([
-                            'first_team_id'  => $first_team_id,
-                            'second_team_id' => $second_team_id,
-                        ]);
+                        if ($first_index <= $second_index && $first_team_id !== $second_team_id)
+                        {
+                            Score::create([
+                                'first_team_id'  => $first_team_id,
+                                'second_team_id' => $second_team_id,
+                            ]);
+                        }
                     }
                 }
             }
@@ -739,6 +768,7 @@ class ChampionshipController extends Controller
             $playersSimple[$simpleTeam->number][$index]['total_difference_set'] = $simpleTeam->total_difference_set;
             $playersSimple[$simpleTeam->number][$index]['total_difference_points'] = $simpleTeam->total_difference_points;
             $playersSimple[$simpleTeam->number][$index]['user_id'] = $simpleTeam->id;
+            $playersSimple[$simpleTeam->number][$index]['pool_number'] = $simpleTeam->number;
         }
 
         return $playersSimple;
@@ -797,6 +827,7 @@ class ChampionshipController extends Controller
             $playersDouble[$doubleTeam->number][$index]['total_difference_points'] = $doubleTeam->total_difference_points;
             $playersDouble[$doubleTeam->number][$index]['userOne_id'] = $doubleTeam->userOne_id;
             $playersDouble[$doubleTeam->number][$index]['userTwo_id'] = $doubleTeam->userTwo_id;
+            $playersDouble[$doubleTeam->number][$index]['pool_number'] = $doubleTeam->number;
         }
 
         return $playersDouble;

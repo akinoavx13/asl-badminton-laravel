@@ -6,6 +6,26 @@
 
 @section('content')
 
+    @if(count($championships) > 0)
+
+        <h1 class="text-center">Choisir un championnat</h1>
+
+        {!! Form::open(['route' => 'championship.index', 'class' => 'form-horizontal']) !!}
+
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-4">
+                {!! Form::select('period_id', $championships, $championship->exists ? $championship->id : old('period_id'),['class' => 'form-control chosen-select', 'required']) !!}
+            </div>
+        </div>
+
+        <div class="form-group text-center">
+            {!! Form::submit('Voir', ['class' => 'btn btn-primary']) !!}
+        </div>
+
+        {!! Form::close() !!}
+        <hr>
+    @endif
+
     @if($championship != null)
         <h1 class="text-center">
             Championnat du
@@ -283,6 +303,8 @@
             radius: 8,
             width: 16
         };
-        $("span.pie").peity("pie")
+        $("span.pie").peity("pie");
+
+        $(".chosen-select").chosen();
     </script>
 @endsection
