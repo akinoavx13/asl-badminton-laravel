@@ -42,6 +42,7 @@ elixir(function(mix) {
   'plugins/dataTables/dataTables.responsive.js',
   'plugins/dataTables/dataTables.tableTools.min.js',
   'plugins/clockpicker/clockpicker.js',
-  'plugins/summernote/summernote.min.js'
+  'plugins/summernote/summernote.min.js',
+  'plugins/peity/jquery.peity.min.js'
  ], 'public/js/app.min.js')
 });

@@ -136,13 +136,24 @@
                         <span class="nav-label">Championnat</span>
                         <span class="fa arrow"></span>
                     </a>
-
                     <ul class="nav nav-second-level">
                         <li class="{{ Request::is('championship/create') ? 'active' : '' }}"><a
                                     href="{{ route('championship.create') }}"><i class="fa fa-plus"></i>Créer un
                                 championnat</a></li>
                     </ul>
+                    <ul class="nav nav-second-level">
+                        <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
+                                    href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du championnat</a></li>
+                    </ul>
                 </li>
+            @endif
+
+            @if($auth->hasRole('user'))
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                    <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
+                                href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du championnat</a></li>
+                    </li>
+                @endif
             @endif
 
             @if($auth->hasRole('admin'))

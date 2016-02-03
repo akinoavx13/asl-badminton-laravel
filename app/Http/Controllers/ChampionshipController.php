@@ -25,6 +25,14 @@ class ChampionshipController extends Controller
      */
     public static function routes($router)
     {
+
+        //championship index
+        $router->get('index', [
+            'middleware' => 'settingExists',
+            'uses'       => 'ChampionshipController@index',
+            'as'         => 'championship.index',
+        ]);
+
         //championship create
         $router->get('create', [
             'middleware' => 'settingExists',
@@ -47,7 +55,54 @@ class ChampionshipController extends Controller
      */
     public function index()
     {
-        //
+
+        $activeSeason = Season::active()->first();
+
+        if ($activeSeason !== null)
+        {
+            $setting = Helpers::getInstance()->setting();
+
+            $championship = Period::current($activeSeason->id, 'championship')->first();
+
+            $teams = [];
+
+            if($championship !== null)
+            {
+                if ($setting->hasChampionshipSimpleWoman(true))
+                {
+                    $teams['simple']['man'] = $this->getSimpleTeamsViews($activeSeason->id, $championship->id, 'man');
+                    $teams['simple']['woman'] = $this->getSimpleTeamsViews($activeSeason->id, $championship->id, 'woman');
+                }
+                else
+                {
+                    $teams['simple'] = $this->getSimpleTeamsViews($activeSeason->id, $championship->id, '', true);
+                }
+
+                if ($setting->hasChampionshipDoubleWoman(true))
+                {
+                    $teams['double']['man'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id,
+                        'double', 'man');
+                    $teams['double']['woman'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id,
+                        'double', 'woman');
+                }
+                else
+                {
+                    $teams['double'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id, 'double', '',
+                        true);
+                }
+
+                $teams['mixte'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id, 'mixte', '');
+
+                return view('championship.index', compact('championship', 'teams', 'setting'));
+            }
+            else
+            {
+                return redirect()->route('home.index')->with('error', "Il n'y a pas de championnat pour le moment !");
+            }
+        }
+
+        return redirect()->route('season.index')->with('error', "Le championnat ne peut pas être créé car il n'y a
+        pas de saison active !");
     }
 
     /**
@@ -110,7 +165,6 @@ class ChampionshipController extends Controller
 
             if ($lastedPeriod !== null)
             {
-
                 if ($setting->hasChampionshipSimpleWoman(true))
                 {
                     $teams['simple']['man'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
@@ -308,8 +362,8 @@ class ChampionshipController extends Controller
         $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
             'users.ending_injury', 'teams.id')
             ->allSimpleTeams($gender, $season_id)
-            ->orderBy('users.forname', 'asc')
-            ->orderBy('users.name', 'asc')
+            ->orderBy('users.forname')
+            ->orderBy('users.name')
             ->get();
 
         $playersSimple = [];
@@ -329,15 +383,28 @@ class ChampionshipController extends Controller
         return $playersSimple;
     }
 
-    public function getSimpleTeamsLastedChampionship($lastedPeriod_id, $activeSeason_id, $gender)
+    private function getSimpleTeamsLastedChampionship($lastedPeriod_id, $activeSeason_id, $gender, $twice = false)
     {
 
-        $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
-            'users.ending_injury', 'teams.id', 'championship_rankings.rank', 'championship_pools.number')
-            ->allSimpleTeamsLastedChampionship($lastedPeriod_id, $activeSeason_id, $gender)
-            ->orderBy('championship_pools.number', 'asc')
-            ->orderBy('championship_rankings.rank', 'asc')
-            ->get();
+        if ($twice)
+        {
+            $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
+                'users.ending_injury', 'teams.id', 'championship_rankings.rank', 'championship_pools.number')
+                ->allSimpleTeamsLastedChampionshipNoGender($lastedPeriod_id, $activeSeason_id)
+                ->orderBy('championship_pools.number')
+                ->orderBy('championship_rankings.rank')
+                ->get();
+        }
+        else
+        {
+            $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
+                'users.ending_injury', 'teams.id', 'championship_rankings.rank', 'championship_pools.number')
+                ->allSimpleTeamsLastedChampionship($lastedPeriod_id, $activeSeason_id, $gender)
+                ->orderBy('championship_pools.number')
+                ->orderBy('championship_rankings.rank')
+                ->get();
+        }
+
 
         $playersSimple = [];
         foreach ($simpleTeams as $index => $simpleTeam)
@@ -365,8 +432,8 @@ class ChampionshipController extends Controller
             'userTwo.state as stateTwo', 'userTwo.ending_holiday as ending_holidayTwo',
             'userTwo.ending_injury as ending_injuryTwo', 'teams.id')
             ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
-            ->orderBy('userOne.forname', 'asc')
-            ->orderBy('userOne.name', 'asc')
+            ->orderBy('userOne.forname')
+            ->orderBy('userOne.name')
             ->get();
 
         $players = [];
@@ -393,19 +460,35 @@ class ChampionshipController extends Controller
     }
 
 
-    private function getDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id)
+    private function getDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id, $twice = false)
     {
 
-        $doubleTeams = Team::select('userOne.name as nameOne', 'userOne.forname as fornameOne',
-            'userOne.state as stateOne', 'userOne.ending_holiday as ending_holidayOne',
-            'userOne.ending_injury as ending_injuryOne', 'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo',
-            'userTwo.state as stateTwo', 'userTwo.ending_holiday as ending_holidayTwo',
-            'userTwo.ending_injury as ending_injuryTwo', 'teams.id', 'championship_rankings.rank',
-            'championship_pools.number')
-            ->allDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id)
-            ->orderBy('championship_pools.number', 'asc')
-            ->orderBy('championship_rankings.rank', 'asc')
-            ->get();
+        if($twice)
+        {
+            $doubleTeams = Team::select('userOne.name as nameOne', 'userOne.forname as fornameOne',
+                'userOne.state as stateOne', 'userOne.ending_holiday as ending_holidayOne',
+                'userOne.ending_injury as ending_injuryOne', 'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo',
+                'userTwo.state as stateTwo', 'userTwo.ending_holiday as ending_holidayTwo',
+                'userTwo.ending_injury as ending_injuryTwo', 'teams.id', 'championship_rankings.rank',
+                'championship_pools.number')
+                ->allDoubleOrMixteTeamsLastedChampionshipNoGender($type, $lastedPeriod_id, $season_id)
+                ->orderBy('championship_pools.number')
+                ->orderBy('championship_rankings.rank')
+                ->get();
+        }
+        else
+        {
+            $doubleTeams = Team::select('userOne.name as nameOne', 'userOne.forname as fornameOne',
+                'userOne.state as stateOne', 'userOne.ending_holiday as ending_holidayOne',
+                'userOne.ending_injury as ending_injuryOne', 'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo',
+                'userTwo.state as stateTwo', 'userTwo.ending_holiday as ending_holidayTwo',
+                'userTwo.ending_injury as ending_injuryTwo', 'teams.id', 'championship_rankings.rank',
+                'championship_pools.number')
+                ->allDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id)
+                ->orderBy('championship_pools.number')
+                ->orderBy('championship_rankings.rank')
+                ->get();
+        }
 
         $players = [];
 
@@ -498,9 +581,8 @@ class ChampionshipController extends Controller
             }
             else
             {
-                $teamsLastedChampionship = array_merge($this->getSimpleTeamsLastedChampionship($lastedPeriod_id,
-                    $season_id, 'man'), $this->getSimpleTeamsLastedChampionship($lastedPeriod_id,
-                    $season_id, 'woman'));
+                $teamsLastedChampionship = $this->getSimpleTeamsLastedChampionship($lastedPeriod_id,
+                    $season_id, '', true);
             }
         }
         elseif ($type === 'double')
@@ -512,9 +594,8 @@ class ChampionshipController extends Controller
             }
             else
             {
-                $teamsLastedChampionship = array_merge($this->getDoubleOrMixteTeamsLastedChampionship('double', 'man',
-                    $lastedPeriod_id, $season_id),
-                    $this->getDoubleOrMixteTeamsLastedChampionship('double', 'woman', $lastedPeriod_id, $season_id));
+                $teamsLastedChampionship = $this->getDoubleOrMixteTeamsLastedChampionship('double', '',
+                    $lastedPeriod_id, $season_id, true);
             }
 
         }
@@ -539,7 +620,14 @@ class ChampionshipController extends Controller
             }
         }
 
-        return $this->array_sort($teamsLastedChampionship, 'rank');
+        if ($combine)
+        {
+            return $teamsLastedChampionship;
+        }
+        else
+        {
+            return $this->array_sort($teamsLastedChampionship, 'rank');
+        }
     }
 
     private function array_sort($array, $on, $order = SORT_ASC)
@@ -602,4 +690,109 @@ class ChampionshipController extends Controller
 
         return $number;
     }
+
+    private function getSimpleTeamsViews($season_id, $lastedPeriod_id, $gender, $twice = false)
+    {
+        $playersSimple = [];
+
+        if ($twice)
+        {
+            $simpleTeams = Team::select('users.name', 'users.forname', 'championship_rankings.rank',
+                'championship_pools.number', 'championship_rankings.total_points', 'championship_rankings.match_played',
+                'championship_rankings.match_to_play', 'championship_rankings.match_won',
+                'championship_rankings.match_lost', 'championship_rankings.match_unplayed',
+                'championship_rankings.match_won_by_wo', 'championship_rankings.match_lost_by_wo',
+                'championship_rankings.total_difference_set', 'championship_rankings.total_difference_points')
+                ->allSimpleTeamsLastedChampionshipNoGender($lastedPeriod_id, $season_id)
+                ->orderBy('championship_pools.number')
+                ->orderBy('championship_rankings.rank')
+                ->get();
+        }
+        else
+        {
+            $simpleTeams = Team::select('users.name', 'users.forname', 'championship_rankings.rank',
+                'championship_pools.number', 'championship_rankings.total_points', 'championship_rankings.match_played',
+                'championship_rankings.match_to_play', 'championship_rankings.match_won',
+                'championship_rankings.match_lost', 'championship_rankings.match_unplayed',
+                'championship_rankings.match_won_by_wo', 'championship_rankings.match_lost_by_wo',
+                'championship_rankings.total_difference_set', 'championship_rankings.total_difference_points')
+                ->allSimpleTeamsLastedChampionship($lastedPeriod_id, $season_id, $gender)
+                ->orderBy('championship_pools.number')
+                ->orderBy('championship_rankings.rank')
+                ->get();
+        }
+
+        foreach ($simpleTeams as $index => $simpleTeam)
+        {
+            $playersSimple[$simpleTeam->number][$index]['rank'] = $simpleTeam->rank;
+            $playersSimple[$simpleTeam->number][$index]['name'] = Helpers::getInstance()->getTeamName($simpleTeam->forname,
+                $simpleTeam->name);
+            $playersSimple[$simpleTeam->number][$index]['points'] = $simpleTeam->total_points;
+            $playersSimple[$simpleTeam->number][$index]['matchs'] = $simpleTeam->match_played . '/' . $simpleTeam->match_to_play;
+            $playersSimple[$simpleTeam->number][$index]['match_won'] = $simpleTeam->match_won;
+            $playersSimple[$simpleTeam->number][$index]['match_lost'] = $simpleTeam->match_lost;
+            $playersSimple[$simpleTeam->number][$index]['match_unplayed'] = $simpleTeam->match_unplayed;
+            $playersSimple[$simpleTeam->number][$index]['match_won_by_wo'] = $simpleTeam->match_won_by_wo;
+            $playersSimple[$simpleTeam->number][$index]['match_lost_by_wo'] = $simpleTeam->match_lost_by_wo;
+            $playersSimple[$simpleTeam->number][$index]['total_difference_set'] = $simpleTeam->total_difference_set;
+            $playersSimple[$simpleTeam->number][$index]['total_difference_points'] = $simpleTeam->total_difference_points;
+        }
+
+        return $playersSimple;
+    }
+
+    private function getDoubleOrMixteTeamsViews($season_id, $lastedPeriod_id, $type, $gender, $twice = false)
+    {
+        $playersDouble = [];
+
+        if ($twice)
+        {
+            $doubleTeams = Team::select('userOne.name as nameOne', 'userOne.forname as fornameOne',
+                'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo', 'championship_rankings.rank',
+                'championship_pools.number', 'championship_rankings.total_points', 'championship_rankings.match_played',
+                'championship_rankings.match_to_play',
+                'championship_rankings.match_won', 'championship_rankings.match_lost',
+                'championship_rankings.match_unplayed', 'championship_rankings.match_won_by_wo',
+                'championship_rankings.match_lost_by_wo', 'championship_rankings.total_difference_set',
+                'championship_rankings.total_difference_points')
+                ->allDoubleOrMixteTeamsLastedChampionshipNoGender($type, $lastedPeriod_id, $season_id)
+                ->orderBy('championship_pools.number')
+                ->orderBy('championship_rankings.rank')
+                ->get();
+        }
+        else
+        {
+            $doubleTeams = Team::select('userOne.name as nameOne', 'userOne.forname as fornameOne',
+                'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo', 'championship_rankings.rank',
+                'championship_pools.number', 'championship_rankings.total_points', 'championship_rankings.match_played',
+                'championship_rankings.match_to_play',
+                'championship_rankings.match_won', 'championship_rankings.match_lost',
+                'championship_rankings.match_unplayed', 'championship_rankings.match_won_by_wo',
+                'championship_rankings.match_lost_by_wo', 'championship_rankings.total_difference_set',
+                'championship_rankings.total_difference_points')
+                ->allDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id)
+                ->orderBy('championship_pools.number')
+                ->orderBy('championship_rankings.rank')
+                ->get();
+        }
+
+        foreach ($doubleTeams as $index => $doubleTeam)
+        {
+            $playersDouble[$doubleTeam->number][$index]['rank'] = $doubleTeam->rank;
+            $playersDouble[$doubleTeam->number][$index]['name'] = Helpers::getInstance()->getTeamName($doubleTeam->fornameOne,
+                $doubleTeam->nameOne, $doubleTeam->fornameTwo, $doubleTeam->nameTwo);
+            $playersDouble[$doubleTeam->number][$index]['points'] = $doubleTeam->total_points;
+            $playersDouble[$doubleTeam->number][$index]['matchs'] = $doubleTeam->match_played . '/' . $doubleTeam->match_to_play;
+            $playersDouble[$doubleTeam->number][$index]['match_won'] = $doubleTeam->match_won;
+            $playersDouble[$doubleTeam->number][$index]['match_lost'] = $doubleTeam->match_lost;
+            $playersDouble[$doubleTeam->number][$index]['match_unplayed'] = $doubleTeam->match_unplayed;
+            $playersDouble[$doubleTeam->number][$index]['match_won_by_wo'] = $doubleTeam->match_won_by_wo;
+            $playersDouble[$doubleTeam->number][$index]['match_lost_by_wo'] = $doubleTeam->match_lost_by_wo;
+            $playersDouble[$doubleTeam->number][$index]['total_difference_set'] = $doubleTeam->total_difference_set;
+            $playersDouble[$doubleTeam->number][$index]['total_difference_points'] = $doubleTeam->total_difference_points;
+        }
+
+        return $playersDouble;
+    }
+
 }

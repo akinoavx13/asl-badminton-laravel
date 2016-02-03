@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Date\Date;
 
 class Period extends Model
 {
@@ -32,9 +33,13 @@ class Period extends Model
     /*  GET SET ATT   */
     /******************/
 
+    /**
+     * @param $start
+     * @return static
+     */
     public function getStartAttribute($start)
     {
-        return Carbon::createFromFormat('Y-m-d', $start);
+        return Date::createFromFormat('Y-m-d', $start)->format('l j F Y');
     }
 
     public function setStartAttribute($start)
@@ -44,7 +49,7 @@ class Period extends Model
 
     public function getEndAttribute($end)
     {
-        return Carbon::createFromFormat('Y-m-d', $end);
+        return Date::createFromFormat('Y-m-d', $end)->format('l j F Y');
     }
 
     public function setEndAttribute($end)
