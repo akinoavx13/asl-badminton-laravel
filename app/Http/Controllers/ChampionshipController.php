@@ -732,7 +732,7 @@ class ChampionshipController extends Controller
                 'championship_rankings.match_lost', 'championship_rankings.match_unplayed',
                 'championship_rankings.match_won_by_wo', 'championship_rankings.match_lost_by_wo',
                 'championship_rankings.total_difference_set', 'championship_rankings.total_difference_points',
-                'users.id')
+                'users.id as user_id', 'championship_pools.id as pool_id')
                 ->allSimpleTeamsLastedChampionshipNoGender($lastedPeriod_id, $season_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -746,7 +746,7 @@ class ChampionshipController extends Controller
                 'championship_rankings.match_lost', 'championship_rankings.match_unplayed',
                 'championship_rankings.match_won_by_wo', 'championship_rankings.match_lost_by_wo',
                 'championship_rankings.total_difference_set', 'championship_rankings.total_difference_points',
-                'users.id')
+                'users.id as user_id', 'championship_pools.id as pool_id')
                 ->allSimpleTeamsLastedChampionship($lastedPeriod_id, $season_id, $gender)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -755,20 +755,24 @@ class ChampionshipController extends Controller
 
         foreach ($simpleTeams as $index => $simpleTeam)
         {
+            $playersSimple[$simpleTeam->number]['pool_id'] = $simpleTeam->pool_id;
             $playersSimple[$simpleTeam->number][$index]['rank'] = $simpleTeam->rank;
-            $playersSimple[$simpleTeam->number][$index]['name'] = Helpers::getInstance()->getTeamName($simpleTeam->forname,
+            $playersSimple[$simpleTeam->number][$index]['name'] = Helpers::getInstance()->getTeamName
+        ($simpleTeam->forname,
                 $simpleTeam->name);
             $playersSimple[$simpleTeam->number][$index]['points'] = $simpleTeam->total_points;
-            $playersSimple[$simpleTeam->number][$index]['matchs'] = $simpleTeam->match_played . '/' . $simpleTeam->match_to_play;
+            $playersSimple[$simpleTeam->number][$index]['matchs'] = $simpleTeam->match_played . '/' .
+            $simpleTeam->match_to_play;
             $playersSimple[$simpleTeam->number][$index]['match_won'] = $simpleTeam->match_won;
             $playersSimple[$simpleTeam->number][$index]['match_lost'] = $simpleTeam->match_lost;
             $playersSimple[$simpleTeam->number][$index]['match_unplayed'] = $simpleTeam->match_unplayed;
             $playersSimple[$simpleTeam->number][$index]['match_won_by_wo'] = $simpleTeam->match_won_by_wo;
             $playersSimple[$simpleTeam->number][$index]['match_lost_by_wo'] = $simpleTeam->match_lost_by_wo;
-            $playersSimple[$simpleTeam->number][$index]['total_difference_set'] = $simpleTeam->total_difference_set;
-            $playersSimple[$simpleTeam->number][$index]['total_difference_points'] = $simpleTeam->total_difference_points;
-            $playersSimple[$simpleTeam->number][$index]['user_id'] = $simpleTeam->id;
-            $playersSimple[$simpleTeam->number][$index]['pool_number'] = $simpleTeam->number;
+            $playersSimple[$simpleTeam->number][$index]['total_difference_set'] =
+            $simpleTeam->total_difference_set;
+            $playersSimple[$simpleTeam->number][$index]['total_difference_points'] =
+            $simpleTeam->total_difference_points;
+            $playersSimple[$simpleTeam->number][$index]['user_id'] = $simpleTeam->user_id;
         }
 
         return $playersSimple;
@@ -788,7 +792,7 @@ class ChampionshipController extends Controller
                 'championship_rankings.match_unplayed', 'championship_rankings.match_won_by_wo',
                 'championship_rankings.match_lost_by_wo', 'championship_rankings.total_difference_set',
                 'championship_rankings.total_difference_points', 'userOne.id as userOne_id',
-                'userTwo.id as userTwo_id')
+                'userTwo.id as userTwo_id', 'championship_pools.id as pool_id')
                 ->allDoubleOrMixteTeamsLastedChampionshipNoGender($type, $lastedPeriod_id, $season_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -804,7 +808,7 @@ class ChampionshipController extends Controller
                 'championship_rankings.match_unplayed', 'championship_rankings.match_won_by_wo',
                 'championship_rankings.match_lost_by_wo', 'championship_rankings.total_difference_set',
                 'championship_rankings.total_difference_points', 'userOne.id as userOne_id',
-                'userTwo.id as userTwo_id')
+                'userTwo.id as userTwo_id', 'championship_pools.id as pool_id')
                 ->allDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -813,6 +817,7 @@ class ChampionshipController extends Controller
 
         foreach ($doubleTeams as $index => $doubleTeam)
         {
+            $playersDouble[$doubleTeam->number]['pool_id'] = $doubleTeam->pool_id;
             $playersDouble[$doubleTeam->number][$index]['rank'] = $doubleTeam->rank;
             $playersDouble[$doubleTeam->number][$index]['name'] = Helpers::getInstance()->getTeamName($doubleTeam->fornameOne,
                 $doubleTeam->nameOne, $doubleTeam->fornameTwo, $doubleTeam->nameTwo);
@@ -827,7 +832,7 @@ class ChampionshipController extends Controller
             $playersDouble[$doubleTeam->number][$index]['total_difference_points'] = $doubleTeam->total_difference_points;
             $playersDouble[$doubleTeam->number][$index]['userOne_id'] = $doubleTeam->userOne_id;
             $playersDouble[$doubleTeam->number][$index]['userTwo_id'] = $doubleTeam->userTwo_id;
-            $playersDouble[$doubleTeam->number][$index]['pool_number'] = $doubleTeam->number;
+            $playersDouble[$doubleTeam->number][$index]['pool_id'] = $doubleTeam->pool_id;
         }
 
         return $playersDouble;

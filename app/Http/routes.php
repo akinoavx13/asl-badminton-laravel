@@ -14,6 +14,7 @@
 use App\Http\Controllers\AdminReservationController;
 use App\Http\Controllers\CeController;
 use App\Http\Controllers\ChampionshipController;
+use App\Http\Controllers\ChampionshipResultController;
 use App\Http\Controllers\CourtController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
@@ -93,13 +94,13 @@ Route::group(['prefix' => 'playerReservation', 'middleware' => ['auth', 'notCE',
     PlayerReservationController::routes($router);
 });
 
-Route::group(['prefix' => 'adminReservation', 'middleware' => ['auth', 'admin', 'notCE', 'notLeisure']], function () use
+Route::group(['prefix' => 'adminReservation', 'middleware' => ['auth', 'admin', 'notCE']], function () use
 ($router)
 {
     AdminReservationController::routes($router);
 });
 
-Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'admin', 'notLeisure']], function () use ($router)
 {
     ChampionshipController::routes($router);
 });
@@ -107,4 +108,9 @@ Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'adm
 Route::group(['prefix' => 'testimonial', 'middleware' => ['auth', 'notCE']], function () use ($router)
 {
     TestimonialController::routes($router);
+});
+
+Route::group(['prefix' => 'championshipResult', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
+{
+    ChampionshipResultController::routes($router);
 });
