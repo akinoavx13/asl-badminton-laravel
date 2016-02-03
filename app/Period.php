@@ -33,13 +33,9 @@ class Period extends Model
     /*  GET SET ATT   */
     /******************/
 
-    /**
-     * @param $start
-     * @return static
-     */
     public function getStartAttribute($start)
     {
-        return Date::createFromFormat('Y-m-d', $start)->format('l j F Y');
+        return Date::createFromFormat('Y-m-d', $start);
     }
 
     public function setStartAttribute($start)
@@ -49,7 +45,7 @@ class Period extends Model
 
     public function getEndAttribute($end)
     {
-        return Date::createFromFormat('Y-m-d', $end)->format('l j F Y');
+        return Date::createFromFormat('Y-m-d', $end);
     }
 
     public function setEndAttribute($end)

@@ -9,9 +9,9 @@
     @if($championship != null)
         <h1 class="text-center">
             Championnat du
-            <span class="font-bold">{{ $championship->start }}</span>
+            <span class="font-bold">{{ $championship->start->format('l j F Y') }}</span>
             au
-            <span class="font-bold">{{ $championship->end }}</span>
+            <span class="font-bold">{{ $championship->end->format('l j F Y') }}</span>
         </h1>
 
         <hr>
