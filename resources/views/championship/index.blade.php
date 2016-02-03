@@ -45,6 +45,11 @@
                         @foreach($teams['simple'][$gender] as $pool_number => $pools)
                             <h4>Poule
                                 <button class="btn btn-warning btn-circle">{{ $pool_number }}</button>
+                                <div style="float: right;">
+                                    <a href="#" class="btn btn-primary btn-rounded">Résultats
+                                        <span class="fa fa-area-chart"></span>
+                                    </a>
+                                </div>
                             </h4>
                             <table class="table table-striped table-hover">
                                 <thead>
@@ -95,6 +100,11 @@
                     @foreach($teams['simple'] as $pool_number => $pools)
                         <h4>Poule
                             <button class="btn btn-warning btn-circle">{{ $pool_number }}</button>
+                            <div style="float: right;">
+                                <a href="#" class="btn btn-primary btn-rounded">Résultats
+                                    <span class="fa fa-area-chart"></span>
+                                </a>
+                            </div>
                         </h4>
                         <table class="table table-striped table-hover">
                             <thead>
@@ -147,6 +157,11 @@
                         @foreach($teams['double'][$gender] as $pool_number => $pools)
                             <h4>Poule
                                 <button class="btn btn-info btn-circle">{{ $pool_number }}</button>
+                                <div style="float: right;">
+                                    <a href="#" class="btn btn-primary btn-rounded">Résultats
+                                        <span class="fa fa-area-chart"></span>
+                                    </a>
+                                </div>
                             </h4>
                             <table class="table table-striped table-hover">
                                 <thead>
@@ -197,6 +212,11 @@
                     @foreach($teams['double'] as $pool_number => $pools)
                         <h4>Poule
                             <button class="btn btn-info btn-circle">{{ $pool_number }}</button>
+                            <div style="float: right;">
+                                <a href="#" class="btn btn-primary btn-rounded">Résultats
+                                    <span class="fa fa-area-chart"></span>
+                                </a>
+                            </div>
                         </h4>
                         <table class="table table-striped table-hover">
                             <thead>
@@ -247,6 +267,11 @@
                 @foreach($teams['mixte'] as $pool_number => $pools)
                     <h4>Poule
                         <button class="btn btn-danger btn-circle">{{ $pool_number }}</button>
+                        <div style="float: right;">
+                            <a href="#" class="btn btn-primary btn-rounded">Résultats
+                                <span class="fa fa-area-chart"></span>
+                            </a>
+                        </div>
                     </h4>
                     <table class="table table-striped table-hover">
                         <thead>
