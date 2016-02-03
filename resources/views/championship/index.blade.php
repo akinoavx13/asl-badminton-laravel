@@ -7,10 +7,14 @@
 @section('content')
 
     @if($championship != null)
-        <h1 class="text-center">Championnat du <span class="text-danger">{{ $championship->start }}</span> au <span class="text-danger">{{ $championship->end }}</span></h1>
+        <h1 class="text-center">
+            Championnat du
+            <span class="font-bold">{{ $championship->start }}</span>
+            au
+            <span class="font-bold">{{ $championship->end }}</span>
+        </h1>
 
         <hr>
-
         @if($setting->hasChampionshipSimpleWoman(true))
             @foreach(['man', 'woman'] as $gender)
                 <div class="panel panel-warning">
@@ -40,7 +44,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($pools as $simpleTeam)
-                                    <tr class="text-center">
+                                    <tr class="text-center {{ $simpleTeam['user_id'] == $auth->id ? 'text-danger' : ''}}">
                                         <td>{{ $simpleTeam['rank'] }}</td>
                                         <td>{{ $simpleTeam['points'] }}</td>
                                         <td>{{ $simpleTeam['name'] }}</td>
@@ -90,7 +94,7 @@
                             </thead>
                             <tbody>
                             @foreach($pools as $simpleTeam)
-                                <tr class="text-center">
+                                <tr class="text-center {{ $simpleTeam['user_id'] == $auth->id ? 'text-danger' : ''}}">
                                     <td>{{ $simpleTeam['rank'] }}</td>
                                     <td>{{ $simpleTeam['points'] }}</td>
                                     <td>{{ $simpleTeam['name'] }}</td>
@@ -142,7 +146,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($pools as $doubleTeam)
-                                    <tr class="text-center">
+                                    <tr class="text-center {{ $doubleTeam['userOne_id'] == $auth->id || $doubleTeam['userTwo_id'] == $auth->id ? 'text-danger' : ''}}">
                                         <td>{{ $doubleTeam['rank'] }}</td>
                                         <td>{{ $doubleTeam['points'] }}</td>
                                         <td>{{ $doubleTeam['name'] }}</td>
@@ -192,7 +196,7 @@
                             </thead>
                             <tbody>
                             @foreach($pools as $doubleTeam)
-                                <tr class="text-center">
+                                <tr class="text-center {{ $doubleTeam['userOne_id'] == $auth->id || $doubleTeam['userTwo_id'] == $auth->id ? 'text-danger' : ''}}">
                                     <td>{{ $doubleTeam['rank'] }}</td>
                                     <td>{{ $doubleTeam['points'] }}</td>
                                     <td>{{ $doubleTeam['name'] }}</td>
@@ -242,7 +246,7 @@
                         </thead>
                         <tbody>
                         @foreach($pools as $mixteTeam)
-                            <tr class="text-center">
+                            <tr class="text-center {{ $mixteTeam['userOne_id'] == $auth->id || $mixteTeam['userTwo_id'] == $auth->id ? 'text-danger' : ''}}">
                                 <td>{{ $mixteTeam['rank'] }}</td>
                                 <td>{{ $mixteTeam['points'] }}</td>
                                 <td>{{ $mixteTeam['name'] }}</td>

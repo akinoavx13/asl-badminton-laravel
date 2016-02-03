@@ -702,7 +702,8 @@ class ChampionshipController extends Controller
                 'championship_rankings.match_to_play', 'championship_rankings.match_won',
                 'championship_rankings.match_lost', 'championship_rankings.match_unplayed',
                 'championship_rankings.match_won_by_wo', 'championship_rankings.match_lost_by_wo',
-                'championship_rankings.total_difference_set', 'championship_rankings.total_difference_points')
+                'championship_rankings.total_difference_set', 'championship_rankings.total_difference_points',
+                'users.id')
                 ->allSimpleTeamsLastedChampionshipNoGender($lastedPeriod_id, $season_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -715,7 +716,8 @@ class ChampionshipController extends Controller
                 'championship_rankings.match_to_play', 'championship_rankings.match_won',
                 'championship_rankings.match_lost', 'championship_rankings.match_unplayed',
                 'championship_rankings.match_won_by_wo', 'championship_rankings.match_lost_by_wo',
-                'championship_rankings.total_difference_set', 'championship_rankings.total_difference_points')
+                'championship_rankings.total_difference_set', 'championship_rankings.total_difference_points',
+                'users.id')
                 ->allSimpleTeamsLastedChampionship($lastedPeriod_id, $season_id, $gender)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -736,6 +738,7 @@ class ChampionshipController extends Controller
             $playersSimple[$simpleTeam->number][$index]['match_lost_by_wo'] = $simpleTeam->match_lost_by_wo;
             $playersSimple[$simpleTeam->number][$index]['total_difference_set'] = $simpleTeam->total_difference_set;
             $playersSimple[$simpleTeam->number][$index]['total_difference_points'] = $simpleTeam->total_difference_points;
+            $playersSimple[$simpleTeam->number][$index]['user_id'] = $simpleTeam->id;
         }
 
         return $playersSimple;
@@ -754,7 +757,8 @@ class ChampionshipController extends Controller
                 'championship_rankings.match_won', 'championship_rankings.match_lost',
                 'championship_rankings.match_unplayed', 'championship_rankings.match_won_by_wo',
                 'championship_rankings.match_lost_by_wo', 'championship_rankings.total_difference_set',
-                'championship_rankings.total_difference_points')
+                'championship_rankings.total_difference_points', 'userOne.id as userOne_id',
+                'userTwo.id as userTwo_id')
                 ->allDoubleOrMixteTeamsLastedChampionshipNoGender($type, $lastedPeriod_id, $season_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -769,7 +773,8 @@ class ChampionshipController extends Controller
                 'championship_rankings.match_won', 'championship_rankings.match_lost',
                 'championship_rankings.match_unplayed', 'championship_rankings.match_won_by_wo',
                 'championship_rankings.match_lost_by_wo', 'championship_rankings.total_difference_set',
-                'championship_rankings.total_difference_points')
+                'championship_rankings.total_difference_points', 'userOne.id as userOne_id',
+                'userTwo.id as userTwo_id')
                 ->allDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -790,6 +795,8 @@ class ChampionshipController extends Controller
             $playersDouble[$doubleTeam->number][$index]['match_lost_by_wo'] = $doubleTeam->match_lost_by_wo;
             $playersDouble[$doubleTeam->number][$index]['total_difference_set'] = $doubleTeam->total_difference_set;
             $playersDouble[$doubleTeam->number][$index]['total_difference_points'] = $doubleTeam->total_difference_points;
+            $playersDouble[$doubleTeam->number][$index]['userOne_id'] = $doubleTeam->userOne_id;
+            $playersDouble[$doubleTeam->number][$index]['userTwo_id'] = $doubleTeam->userTwo_id;
         }
 
         return $playersDouble;
