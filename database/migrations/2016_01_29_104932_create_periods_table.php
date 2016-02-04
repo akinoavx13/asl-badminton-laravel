@@ -23,6 +23,9 @@ class CreatePeriodsTable extends Migration
             $table->foreign('season_id')->references('id')->on('seasons')->onDelete('cascade')->onUpdate('cascade');
 
             $table->enum('type', ['championship', 'tournament']);
+
+            $table->boolean('championship_simple_woman');
+            $table->boolean('championship_double_woman');
         });
     }
 

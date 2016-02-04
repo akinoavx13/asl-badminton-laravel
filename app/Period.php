@@ -15,6 +15,13 @@ class Period extends Model
         'end',
         'season_id',
         'type',
+        'championship_simple_woman',
+        'championship_double_woman',
+    ];
+
+    protected $casts = [
+        'championship_simple_woman' => 'boolean',
+        'championship_double_woman' => 'boolean',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -51,6 +58,16 @@ class Period extends Model
     public function setEndAttribute($end)
     {
         $this->attributes['end'] = Carbon::createFromFormat('d/m/Y', $end)->format('Y-m-d');
+    }
+
+    public function hasChampionshipSimpleWoman($championshipSimpleWoman)
+    {
+        return $this->championship_simple_woman === $championshipSimpleWoman;
+    }
+
+    public function hasChampionshipDoubleWoman($championshipDoubleWoman)
+    {
+        return $this->championship_double_woman === $championshipDoubleWoman;
     }
 
     /******************/

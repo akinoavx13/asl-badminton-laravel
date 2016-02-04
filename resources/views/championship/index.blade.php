@@ -35,7 +35,7 @@
         </h1>
 
         <hr>
-        @if($setting->hasChampionshipSimpleWoman(true))
+        @if($championship->hasChampionshipSimpleWoman(true))
             @foreach(['man', 'woman'] as $gender)
                 <div class="panel panel-warning">
                     <div class="panel-heading">
@@ -151,7 +151,7 @@
             </div>
         @endif
 
-        @if($setting->hasChampionshipDoubleWoman(true))
+        @if($championship->hasChampionshipDoubleWoman(true))
             @foreach(['man', 'woman'] as $gender)
                 <div class="panel panel-info">
                     <div class="panel-heading">

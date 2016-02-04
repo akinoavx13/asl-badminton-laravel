@@ -23,6 +23,7 @@ class ChampionshipController extends Controller
     {
         parent::__constructor();
     }
+
     /**
      * @param $router
      */
@@ -30,14 +31,12 @@ class ChampionshipController extends Controller
     {
         //championship index
         $router->get('index', [
-            'middleware' => 'settingExists',
             'uses'       => 'ChampionshipController@index',
             'as'         => 'championship.index',
         ]);
 
         //championship index
         $router->post('index', [
-            'middleware' => 'settingExists',
             'uses'       => 'ChampionshipController@index',
             'as'         => 'championship.index',
         ]);
@@ -69,54 +68,53 @@ class ChampionshipController extends Controller
 
         $championships = [];
 
-        foreach (Period::all() as $period)
+        foreach (Period::orderBy('start')->get() as $period)
         {
             $championships[$period->id] = 'Du ' . $period->start->format('l j F Y') . ' au ' . $period->end->format('l j F Y');
         }
 
         if ($activeSeason !== null)
         {
-            $setting = Helpers::getInstance()->setting();
-
-            if($request->isMethod('GET'))
+            if ($request->isMethod('GET'))
             {
                 $championship = Period::current($activeSeason->id, 'championship')->first();
             }
-            elseif($request->isMethod('POST'))
+            elseif ($request->isMethod('POST'))
             {
                 $championship = Period::findOrFail($request->period_id);
             }
 
             $teams = [];
 
-            if($championship !== null)
+            if ($championship !== null)
             {
-                if ($setting->hasChampionshipSimpleWoman(true))
+                if ($championship->hasChampionshipSimpleWoman(true))
                 {
                     $teams['simple']['man'] = $this->getSimpleTeamsViews($activeSeason->id, $championship->id, 'man');
-                    $teams['simple']['woman'] = $this->getSimpleTeamsViews($activeSeason->id, $championship->id, 'woman');
+                    $teams['simple']['woman'] = $this->getSimpleTeamsViews($activeSeason->id, $championship->id,
+                        'woman');
                 }
                 else
                 {
                     $teams['simple'] = $this->getSimpleTeamsViews($activeSeason->id, $championship->id, '', true);
                 }
 
-                if ($setting->hasChampionshipDoubleWoman(true))
+                if ($championship->hasChampionshipDoubleWoman(true))
                 {
                     $teams['double']['man'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id,
                         'double', 'man');
-                    $teams['double']['woman'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id,
-                        'double', 'woman');
+                    $teams['double']['woman'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id,$championship->id, 'double', 'woman');
                 }
                 else
                 {
-                    $teams['double'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id, 'double', '',
+                    $teams['double'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id, 'double',
+                        '',
                         true);
                 }
 
                 $teams['mixte'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id, 'mixte', '');
 
-                return view('championship.index', compact('championship', 'teams', 'setting', 'championships'));
+                return view('championship.index', compact('championship', 'teams', 'championships'));
             }
             else
             {
@@ -253,16 +251,19 @@ class ChampionshipController extends Controller
         $season = Season::active()->first();
 
         $setting = Helpers::getInstance()->setting();
+
         $championshipSimpleWoman = $setting->hasChampionshipSimpleWoman(true) ? true : false;
         $championshipDoubleWoman = $setting->hasChampionshipDoubleWoman(true) ? true : false;
 
         if ($season !== null)
         {
             $period = Period::create([
-                'start'     => $request->start,
-                'end'       => $request->end,
-                'season_id' => $season->id,
-                'type'      => 'championship',
+                'start'                     => $request->start,
+                'end'                       => $request->end,
+                'season_id'                 => $season->id,
+                'type'                      => 'championship',
+                'championship_simple_woman' => $championshipSimpleWoman,
+                'championship_double_woman' => $championshipDoubleWoman,
             ]);
 
             $pools = [];
@@ -286,8 +287,7 @@ class ChampionshipController extends Controller
                 $pools['double_man'] = $this->initPoolsTable($request->pool_number_double_man,
                     $request->exists('pool_number_double_man'));
 
-                $pools['double_woman'] = [];
-                $this->initPoolsTable($request->pool_number_double_woman, $request->exists('pool_number_double_woman'));
+                $pools['double_woman'] = $this->initPoolsTable($request->pool_number_double_woman, $request->exists('pool_number_double_woman'));
             }
             else
             {
@@ -483,10 +483,15 @@ class ChampionshipController extends Controller
     }
 
 
-    private function getDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id, $twice = false)
-    {
+    private function getDoubleOrMixteTeamsLastedChampionship(
+        $type,
+        $gender,
+        $lastedPeriod_id,
+        $season_id,
+        $twice = false
+    ) {
 
-        if($twice)
+        if ($twice)
         {
             $doubleTeams = Team::select('userOne.name as nameOne', 'userOne.forname as fornameOne',
                 'userOne.state as stateOne', 'userOne.ending_holiday as ending_holidayOne',
@@ -541,7 +546,7 @@ class ChampionshipController extends Controller
     {
         foreach ($pools as $pool_number => $teams_id)
         {
-            if($pool_number != 0)
+            if ($pool_number != 0)
             {
                 $pool = ChampionshipPool::create([
                     'number'    => $pool_number,
@@ -580,7 +585,7 @@ class ChampionshipController extends Controller
     {
         foreach ($pools as $pool_number => $pool)
         {
-            if($pool_number !== "")
+            if ($pool_number !== "")
             {
                 foreach ($pool as $first_index => $first_team_id)
                 {
@@ -758,20 +763,20 @@ class ChampionshipController extends Controller
             $playersSimple[$simpleTeam->number]['pool_id'] = $simpleTeam->pool_id;
             $playersSimple[$simpleTeam->number][$index]['rank'] = $simpleTeam->rank;
             $playersSimple[$simpleTeam->number][$index]['name'] = Helpers::getInstance()->getTeamName
-        ($simpleTeam->forname,
+            ($simpleTeam->forname,
                 $simpleTeam->name);
             $playersSimple[$simpleTeam->number][$index]['points'] = $simpleTeam->total_points;
             $playersSimple[$simpleTeam->number][$index]['matchs'] = $simpleTeam->match_played . '/' .
-            $simpleTeam->match_to_play;
+                $simpleTeam->match_to_play;
             $playersSimple[$simpleTeam->number][$index]['match_won'] = $simpleTeam->match_won;
             $playersSimple[$simpleTeam->number][$index]['match_lost'] = $simpleTeam->match_lost;
             $playersSimple[$simpleTeam->number][$index]['match_unplayed'] = $simpleTeam->match_unplayed;
             $playersSimple[$simpleTeam->number][$index]['match_won_by_wo'] = $simpleTeam->match_won_by_wo;
             $playersSimple[$simpleTeam->number][$index]['match_lost_by_wo'] = $simpleTeam->match_lost_by_wo;
             $playersSimple[$simpleTeam->number][$index]['total_difference_set'] =
-            $simpleTeam->total_difference_set;
+                $simpleTeam->total_difference_set;
             $playersSimple[$simpleTeam->number][$index]['total_difference_points'] =
-            $simpleTeam->total_difference_points;
+                $simpleTeam->total_difference_points;
             $playersSimple[$simpleTeam->number][$index]['user_id'] = $simpleTeam->user_id;
         }
 
