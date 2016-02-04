@@ -20,6 +20,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerReservationController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TestimonialController;
@@ -113,4 +114,9 @@ Route::group(['prefix' => 'testimonial', 'middleware' => ['auth', 'notCE']], fun
 Route::group(['prefix' => 'championshipResult', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
 {
     ChampionshipResultController::routes($router);
+});
+
+Route::group(['prefix' => 'scores', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
+{
+    ScoreController::routes($router);
 });

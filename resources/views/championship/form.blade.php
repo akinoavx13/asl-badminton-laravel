@@ -8,11 +8,7 @@
     </div>
     <div class="ibox-content">
 
-        @if($period->exists)
-            {!! Form::open(['route' => ['championship.update', $period->id], 'class' => 'form-horizontal']) !!}
-        @else
-            {!! Form::open(['route' => 'championship.store', 'class' => 'form-horizontal']) !!}
-        @endif
+        {!! Form::open(['route' => 'championship.store', 'class' => 'form-horizontal']) !!}
 
         <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 

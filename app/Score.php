@@ -41,4 +41,29 @@ class Score extends Model
     {
         return $this->belongsTo('App\Team');
     }
+
+    /******************/
+    /*      Has       */
+    /******************/
+
+    public function hasDisplay($display)
+    {
+        return $this->display === $display;
+    }
+
+    public function hasMyWo($my_wo)
+    {
+        return $this->my_wo === $my_wo;
+    }
+
+    public function hasHisWo($his_wo)
+    {
+        return $this->his_wo === $his_wo;
+    }
+
+    public function hasUnplayed($unplayed)
+    {
+        return $this->unplayed === $unplayed;
+    }
+
 }
