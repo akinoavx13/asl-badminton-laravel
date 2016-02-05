@@ -35,6 +35,11 @@ class Season extends Model
         return $this->hasMany('App\Team');
     }
 
+    public function periods()
+    {
+        return $this->hasMany('App\Period');
+    }
+
     /******************/
     /*      Has       */
     /******************/

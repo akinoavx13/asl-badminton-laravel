@@ -26,13 +26,17 @@ class Setting extends Model
         'corpo_external_price',
         'competition_external_price',
         't_shirt_price',
+        'championship_simple_woman',
+        'championship_double_woman',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
 
     protected $casts = [
-        'can_buy_t_shirt' => 'boolean',
-        'can_enroll'      => 'boolean',
+        'can_buy_t_shirt'           => 'boolean',
+        'can_enroll'                => 'boolean',
+        'championship_simple_woman' => 'boolean',
+        'championship_double_woman' => 'boolean',
     ];
 
     /******************/
@@ -47,6 +51,16 @@ class Setting extends Model
     public function hasEnroll($can_enroll)
     {
         return $this->can_enroll === $can_enroll;
+    }
+
+    public function hasChampionshipSimpleWoman($championshipSimpleWoman)
+    {
+        return $this->championship_simple_woman === $championshipSimpleWoman;
+    }
+
+    public function hasChampionshipDoubleWoman($championshipDoubleWoman)
+    {
+        return $this->championship_double_woman === $championshipDoubleWoman;
     }
 
 }

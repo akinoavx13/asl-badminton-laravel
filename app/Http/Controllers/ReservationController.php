@@ -50,21 +50,14 @@ class ReservationController extends Controller
 
         $allDays = Calendar::getAllDaysMonth();
 
-        $firstDay = new Carbon('first day of this month');
-
-        if ($firstDay < Carbon::today())
-        {
-            $firstDay = Carbon::today();
-        }
-
         $lastDayMonth = end($allDays);
 
-        $playerReservations = PlayersReservation::where('date', '>=', $firstDay)
+        $playerReservations = PlayersReservation::where('date', '>=', Carbon::today())
             ->where('date', '<=', $lastDayMonth)
             ->orderBy('date')
             ->get();
 
-        $adminReservations = AdminsReservation::where('start', '>=', $firstDay)
+        $adminReservations = AdminsReservation::where('start', '>=', Carbon::today())
             ->orWhere(function ($query) use ($lastDayMonth)
             {
                 $query->where('end', '<=', $lastDayMonth);

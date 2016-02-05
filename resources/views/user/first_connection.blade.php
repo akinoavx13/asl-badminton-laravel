@@ -84,7 +84,7 @@
                 </div>
 
                 <div class="col-md-9">
-                    {!! Form::text('birthday', old('birthday'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'required']) !!}
+                    {!! Form::text('birthday', old('birthday'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'required', 'placeholder' => 'dd/mm/yyyy']) !!}
                 </div>
             </div>
 
@@ -181,7 +181,7 @@
                 </div>
 
                 <div class="col-md-9">
-                    {!! Form::text('ending_injury', old('ending_injury'), ['class' => 'form-control', 'data-mask' => '99/99/9999']) !!}
+                    {!! Form::text('ending_injury', old('ending_injury'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'placeholder' => 'dd/mm/yyyy']) !!}
                 </div>
             </div>
 
@@ -192,7 +192,7 @@
                 </div>
 
                 <div class="col-md-9">
-                    {!! Form::text('ending_holiday', old('ending_holiday'), ['class' => 'form-control', 'data-mask' => '99/99/9999']) !!}
+                    {!! Form::text('ending_holiday', old('ending_holiday'), ['class' => 'form-control', 'data-mask' => '99/99/9999', 'placeholder' => 'dd/mm/yyyy']) !!}
                 </div>
             </div>
 

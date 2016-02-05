@@ -30,6 +30,8 @@ class SettingTableSeeder extends Seeder
             'corpo_external_price'       => 100,
             'competition_external_price' => 200,
             't_shirt_price'              => 25,
+            'championship_simple_woman'  => false,
+            'championship_double_woman'  => false,
         ]);
     }
 }
