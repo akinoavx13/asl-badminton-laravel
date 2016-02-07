@@ -36,6 +36,9 @@ class CreateScoresTable extends Migration
             $table->boolean('my_wo')->default(false);
             $table->boolean('his_wo')->default(false);
             $table->boolean('unplayed')->default(true);
+
+            $table->boolean('first_team_win')->default(false);
+            $table->boolean('second_team_win')->default(false);
         });
     }
 

@@ -17,13 +17,15 @@ class ScoreController extends Controller
         //patterns
         $router->pattern('score_id', '[0-9]+');
         $router->pattern('pool_id', '[0-9]+');
+        $router->pattern('firstTeamName', '[a-zA-Zéèàê&ïô_-]+');
+        $router->pattern('secondTeamName', '[a-zA-Zéèàê&ïô_-]+');
 
-        $router->get('create/{score_id}/{pool_id}', [
+        $router->get('create/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}', [
             'uses' => 'ScoreController@edit',
             'as'   => 'score.edit',
         ]);
 
-        $router->post('create/{score_id}/{pool_id}', [
+        $router->post('create/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}', [
             'uses' => 'ScoreController@update',
             'as'   => 'score.update',
         ]);
@@ -33,13 +35,17 @@ class ScoreController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param $score_id
+     * @param $pool_id
      * @return \Illuminate\Http\Response
      */
-    public function edit($score_id, $pool_id)
+    public function edit($score_id, $pool_id, $firstTeamName, $secondTeamName)
     {
         $score = Score::findOrFail($score_id);
 
-        return view('score.edit', compact('score', 'pool_id'));
+        $firstTeamName = str_replace('-', ' ', $firstTeamName);
+        $secondTeamName = str_replace('-', ' ', $secondTeamName);
+
+        return view('score.edit', compact('score', 'pool_id', 'firstTeamName', 'secondTeamName'));
     }
 
     /**
@@ -49,8 +55,9 @@ class ScoreController extends Controller
      * @param $score_id
      * @return \Illuminate\Http\Response
      */
-    public function update(ScoreUpdateRequest $request, $score_id, $pool_id)
+    public function update(ScoreUpdateRequest $request, $score_id, $pool_id, $firstTeamName, $secondTeamName)
     {
+
         $score = Score::findOrFail($score_id);
 
         $firstSet = [
@@ -68,55 +75,61 @@ class ScoreController extends Controller
             'secondTeam' => $request->third_set_second_team,
         ];
 
-        if($request->unplayed)
+        if ($request->exists('unplayed') && $request->unplayed)
         {
             $score->update([
                 'first_set_first_team'   => 0,
                 'first_set_second_team'  => 0,
                 'second_set_first_team'  => 0,
                 'second_set_second_team' => 0,
-                'third_set_first_team'   => 0,
-                'third_set_second_team'  => 0,
+                'third_set_first_team'   => null,
+                'third_set_second_team'  => null,
                 'my_wo'                  => false,
                 'his_wo'                 => false,
                 'unplayed'               => true,
                 'display'                => true,
+                'first_team_win'         => false,
+                'second_team_win'        => false,
             ]);
 
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
 
-        if($request->my_wo)
+        if ($request->exists('my_wo') && $request->my_wo == "my_wo")
         {
             $score->update([
                 'first_set_first_team'   => 0,
                 'first_set_second_team'  => 0,
                 'second_set_first_team'  => 0,
                 'second_set_second_team' => 0,
-                'third_set_first_team'   => 0,
-                'third_set_second_team'  => 0,
+                'third_set_first_team'   => null,
+                'third_set_second_team'  => null,
                 'my_wo'                  => true,
                 'his_wo'                 => false,
                 'unplayed'               => false,
                 'display'                => true,
+                'first_team_win'         => false,
+                'second_team_win'        => true,
             ]);
 
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
 
-        if($request->his_wo)
+        if ($request->exists('his_wo') && $request->his_wo == "his_wo")
         {
             $score->update([
                 'first_set_first_team'   => 0,
                 'first_set_second_team'  => 0,
                 'second_set_first_team'  => 0,
                 'second_set_second_team' => 0,
-                'third_set_first_team'   => 0,
-                'third_set_second_team'  => 0,
+                'third_set_first_team'   => null,
+                'third_set_second_team'  => null,
                 'my_wo'                  => false,
                 'his_wo'                 => true,
                 'unplayed'               => false,
                 'display'                => true,
+                'first_team_win'         => true,
+                'second_team_win'        => false,
             ]);
 
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
@@ -126,6 +139,9 @@ class ScoreController extends Controller
 
         if ($message == 'valid')
         {
+
+            $winner = $this->getWinner($firstSet, $secondSet, $thirdSet);
+
             $score->update([
                 'first_set_first_team'   => $request->first_set_first_team,
                 'first_set_second_team'  => $request->first_set_second_team,
@@ -139,6 +155,8 @@ class ScoreController extends Controller
                 'his_wo'                 => false,
                 'unplayed'               => false,
                 'display'                => true,
+                'first_team_win'         => $winner == "firstTeam" ? true : false,
+                'second_team_win'        => $winner == "secondTeam" ? true : false,
             ]);
 
 //            $rankFirstTeam = $score
@@ -349,5 +367,56 @@ class ScoreController extends Controller
         }
 
         return $result;
+    }
+
+    private function getWinner($firstSet, $secondSet, $thirdSet)
+    {
+        $winnerFirstSet = null;
+        $winnerSecondSet = null;
+        $winnerThirdSet = null;
+
+        if ($firstSet['firstTeam'] > $firstSet['secondTeam'])
+        {
+            $winnerFirstSet = "firstTeam";
+        }
+        elseif ($firstSet['firstTeam'] < $firstSet['secondTeam'])
+        {
+            $winnerFirstSet = "secondTeam";
+        }
+
+        if ($secondSet['firstTeam'] > $secondSet['secondTeam'])
+        {
+            $winnerSecondSet = "firstTeam";
+        }
+        elseif ($secondSet['firstTeam'] < $secondSet['secondTeam'])
+        {
+            $winnerSecondSet = "secondTeam";
+        }
+
+        if ($winnerFirstSet == $winnerSecondSet)
+        {
+            return $winnerFirstSet;
+        }
+        else
+        {
+            if ($thirdSet['firstTeam'] > $thirdSet['secondTeam'])
+            {
+                $winnerThirdSet = "firstTeam";
+            }
+            elseif ($thirdSet['firstTeam'] < $thirdSet['secondTeam'])
+            {
+                $winnerThirdSet = "secondTeam";
+            }
+
+            if ($winnerFirstSet == $winnerThirdSet)
+            {
+                return $winnerFirstSet;
+            }
+            else
+            {
+                return $winnerSecondSet;
+            }
+
+        }
     }
 }

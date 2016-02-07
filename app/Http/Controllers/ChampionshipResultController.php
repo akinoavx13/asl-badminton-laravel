@@ -70,17 +70,9 @@ class ChampionshipResultController extends Controller
                 'userSecondTeam.forname as userSecondTeamForname', 'userSecondTeam.id as userSecondTeamId',
                 'scores.first_set_first_team', 'scores.first_set_second_team', 'scores.second_set_first_team',
                 'scores.second_set_second_team', 'scores.third_set_first_team', 'scores.third_set_second_team',
-                'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId')
-                ->join('teams as firstTeam', 'firstTeam.id', '=', 'scores.first_team_id')
-                ->join('players as playerFirstTeam', 'playerFirstTeam.id', '=', 'firstTeam.player_one')
-                ->join('users as userFirstTeam', 'userFirstTeam.id', '=', 'playerFirstTeam.user_id')
-                ->join('teams as secondTeam', 'secondTeam.id', '=', 'scores.second_team_id')
-                ->join('players as playerSecondTeam', 'playerSecondTeam.id', '=', 'secondTeam.player_one')
-                ->join('users as userSecondTeam', 'userSecondTeam.id', '=', 'playerSecondTeam.user_id')
-                ->join('championship_rankings as rankingFirstTeam', 'rankingFirstTeam.team_id', '=', 'firstTeam.id')
-                ->join('championship_rankings as rankingSecondTeam', 'rankingSecondTeam.team_id', '=', 'secondTeam.id')
-                ->where('rankingFirstTeam.championship_pool_id', $pool_id)
-                ->where('rankingSecondTeam.championship_pool_id', $pool_id)
+                'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId',
+                'scores.first_team_win', 'scores.second_team_win')
+                ->allScoresSimpleInSelectedPool($pool_id)
                 ->get();
         }
         else
@@ -94,21 +86,9 @@ class ChampionshipResultController extends Controller
                 'userTwoSecondTeam.forname as userTwoSecondTeamForname', 'userTwoSecondTeam.id as userTwoSecondTeamId',
                 'scores.first_set_first_team', 'scores.first_set_second_team', 'scores.second_set_first_team',
                 'scores.second_set_second_team', 'scores.third_set_first_team', 'scores.third_set_second_team',
-                'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId')
-                ->join('teams as firstTeam', 'firstTeam.id', '=', 'scores.first_team_id')
-                ->join('players as playerOneFirstTeam', 'playerOneFirstTeam.id', '=', 'firstTeam.player_one')
-                ->join('users as userOneFirstTeam', 'userOneFirstTeam.id', '=', 'playerOneFirstTeam.user_id')
-                ->join('players as playerTwoFirstTeam', 'playerTwoFirstTeam.id', '=', 'firstTeam.player_two')
-                ->join('users as userTwoFirstTeam', 'userTwoFirstTeam.id', '=', 'playerTwoFirstTeam.user_id')
-                ->join('teams as secondTeam', 'secondTeam.id', '=', 'scores.second_team_id')
-                ->join('players as playerOneSecondTeam', 'playerOneSecondTeam.id', '=', 'secondTeam.player_one')
-                ->join('users as userOneSecondTeam', 'userOneSecondTeam.id', '=', 'playerOneSecondTeam.user_id')
-                ->join('players as playerTwoSecondTeam', 'playerTwoSecondTeam.id', '=', 'secondTeam.player_two')
-                ->join('users as userTwoSecondTeam', 'userTwoSecondTeam.id', '=', 'playerTwoSecondTeam.user_id')
-                ->join('championship_rankings as rankingFirstTeam', 'rankingFirstTeam.team_id', '=', 'firstTeam.id')
-                ->join('championship_rankings as rankingSecondTeam', 'rankingSecondTeam.team_id', '=', 'secondTeam.id')
-                ->where('rankingFirstTeam.championship_pool_id', $pool_id)
-                ->where('rankingSecondTeam.championship_pool_id', $pool_id)
+                'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId',
+                'scores.first_team_win', 'scores.second_team_win')
+                ->allScoresDoubleOrMixteInSelectedPool($pool_id)
                 ->get();
         }
 
@@ -148,6 +128,9 @@ class ChampionshipResultController extends Controller
             $results[$index]['his_wo'] = $score->his_wo;
             $results[$index]['unplayed'] = $score->unplayed;
             $results[$index]['scoreId'] = $score->scoreId;
+
+            $results[$index]['firstTeamWin'] = $score->first_team_win;
+            $results[$index]['secondTeamWin'] = $score->second_team_win;
         }
 
         return $results;
