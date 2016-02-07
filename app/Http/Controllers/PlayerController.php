@@ -142,6 +142,30 @@ class PlayerController extends Controller
      */
     public function create()
     {
+
+        $alreadySubscribe = false;
+
+        //on s'inscrit dans la saison active
+        $activeSeason = Season::active()->first();
+
+        //si il y a pas encore de saison
+        if ($activeSeason === null)
+        {
+            return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouverte !");
+        }
+
+        //compte le nombre d'inscription dans lesquels on est inscrit
+        $numberOfPlayerForUserInSelectedSeason = Player::select('players.id')
+            ->withSeason($activeSeason->id)
+            ->where('user_id', $this->user->id)
+            ->count();
+
+        //si on a plus de 1 inscription
+        if ($numberOfPlayerForUserInSelectedSeason >= 1)
+        {
+            $alreadySubscribe = true;
+        }
+
         $player = new Player();
         $setting = Helpers::getInstance()->setting();
 
@@ -150,7 +174,7 @@ class PlayerController extends Controller
         $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id);
         $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id);
 
-        return view('player.create', compact('player', 'setting', 'listPartnerAvailable'));
+        return view('player.create', compact('player', 'setting', 'listPartnerAvailable', 'alreadySubscribe'));
     }
 
     /**
