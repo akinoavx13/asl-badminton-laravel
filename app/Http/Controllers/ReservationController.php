@@ -57,11 +57,14 @@ class ReservationController extends Controller
             ->orderBy('date')
             ->get();
 
-        $adminReservations = AdminsReservation::where('start', '>=', Carbon::today())
-            ->orWhere(function ($query) use ($lastDayMonth)
-            {
-                $query->where('end', '<=', $lastDayMonth);
-            })
+        $adminReservationsNotRecurring = AdminsReservation::whereNull('end')
+            ->where('start', '<=', $lastDayMonth)
+            ->orderBy('start')
+            ->get();
+
+        $adminReservationsRecurring = AdminsReservation::where('end', '>=', Carbon::today())
+            ->where('start', '<=', $lastDayMonth)
+            ->where('recurring', true)
             ->orderBy('start')
             ->get();
 
@@ -182,27 +185,115 @@ class ReservationController extends Controller
             }
         }
 
-        if (count($adminReservations) > 0)
+        if (count($adminReservationsNotRecurring) > 0)
         {
-            foreach ($adminReservations as $adminReservation)
+            foreach ($adminReservationsNotRecurring as $adminReservationNotRecurring)
             {
-                foreach ($adminReservation->courts as $court)
+                foreach ($adminReservationNotRecurring->courts as $court)
                 {
-                    foreach ($adminReservation->timeSlots as $timeSlot)
+                    foreach ($adminReservationNotRecurring->timeSlots as $timeSlot)
                     {
-                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['name'] = $adminReservation->title;
-                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['content'] =
-                            $adminReservation->comment;
-                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['user_id'] =
-                            $adminReservation->user_id;
-                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['reservation_id'] =
-                            $adminReservation->id;
-                        $reservations[$adminReservation->start][$timeSlot->id][$court->id]['type'] =
+                        $reservations[$adminReservationNotRecurring->start->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
+                            $adminReservationNotRecurring->title;
+                        $reservations[$adminReservationNotRecurring->start->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
+                            $adminReservationNotRecurring->comment;
+                        $reservations[$adminReservationNotRecurring->start->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] =
+                            $adminReservationNotRecurring->user_id;
+                        $reservations[$adminReservationNotRecurring->start->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id'] =
+                            $adminReservationNotRecurring->id;
+                        $reservations[$adminReservationNotRecurring->start->format('Y-m-d')][$timeSlot->id][$court->id]['type'] =
                             'admin';
                     }
                 }
             }
         }
+
+        if (count($adminReservationsRecurring) > 0)
+        {
+            foreach ($adminReservationsRecurring as $adminReservationRecurring)
+            {
+                foreach ($adminReservationRecurring->courts as $court)
+                {
+                    foreach ($adminReservationRecurring->timeSlots as $timeSlot)
+                    {
+                        $day = Carbon::create($adminReservationRecurring->start->year,
+                        $adminReservationRecurring->start->month, $adminReservationRecurring->start->day);
+
+                        while ($day <= $adminReservationRecurring->end)
+                        {
+                            if($adminReservationRecurring->monday == true && $day->isMonday())
+                            {
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
+                                    $adminReservationRecurring->title;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
+                                    $adminReservationRecurring->comment;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] =
+                                    $adminReservationRecurring->user_id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id'] =
+                                    $adminReservationRecurring->id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] =
+                                    'admin';
+                            }
+                            if($adminReservationRecurring->tuesday == true && $day->isTuesday())
+                            {
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
+                                    $adminReservationRecurring->title;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
+                                    $adminReservationRecurring->comment;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] =
+                                    $adminReservationRecurring->user_id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id'] =
+                                    $adminReservationRecurring->id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] =
+                                    'admin';
+                            }
+                            if($adminReservationRecurring->wednesday == true && $day->isWednesday())
+                            {
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
+                                    $adminReservationRecurring->title;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
+                                    $adminReservationRecurring->comment;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] =
+                                    $adminReservationRecurring->user_id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id'] =
+                                    $adminReservationRecurring->id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] =
+                                    'admin';
+                            }
+                            if($adminReservationRecurring->thursday == true && $day->isThursday())
+                            {
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
+                                    $adminReservationRecurring->title;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
+                                    $adminReservationRecurring->comment;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] =
+                                    $adminReservationRecurring->user_id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id'] =
+                                    $adminReservationRecurring->id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] =
+                                    'admin';
+                            }
+                            if($adminReservationRecurring->friday == true && $day->isFriday())
+                            {
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
+                                    $adminReservationRecurring->title;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
+                                    $adminReservationRecurring->comment;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] =
+                                    $adminReservationRecurring->user_id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id'] =
+                                    $adminReservationRecurring->id;
+                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] =
+                                    'admin';
+                            }
+
+                            $day->addDay();
+                        }
+                    }
+                }
+            }
+        }
+
 
         return view('reservation.index',
             compact('timeSlots', 'courts', 'allDays', 'reservations', 'courtSimpleAvailable', 'courtDoubleAvailable',
