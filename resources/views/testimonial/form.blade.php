@@ -24,8 +24,21 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#summernote').summernote({
-                height: "500px"
+                height: "500px",
+                disableDragAndDrop: true,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ]
             });
+
         });
         var postForm = function() {
             var content = $('textarea[name="content"]').html($('#summernote').code());
