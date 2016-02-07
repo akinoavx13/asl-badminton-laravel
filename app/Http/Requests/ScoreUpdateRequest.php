@@ -16,7 +16,7 @@ class ScoreUpdateRequest extends Request
     {
         $player = Helpers::getInstance()->myPlayer();
 
-        if(Helpers::getInstance()->auth()->hasRole('admin'))
+        if (Helpers::getInstance()->auth()->hasRole('admin'))
         {
             return true;
         }
@@ -41,9 +41,7 @@ class ScoreUpdateRequest extends Request
     public function rules()
     {
         return [
-            'my_wo' => 'required|boolean',
-            'his_wo' => 'required|boolean',
-            'unplayed' => 'required|boolean',
+            //
         ];
     }
 }

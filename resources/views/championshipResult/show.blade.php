@@ -19,14 +19,30 @@
                     <th class="text-center">Troisième set</th>
                     <th class="text-center">Mon forfait</th>
                     <th class="text-center">Son forfait</th>
-                    <th class="text-center">Pas joué</th>
+                    <th class="text-center">Joué</th>
                     <th class="text-center">Éditer</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($results as $result)
                     <tr class="text-center {{ $result['owner'] ? 'text-danger' : '' }}">
-                        <td>{{ $result['firstTeam'] }} <span class="font-bold"> VS </span> {{ $result['secondTeam'] }}</td>
+                        <td>
+                            @if($result['firstTeamWin'])
+                                <span class="btn btn-primary btn-rounded">
+                                    {{ $result['firstTeam'] }}
+                                </span>
+                            @else
+                                {{ $result['firstTeam'] }}
+                            @endif
+                            <span class="font-bold text-info"> VS </span>
+                            @if($result['secondTeamWin'])
+                                <span class="btn btn-primary btn-rounded">
+                                {{ $result['secondTeam'] }}
+                            </span>
+                            @else
+                                {{ $result['secondTeam'] }}
+                            @endif
+                        </td>
                         <td>{{ $result['first_set_first_team'] }} / {{ $result['first_set_second_team'] }}</td>
                         <td>{{ $result['second_set_first_team'] }} / {{ $result['second_set_second_team'] }}</td>
                         <td>
@@ -50,14 +66,17 @@
                             @endif
                         </td>
                         <td>@if($result['unplayed'])
-                                <span class="fa fa-check text-info"></span>
-                            @else
                                 <span class="fa fa-times text-danger"></span>
+                            @else
+                                <span class="fa fa-check text-info"></span>
                             @endif
                         </td>
                         <td>
                             @if($result['owner'] || $auth->hasRole('admin'))
-                                <a href="{{ route('score.edit', [$result['scoreId'], $pool->id]) }}" class="btn btn-primary"><span class="fa fa-edit"></span></a>
+                                <a href="{{ route('score.edit', [$result['scoreId'], $pool->id,
+                                str_replace(' ', '-', $result['firstTeam']), str_replace(' ', '-', $result['secondTeam'])]) }}"
+                                   class="btn btn-primary"><span
+                                            class="fa fa-edit"></span></a>
                             @else
                                 <span class="fa fa-times text-danger"></span>
                             @endif
@@ -68,6 +87,4 @@
             </table>
         </div>
     </div>
-
-
 @stop
