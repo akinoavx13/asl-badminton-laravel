@@ -1,4 +1,8 @@
-@extends('emails.email-layout')
+@extends('emails.layout')
+
+@section('title')
+    Nouvelle inscription
+@stop
 
 @section('content')
     <p>Bonjour {{ $forname }} {{ $name }}</p>

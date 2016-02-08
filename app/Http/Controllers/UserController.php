@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Requests\UserFirstConnectionRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Utilities\SendMail;
 use App\Player;
 use App\Season;
 use App\User;
@@ -153,15 +154,7 @@ class UserController extends Controller
             'ending_holiday'         => Carbon::now()->format('d/m/Y'),
         ]);
 
-        if (Helpers::getInstance()->canSendMail())
-        {
-            Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
-            {
-                $message->from(Helpers::getInstance()->fromAddressMail(), Helpers::getInstance()->fromNameMail());
-                $message->to($user->email, $user)
-                    ->subject('Création de compte AS Lectra Badminton')->cc(Helpers::getInstance()->ccMail());
-            });
-        }
+        SendMail::send($this->user, 'userStore', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");
     }
@@ -363,15 +356,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        if (Helpers::getInstance()->canSendMail())
-        {
-            Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
-            {
-                $message->from(Helpers::getInstance()->fromAddressMail(), Helpers::getInstance()->fromNameMail());
-                $message->to($user->email, $user)
-                    ->subject('Création de compte AS Lectra Badminton')->cc(Helpers::getInstance()->ccMail());
-            });
-        }
+        SendMail::send($this->user, 'userStore', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "Un autre email vient d'être envoyé à $user !");
     }

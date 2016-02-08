@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Http\Utilities\SendMail;
 use App\Score;
 
 /**
@@ -13,6 +14,11 @@ use App\Score;
  */
 class HomeController extends Controller
 {
+
+    public function __construct()
+    {
+        parent::__constructor();
+    }
 
     /**
      * @param $router
@@ -33,6 +39,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        SendMail::send($this->user, 'test', [], 'toto');
 
         $scores = Score::select(
             'userOneTeamOne.name as userOneTeamOne_name',
