@@ -40,8 +40,6 @@ class HomeController extends Controller
     public function index()
     {
 
-        SendMail::send($this->user, 'test', [], 'toto');
-
         $scores = Score::select(
             'userOneTeamOne.name as userOneTeamOne_name',
             'userOneTeamOne.forname as userOneTeamOne_forname',

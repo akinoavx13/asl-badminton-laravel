@@ -20,6 +20,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerReservationController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RopeController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SettingController;
@@ -119,4 +120,9 @@ Route::group(['prefix' => 'championshipResult', 'middleware' => ['auth', 'notCE'
 Route::group(['prefix' => 'scores', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
 {
     ScoreController::routes($router);
+});
+
+Route::group(['prefix' => 'rope', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    RopeController::routes($router);
 });
