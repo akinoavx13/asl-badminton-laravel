@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\ActualityController;
 use App\Http\Controllers\AdminReservationController;
 use App\Http\Controllers\CeController;
 use App\Http\Controllers\ChampionshipController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\CourtController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerReservationController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RopeController;
 use App\Http\Controllers\ScoreController;
@@ -125,4 +127,14 @@ Route::group(['prefix' => 'scores', 'middleware' => ['auth', 'notCE', 'notLeisur
 Route::group(['prefix' => 'rope', 'middleware' => ['auth', 'notCE']], function () use ($router)
 {
     RopeController::routes($router);
+});
+
+Route::group(['prefix' => 'actuality', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    ActualityController::routes($router);
+});
+
+Route::group(['prefix' => 'post', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    PostController::routes($router);
 });

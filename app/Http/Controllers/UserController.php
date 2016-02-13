@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers;
 use App\Http\Requests;
+use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserFirstConnectionRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -109,6 +110,20 @@ class UserController extends Controller
             'as'         => 'user.send_creation_link',
         ]);
 
+        //users create
+        $router->get('/changePassword/{user_id}', [
+            'middleware' => ['userOwner'],
+            'uses' => 'UserController@changePassword',
+            'as'   => 'user.changePassword',
+        ]);
+
+        //users store
+        $router->post('/changePassword/{user_id}', [
+            'middleware' => ['userOwner'],
+            'uses' => 'UserController@updatePassword',
+            'as'   => 'user.updatePassword',
+        ]);
+
     }
 
     /**
@@ -211,7 +226,6 @@ class UserController extends Controller
             'state'               => $request->state,
             'lectra_relationship' => $request->lectra_relationship,
             'newsletter'          => $request->newsletter,
-            'password'            => $request->password !== "" ? bcrypt($request->password) : $user->password,
             'avatar'              => $request->avatar,
         ]);
 
@@ -359,6 +373,23 @@ class UserController extends Controller
         SendMail::send($this->user, 'userStore', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "Un autre email vient d'être envoyé à $user !");
+    }
+
+    public function changePassword($user_id)
+    {
+        return view('user.changePassword', compact('user_id'));
+    }
+
+    public function updatePassword(UserChangePasswordRequest $request, $user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        $user->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->route('user.show', $user_id)->with('success', "Le mot de passe a bien été changé !");
+
     }
 }
 

@@ -8,7 +8,10 @@
 
     <h1 class="text-center">Les derniers matchs</h1>
 
-    <div class="rox">
+    @include('actuality.create')
+    <hr>
+
+    <div class="row">
         <div class="col-md-8">
             @if(count($scores) > 0)
                 <hr>
@@ -99,6 +102,10 @@
                     Pas encore de match
                 </h2>
             @endif
+        </div>
+
+        <div class="col-md-4">
+            @include('actuality.index')
         </div>
     </div>
 @stop

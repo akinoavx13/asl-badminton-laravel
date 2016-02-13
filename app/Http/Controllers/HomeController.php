@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actuality;
 use App\Http\Requests;
 use App\Http\Utilities\SendMail;
+use App\Post;
 use App\Score;
+use Jenssegers\Date\Date;
 
 /**
  * View scores
@@ -74,6 +77,58 @@ class HomeController extends Controller
             ->orderBy('scores.updated_at', 'desc')
             ->paginate(15);
 
-        return view('home.index', compact('scores'));
+        $actus = Actuality::select('users.name', 'users.forname', 'users.avatar',
+            'actualities.title', 'actualities.content', 'actualities.photo', 'actualities.user_id',
+            'actualities.created_at', 'actualities.id')
+            ->join('users', 'users.id', '=', 'actualities.user_id')
+            ->orderBy('actualities.created_at', 'desc')
+            ->take(15)
+            ->get();
+
+        $posts = Post::select('users.name', 'users.forname', 'users.avatar', 'posts.content', 'posts.user_id',
+            'posts.photo', 'posts.created_at', 'posts.actuality_id', 'posts.id')
+            ->join('users', 'users.id', '=', 'posts.user_id')
+            ->orderBy('posts.created_at', 'asc')
+            ->get();
+
+        $actualities = [];
+
+        foreach ($actus as $index => $actuality)
+        {
+            $actualities[$index]['userName'] = $actuality->forname . ' ' . $actuality->name;
+            $actualities[$index]['userAvatar'] = $actuality->avatar ? "/img/avatars/{$actuality->user_id}.jpg" :
+                'img/anonymous.png';
+            $actualities[$index]['userId'] = $actuality->user_id;
+            $actualities[$index]['title'] = $actuality->title;
+            $actualities[$index]['content'] = $actuality->content;
+            $actualities[$index]['photo'] = $actuality->photo;
+            $actualities[$index]['createdAt'] = ucfirst(Date::create($actuality->created_at->year,
+                $actuality->created_at->month,
+                $actuality->created_at->day, $actuality->created_at->hour, $actuality->created_at->minute,
+                $actuality->created_at->second)->ago());
+            $actualities[$index]['actualityId'] = $actuality->id;
+            $actualities[$index]['posts'] = null;
+
+            foreach ($posts as $indexPost => $post)
+            {
+                if ($post->actuality_id == $actuality->id)
+                {
+                    $actualities[$index]['posts'][$indexPost]['postId'] = $post->id;
+                    $actualities[$index]['posts'][$indexPost]['userId'] = $post->user_id;
+                    $actualities[$index]['posts'][$indexPost]['userName'] = $post->forname . ' ' . $post->name;
+                    $actualities[$index]['posts'][$indexPost]['userAvatar'] = $post->avatar ?
+                        "/img/avatars/{$post->user_id}.jpg" :
+                        'img/anonymous.png';
+                    $actualities[$index]['posts'][$indexPost]['content'] = $post->content;
+                    $actualities[$index]['posts'][$indexPost]['photo'] = $post->photo;
+                    $actualities[$index]['posts'][$indexPost]['createdAt'] = ucfirst(Date::create($post->created_at->year,
+                        $post->created_at->month,
+                        $post->created_at->day, $post->created_at->hour, $post->created_at->minute,
+                        $post->created_at->second)->ago());
+                }
+            }
+        }
+
+        return view('home.index', compact('scores', 'actualities'));
     }
 }
