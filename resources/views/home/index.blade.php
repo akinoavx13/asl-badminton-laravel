@@ -52,7 +52,7 @@
                                         {{ $score->second_set_first_team }}
                                         <span class="text-danger">/</span>
                                         {{ $score->second_set_second_team }}
-                                        @if($score->third_set_first_team != null && $score->third_set_second_team != null)
+                                        @if($score->third_set_first_team != 0 && $score->third_set_second_team != 0)
                                             -
                                             {{ $score->third_set_first_team }}
                                             <span class="text-danger">/</span>
@@ -72,7 +72,7 @@
                                         </span>
                                     @else
                                         {{ $score->userOneTeamTwo_forname }} {{ $score->userOneTeamTwo_name }}
-                                        @if($score->userTwoTeamTwo_forname != null && $score->userTwoTeamTwo_name != null)
+                                        @if($score->userTwoTeamTwo_forname != 0 && $score->userTwoTeamTwo_name != 0)
                                             <span style="font-weight: bold;">&</span>
                                             <br>
                                             {{ $score->userTwoTeamTwo_forname }} {{ $score->userTwoTeamTwo_name }}

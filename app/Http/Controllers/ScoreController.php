@@ -82,8 +82,8 @@ class ScoreController extends Controller
                 'first_set_second_team'  => 0,
                 'second_set_first_team'  => 0,
                 'second_set_second_team' => 0,
-                'third_set_first_team'   => null,
-                'third_set_second_team'  => null,
+                'third_set_first_team'   => 0,
+                'third_set_second_team'  => 0,
                 'my_wo'                  => false,
                 'his_wo'                 => false,
                 'unplayed'               => true,
@@ -99,11 +99,11 @@ class ScoreController extends Controller
         {
             $score->update([
                 'first_set_first_team'   => 0,
-                'first_set_second_team'  => 0,
+                'first_set_second_team'  => 21,
                 'second_set_first_team'  => 0,
-                'second_set_second_team' => 0,
-                'third_set_first_team'   => null,
-                'third_set_second_team'  => null,
+                'second_set_second_team' => 21,
+                'third_set_first_team'   => 0,
+                'third_set_second_team'  => 0,
                 'my_wo'                  => true,
                 'his_wo'                 => false,
                 'unplayed'               => false,
@@ -118,12 +118,12 @@ class ScoreController extends Controller
         if ($request->exists('his_wo') && $request->his_wo == "his_wo")
         {
             $score->update([
-                'first_set_first_team'   => 0,
+                'first_set_first_team'   => 21,
                 'first_set_second_team'  => 0,
-                'second_set_first_team'  => 0,
+                'second_set_first_team'  => 21,
                 'second_set_second_team' => 0,
-                'third_set_first_team'   => null,
-                'third_set_second_team'  => null,
+                'third_set_first_team'   => 0,
+                'third_set_second_team'  => 0,
                 'my_wo'                  => false,
                 'his_wo'                 => true,
                 'unplayed'               => false,
@@ -159,19 +159,7 @@ class ScoreController extends Controller
                 'second_team_win'        => $winner == "secondTeam" ? true : false,
             ]);
 
-//            $rankFirstTeam = $score
-//                ->firstTeam()
-//                ->first()
-//                ->championshipRanks()
-//                ->where('championship_pool_id', $pool_id)
-//                ->first();
-//
-//            $rankSecondTeam = $score
-//                ->secondTeam()
-//                ->first()
-//                ->championshipRanks()
-//                ->where('championship_pool_id', $pool_id)
-//                ->first();
+            $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
@@ -418,5 +406,23 @@ class ScoreController extends Controller
             }
 
         }
+    }
+
+    private function updateRankings($pool_id, $first_team_id, $second_team_id)
+    {
+        $allScoresFirstTeam = Score::select('scores.*')
+            ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+            ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
+            ->where('championship_rankings.championship_pool_id', $pool_id)
+            ->where('scores.first_team_id', $first_team_id)
+            ->get();
+
+        $allScoresSecondTeam = Score::select('scores.*')
+            ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+            ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
+            ->where('championship_rankings.championship_pool_id', $pool_id)
+            ->where('scores.second_team_id', $second_team_id)
+            ->get();
+
     }
 }

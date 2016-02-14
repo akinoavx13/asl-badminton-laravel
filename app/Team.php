@@ -22,12 +22,12 @@ class Team extends Model
     ];
 
     protected $casts = [
-        'simple_man'   => 'boolean',
+        'simple_man' => 'boolean',
         'simple_woman' => 'boolean',
-        'double_man'   => 'boolean',
+        'double_man' => 'boolean',
         'double_woman' => 'boolean',
-        'mixte'        => 'boolean',
-        'enable'       => 'boolean',
+        'mixte' => 'boolean',
+        'enable' => 'boolean',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -92,6 +92,25 @@ class Team extends Model
             ->where('teams.season_id', $season_id);
     }
 
+    public function scopeAllSimpleTeamsNoGender($query, $season_id)
+    {
+        $query->join('players', 'players.id', '=', 'teams.player_one')
+            ->join('users', 'players.user_id', '=', 'users.id')
+            ->whereNotNull('teams.player_one')
+            ->whereNull('teams.player_two')
+            ->where('teams.enable', true)
+            ->where('teams.season_id', $season_id)
+            ->where('teams.simple_man', true)
+            ->orWhere(function ($query) use ($season_id)
+            {
+                $query->whereNotNull('teams.player_one')
+                ->whereNull('teams.player_two')
+                ->where('teams.enable', true)
+                ->where('teams.season_id', $season_id)
+                ->where('teams.simple_woman', true);
+            });
+    }
+
     public function scopeMySimpleTeams($query, $gender, $player_id, $season_id)
     {
         $query->join('players', 'players.id', '=', 'teams.player_one')
@@ -130,29 +149,34 @@ class Team extends Model
     public function scopeAllSimpleTeamsLastedChampionshipNoGender($query, $lastedPeriod_id, $activeSeason_id)
     {
         $query->join('players', 'players.id', '=', 'teams.player_one')
-        ->join('users', 'players.user_id', '=', 'users.id')
-        ->join('championship_rankings', 'teams.id', '=', 'championship_rankings.team_id')
-        ->join('championship_pools', 'championship_rankings.championship_pool_id', '=',
-            'championship_pools.id')
-        ->where('championship_pools.period_id', $lastedPeriod_id)
-        ->where('teams.season_id', $activeSeason_id)
-        ->where('teams.simple_man', true)
-        ->whereNotNull('teams.player_one')
-        ->whereNull('teams.player_two')
-        ->where('teams.enable', true)
-        ->orWhere(function ($query) use ($activeSeason_id, $lastedPeriod_id)
-        {
-            $query->where('championship_pools.period_id', $lastedPeriod_id)
-                ->where('teams.season_id', $activeSeason_id)
-                ->where('teams.simple_woman', true)
-                ->whereNotNull('teams.player_one')
-                ->whereNull('teams.player_two')
-                ->where('teams.enable', true);
-        });
+            ->join('users', 'players.user_id', '=', 'users.id')
+            ->join('championship_rankings', 'teams.id', '=', 'championship_rankings.team_id')
+            ->join('championship_pools', 'championship_rankings.championship_pool_id', '=',
+                'championship_pools.id')
+            ->where('championship_pools.period_id', $lastedPeriod_id)
+            ->where('teams.season_id', $activeSeason_id)
+            ->where('teams.simple_man', true)
+            ->whereNotNull('teams.player_one')
+            ->whereNull('teams.player_two')
+            ->where('teams.enable', true)
+            ->orWhere(function ($query) use ($activeSeason_id, $lastedPeriod_id)
+            {
+                $query->where('championship_pools.period_id', $lastedPeriod_id)
+                    ->where('teams.season_id', $activeSeason_id)
+                    ->where('teams.simple_woman', true)
+                    ->whereNotNull('teams.player_one')
+                    ->whereNull('teams.player_two')
+                    ->where('teams.enable', true);
+            });
     }
 
-    public function scopeAllDoubleOrMixteTeamsLastedChampionship($query, $type, $gender, $lastedPeriod_id, $activeSeason_id)
-    {
+    public function scopeAllDoubleOrMixteTeamsLastedChampionship(
+        $query,
+        $type,
+        $gender,
+        $lastedPeriod_id,
+        $activeSeason_id
+    ) {
         $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
             ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
             ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
@@ -173,8 +197,12 @@ class Team extends Model
             });
     }
 
-    public function scopeAllDoubleOrMixteTeamsLastedChampionshipNoGender($query, $type, $lastedPeriod_id, $activeSeason_id)
-    {
+    public function scopeAllDoubleOrMixteTeamsLastedChampionshipNoGender(
+        $query,
+        $type,
+        $lastedPeriod_id,
+        $activeSeason_id
+    ) {
         $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
             ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
             ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
@@ -242,6 +270,23 @@ class Team extends Model
             {
                 $query->where('teams.season_id', $season_id)
                     ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
+                    ->where('teams.enable', true);
+            });
+    }
+
+    public function scopeAllDoubleOrMixteActiveTeamsNoGender($query, $type, $season_id)
+    {
+        $query->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
+            ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
+            ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+            ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.user_id')
+            ->where('teams.season_id', $season_id)
+            ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_man'), true)
+            ->where('teams.enable', true)
+            ->orWhere(function ($query) use ($type, $season_id)
+            {
+                $query->where('teams.season_id', $season_id)
+                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_woman'), true)
                     ->where('teams.enable', true);
             });
     }

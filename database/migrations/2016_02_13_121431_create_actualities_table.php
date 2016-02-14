@@ -33,6 +33,6 @@ class CreateActualitiesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('actuality');
+        Schema::drop('actualities');
     }
 }

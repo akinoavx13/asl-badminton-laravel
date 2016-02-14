@@ -22,8 +22,8 @@ class CreateScoresTable extends Migration
             $table->integer('second_set_first_team')->default(0);
             $table->integer('second_set_second_team')->default(0);
 
-            $table->integer('third_set_first_team')->nullable();
-            $table->integer('third_set_second_team')->nullable();
+            $table->integer('third_set_first_team')->default(0);
+            $table->integer('third_set_second_team')->default(0);
 
             $table->boolean('display')->default(false);
 
