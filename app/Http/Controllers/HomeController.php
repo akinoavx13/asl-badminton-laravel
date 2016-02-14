@@ -88,6 +88,8 @@ class HomeController extends Controller
         $posts = Post::select('users.name', 'users.forname', 'users.avatar', 'posts.content', 'posts.user_id',
             'posts.photo', 'posts.created_at', 'posts.actuality_id', 'posts.id')
             ->join('users', 'users.id', '=', 'posts.user_id')
+            ->whereNotNull('posts.actuality_id')
+            ->whereNull('posts.score_id')
             ->orderBy('posts.created_at', 'asc')
             ->get();
 
