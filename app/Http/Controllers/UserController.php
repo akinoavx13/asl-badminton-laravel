@@ -119,7 +119,7 @@ class UserController extends Controller
 
         //users store
         $router->post('/changePassword/{user_id}', [
-            'middleware' => ['userOwner'],
+            //'middleware' => ['userOwner'],
             'uses'       => 'UserController@updatePassword',
             'as'         => 'user.updatePassword',
         ]);

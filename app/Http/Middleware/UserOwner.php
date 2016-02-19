@@ -23,7 +23,7 @@ class UserOwner
 
         if ($user->hasOwner($user_id) || $user->hasRole('admin'))
         {
-            dd('ok');
+
             return $next($request);
         }
 
