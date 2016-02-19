@@ -169,7 +169,7 @@ class UserController extends Controller
             'ending_holiday'         => Carbon::now()->format('d/m/Y'),
         ]);
 
-        SendMail::send($this->user, 'userStore', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
+        SendMail::send($this->user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");
     }
@@ -214,6 +214,8 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
+        $data['oldValues'] = $user->attributesToArray();
+
         $user->update([
             'name'                => $request->name,
             'forname'             => $request->forname,
@@ -237,6 +239,17 @@ class UserController extends Controller
                 'active' => $request->active,
                 'role'   => $request->role,
             ]);
+        }
+
+        $admin = User::where('email', 'c.maheo@lectra.com')->first();
+
+        if($admin != null)
+        {
+            $data['newValues'] = $user->attributesToArray();
+            $data['userName'] = $user->forname . " " . $user->name;
+            $data['adminUserName'] = $admin->forname . " " . $admin->name;
+
+            SendMail::send($admin, 'updateProfil', $data, 'Modification d\'un profil AS Lectra Badminton');
         }
 
         return redirect()->route('user.show', $user->id)->with('success',
@@ -370,7 +383,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        SendMail::send($this->user, 'userStore', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
+        SendMail::send($this->user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "Un autre email vient d'être envoyé à $user !");
     }

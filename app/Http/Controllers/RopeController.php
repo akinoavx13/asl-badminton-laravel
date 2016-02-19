@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddingRopeRequest;
+use App\Http\Utilities\SendMail;
 use App\Rope;
 use Illuminate\Http\Request;
 
@@ -31,14 +32,14 @@ class RopeController extends Controller
 
         $router->get('create', [
             'middleware' => 'admin',
-            'uses' => 'RopeController@create',
-            'as'   => 'rope.create',
+            'uses'       => 'RopeController@create',
+            'as'         => 'rope.create',
         ]);
 
         $router->post('create', [
             'middleware' => 'admin',
-            'uses' => 'RopeController@adding',
-            'as'   => 'rope.adding',
+            'uses'       => 'RopeController@adding',
+            'as'         => 'rope.adding',
         ]);
     }
 
@@ -65,7 +66,14 @@ class RopeController extends Controller
             'fill'    => false,
         ]);
 
-        return redirect()->route('home.index')->with('success', "Le cordage de votre raquette vient d'être enregistré, un mail a été envoyé à Cestas Sport");
+        if (env('APP_ENV') == 'prod')
+        {
+            SendMail::send($this->user, 'takeRope', $this->user->attributesToArray(), 'Demande de cordage AS Lectra
+        Badminton', true);
+        }
+
+        return redirect()->route('home.index')->with('success',
+            "Le cordage de votre raquette vient d'être enregistré, un mail a été envoyé à Cestas Sport");
     }
 
     public function create()

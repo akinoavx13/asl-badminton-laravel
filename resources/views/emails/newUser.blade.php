@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-    <p>Bonjour {{ $forname }} {{ $name }}</p>
+    <p>Bonjour {{ $forname }} {{ $name }},</p>
     <br>
 
     <p>
