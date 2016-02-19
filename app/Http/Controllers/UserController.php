@@ -113,15 +113,15 @@ class UserController extends Controller
         //users create
         $router->get('/changePassword/{user_id}', [
             'middleware' => ['userOwner'],
-            'uses' => 'UserController@changePassword',
-            'as'   => 'user.changePassword',
+            'uses'       => 'UserController@changePassword',
+            'as'         => 'user.changePassword',
         ]);
 
         //users store
         $router->post('/changePassword/{user_id}', [
             'middleware' => ['userOwner'],
-            'uses' => 'UserController@updatePassword',
-            'as'   => 'user.updatePassword',
+            'uses'       => 'UserController@updatePassword',
+            'as'         => 'user.updatePassword',
         ]);
 
     }
@@ -185,7 +185,13 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
 
         $activeSeason = Season::active()->first();
-        $player = Player::withUser($user_id)->withSeason($activeSeason->id)->first();
+
+        $player = null;
+
+        if ($activeSeason !== null)
+        {
+            $player = Player::withUser($user_id)->withSeason($activeSeason->id)->first();
+        }
 
         return view('user.show', compact('user', 'player'));
     }
@@ -243,7 +249,7 @@ class UserController extends Controller
 
         $admin = User::where('email', 'c.maheo@lectra.com')->first();
 
-        if($admin != null)
+        if ($admin != null)
         {
             $data['newValues'] = $user->attributesToArray();
             $data['userName'] = $user->forname . " " . $user->name;
