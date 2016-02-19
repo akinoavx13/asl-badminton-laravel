@@ -114,6 +114,8 @@
 
     <div class="row">
         <div class="col-md-12">
+
+            @if(count($players) > 0)
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="table-responsive">
@@ -183,6 +185,11 @@
                     </div>
                 </div>
             </div>
+            @else
+                <h2 class="text-center text-danger">
+                    Pas encore de joueur
+                </h2>
+            @endif
         </div>
     </div>
 @stop
