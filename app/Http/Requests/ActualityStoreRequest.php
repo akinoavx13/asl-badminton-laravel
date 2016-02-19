@@ -34,8 +34,8 @@ class ActualityStoreRequest extends Request
     {
         return [
             'title'   => 'required',
-            'content' => 'required',
             'photo'   => 'image',
+            'content' => 'required_without:photo',
         ];
     }
 }

@@ -20,7 +20,7 @@
 
             <div class="modal-body">
 
-                {!! Form::open(['route' => 'actuality.store', 'class' => 'form-horizontal']) !!}
+                {!! Form::open(['route' => 'actuality.store', 'class' => 'form-horizontal', 'files' => 'true']) !!}
 
                 <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 
@@ -38,11 +38,20 @@
                 <div class="form-group">
                     <div class="col-md-3">
                         {!! Form::label('content', 'Actualité :', ['class' => 'control-label']) !!}
-                        <i class="text-navy">*</i>
                     </div>
 
                     <div class="col-md-9">
-                        {!! Form::textarea('content', old('content'), ['class' => 'form-control', 'rows' => '3', 'required']) !!}
+                        {!! Form::textarea('content', old('content'), ['class' => 'form-control', 'rows' => '3']) !!}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {!! Form::label('photo', 'Photo :', ['class' => 'control-label']) !!}
+                    </div>
+
+                    <div class="col-md-9">
+                        {!! Form::file('photo', ['class' => 'form-control', 'accept' => 'image/*']) !!}
                     </div>
                 </div>
 

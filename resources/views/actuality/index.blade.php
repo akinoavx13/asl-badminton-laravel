@@ -17,11 +17,21 @@
                     <div class="col-md-10" style="margin-left: 10px;">
                         <a href="{{ route('user.show', $actuality['userId']) }}"
                            class="font-bold">{{ $actuality['userName'] }}</a>
-                        {!! $actuality['content'] !!}
                         @if($actuality['userId'] == $auth->id || $auth->hasRole('admin'))
                             <a href="{{ route('actuality.delete', $actuality['actualityId']) }}" class="text-danger" style="float: right;">
                                 <span class="fa fa-times"></span>
                             </a>
+                        @endif
+                        {!! $actuality['content'] !!}
+                        @if($actuality['photo'])
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="text-center">
+                                        <img src="{{ asset($actuality['photo']) }}"
+                                             class="img-rounded" alt="photo" width="100" height="100"/>
+                                    </div>
+                                </div>
+                            </div>
                         @endif
                         <p style="margin-top: 10px; font-size: 10px;" class="font-bold">
                             {{ $actuality['createdAt'] }}
@@ -40,6 +50,11 @@
                             <div class="col-md-10" style="margin-left: 10px;">
                                 <a href="{{ route('user.show', $post['userId']) }}"
                                    class="font-bold">{{ $post['userName'] }}</a>
+                                @if($post['userId'] == $auth->id || $auth->hasRole('admin'))
+                                    <a href="{{ route('post.delete', $post['postId']) }}" class="text-danger" style="float: right;">
+                                        <span class="fa fa-times"></span>
+                                    </a>
+                                @endif
                                 {!! $post['content'] !!}
                                 @if($post['photo'])
                                     <div class="row">
@@ -48,14 +63,8 @@
                                                 <img src="{{ asset($post['photo']) }}"
                                                      class="img-rounded" alt="photo" width="100" height="100"/>
                                             </div>
-
                                         </div>
                                     </div>
-                                @endif
-                                @if($post['userId'] == $auth->id || $auth->hasRole('admin'))
-                                    <a href="{{ route('post.delete', $post['postId']) }}" class="text-danger" style="float: right;">
-                                        <span class="fa fa-times"></span>
-                                    </a>
                                 @endif
                                 <p style="margin-top: 10px; font-size: 10px;" class="font-bold">
                                     {{ $post['createdAt'] }}

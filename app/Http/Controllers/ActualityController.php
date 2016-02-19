@@ -42,11 +42,19 @@ class ActualityController extends Controller
      */
     public function store(ActualityStoreRequest $request)
     {
-        Actuality::create([
+        $actuality = Actuality::create([
             'title'   => $request->title,
             'content' => nl2br($request->get('content')),
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
+            'photo'   => 0,
         ]);
+
+        if ($request->exists('photo'))
+        {
+            $actuality->update([
+                'photo' => $request->photo,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'L\'actualité est bien postée !');
     }
