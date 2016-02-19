@@ -70,9 +70,7 @@ class AdminsReservation extends Model
 
     public function getStartAttribute($start)
     {
-        $date = Carbon::createFromFormat('Y-m-d', $start);
-
-        return $date->format('Y-m-d');
+        return Carbon::createFromFormat('Y-m-d', $start);
     }
 
     public function setStartAttribute($start)
@@ -82,9 +80,7 @@ class AdminsReservation extends Model
 
     public function getEndAttribute($end)
     {
-        $date = Carbon::createFromFormat('Y-m-d', $end);
-
-        return $date->format('Y-m-d');
+        return Carbon::createFromFormat('Y-m-d', $end);
     }
 
     public function setEndAttribute($end)

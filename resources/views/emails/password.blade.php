@@ -1,7 +1,11 @@
-@extends('emails.email-layout')
+@extends('emails.layout')
+
+@section('title')
+    Réinitialisation du mot de passe
+@stop
 
 @section('content')
-    <p>Bonjour {{ $user }}</p>
+    <p>Bonjour {{ $user }},</p>
     <br>
 
     <p>

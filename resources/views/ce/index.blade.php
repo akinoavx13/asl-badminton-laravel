@@ -116,7 +116,8 @@
         <div class="col-md-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <table class="table table-striped table-hover display" id="ceList">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover display" id="ceList">
                             <thead>
                             <tr>
                                 <th class="text-center">Prénom</th>
@@ -179,6 +180,7 @@
                             @endforeach
                             </tbody>
                         </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -189,6 +191,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#ceList').DataTable( {
+                "pageLength": 100,
                 language: {
                     processing:     "Traitement en cours...",
                     search:         "Rechercher&nbsp;:",

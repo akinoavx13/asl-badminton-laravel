@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers;
 use App\Http\Requests\Request;
 
-class ScoreUpdateRequest extends Request
+class AddingRopeRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,20 +13,13 @@ class ScoreUpdateRequest extends Request
      */
     public function authorize()
     {
-        $player = Helpers::getInstance()->myPlayer();
+        $user = $this->user();
 
-        if (Helpers::getInstance()->auth()->hasRole('admin'))
+        if ($user->hasRole('admin'))
         {
             return true;
         }
 
-        if ($player !== null)
-        {
-            if (! $player->hasFormula('leisure'))
-            {
-                return true;
-            }
-        }
         abort(401, 'Unauthorized action.');
 
         return false;
@@ -41,8 +33,7 @@ class ScoreUpdateRequest extends Request
     public function rules()
     {
         return [
-            'photo'   => 'image',
-            'content' => 'required_without:photo',
+            'rest' => 'required|Integer|min:1'
         ];
     }
 }

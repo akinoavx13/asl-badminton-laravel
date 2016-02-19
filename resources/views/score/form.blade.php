@@ -4,7 +4,7 @@
     </div>
     <div class="ibox-content">
 
-        {!! Form::open(['route' => ['score.update', $score->id, $pool_id, str_replace(' ', '-', $firstTeamName), str_replace(' ', '-', $secondTeamName)], 'class' => 'form-horizontal']) !!}
+        {!! Form::open(['route' => ['score.update', $score->id, $pool_id, str_replace(' ', '-', $firstTeamName), str_replace(' ', '-', $secondTeamName)], 'class' => 'form-horizontal', 'files' => 'true']) !!}
 
         <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 
@@ -117,6 +117,20 @@
                     {!! Form::checkbox('unplayed', '1', false) !!}
                     Non joué
                 </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                {!! Form::textarea('content', old('content'), ['class' => 'form-control', 'rows' => '2', 'placeholder' => 'Votre commentaire ...']) !!}
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-md-12">
+                {!! Form::file('photo', ['accept' => 'image/*']) !!}
             </div>
         </div>
 

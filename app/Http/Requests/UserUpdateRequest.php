@@ -35,7 +35,7 @@ class UserUpdateRequest extends Request
             'name'                => 'required',
             'forname'             => 'required',
             'email'               => 'unique:users,email|email',
-            'password'            => 'confirmed|required_with:password_confirmation|min:6',
+            'password'            => 'confirmed|min:6',
             'birthday'            => 'required|date_format:d/m/Y',
             'tshirt_size'         => 'required|in:XXS,XS,S,M,L,XL,XXL',
             'gender'              => 'required|in:man,woman',

@@ -33,7 +33,6 @@ class AdminReservationController extends Controller
             'uses' => 'AdminReservationController@store',
             'as'   => 'adminReservation.store',
         ]);
-
     }
 
     /**

@@ -5,5 +5,12 @@
 @stop
 
 @section('content')
-    @include('player.form')
+
+    @if($alreadySubscribe)
+        <h2 class="text-center text-danger">
+            Vous êtes déjà inscrit à la saison, modifier votre inscription <a href="{{ route('player.edit', $myPlayer->id) }}">ici</a> !
+        </h2>
+    @else
+        @include('player.form')
+    @endif
 @stop
