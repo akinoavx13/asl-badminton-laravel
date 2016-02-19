@@ -174,7 +174,7 @@ class SeasonController extends Controller
             'active' => true,
         ]);
 
-        return redirect()->route('season.index')->with('success', "La saison $season est active !");
+        return redirect()->route('season.index')->with('success', "La saison $seasonSelected est active !");
     }
 
 }
