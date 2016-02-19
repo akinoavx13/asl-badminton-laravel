@@ -18,9 +18,10 @@ class UserChangePasswordRequest extends Request
 
         echo $user_id;
         echo $user->id === $user_id;
+        dd($user->id === $user_id);
         if ($user->hasOwner($user_id))
         {
-            dd($user);
+
             return true;
         }
 
