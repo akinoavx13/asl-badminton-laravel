@@ -14,9 +14,7 @@
     <div class="row">
         <div class="col-md-8">
             @if(count($scores) > 0)
-                <hr>
                 @foreach($scores as $score)
-
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <div class="row" style="font-size: 15px;">

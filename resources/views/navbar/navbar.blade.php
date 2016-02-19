@@ -6,7 +6,7 @@
                     <div class="text-center">
                         <span>
                             @if($auth->avatar)
-                                <img src="{{ url($auth->avatar) }}"
+                                <img src="{{ asset($auth->avatar) }}"
                                      class="img-circle" alt="logo" width="50" height="50"/>
                             @else
                                 <img src="{{ asset('img/anonymous.png') }}"

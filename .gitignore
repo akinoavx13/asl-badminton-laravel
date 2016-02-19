@@ -5,4 +5,5 @@ Homestead.json
 .env
 _ide_helper.php
 /public/img/avatars
+/public/img/posts
 .idea

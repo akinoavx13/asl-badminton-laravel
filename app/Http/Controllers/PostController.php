@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostStoreRequest;
 use App\Post;
 use Illuminate\Http\Request;
 
@@ -40,16 +41,26 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param PostStoreRequest $request
+     * @param $actuality_id
      * @return \Illuminate\Http\Response
      */
-    public function storeActualityPost(Request $request, $actuality_id)
+    public function storeActualityPost(PostStoreRequest $request, $actuality_id)
     {
-        Post::create([
+
+        $post = Post::create([
             'user_id'      => $this->user->id,
             'actuality_id' => $actuality_id,
             'content'      => nl2br($request->get('content')),
+            'photo'        => 0,
         ]);
+
+        if ($request->exists('photo'))
+        {
+            $post->update([
+                'photo' => $request->photo,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Le commentaire est bien ajouté !');
     }

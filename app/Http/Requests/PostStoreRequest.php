@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class ActualityStoreRequest extends Request
+class PostStoreRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,9 +33,8 @@ class ActualityStoreRequest extends Request
     public function rules()
     {
         return [
-            'title'   => 'required',
-            'content' => 'required',
             'photo'   => 'image',
+            'content' => 'required_without:photo',
         ];
     }
 }
