@@ -20,6 +20,9 @@ class UserOwner
         $user_id = $request->route()->getParameter('user_id');
         $user = Helpers::getInstance()->auth();
 
+        echo $user_id;
+        dd($user);
+
         if ($user->hasOwner($user_id) || $user->hasRole('admin'))
         {
             return $next($request);
