@@ -61,7 +61,8 @@ class HomeController extends Controller
             'scores.first_set_first_team', 'scores.first_set_second_team',
             'scores.second_set_first_team', 'scores.second_set_second_team',
             'scores.third_set_first_team', 'scores.third_set_second_team',
-            'scores.first_team_win', 'scores.second_team_win', 'scores.updated_at'
+            'scores.first_team_win', 'scores.second_team_win', 'scores.updated_at',
+            'scores.id as scoreId'
         )
             ->leftJoin('teams as teamOne', 'teamOne.id', '=', 'scores.first_team_id')
             ->leftJoin('players as playerOneTeamOne', 'playerOneTeamOne.id', '=', 'teamOne.player_one')
@@ -85,7 +86,8 @@ class HomeController extends Controller
             ->take(15)
             ->get();
 
-        $posts = Post::select('users.name', 'users.forname', 'users.avatar', 'posts.content', 'posts.user_id',
+        $postsActualities = Post::select('users.name', 'users.forname', 'users.avatar', 'posts.content',
+            'posts.user_id',
             'posts.photo', 'posts.created_at', 'posts.actuality_id', 'posts.id')
             ->join('users', 'users.id', '=', 'posts.user_id')
             ->whereNotNull('posts.actuality_id')
@@ -93,6 +95,16 @@ class HomeController extends Controller
             ->orderBy('posts.created_at', 'asc')
             ->get();
 
+        $postsScoresEntities = Post::select('users.name', 'users.forname', 'users.avatar', 'posts.content',
+            'posts.user_id',
+            'posts.photo', 'posts.created_at', 'posts.score_id', 'posts.id')
+            ->join('users', 'users.id', '=', 'posts.user_id')
+            ->whereNotNull('posts.score_id')
+            ->whereNull('posts.actuality_id')
+            ->orderBy('posts.created_at', 'asc')
+            ->get();
+
+        $postsScores = [];
         $actualities = [];
 
         foreach ($actus as $index => $actuality)
@@ -111,7 +123,7 @@ class HomeController extends Controller
             $actualities[$index]['actualityId'] = $actuality->id;
             $actualities[$index]['posts'] = null;
 
-            foreach ($posts as $indexPost => $post)
+            foreach ($postsActualities as $indexPost => $post)
             {
                 if ($post->actuality_id == $actuality->id)
                 {
@@ -131,6 +143,29 @@ class HomeController extends Controller
             }
         }
 
-        return view('home.index', compact('scores', 'actualities'));
+        foreach ($scores as $score)
+        {
+            foreach ($postsScoresEntities as $index => $post)
+            {
+                if ($score->scoreId == $post->score_id)
+                {
+                    $postsScores[$index]['userName'] = $post->forname . ' ' . $post->name;
+                    $postsScores[$index]['userAvatar'] = $post->avatar ?
+                        "/img/avatars/{$post->user_id}.jpg" :
+                        'img/anonymous.png';
+                    $postsScores[$index]['content'] = $post->content;
+                    $postsScores[$index]['photo'] = $post->photo;
+                    $postsScores[$index]['createdAt'] = ucfirst(Date::create($post->created_at->year,
+                        $post->created_at->month,
+                        $post->created_at->day, $post->created_at->hour, $post->created_at->minute,
+                        $post->created_at->second)->ago());
+                    $postsScores[$index]['scoreId'] = $post->score_id;
+                    $postsScores[$index]['userId'] = $post->user_id;
+                    $postsScores[$index]['postId'] = $post->id;
+                }
+            }
+        }
+
+        return view('home.index', compact('scores', 'actualities', 'postsScores'));
     }
 }

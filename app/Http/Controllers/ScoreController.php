@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ChampionshipRanking;
 use App\Http\Requests\ScoreUpdateRequest;
 use App\Period;
+use App\Post;
 use App\Score;
 use App\Season;
 use Illuminate\Http\Request;
@@ -14,6 +15,11 @@ use App\Http\Controllers\Controller;
 
 class ScoreController extends Controller
 {
+
+    public function __construct()
+    {
+        parent::__constructor();
+    }
 
     public static function routes($router)
     {
@@ -60,8 +66,24 @@ class ScoreController extends Controller
      */
     public function update(ScoreUpdateRequest $request, $score_id, $pool_id, $firstTeamName, $secondTeamName)
     {
-
         $score = Score::findOrFail($score_id);
+
+        if ($request->exists('content'))
+        {
+            $post = Post::create([
+                'user_id'  => $this->user->id,
+                'score_id' => $score_id,
+                'content'  => nl2br($request->get('content')),
+                'photo'    => 0,
+            ]);
+
+            if ($request->exists('photo'))
+            {
+                $post->update([
+                    'photo' => $request->photo,
+                ]);
+            }
+        }
 
         $firstSet = [
             'firstTeam'  => $request->first_set_first_team,
@@ -588,7 +610,7 @@ class ScoreController extends Controller
         if ($activeSeason != null)
         {
             $activePeriod = Period::current($activeSeason->id, 'championship');
-            if($activePeriod != null)
+            if ($activePeriod != null)
             {
                 $rankings = ChampionshipRanking::where('championship_pool_id', $pool_id)
                     ->orderBy('total_points', 'desc')

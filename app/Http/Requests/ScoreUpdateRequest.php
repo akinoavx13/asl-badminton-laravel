@@ -41,7 +41,8 @@ class ScoreUpdateRequest extends Request
     public function rules()
     {
         return [
-            //
+            'photo'   => 'image',
+            'content' => 'required_without:photo',
         ];
     }
 }

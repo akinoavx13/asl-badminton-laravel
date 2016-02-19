@@ -82,9 +82,12 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="ibox-content">
+                            <hr>
+                            @include('post.indexScore')
+                            @include('post.createScore')
+                        </div>
                     </div>
-
                 @endforeach
 
                 <div class="row">

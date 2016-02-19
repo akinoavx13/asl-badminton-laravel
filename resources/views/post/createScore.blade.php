@@ -1,4 +1,4 @@
-{!! Form::open(['route' => ['post.storeActualityPost', $actuality['actualityId']], 'class' => 'form-horizontal', 'files' =>'true']) !!}
+{!! Form::open(['route' => ['post.storeScorePost', $score->scoreId], 'class' => 'form-horizontal', 'files' =>'true']) !!}
 <div class="row" style="margin-top: 5px;">
     <div class="col-md-12">
         {!! Form::textarea('content', old('content'), ['class' => 'form-control', 'rows' => '2', 'placeholder' => 'Votre commentaire ...']) !!}
