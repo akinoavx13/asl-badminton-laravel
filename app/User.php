@@ -114,7 +114,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function hasOwner($user_id)
     {
-        return $this->id === $user_id;
+        return $this->id == $user_id;
     }
 
     public function hasGender($gender)
