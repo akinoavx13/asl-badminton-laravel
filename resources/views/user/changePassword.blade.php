@@ -29,7 +29,7 @@
                             <i class="text-navy">*</i>
                         </div>
                         <div class="col-md-9">
-                            {!! Form::password('password', ['class' => 'form-control']) !!}
+                            {!! Form::password('password', ['class' => 'form-control', 'required']) !!}
                         </div>
                     </div>
 
@@ -39,7 +39,7 @@
                             <i class="text-navy">*</i>
                         </div>
                         <div class="col-md-9">
-                            {!! Form::password('password_confirmation', ['class' => 'form-control']) !!}
+                            {!! Form::password('password_confirmation', ['class' => 'form-control', 'required']) !!}
                         </div>
                     </div>
 
