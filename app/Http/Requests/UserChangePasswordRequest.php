@@ -16,9 +16,6 @@ class UserChangePasswordRequest extends Request
         $user_id = $this->route()->getParameter('user_id');
         $user = $this->user();
 
-        echo $user_id;
-        echo $user->id === $user_id;
-        dd($user->id === $user_id);
         if ($user->hasOwner($user_id))
         {
 
