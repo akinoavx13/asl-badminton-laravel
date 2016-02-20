@@ -17,6 +17,7 @@ use App\Http\Controllers\CeController;
 use App\Http\Controllers\ChampionshipController;
 use App\Http\Controllers\ChampionshipResultController;
 use App\Http\Controllers\CourtController;
+use App\Http\Controllers\EmailToDevController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerReservationController;
@@ -137,4 +138,9 @@ Route::group(['prefix' => 'actuality', 'middleware' => ['auth', 'notCE']], funct
 Route::group(['prefix' => 'post', 'middleware' => ['auth', 'notCE']], function () use ($router)
 {
     PostController::routes($router);
+});
+
+Route::group(['prefix' => 'emailToDev', 'middleware' => ['auth']], function () use ($router)
+{
+    EmailToDevController::routes($router);
 });
