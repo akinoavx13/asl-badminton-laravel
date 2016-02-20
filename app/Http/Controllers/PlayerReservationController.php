@@ -6,13 +6,20 @@ use App\Court;
 use App\Helpers;
 use App\Http\Requests\PlayerReservationStoreRequest;
 use App\Http\Requests\ReservationStoreRequest;
+use App\Http\Utilities\SendMail;
 use App\PlayersReservation;
 use App\Season;
 use App\Team;
+use App\TimeSlot;
+use App\User;
 use Carbon\Carbon;
+use Eluceo\iCal\Component\Calendar;
+use Eluceo\iCal\Component\Event;
+use Eluceo\iCal\Property\Event\Attendees;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\File;
 
 class PlayerReservationController extends Controller
 {
@@ -76,7 +83,6 @@ class PlayerReservationController extends Controller
                 //mon équipe de simple
                 $mySimpleTeam = Team::select('users.forname', 'users.name', 'teams.id')
                     ->mySimpleTeams($user->gender, $myPlayer->id, $seasonActive->id)->first();
-
 
 
                 if ($mySimpleTeam !== null)
@@ -159,16 +165,17 @@ class PlayerReservationController extends Controller
      */
     public function store(PlayerReservationStoreRequest $request, $date, $court_id, $timeSlot_id)
     {
-        $date = Carbon::createFromFormat('Y-m-d', $date);
-
         $playerReservationAtThisDay = PlayersReservation::where('date', $date)
             ->where('time_slot_id', $timeSlot_id)
             ->where('court_id', $court_id)
             ->first();
 
+        $date = Carbon::createFromFormat('Y-m-d', $date);
+
         if ($playerReservationAtThisDay === null)
         {
-            PlayersReservation::create([
+
+            $reservation = PlayersReservation::create([
                 'date'         => $date,
                 'first_team'   => $request->first_team,
                 'second_team'  => $request->second_team,
@@ -177,56 +184,93 @@ class PlayerReservationController extends Controller
                 'court_id'     => $court_id,
             ]);
 
+            $icsCalendar = new Calendar('http://badminton.aslectra.com');
+            $icsEvent = new Event();
+            $icsAttendees = new Attendees();
+
+            $icsName = "";
+
+            $firstTeam = Team::where('teams.id', $request->first_team)->first();
+            if ($firstTeam !== null)
+            {
+                $firstPlayerFirstTeam = $firstTeam->playerOne;
+                $secondPlayerFirstTeam = $firstTeam->playerTwo;
+                if ($firstPlayerFirstTeam !== null)
+                {
+                    $firstUserFirstTeam = $firstPlayerFirstTeam->user;
+                    if ($firstUserFirstTeam !== null)
+                    {
+                        $icsAttendees->add($firstUserFirstTeam->email);
+                        $icsName .= $firstUserFirstTeam->forname . " " . $firstUserFirstTeam->name;
+                    }
+                }
+                if ($secondPlayerFirstTeam !== null)
+                {
+                    $seconUserFirstTeam = $secondPlayerFirstTeam->user;
+                    if ($seconUserFirstTeam !== null)
+                    {
+                        $icsAttendees->add($seconUserFirstTeam->email);
+                        $icsName .= ' & ' . $seconUserFirstTeam->forname . " " . $seconUserFirstTeam->name;
+                    }
+                }
+            }
+
+            $secondTeam = Team::where('teams.id', $request->second_team)->first();
+            if ($secondTeam !== null)
+            {
+                $firstPlayerSecondTeam = $secondTeam->playerOne;
+                $secondPlayerSecondTeam = $secondTeam->playerTwo;
+                if ($firstPlayerSecondTeam !== null)
+                {
+                    $firstUserSecondTeam = $firstPlayerSecondTeam->user;
+                    if ($firstUserSecondTeam !== null)
+                    {
+                        $icsAttendees->add($firstUserSecondTeam->email);
+                        $icsName .= ' VS ' . $firstUserSecondTeam->forname . " " . $firstUserSecondTeam->name;
+                    }
+                }
+                if ($secondPlayerSecondTeam !== null)
+                {
+                    $seconUserSecondTeam = $secondPlayerSecondTeam->user;
+                    if ($seconUserSecondTeam !== null)
+                    {
+                        $icsAttendees->add($seconUserSecondTeam->email);
+                        $icsName .= ' & ' . $seconUserSecondTeam->forname . " " . $seconUserSecondTeam->name;
+                    }
+                }
+            }
+
+            $timeSlot = TimeSlot::findOrFail($timeSlot_id);
+            $court = Court::findOrFail($court_id);
+
+            $start = explode(':', $timeSlot->start);
+            $end = explode(':', $timeSlot->end);
+
+            $icsEvent->setSummary($icsName)
+                ->setNoTime(false)
+                ->setLocation("Court n° " . $court->number)
+                ->setAttendees($icsAttendees)
+                ->setUseTimezone(true)
+                ->setDtStart(Carbon::create($date->year, $date->month, $date->day, $start[0], $start[1]))
+                ->setDtEnd(Carbon::create($date->year, $date->month, $date->day, $end[0], $end[1]));
+
+            $icsCalendar->addComponent($icsEvent);
+
+            $icsFile = fopen(public_path() . "/ics/reservation$reservation->id.ics", 'a');
+            File::put(public_path() . "/ics/reservation$reservation->id.ics", $icsCalendar->render());
+            fclose($icsFile);
+
+            SendMail::send($this->user, 'reservationCreate', $this->user->attributesToArray(), 'Réservation de court AS
+            Lectra Badminton', false,
+                asset("ics/reservation$reservation->id.ics"));
+
+            unlink(public_path() . "/ics/reservation$reservation->id.ics");
+
             return redirect()->route('reservation.index')->with('success', "La réservation a été enregistrée !");
         }
 
         return redirect()->back()->with('error', "La réservation n'est plus disponible !");
 
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     private function listTeams($gender, $type, $player_id, $season_id, $myDoubleOrMixteTeam = null)
