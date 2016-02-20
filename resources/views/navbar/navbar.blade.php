@@ -244,6 +244,15 @@
                 </li>
             @endif
 
+            @if($auth->hasRole('user') || $auth->hasRole('ce') || $auth->hasRole('admin'))
+                <li class="{{ Request::is('emailToDev') ? 'active' : '' }}">
+                    <a href="{{ route('emailToDev.index') }}">
+                        <i class="fa fa-send"></i>
+                        <span class="nav-label">Email au développeur</span>
+                    </a>
+                </li>
+            @endif
         </ul>
+        <p class="text-center">&copy; <a href="http://maxime.maheo.free.fr">Maxime Maheo</a></p>
     </div>
 </nav>
