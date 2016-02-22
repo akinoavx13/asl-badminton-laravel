@@ -19,9 +19,9 @@
                 @if($post['photo'])
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="text-center">
+                            <div class="img-responsive">
                                 <img src="{{ asset($post['photo']) }}"
-                                     class="img-rounded" alt="photo" width="100" height="100"/>
+                                     class="img-rounded" alt="photo"/>
                             </div>
                         </div>
                     </div>
