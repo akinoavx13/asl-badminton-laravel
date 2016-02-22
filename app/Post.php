@@ -99,6 +99,7 @@ class Post extends Model
             }
 
             $image->save(public_path() . "/img/posts/{$this->id}.jpg");
+
             $this->attributes['photo'] = 1;
         }
     }
