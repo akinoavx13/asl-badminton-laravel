@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('forname', 60);
             $table->string('email')->unique();
             $table->date('birthday');
-            $table->enum('tshirt_size', ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XLL']);
+            $table->enum('tshirt_size', ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL']);
             $table->enum('gender', ['man', 'woman']);
             $table->string('address')->nullable();
             $table->string('phone', 60)->nullable();
