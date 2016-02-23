@@ -1,4 +1,3 @@
-@extends('layout')
 
 @section('title')
     Championnat en cours
