@@ -22,6 +22,9 @@ class AdminReservationController extends Controller
 
     public static function routes($router)
     {
+        $router->pattern('reservation_id', '[0-9]+');
+
+
         //admin reservation create day
         $router->get('create', [
             'uses' => 'AdminReservationController@create',
@@ -32,6 +35,13 @@ class AdminReservationController extends Controller
         $router->post('create', [
             'uses' => 'AdminReservationController@store',
             'as'   => 'adminReservation.store',
+        ]);
+
+        //player reservation delete
+        $router->get('/delete/{reservation_id}', [
+            'middleware' => ['admin'],
+            'uses'       => 'AdminReservationController@delete',
+            'as'         => 'adminReservation.delete',
         ]);
     }
 
@@ -98,37 +108,11 @@ class AdminReservationController extends Controller
         return redirect()->back()->with('success', "Les réservations sont bien bloquées !");
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function delete($reservation_id)
     {
-        //
-    }
+        $reservation = AdminsReservation::findOrFail($reservation_id);
+        $reservation->delete();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function delete($id)
-    {
-        //
+        return redirect()->back()->with('success', "La réservation vient d'être supprimée !");
     }
 }

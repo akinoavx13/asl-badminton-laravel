@@ -93,8 +93,11 @@
                                                         </div>
                                                     </div>
                                                 @endif
-                                                @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')))
+                                                @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')) && $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] != 'admin')
                                                     <p><a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa
+                                                    fa-times"></span></a></p>
+                                                @elseif($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'admin')
+                                                        <p><a href="{{ route('adminReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa
                                                     fa-times"></span></a></p>
                                                 @endif
                                             </td>
@@ -149,8 +152,10 @@
                                                                 </div>
 
                                                             @endif
-                                                            @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')))
+                                                            @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')) && $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] != 'admin')
                                                                 <p><a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa fa-times"></span></a></p>
+                                                            @elseif($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'admin')
+                                                                    <p><a href="{{ route('adminReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa fa-times"></span></a></p>
                                                             @endif
                                                         </td>
                                                     @endforeach

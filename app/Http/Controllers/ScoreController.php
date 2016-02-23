@@ -70,18 +70,20 @@ class ScoreController extends Controller
 
         if ($request->exists('content'))
         {
-            $post = Post::create([
-                'user_id'  => $this->user->id,
-                'score_id' => $score_id,
-                'content'  => nl2br($request->get('content')),
-                'photo'    => 0,
-            ]);
-
-            if ($request->exists('photo'))
+            if($request->get('content') != "" || $request->exists('photo'))
             {
-                $post->update([
-                    'photo' => $request->photo,
+                $post = Post::create([
+                    'user_id'  => $this->user->id,
+                    'score_id' => $score_id,
+                    'content'  => nl2br($request->get('content')),
+                    'photo'    => 0,
                 ]);
+                if ($request->exists('photo'))
+                {
+                    $post->update([
+                        'photo' => $request->photo,
+                    ]);
+                }
             }
         }
 
@@ -120,7 +122,7 @@ class ScoreController extends Controller
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
 
-        if ($request->exists('my_wo') && $request->my_wo == "my_wo")
+        if ($request->exists('wo') && $request->wo == "my_wo")
         {
             $score->update([
                 'first_set_first_team'   => 0,
@@ -140,7 +142,7 @@ class ScoreController extends Controller
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
 
-        if ($request->exists('his_wo') && $request->his_wo == "his_wo")
+        if ($request->exists('wo') && $request->wo == "his_wo")
         {
             $score->update([
                 'first_set_first_team'   => 21,
@@ -609,7 +611,7 @@ class ScoreController extends Controller
         $activeSeason = Season::active()->first();
         if ($activeSeason != null)
         {
-            $activePeriod = Period::current($activeSeason->id, 'championship');
+            $activePeriod = Period::current($activeSeason->id, 'championship')->first();
             if ($activePeriod != null)
             {
                 $rankings = ChampionshipRanking::where('championship_pool_id', $pool_id)

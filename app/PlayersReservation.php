@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class PlayersReservation extends Model
@@ -36,5 +37,17 @@ class PlayersReservation extends Model
     public function court()
     {
         return $this->belongsTo('App\Court');
+    }
+
+    public function getDateAttribute($date)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $date);
+
+        return $date;
+    }
+
+    public function setDateAttribute($date)
+    {
+        $this->attributes['date'] = $date->format('Y-m-d');
     }
 }
