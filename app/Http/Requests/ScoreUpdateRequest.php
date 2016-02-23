@@ -42,7 +42,6 @@ class ScoreUpdateRequest extends Request
     {
         return [
             'photo'   => 'image',
-            'content' => 'required_without:photo',
         ];
     }
 }

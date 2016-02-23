@@ -58,6 +58,36 @@
                 </li>
             @endif
 
+            @if($auth->hasRole('user'))
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                    <li class="{{ Request::is('dashboard*')? 'active' : '' }}">
+                        <a href="{{ route('dashboard.index') }}">
+                            <i class="fa fa-dashboard"></i>
+                            <span class="nav-label">Tableau de bord</span>
+                        </a>
+                    </li>
+                @endif
+            @endif
+
+            @if($auth->hasRole('admin'))
+                <li class="{{ Request::is('dashboard*') ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i>
+                        <span class="nav-label">Tableau de bord</span>
+                        <span class="fa arrow"></span>
+                    </a>
+
+                    <ul class="nav nav-second-level">
+                        <li class="{{ Request::is('dashboard/index') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>Joueur</a>
+                        </li>
+                        <li class="{{ Request::is('dashboard/index') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>Section</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
             @if($auth->hasRole('admin'))
                 <li class="{{ Request::is('setting*') || Request::is('court*') || Request::is('timeSlot*') ? 'active' : '' }}">
                     <a href="#">
@@ -143,7 +173,8 @@
                     </ul>
                     <ul class="nav nav-second-level">
                         <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
-                                    href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du championnat</a></li>
+                                    href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement
+                                du championnat</a></li>
                     </ul>
                 </li>
             @endif
@@ -151,7 +182,8 @@
             @if($auth->hasRole('user'))
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
                     <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
-                                href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du championnat</a></li>
+                                href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du
+                            championnat</a></li>
                     </li>
                 @endif
             @endif
