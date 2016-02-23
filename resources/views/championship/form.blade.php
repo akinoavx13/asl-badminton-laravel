@@ -67,7 +67,7 @@
                             <tbody>
                             @foreach($teams['simple'][$gender] as $simpleTeam)
                                 <tr class="text-center">
-                                    <td>{{ $simpleTeam['id'] }} {{ $simpleTeam['name'] }}</td>
+                                    <td>{{ $simpleTeam['name'] }}</td>
                                     <td>
                                         @if($simpleTeam['state'] === 'active')
                                             <i class="text-navy">Actif</i>
@@ -129,7 +129,7 @@
                         <tbody>
                         @foreach($teams['simple'] as $simpleTeam)
                             <tr class="text-center">
-                                <td>{{ $simpleTeam['id'] }} {{ $simpleTeam['name'] }}</td>
+                                <td>{{ $simpleTeam['name'] }}</td>
                                 <td>
                                     @if($simpleTeam['state'] === 'active')
                                         <i class="text-navy">Actif</i>
@@ -192,7 +192,7 @@
                             <tbody>
                             @foreach($teams['double'][$gender] as $doubleTeam)
                                 <tr class="text-center">
-                                    <td>{{ $doubleTeam['id'] }} {{ $doubleTeam['name'] }}</td>
+                                    <td>{{ $doubleTeam['name'] }}</td>
                                     <td>
                                         @if($doubleTeam['stateOne'] === 'active')
                                             <i class="text-navy">Actif</i>
@@ -262,7 +262,7 @@
                         <tbody>
                         @foreach($teams['double'] as $doubleTeam)
                             <tr class="text-center">
-                                <td>{{ $doubleTeam['id'] }} {{ $doubleTeam['name'] }}</td>
+                                <td>{{ $doubleTeam['name'] }}</td>
                                 <td>
                                     @if($doubleTeam['stateOne'] === 'active')
                                         <i class="text-navy">Actif</i>
@@ -332,7 +332,7 @@
                     <tbody>
                     @foreach($teams['mixte'] as $mixteTeam)
                         <tr class="text-center">
-                            <td>{{ $mixteTeam['id'] }} {{ $mixteTeam['name'] }}</td>
+                            <td>{{ $mixteTeam['name'] }}</td>
                             <td>
                                 @if($mixteTeam['stateOne'] === 'active')
                                     <i class="text-navy">Actif</i>
