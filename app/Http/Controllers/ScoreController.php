@@ -448,6 +448,9 @@ class ScoreController extends Controller
             ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
             ->where('championship_rankings.championship_pool_id', $pool_id)
             ->where('scores.first_team_id', $first_team_id)
+            ->orWhere(function ($query) use($first_team_id){
+                $query->where('scores.second_team_id', $first_team_id);
+            })
             ->get();
 
 
@@ -456,6 +459,9 @@ class ScoreController extends Controller
             ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
             ->where('championship_rankings.championship_pool_id', $pool_id)
             ->where('scores.second_team_id', $second_team_id)
+            ->orWhere(function ($query) use($second_team_id){
+                $query->where('scores.first_team_id', $second_team_id);
+            })
             ->get();
 
         $rankingFirstTeam = ChampionshipRanking::where('team_id', $first_team_id)->first();

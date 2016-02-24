@@ -214,7 +214,8 @@
                                                     @elseif($resum['hisWo'])
                                                         Gagné par wo
                                                     @endif
-                                                @else
+                                                @endif
+                                                @if($resum['firstSetFirstTeam'] != 0 && $resum['firstSetSecondTeam'] != 0)
                                                     {{ $resum['firstSetFirstTeam'] }}
                                                     <span class="text-danger">/</span>
                                                     {{ $resum['firstSetSecondTeam'] }}
