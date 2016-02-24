@@ -26,8 +26,8 @@ class ScoreController extends Controller
         //patterns
         $router->pattern('score_id', '[0-9]+');
         $router->pattern('pool_id', '[0-9]+');
-        $router->pattern('firstTeamName', '[a-zA-Zéèàê&ïô_-]+');
-        $router->pattern('secondTeamName', '[a-zA-Zéèàê&ïô_-]+');
+        $router->pattern('firstTeamName', '[a-zA-Zéèàê&ïôç_-]+');
+        $router->pattern('secondTeamName', '[a-zA-Zéèàê&ïôç_-]+');
 
         $router->get('create/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}', [
             'uses' => 'ScoreController@edit',
