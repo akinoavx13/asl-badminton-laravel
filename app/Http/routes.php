@@ -106,7 +106,7 @@ Route::group(['prefix' => 'adminReservation', 'middleware' => ['auth', 'admin', 
     AdminReservationController::routes($router);
 });
 
-Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'admin', 'notLeisure']], function () use ($router)
+Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
 {
     ChampionshipController::routes($router);
 });
