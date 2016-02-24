@@ -518,7 +518,6 @@ class ScoreController extends Controller
 
                 if ($score->hasUnplayed(true))
                 {
-                    $infoRankings['match_played'] += 1;
                     $infoRankings['match_unplayed'] += 1;
                 }
                 //gagné par wo
