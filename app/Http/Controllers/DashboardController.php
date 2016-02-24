@@ -99,13 +99,34 @@ class DashboardController extends Controller
                     })
                     ->first();
 
-                $tableReservation['double'] = $this->createTableReservation($myDoublePool, 'double', $activeSeason);
                 $tableReservation['simple'] = $this->createTableReservation($mySimplePool, 'simple', $activeSeason);
+                $tableReservation['double'] = $this->createTableReservation($myDoublePool, 'double', $activeSeason);
                 $tableReservation['mixte'] = $this->createTableReservation($myMixtePool, 'mixte', $activeSeason);
+
+                $pools = [];
+
+                if ($mySimplePool != null)
+                {
+                    $pools['simple']['pool_number'] = $mySimplePool->number;
+                    $pools['simple']['pool_id'] = $mySimplePool->id;
+                }
+
+                if ($myDoublePool != null)
+                {
+                    $pools['double']['pool_number'] = $myDoublePool->number;
+                    $pools['double']['pool_id'] = $myDoublePool->id;
+                }
+
+                if ($myMixtePool != null)
+                {
+                    $pools['mixte']['pool_number'] = $myMixtePool->number;
+                    $pools['mixte']['pool_id'] = $myMixtePool->id;
+                }
 
                 if (count($tableReservation) > 0)
                 {
-                    return view('dashboard.index', compact('tableReservation', 'mySimplePool'));
+                    return view('dashboard.index',
+                        compact('tableReservation', 'pools'));
                 }
             }
         }
