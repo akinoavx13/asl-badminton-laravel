@@ -43,14 +43,14 @@ class ChampionshipController extends Controller
 
         //championship create
         $router->get('create', [
-            'middleware' => 'settingExists',
+            'middleware' => ['settingExists', 'admin'],
             'uses'       => 'ChampionshipController@create',
             'as'         => 'championship.create',
         ]);
 
         //championship store
         $router->post('store', [
-            'middleware' => 'settingExists',
+            'middleware' => ['settingExists', 'admin'],
             'uses'       => 'ChampionshipController@store',
             'as'         => 'championship.store',
         ]);
