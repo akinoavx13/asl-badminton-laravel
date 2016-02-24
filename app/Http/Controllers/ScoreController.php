@@ -568,7 +568,7 @@ class ScoreController extends Controller
                         }
 
                         $infoRankings['total_difference_points'] +=
-                            $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_firt_team + $score->third_set_second_team - $score->third_set_first_team;
+                            $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_first_team + $score->third_set_second_team - $score->third_set_first_team;
                     }
                     $infoRankings['total_points'] += 3;
                 }
@@ -605,7 +605,7 @@ class ScoreController extends Controller
                         }
 
                         $infoRankings['total_difference_points'] +=
-                            $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_firt_team + $score->third_set_second_team - $score->third_set_first_team;
+                            $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_first_team + $score->third_set_second_team - $score->third_set_first_team;
                     }
                     $infoRankings['total_points'] += 1;
                 }
