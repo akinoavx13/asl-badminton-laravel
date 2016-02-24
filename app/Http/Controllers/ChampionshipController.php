@@ -123,8 +123,7 @@ class ChampionshipController extends Controller
             }
         }
 
-        return redirect()->route('season.index')->with('error', "Le championnat ne peut pas être créé car il n'y a
-        pas de saison active !");
+        return redirect()->route('season.index')->with('error', "Le championnat ne peut pas être créé car il n'y a pas de saison active !");
     }
 
     /**
