@@ -90,7 +90,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {!! Form::number('pool_number_simple_' . $gender . '[' . $simpleTeam['id'] . ']', old('number') ,['max' => 20, 'min' => 0, 'class' => 'form-control']) !!}
+                                        {!! Form::text('pool_number_simple_' . $gender . '[' . $simpleTeam['id'] . ']', old('number') ,[ 'class' => 'form-control']) !!}
                                     </td>
                                 </tr>
                             @endforeach
@@ -151,7 +151,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {!! Form::number('pool_number_simple[' . $simpleTeam['id'] . ']', old('number') ,['max' => 20, 'min' => 0, 'class' => 'form-control']) !!}
+                                    {!! Form::text('pool_number_simple[' . $simpleTeam['id'] . ']', old('number') ,['class' => 'form-control']) !!}
                                 </td>
                             </tr>
                         @endforeach
@@ -223,7 +223,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {!! Form::number('pool_number_double_' . $gender . '[' . $doubleTeam['id'] . ']', old('number') ,['max' => 20, 'min' => 0, 'class' => 'form-control']) !!}
+                                        {!! Form::text('pool_number_double_' . $gender . '[' . $doubleTeam['id'] . ']', old('number') ,['class' => 'form-control']) !!}
                                     </td>
                                 </tr>
                             @endforeach
@@ -293,7 +293,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {!! Form::number('pool_number_double[' . $doubleTeam['id'] . ']', old('number') ,['max' => 20, 'min' => 0, 'class' => 'form-control']) !!}
+                                    {!! Form::text('pool_number_double[' . $doubleTeam['id'] . ']', old('number') ,['class' => 'form-control']) !!}
                                 </td>
                             </tr>
                         @endforeach
@@ -363,8 +363,7 @@
                                 @endif
                             </td>
                             <td>
-                                {!! Form::number('pool_number_mixte[' . $mixteTeam['id'] . ']', old('number') ,['max' => 20, 'min' =>
-                                0, 'class' => 'form-control']) !!}
+                                {!! Form::text('pool_number_mixte[' . $mixteTeam['id'] . ']', old('number') ,[ 'class' => 'form-control']) !!}
                             </td>
                         </tr>
                     @endforeach
