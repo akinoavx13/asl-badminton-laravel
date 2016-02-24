@@ -119,6 +119,8 @@ class ScoreController extends Controller
                 'second_team_win'        => false,
             ]);
 
+            $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
+
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
 
@@ -139,6 +141,8 @@ class ScoreController extends Controller
                 'second_team_win'        => true,
             ]);
 
+            $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
+
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
 
@@ -158,6 +162,8 @@ class ScoreController extends Controller
                 'first_team_win'         => true,
                 'second_team_win'        => false,
             ]);
+
+            $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
@@ -546,7 +552,8 @@ class ScoreController extends Controller
                             $infoRankings['total_difference_set'] += 1;
                         }
 
-                        $infoRankings['total_difference_points'] += $score->first_set_first_team - $score->first_set_second_team + $score->second_set_first_team - $score->second_set_second_team + $score->third_set_first_team - $score->third_set_second_team;
+                        $infoRankings['total_difference_points'] +=
+                            $score->first_set_first_team - $score->first_set_second_team + $score->second_set_first_team - $score->second_set_second_team + $score->third_set_first_team - $score->third_set_second_team;
                     }
                     else
                     {
@@ -560,7 +567,8 @@ class ScoreController extends Controller
                             $infoRankings['total_difference_set'] += 1;
                         }
 
-                        $infoRankings['total_difference_points'] += $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_firt_team + $score->third_set_second_team - $score->third_set_first_team;
+                        $infoRankings['total_difference_points'] +=
+                            $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_firt_team + $score->third_set_second_team - $score->third_set_first_team;
                     }
                     $infoRankings['total_points'] += 3;
                 }
@@ -581,7 +589,8 @@ class ScoreController extends Controller
                             $infoRankings['total_difference_set'] -= 1;
                         }
 
-                        $infoRankings['total_difference_points'] += $score->first_set_first_team - $score->first_set_second_team + $score->second_set_first_team - $score->second_set_second_team + $score->third_set_first_team - $score->third_set_second_team;
+                        $infoRankings['total_difference_points'] +=
+                            $score->first_set_first_team - $score->first_set_second_team + $score->second_set_first_team - $score->second_set_second_team + $score->third_set_first_team - $score->third_set_second_team;
                     }
                     else
                     {
@@ -595,7 +604,8 @@ class ScoreController extends Controller
                             $infoRankings['total_difference_set'] -= 1;
                         }
 
-                        $infoRankings['total_difference_points'] += $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_firt_team + $score->third_set_second_team - $score->third_set_first_team;
+                        $infoRankings['total_difference_points'] +=
+                            $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_firt_team + $score->third_set_second_team - $score->third_set_first_team;
                     }
                     $infoRankings['total_points'] += 1;
                 }
