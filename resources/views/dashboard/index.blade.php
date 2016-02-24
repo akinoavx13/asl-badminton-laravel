@@ -43,7 +43,7 @@
                                                 @if($type == 'simple')
                                                     @if($resum['imTheFirstTeam'])
                                                         @if($resum['userSecondTeamAvatar'])
-                                                            <img src="{{ asset($resum['userSecondTeamAvatar']) }}"
+                                                            <img src="{{ asset('img/avatars/' . $resum['userSecondTeamId'] . '.jpg') }}"
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @else
                                                             <img src="{{ asset('img/anonymous.png') }}"
@@ -51,7 +51,7 @@
                                                         @endif
                                                     @else
                                                         @if($resum['userFirstTeamAvatar'])
-                                                            <img src="{{ asset($resum['userSecondTeamAvatar']) }}"
+                                                            <img src="{{ asset('img/avatars/' . $resum['userFirstTeamId'] . '.jpg') }}"
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @else
                                                             <img src="{{ asset('img/anonymous.png') }}"
@@ -61,14 +61,14 @@
                                                 @else
                                                     @if($resum['imTheFirstTeam'])
                                                         @if($resum['userOneSecondTeamAvatar'])
-                                                            <img src="{{ asset($resum['userOneSecondTeamAvatar']) }}"
+                                                            <img src="{{ asset('img/avatars/' . $resum['userOneSecondTeamId'] . '.jpg') }}"
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @else
                                                             <img src="{{ asset('img/anonymous.png') }}"
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @endif
                                                         @if($resum['userTwoSecondTeamAvatar'])
-                                                            <img src="{{ asset($resum['userTwoSecondTeamAvatar']) }}"
+                                                            <img src="{{ asset('img/avatars/' . $resum['userTwoSecondTeamId'] . '.jpg') }}"
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @else
                                                             <img src="{{ asset('img/anonymous.png') }}"
@@ -76,14 +76,14 @@
                                                         @endif
                                                     @else
                                                         @if($resum['userOneFirstTeamAvatar'])
-                                                            <img src="{{ asset($resum['userOneFirstTeamAvatar']) }}"
+                                                            <img src="{{ asset('img/avatars/' . $resum['userOneFirstTeamId'] . '.jpg') }}"
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @else
                                                             <img src="{{ asset('img/anonymous.png') }}"
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @endif
                                                         @if($resum['userTwoFirstTeamAvatar'])
-                                                            <img src="{{ asset($resum['userTwoFirstTeamAvatar']) }}"
+                                                            <img src="{{ asset('img/avatars/' . $resum['userTwoFirstTeamId'] . '.jpg') }}"
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @else
                                                             <img src="{{ asset('img/anonymous.png') }}"
