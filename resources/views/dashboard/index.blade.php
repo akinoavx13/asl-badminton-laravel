@@ -20,7 +20,7 @@
                     <div class="col-md-12">
                         <div class="panel {{ $type == 'simple' ? 'panel-warning' : '' }} {{ $type == 'double' ? 'panel-info' : '' }} {{ $type == 'mixte' ? 'panel-danger' : '' }}">
                             <div class="panel-heading">
-                                <h1 class="text-center">Championnat de {{ $type }} (Poule n° {{ $mySimplePool->number }})</h1>
+                                <h1 class="text-center">Championnat de {{ $type }} (Poule n° {{ $pools[$type]['pool_number'] }})</h1>
                             </div>
                             <div class="panel-body">
                                 <table class="table table-striped table-hover">
@@ -267,14 +267,14 @@
                                             </td>
                                             <td>
                                                 @if($type == 'simple')
-                                                    <a href="{{ route('score.edit', [$resum['scoreId'], $mySimplePool->id,
+                                                    <a href="{{ route('score.edit', [$resum['scoreId'], $pools[$type]['pool_id'],
                                         str_replace(' ', '-', $resum['userFirstTeamName']),
                                         str_replace(' ', '-', $resum['userSecondTeamName'])
                                         ]) }}" class="btn btn-primary">
                                                         <span class="fa fa-edit"></span>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('score.edit', [$resum['scoreId'], $mySimplePool->id,
+                                                    <a href="{{ route('score.edit', [$resum['scoreId'], $pools[$type]['pool_id'],
                                         str_replace(' ', '-', $resum['userOneFirstTeamName'] . ' & ' . $resum['userTwoFirstTeamName']),
                                         str_replace(' ', '-', $resum['userOneSecondTeamName'] . ' & ' . $resum['userTwoSecondTeamName'])
                                         ]) }}" class="btn btn-primary">
