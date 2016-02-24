@@ -329,12 +329,7 @@ class ScoreController extends Controller
             $needThirdSet = true;
         }
 
-        if (
-            $needThirdSet &&
-            $thirdSet['firstTeam'] === "" || $thirdSet['secondTeam'] === "" &&
-            ($winnerFirstSet === 'firstTeam' && $winnerSecondSet === 'secondTeam') ||
-            ($winnerFirstSet === 'secondTeam' && $winnerSecondSet === 'firstTeam')
-        )
+        if ($needThirdSet && $thirdSet['firstTeam'] == "" || $thirdSet['secondTeam'] == "")
         {
             return 'Il faut un troisième set pour déterminer le vainqueur !';
         }
@@ -523,11 +518,13 @@ class ScoreController extends Controller
 
                 if ($score->hasUnplayed(true))
                 {
+                    $infoRankings['match_played'] += 1;
                     $infoRankings['match_unplayed'] += 1;
                 }
                 //gagné par wo
                 elseif (($isFirstTeam && $score->hasHisWo(true)) || (! $isFirstTeam && $score->hasMyWo(true)))
                 {
+                    $infoRankings['match_played'] += 1;
                     $infoRankings['match_won_by_wo'] += 1;
                     $infoRankings['total_difference_set'] += 2;
                     $infoRankings['total_difference_points'] += 42;
@@ -536,6 +533,7 @@ class ScoreController extends Controller
                 //perdu par wo
                 elseif (($isFirstTeam && $score->hasMyWo(true)) || (! $isFirstTeam && $score->hasHisWo(true)))
                 {
+                    $infoRankings['match_played'] += 1;
                     $infoRankings['match_lost_by_wo'] += 1;
                     $infoRankings['total_difference_set'] -= 2;
                     $infoRankings['total_difference_points'] -= 42;
