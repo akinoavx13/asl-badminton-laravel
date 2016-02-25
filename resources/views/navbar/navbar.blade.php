@@ -81,8 +81,8 @@
                         <li class="{{ Request::is('dashboard/index') ? 'active' : '' }}">
                             <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>Joueur</a>
                         </li>
-                        <li class="{{ Request::is('dashboard/index') ? 'active' : '' }}">
-                            <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>Section</a>
+                        <li class="{{ Request::is('dashboardAdmin/index') ? 'active' : '' }}">
+                            <a href="{{ route('dashboardAdmin.index') }}"><i class="fa fa-dashboard"></i>Section</a>
                         </li>
                     </ul>
                 </li>

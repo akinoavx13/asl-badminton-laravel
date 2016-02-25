@@ -17,6 +17,7 @@ use App\Http\Controllers\CeController;
 use App\Http\Controllers\ChampionshipController;
 use App\Http\Controllers\ChampionshipResultController;
 use App\Http\Controllers\CourtController;
+use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailToDevController;
 use App\Http\Controllers\HomeController;
@@ -149,4 +150,9 @@ Route::group(['prefix' => 'emailToDev', 'middleware' => ['auth']], function () u
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
 {
     DashboardController::routes($router);
+});
+
+Route::group(['prefix' => 'dashboardAdmin', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    DashboardAdminController::routes($router);
 });
