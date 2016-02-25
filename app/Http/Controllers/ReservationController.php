@@ -135,10 +135,10 @@ class ReservationController extends Controller
                         {
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
                             ][$playerReservation->court_id]['first_team'] =
-                                Helpers::getInstance()->getTeamName($firstTeam->fornameOne, $firstTeam->nameOne,
-                                    $firstTeam->fornameTwo, $firstTeam->nameTwo, true);
-                            $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id][$playerReservation->court_id]['second_team'] = Helpers::getInstance()->getTeamName($secondTeam->fornameOne,
-                                $secondTeam->nameOne, $secondTeam->fornameTwo, $secondTeam->nameTwo, true);
+                                $firstTeam->fornameOne . ' ' . $firstTeam->nameOne . '<br> <span class="font-bold"> & </span> <br>' .
+                                $firstTeam->fornameTwo . $firstTeam->nameTwo;
+                            $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id][$playerReservation->court_id]['second_team'] = $secondTeam->fornameOne . ' ' . $secondTeam->nameOne . '<br> <span class="font-bold"> & </span> <br>' .
+                                $secondTeam->fornameTwo . $secondTeam->nameTwo;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
                             ][$playerReservation->court_id]['user_id'] = $playerReservation->user_id;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
