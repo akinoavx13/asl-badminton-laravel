@@ -264,6 +264,7 @@ class PlayerController extends Controller
         $gender = $this->user->gender;
 
         $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id, $player_id);
+
         $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id, $player_id);
 
         return view('player.edit', compact('player', 'setting', 'listPartnerAvailable'));

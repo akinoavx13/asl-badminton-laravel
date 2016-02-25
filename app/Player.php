@@ -215,7 +215,7 @@ class Player extends Model
 
             if ($myTeam !== null)
             {
-                $partnerId = $myTeam->player_one === $player_id ? $myTeam->player_two : $myTeam->player_one;
+                $partnerId = $myTeam->player_one == $player_id ? $myTeam->player_two : $myTeam->player_one;
 
                 $partner = Player::findOrFail($partnerId);
 
