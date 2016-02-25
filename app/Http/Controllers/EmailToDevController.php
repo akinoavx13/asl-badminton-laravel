@@ -44,6 +44,7 @@ class EmailToDevController extends Controller
             {
 
                 $data['sender'] = $this->user->forname . " " . $this->user->name;
+                $data['email'] = $this->user->email;
                 $data['content'] = $request->get('content');
                 $data['dev'] = $dev->forname . " " . $dev->name;
 
