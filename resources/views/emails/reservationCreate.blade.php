@@ -12,6 +12,6 @@
         Nous vous informons que la réservation a bien été créée.
     </p>
     <p>
-        Un fichier ".ics" vous est fournit pour prévenir vos partenaire.
+        Un fichier ".ics" vous est fourni pour prévenir vos partenaires.
     </p>
 @stop
