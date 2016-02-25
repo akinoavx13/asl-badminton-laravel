@@ -61,7 +61,7 @@
 
         <div class="form-group">
             <div class="col-md-3">
-                {!! Form::label('timeSlot_id', 'Crénaux :', ['class' => 'control-label', 'required']) !!}
+                {!! Form::label('timeSlot_id', 'Créneaux :', ['class' => 'control-label', 'required']) !!}
                 <i class="text-navy">*</i>
             </div>
 

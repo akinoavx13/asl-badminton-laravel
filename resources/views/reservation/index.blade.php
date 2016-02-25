@@ -33,7 +33,7 @@
                                 <thead>
                                 <tr>
                                     <th rowspan="{{ count($timeSlots) }}" class="text-center">Jour</th>
-                                    <th class="text-center">Crénaux</th>
+                                    <th class="text-center">Créneaux</th>
                                     @foreach($courts as $court)
                                         <th class="text-center">{{ $court }}</th>
                                     @endforeach
