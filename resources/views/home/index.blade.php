@@ -70,7 +70,7 @@
                                         </span>
                                     @else
                                         {{ $score->userOneTeamTwo_forname }} {{ $score->userOneTeamTwo_name }}
-                                        @if($score->userTwoTeamTwo_forname != 0 && $score->userTwoTeamTwo_name != 0)
+                                        @if($score->userTwoTeamTwo_forname != null && $score->userTwoTeamTwo_name != null)
                                             <span style="font-weight: bold;">&</span>
                                             <br>
                                             {{ $score->userTwoTeamTwo_forname }} {{ $score->userTwoTeamTwo_name }}
