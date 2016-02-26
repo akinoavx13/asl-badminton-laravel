@@ -51,7 +51,6 @@ class PlayerReservationController extends Controller
 
         //player reservation delete
         $router->get('/delete/{playerReservation_id}', [
-            'middleware' => ['admin'],
             'uses'       => 'PlayerReservationController@delete',
             'as'         => 'playerReservation.delete',
         ]);
