@@ -123,7 +123,8 @@ class ChampionshipController extends Controller
             }
         }
 
-        return redirect()->route('season.index')->with('error', "Le championnat ne peut pas être créé car il n'y a pas de saison active !");
+        return redirect()->route('season.index')->with('error',
+            "Le championnat ne peut pas être créé car il n'y a pas de saison active !");
     }
 
     /**
@@ -182,7 +183,6 @@ class ChampionshipController extends Controller
 
             if ($lastedPeriod !== null)
             {
-
                 if ($setting->hasChampionshipSimpleWoman(true))
                 {
                     $teams['simple']['man'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
@@ -224,7 +224,7 @@ class ChampionshipController extends Controller
                 }
 
                 $teams['mixte'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
-                    $teams['mixte'], 'mixte', '');
+                    $teams['mixte'], 'mixte', '', true);
                 $poolsNumber['mixte'] = $this->getNumberOfPool($teams['mixte']);
 
             }
@@ -666,9 +666,10 @@ class ChampionshipController extends Controller
         }
         else
         {
-            $teamsLastedChampionship = $this->getDoubleOrMixteTeamsLastedChampionship('mixte', $gender,
+            $teamsLastedChampionship = $this->getDoubleOrMixteTeamsLastedChampionship('mixte', '',
                 $lastedPeriod_id, $season_id);
         }
+
         foreach ($teams as $team)
         {
             $exist = false;
@@ -685,14 +686,7 @@ class ChampionshipController extends Controller
             }
         }
 
-        if ($combine)
-        {
-            return $teamsLastedChampionship;
-        }
-        else
-        {
-            return $this->array_sort($teamsLastedChampionship, 'rank');
-        }
+        return $teamsLastedChampionship;
     }
 
     private function array_sort($array, $on, $order = SORT_ASC)
