@@ -73,6 +73,11 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\Player');
     }
 
+    public function ropes()
+    {
+        return $this->hasMany('App\Rope');
+    }
+
     public function playersReservations()
     {
         return $this->hasMany('App\PlayersReservation');
@@ -86,6 +91,11 @@ class User extends Model implements AuthenticatableContract,
     public function testimonials()
     {
         return $this->hasMany('App\Testimonial');
+    }
+
+    public function actualities()
+    {
+        return $this->hasMany('App\Actuality');
     }
 
     public function __toString()
@@ -104,7 +114,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function hasOwner($user_id)
     {
-        return $this->id === $user_id;
+        return $this->id == $user_id;
     }
 
     public function hasGender($gender)

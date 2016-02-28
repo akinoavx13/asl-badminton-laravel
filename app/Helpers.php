@@ -55,7 +55,7 @@ class Helpers
 
     public function canSendMail()
     {
-        return env('APP_ENV') === 'prod' || env('APP_ENV') === 'local';
+        return env('APP_ENV') == 'prod' || env('APP_ENV') == 'local';
     }
 
     public function fromAddressMail()

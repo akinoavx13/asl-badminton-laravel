@@ -21,6 +21,11 @@ class NotLeisure
 
         if ($user !== null)
         {
+            if ($user->hasRole('admin'))
+            {
+                return $next($request);
+
+            }
             $player = Helpers::getInstance()->myPlayer();
 
             if ($player !== null)
@@ -29,19 +34,11 @@ class NotLeisure
                 {
                     return $next($request);
                 }
-                else
-                {
-                    abort(401, 'Unauthorized action.');
-                }
             }
-            else
-            {
-                abort(401, 'Unauthorized action.');
-            }
+
         }
-        else
-        {
-            abort(401, 'Unauthorized action.');
-        }
+        abort(401, 'Unauthorized action.');
+
+        return false;
     }
 }

@@ -46,6 +46,11 @@ class Score extends Model
         return $this->belongsTo('App\Team');
     }
 
+    public function posts()
+    {
+        return $this->hasMany('App\Post');
+    }
+
     /******************/
     /*      Has       */
     /******************/

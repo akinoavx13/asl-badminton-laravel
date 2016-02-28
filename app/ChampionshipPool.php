@@ -28,7 +28,7 @@ class ChampionshipPool extends Model
 
     public function __toString()
     {
-        return $this->number;
+        return strval($this->number);
     }
 
     public function getTypeFrench()

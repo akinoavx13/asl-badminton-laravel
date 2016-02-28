@@ -8,12 +8,13 @@
 
     <h1 class="text-center">Les derniers matchs</h1>
 
-    <div class="rox">
+    @include('actuality.create')
+    <hr>
+
+    <div class="row">
         <div class="col-md-8">
             @if(count($scores) > 0)
-                <hr>
                 @foreach($scores as $score)
-
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <div class="row" style="font-size: 15px;">
@@ -49,7 +50,7 @@
                                         {{ $score->second_set_first_team }}
                                         <span class="text-danger">/</span>
                                         {{ $score->second_set_second_team }}
-                                        @if($score->third_set_first_team != null && $score->third_set_second_team != null)
+                                        @if($score->third_set_first_team != 0 && $score->third_set_second_team != 0)
                                             -
                                             {{ $score->third_set_first_team }}
                                             <span class="text-danger">/</span>
@@ -81,9 +82,12 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="ibox-content">
+                            <hr>
+                            @include('post.indexScore')
+                            @include('post.createScore')
+                        </div>
                     </div>
-
                 @endforeach
 
                 <div class="row">
@@ -99,6 +103,10 @@
                     Pas encore de match
                 </h2>
             @endif
+        </div>
+
+        <div class="col-md-4">
+            @include('actuality.index')
         </div>
     </div>
 @stop

@@ -41,7 +41,7 @@ class ScoreUpdateRequest extends Request
     public function rules()
     {
         return [
-            //
+            'photo'   => 'image',
         ];
     }
 }

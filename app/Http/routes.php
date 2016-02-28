@@ -11,15 +11,21 @@
 |
 */
 
+use App\Http\Controllers\ActualityController;
 use App\Http\Controllers\AdminReservationController;
 use App\Http\Controllers\CeController;
 use App\Http\Controllers\ChampionshipController;
 use App\Http\Controllers\ChampionshipResultController;
 use App\Http\Controllers\CourtController;
+use App\Http\Controllers\DashboardAdminController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmailToDevController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerReservationController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RopeController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SettingController;
@@ -37,7 +43,7 @@ Route::get('password/email', 'Auth\PasswordController@getEmail');
 Route::post('password/email', 'Auth\PasswordController@postEmail');
 
 // Password reset routes...
-Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
+Route::get('password/reset/{token}', 'Auth\PasswordController@getReset')->where('token', '[a-zA-Z0-9]+');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 
 Route::get('/', function () {
@@ -101,7 +107,7 @@ Route::group(['prefix' => 'adminReservation', 'middleware' => ['auth', 'admin', 
     AdminReservationController::routes($router);
 });
 
-Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'admin', 'notLeisure']], function () use ($router)
+Route::group(['prefix' => 'championship', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
 {
     ChampionshipController::routes($router);
 });
@@ -119,4 +125,34 @@ Route::group(['prefix' => 'championshipResult', 'middleware' => ['auth', 'notCE'
 Route::group(['prefix' => 'scores', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
 {
     ScoreController::routes($router);
+});
+
+Route::group(['prefix' => 'rope', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    RopeController::routes($router);
+});
+
+Route::group(['prefix' => 'actuality', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    ActualityController::routes($router);
+});
+
+Route::group(['prefix' => 'post', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    PostController::routes($router);
+});
+
+Route::group(['prefix' => 'emailToDev', 'middleware' => ['auth']], function () use ($router)
+{
+    EmailToDevController::routes($router);
+});
+
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
+{
+    DashboardController::routes($router);
+});
+
+Route::group(['prefix' => 'dashboardAdmin', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    DashboardAdminController::routes($router);
 });

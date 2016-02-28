@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers;
 use App\Http\Requests;
+use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserFirstConnectionRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Utilities\SendMail;
 use App\Player;
 use App\Season;
 use App\User;
@@ -108,6 +110,20 @@ class UserController extends Controller
             'as'         => 'user.send_creation_link',
         ]);
 
+        //users create
+        $router->get('/changePassword/{user_id}', [
+            'middleware' => ['userOwner'],
+            'uses'       => 'UserController@changePassword',
+            'as'         => 'user.changePassword',
+        ]);
+
+        //users store
+        $router->post('/changePassword/{user_id}', [
+            'middleware' => ['userOwner'],
+            'uses'       => 'UserController@updatePassword',
+            'as'         => 'user.updatePassword',
+        ]);
+
     }
 
     /**
@@ -153,15 +169,7 @@ class UserController extends Controller
             'ending_holiday'         => Carbon::now()->format('d/m/Y'),
         ]);
 
-        if (Helpers::getInstance()->canSendMail())
-        {
-            Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
-            {
-                $message->from(Helpers::getInstance()->fromAddressMail(), Helpers::getInstance()->fromNameMail());
-                $message->to($user->email, $user)
-                    ->subject('Création de compte AS Lectra Badminton')->cc(Helpers::getInstance()->ccMail());
-            });
-        }
+        SendMail::send($this->user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");
     }
@@ -177,7 +185,13 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
 
         $activeSeason = Season::active()->first();
-        $player = Player::withUser($user_id)->withSeason($activeSeason->id)->first();
+
+        $player = null;
+
+        if ($activeSeason !== null)
+        {
+            $player = Player::withUser($user_id)->withSeason($activeSeason->id)->first();
+        }
 
         return view('user.show', compact('user', 'player'));
     }
@@ -206,6 +220,8 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
+        $data['oldValues'] = $user->attributesToArray();
+
         $user->update([
             'name'                => $request->name,
             'forname'             => $request->forname,
@@ -218,7 +234,6 @@ class UserController extends Controller
             'state'               => $request->state,
             'lectra_relationship' => $request->lectra_relationship,
             'newsletter'          => $request->newsletter,
-            'password'            => $request->password !== "" ? bcrypt($request->password) : $user->password,
             'avatar'              => $request->avatar,
         ]);
 
@@ -230,6 +245,17 @@ class UserController extends Controller
                 'active' => $request->active,
                 'role'   => $request->role,
             ]);
+        }
+
+        $admin = User::where('email', 'c.maheo@lectra.com')->first();
+
+        if ($admin != null)
+        {
+            $data['newValues'] = $user->attributesToArray();
+            $data['userName'] = $user->forname . " " . $user->name;
+            $data['adminUserName'] = $admin->forname . " " . $admin->name;
+
+            SendMail::send($admin, 'updateProfil', $data, 'Modification d\'un profil AS Lectra Badminton');
         }
 
         return redirect()->route('user.show', $user->id)->with('success',
@@ -363,17 +389,26 @@ class UserController extends Controller
     {
         $user = User::findOrFail($user_id);
 
-        if (Helpers::getInstance()->canSendMail())
-        {
-            Mail::send('emails.user.store', $user->attributesToArray(), function ($message) use ($user)
-            {
-                $message->from(Helpers::getInstance()->fromAddressMail(), Helpers::getInstance()->fromNameMail());
-                $message->to($user->email, $user)
-                    ->subject('Création de compte AS Lectra Badminton')->cc(Helpers::getInstance()->ccMail());
-            });
-        }
+        SendMail::send($this->user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "Un autre email vient d'être envoyé à $user !");
+    }
+
+    public function changePassword($user_id)
+    {
+        return view('user.changePassword', compact('user_id'));
+    }
+
+    public function updatePassword(UserChangePasswordRequest $request, $user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        $user->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->route('user.show', $user_id)->with('success', "Le mot de passe a bien été changé !");
+
     }
 }
 

@@ -20,13 +20,13 @@ class UserOwner
         $user_id = $request->route()->getParameter('user_id');
         $user = Helpers::getInstance()->auth();
 
+
         if ($user->hasOwner($user_id) || $user->hasRole('admin'))
         {
+
             return $next($request);
         }
-        else
-        {
-            abort(401, 'Unauthorized action.');
-        }
+
+        abort(401, 'Unauthorized action.');
     }
 }

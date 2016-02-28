@@ -48,16 +48,7 @@
                     {!! Form::label('password', 'Mot de passe :', ['class' => 'control-label']) !!}
                 </div>
                 <div class="col-md-9">
-                    {!! Form::password('password', ['class' => 'form-control']) !!}
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-3">
-                    {!! Form::label('password_confirmation', 'Confirmer :', ['class' => 'control-label']) !!}
-                </div>
-                <div class="col-md-9">
-                    {!! Form::password('password_confirmation', ['class' => 'form-control']) !!}
+                    <a href="{{ route('user.changePassword', $user->id) }}">Changer mon mot de passe</a>
                 </div>
             </div>
 

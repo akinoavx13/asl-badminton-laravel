@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\ChampionshipRanking;
 use App\Http\Requests\ScoreUpdateRequest;
+use App\Period;
+use App\Post;
 use App\Score;
+use App\Season;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -12,13 +16,18 @@ use App\Http\Controllers\Controller;
 class ScoreController extends Controller
 {
 
+    public function __construct()
+    {
+        parent::__constructor();
+    }
+
     public static function routes($router)
     {
         //patterns
         $router->pattern('score_id', '[0-9]+');
         $router->pattern('pool_id', '[0-9]+');
-        $router->pattern('firstTeamName', '[a-zA-Zéèàê&ïô_-]+');
-        $router->pattern('secondTeamName', '[a-zA-Zéèàê&ïô_-]+');
+        $router->pattern('firstTeamName', '[a-zA-Zéèàê&ïôç_-]+');
+        $router->pattern('secondTeamName', '[a-zA-Zéèàê&ïôç_-]+');
 
         $router->get('create/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}', [
             'uses' => 'ScoreController@edit',
@@ -57,8 +66,26 @@ class ScoreController extends Controller
      */
     public function update(ScoreUpdateRequest $request, $score_id, $pool_id, $firstTeamName, $secondTeamName)
     {
-
         $score = Score::findOrFail($score_id);
+
+        if ($request->exists('content'))
+        {
+            if($request->get('content') != "" || $request->exists('photo'))
+            {
+                $post = Post::create([
+                    'user_id'  => $this->user->id,
+                    'score_id' => $score_id,
+                    'content'  => nl2br($request->get('content')),
+                    'photo'    => 0,
+                ]);
+                if ($request->exists('photo'))
+                {
+                    $post->update([
+                        'photo' => $request->photo,
+                    ]);
+                }
+            }
+        }
 
         $firstSet = [
             'firstTeam'  => $request->first_set_first_team,
@@ -82,8 +109,8 @@ class ScoreController extends Controller
                 'first_set_second_team'  => 0,
                 'second_set_first_team'  => 0,
                 'second_set_second_team' => 0,
-                'third_set_first_team'   => null,
-                'third_set_second_team'  => null,
+                'third_set_first_team'   => 0,
+                'third_set_second_team'  => 0,
                 'my_wo'                  => false,
                 'his_wo'                 => false,
                 'unplayed'               => true,
@@ -92,18 +119,20 @@ class ScoreController extends Controller
                 'second_team_win'        => false,
             ]);
 
+            $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
+
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
 
-        if ($request->exists('my_wo') && $request->my_wo == "my_wo")
+        if ($request->exists('wo') && $request->wo == "my_wo")
         {
             $score->update([
                 'first_set_first_team'   => 0,
-                'first_set_second_team'  => 0,
+                'first_set_second_team'  => 21,
                 'second_set_first_team'  => 0,
-                'second_set_second_team' => 0,
-                'third_set_first_team'   => null,
-                'third_set_second_team'  => null,
+                'second_set_second_team' => 21,
+                'third_set_first_team'   => 0,
+                'third_set_second_team'  => 0,
                 'my_wo'                  => true,
                 'his_wo'                 => false,
                 'unplayed'               => false,
@@ -112,18 +141,20 @@ class ScoreController extends Controller
                 'second_team_win'        => true,
             ]);
 
+            $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
+
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
 
-        if ($request->exists('his_wo') && $request->his_wo == "his_wo")
+        if ($request->exists('wo') && $request->wo == "his_wo")
         {
             $score->update([
-                'first_set_first_team'   => 0,
+                'first_set_first_team'   => 21,
                 'first_set_second_team'  => 0,
-                'second_set_first_team'  => 0,
+                'second_set_first_team'  => 21,
                 'second_set_second_team' => 0,
-                'third_set_first_team'   => null,
-                'third_set_second_team'  => null,
+                'third_set_first_team'   => 0,
+                'third_set_second_team'  => 0,
                 'my_wo'                  => false,
                 'his_wo'                 => true,
                 'unplayed'               => false,
@@ -131,6 +162,8 @@ class ScoreController extends Controller
                 'first_team_win'         => true,
                 'second_team_win'        => false,
             ]);
+
+            $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
@@ -159,19 +192,7 @@ class ScoreController extends Controller
                 'second_team_win'        => $winner == "secondTeam" ? true : false,
             ]);
 
-//            $rankFirstTeam = $score
-//                ->firstTeam()
-//                ->first()
-//                ->championshipRanks()
-//                ->where('championship_pool_id', $pool_id)
-//                ->first();
-//
-//            $rankSecondTeam = $score
-//                ->secondTeam()
-//                ->first()
-//                ->championshipRanks()
-//                ->where('championship_pool_id', $pool_id)
-//                ->first();
+            $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
             return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
         }
@@ -308,12 +329,7 @@ class ScoreController extends Controller
             $needThirdSet = true;
         }
 
-        if (
-            $needThirdSet &&
-            $thirdSet['firstTeam'] === "" || $thirdSet['secondTeam'] === "" &&
-            ($winnerFirstSet === 'firstTeam' && $winnerSecondSet === 'secondTeam') ||
-            ($winnerFirstSet === 'secondTeam' && $winnerSecondSet === 'firstTeam')
-        )
+        if ($needThirdSet && $thirdSet['firstTeam'] == "" || $thirdSet['secondTeam'] == "")
         {
             return 'Il faut un troisième set pour déterminer le vainqueur !';
         }
@@ -417,6 +433,352 @@ class ScoreController extends Controller
                 return $winnerSecondSet;
             }
 
+        }
+    }
+
+    private function updateRankings($pool_id, $first_team_id, $second_team_id)
+    {
+        $allScoresFirstTeam = Score::select('scores.*')
+            ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+            ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
+            ->where('championship_rankings.championship_pool_id', $pool_id)
+            ->where('scores.first_team_id', $first_team_id)
+            ->orWhere(function ($query) use($first_team_id){
+                $query->where('scores.second_team_id', $first_team_id);
+            })
+            ->get();
+
+
+        $allScoresSecondTeam = Score::select('scores.*')
+            ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+            ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
+            ->where('championship_rankings.championship_pool_id', $pool_id)
+            ->where('scores.second_team_id', $second_team_id)
+            ->orWhere(function ($query) use($second_team_id){
+                $query->where('scores.first_team_id', $second_team_id);
+            })
+            ->get();
+
+        $rankingFirstTeam = ChampionshipRanking::where('team_id', $first_team_id)->first();
+        $infoScoreFirstTeam = $this->getInfoRankings($allScoresFirstTeam, $first_team_id);
+        if ($rankingFirstTeam !== null)
+        {
+            $rankingFirstTeam->update([
+                'match_played'            => $infoScoreFirstTeam['match_played'],
+                'match_won'               => $infoScoreFirstTeam['match_won'],
+                'match_lost'              => $infoScoreFirstTeam['match_lost'],
+                'match_unplayed'          => $infoScoreFirstTeam['match_unplayed'],
+                'match_won_by_wo'         => $infoScoreFirstTeam['match_won_by_wo'],
+                'match_lost_by_wo'        => $infoScoreFirstTeam['match_lost_by_wo'],
+                'total_difference_set'    => $infoScoreFirstTeam['total_difference_set'],
+                'total_difference_points' => $infoScoreFirstTeam['total_difference_points'],
+                'total_points'            => $infoScoreFirstTeam['total_points'],
+            ]);
+        }
+
+        $rankingSecondTeam = ChampionshipRanking::where('team_id', $second_team_id)->first();
+        $infoScoreSecondTeam = $this->getInfoRankings($allScoresSecondTeam, $second_team_id);
+        if ($rankingSecondTeam !== null)
+        {
+            $rankingSecondTeam->update([
+                'match_played'            => $infoScoreSecondTeam['match_played'],
+                'match_won'               => $infoScoreSecondTeam['match_won'],
+                'match_lost'              => $infoScoreSecondTeam['match_lost'],
+                'match_unplayed'          => $infoScoreSecondTeam['match_unplayed'],
+                'match_won_by_wo'         => $infoScoreSecondTeam['match_won_by_wo'],
+                'match_lost_by_wo'        => $infoScoreSecondTeam['match_lost_by_wo'],
+                'total_difference_set'    => $infoScoreSecondTeam['total_difference_set'],
+                'total_difference_points' => $infoScoreSecondTeam['total_difference_points'],
+                'total_points'            => $infoScoreSecondTeam['total_points'],
+            ]);
+        }
+
+        $this->calculRankings($pool_id);
+
+    }
+
+    private function getInfoRankings($scores, $team_id)
+    {
+        $infoRankings['match_played'] = 0;
+        $infoRankings['match_unplayed'] = 0;
+        $infoRankings['match_won'] = 0;
+        $infoRankings['match_lost'] = 0;
+        $infoRankings['match_won_by_wo'] = 0;
+        $infoRankings['match_lost_by_wo'] = 0;
+        $infoRankings['total_difference_set'] = 0;
+        $infoRankings['total_difference_points'] = 0;
+        $infoRankings['total_points'] = 0;
+
+        if ($scores !== null)
+        {
+            foreach ($scores as $score)
+            {
+
+                $team_id == $score->first_team_id ? $isFirstTeam = true : $isFirstTeam = false;
+
+                if ($score->hasUnplayed(true))
+                {
+                    $infoRankings['match_unplayed'] += 1;
+                }
+                //gagné par wo
+                elseif (($isFirstTeam && $score->hasHisWo(true)) || (! $isFirstTeam && $score->hasMyWo(true)))
+                {
+                    $infoRankings['match_played'] += 1;
+                    $infoRankings['match_won_by_wo'] += 1;
+                    $infoRankings['total_difference_set'] += 2;
+                    $infoRankings['total_difference_points'] += 42;
+                    $infoRankings['total_points'] += 3;
+                }
+                //perdu par wo
+                elseif (($isFirstTeam && $score->hasMyWo(true)) || (! $isFirstTeam && $score->hasHisWo(true)))
+                {
+                    $infoRankings['match_played'] += 1;
+                    $infoRankings['match_lost_by_wo'] += 1;
+                    $infoRankings['total_difference_set'] -= 2;
+                    $infoRankings['total_difference_points'] -= 42;
+                    $infoRankings['total_points'] += 0;
+                }
+                //match gagné
+                elseif ($isFirstTeam && $score->hasFirstTeamWin(true) || ! $isFirstTeam && $score->hasSecondTeamWin(true))
+                {
+                    $infoRankings['match_played'] += 1;
+                    $infoRankings['match_won'] += 1;
+                    if ($isFirstTeam)
+                    {
+                        //on gagne le match en 2 ou 3 set si mon score est 0 au 3 set j'ai gagné en 2 set
+                        if ($score->third_set_first_team == 0)
+                        {
+                            $infoRankings['total_difference_set'] += 2;
+                        }
+                        else
+                        {
+                            $infoRankings['total_difference_set'] += 1;
+                        }
+
+                        $infoRankings['total_difference_points'] +=
+                            $score->first_set_first_team - $score->first_set_second_team + $score->second_set_first_team - $score->second_set_second_team + $score->third_set_first_team - $score->third_set_second_team;
+                    }
+                    else
+                    {
+                        //on gagne le match en 2 ou 3 set si mon score est 0 au 3 set j'ai gagné en 2 set
+                        if ($score->third_set_second_team == 0)
+                        {
+                            $infoRankings['total_difference_set'] += 2;
+                        }
+                        else
+                        {
+                            $infoRankings['total_difference_set'] += 1;
+                        }
+
+                        $infoRankings['total_difference_points'] +=
+                            $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_first_team + $score->third_set_second_team - $score->third_set_first_team;
+                    }
+                    $infoRankings['total_points'] += 3;
+                }
+                //match perdu
+                elseif ($isFirstTeam && $score->hasSecondTeamWin(true) || ! $isFirstTeam && $score->hasFirstTeamWin(true))
+                {
+                    $infoRankings['match_played'] += 1;
+                    $infoRankings['match_lost'] += 1;
+                    if ($isFirstTeam)
+                    {
+                        //on perd le match en 2 ou 3 set si son score est 0 au 3 set j'ai perdu en 2 set
+                        if ($score->third_set_second_team == 0)
+                        {
+                            $infoRankings['total_difference_set'] -= 2;
+                        }
+                        else
+                        {
+                            $infoRankings['total_difference_set'] -= 1;
+                        }
+
+                        $infoRankings['total_difference_points'] +=
+                            $score->first_set_first_team - $score->first_set_second_team + $score->second_set_first_team - $score->second_set_second_team + $score->third_set_first_team - $score->third_set_second_team;
+                    }
+                    else
+                    {
+                        //on perd le match en 2 ou 3 set si son score est 0 au 3 set j'ai perdu en 2 set
+                        if ($score->third_set_first_team == 0)
+                        {
+                            $infoRankings['total_difference_set'] -= 2;
+                        }
+                        else
+                        {
+                            $infoRankings['total_difference_set'] -= 1;
+                        }
+
+                        $infoRankings['total_difference_points'] +=
+                            $score->first_set_second_team - $score->first_set_first_team + $score->second_set_second_team - $score->second_set_first_team + $score->third_set_second_team - $score->third_set_first_team;
+                    }
+                    $infoRankings['total_points'] += 1;
+                }
+            }
+        }
+
+        return $infoRankings;
+    }
+
+    private function calculRankings($pool_id)
+    {
+
+        $activeSeason = Season::active()->first();
+        if ($activeSeason != null)
+        {
+            $activePeriod = Period::current($activeSeason->id, 'championship')->first();
+            if ($activePeriod != null)
+            {
+                $rankings = ChampionshipRanking::where('championship_pool_id', $pool_id)
+                    ->orderBy('total_points', 'desc')
+                    ->orderBy('total_difference_set', 'desc')
+                    ->orderBy('total_difference_points', 'desc')
+                    ->get();
+
+                //on cherche les exaequo
+                $allTotalPoints = [];
+                $nbExaequo = [];
+
+                // on commence par initaliser le tableau
+                foreach ($rankings as $ranking)
+                {
+                    $nbExaequo[$ranking->total_points][0] = 0;
+                }
+
+                // on cherche le nombre de fois ou l'on trouve le meme nombre de points
+                foreach ($rankings as $ranking)
+                {
+                    $allTotalPoints[$ranking->id] = $ranking->total_points;
+                    $nbExaequo[$ranking->total_points][0] += 1;
+                    $nbExaequo[$ranking->total_points][$nbExaequo[$ranking->total_points][0]] = $ranking;
+                }
+
+                $rank = 1;
+
+                foreach ($rankings as $index => $ranking)
+                {
+                    if ($nbExaequo[$ranking->total_points][0] == 2)
+                    {
+                        // deux exaequo qu'il faut departager au match particulier...
+                        // on cherche si il y a un score entre ces 2 joueurs dans la periode, si il y a en plusieurs (erreurs de saisie) on prend le dernier
+
+                        $score = Score::where('first_team_id', '=', $nbExaequo[$ranking->total_points][1]->team_id)
+                            ->where('second_team_id', '=', $nbExaequo[$ranking->total_points][2]->team_id)
+                            ->where('created_at', '>=', $activePeriod->start)
+                            ->where('created_at', '<=', $activePeriod->end)
+                            ->orderBy('created_at', 'desc')
+                            ->orWhere(function ($query) use ($nbExaequo, $activePeriod, $ranking)
+                            {
+                                $query->where('first_team_id', $nbExaequo[$ranking->total_points][2]->team_id)
+                                    ->where('second_team_id', $nbExaequo[$ranking->total_points][1]->team_id)
+                                    ->where('created_at', '>=', $activePeriod->start)
+                                    ->where('created_at', '<=', $activePeriod->end)
+                                    ->orderBy('created_at', 'desc');
+                            })
+                            ->first();
+
+                        if ($score != null)
+                        {
+                            // il y a un score on cherche qui est le gagnant si c'est le deuxieme joueur on inverse le ranking
+                            if ($score->my_wo)
+                            {
+                                if ($nbExaequo[$ranking->total_points][1]->team_id == $ranking->team_id)
+                                {
+                                    $ranking->rank = $rank + 1;
+                                }
+                                else
+                                {
+                                    $ranking->rank = $rank;
+                                }
+
+                            }
+                            elseif ($score->his_wo)
+                            {
+                                if ($nbExaequo[$ranking->total_points][1]->team_id == $ranking->team_id)
+                                {
+                                    $ranking->rank = $rank;
+                                }
+                                else
+                                {
+                                    $ranking->rank = $rank - 1;
+                                }
+                            }
+                            else
+                            {
+                                $firstTeamWonSet = 0;
+                                $secondTeamWonSet = 0;
+
+                                if ($score->first_set_first_team > $score->first_set_second_team)
+                                {
+                                    $firstTeamWonSet++;
+                                }
+                                else
+                                {
+                                    $secondTeamWonSet++;
+                                }
+
+                                if ($score->second_set_first_team > $score->second_set_second_team)
+                                {
+                                    $firstTeamWonSet++;
+                                }
+                                else
+                                {
+                                    $secondTeamWonSet++;
+                                }
+
+                                if ($score->third_set_first_team != 0 &&
+                                    $score->third_set_second_team != 0
+                                )
+                                {
+                                    if ($score->third_set_first_team > $score->third_set_second_team)
+                                    {
+                                        $firstTeamWonSet++;
+                                    }
+                                    else
+                                    {
+                                        $secondTeamWonSet++;
+                                    }
+                                }
+
+                                if ($firstTeamWonSet > $secondTeamWonSet)
+                                {
+                                    if ($nbExaequo[$ranking->total_points][1]->team_id == $ranking->team_id)
+                                    {
+                                        $ranking->rank = $rank;
+                                    }
+                                    else
+                                    {
+                                        $ranking->rank = $rank - 1;
+                                    }
+                                }
+                                else
+                                {
+                                    if ($nbExaequo[$ranking->total_points][1]->team_id == $ranking->team_id)
+                                    {
+                                        $ranking->rank = $rank;
+                                    }
+                                    else
+                                    {
+                                        $ranking->rank = $rank;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // pas de score on garde le ranking donné par la requete
+                            $ranking->rank = $rank;
+                        }
+
+                    }
+                    else
+                    {
+                        // ici pas besoin de vérifier si il y a 3 exaequo ou plus, car la requete est deja triée par difference de set puis de points
+                        $ranking->rank = $rank;
+                    }
+
+                    $ranking->save();
+                    $rank++;
+                }
+            }
         }
     }
 }

@@ -33,7 +33,7 @@
                                 <thead>
                                 <tr>
                                     <th rowspan="{{ count($timeSlots) }}" class="text-center">Jour</th>
-                                    <th class="text-center">Crénaux</th>
+                                    <th class="text-center">Créneaux</th>
                                     @foreach($courts as $court)
                                         <th class="text-center">{{ $court }}</th>
                                     @endforeach
@@ -53,12 +53,13 @@
                                         @foreach($courts as $court)
                                             <td>
                                                 @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'simple' || $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'double')
-                                                    {{ $reservations[$day->format('Y-m-d')
-                                                    ][$timeSlots[0]->id][$court->id]['first_team'] }} <br> VS <br> {{
-                                                                $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['second_team'] }}
+                                                    {!! $reservations[$day->format('Y-m-d')
+                                                    ][$timeSlots[0]->id][$court->id]['first_team'] !!}
+                                                    <br> <span class="text-danger font-bold">VS</span> <br>
+                                                    {!! $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['second_team'] !!}
                                                 @elseif($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'free')
                                                     <a href="{{ route('playerReservation.create', [$reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['day'], $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['court_id'], $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['timeSlot_id']]) }}"
-                                                       class="text-white">Réserver</a>
+                                                       class="text-resa">Réserver</a>
                                                 @elseif($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'admin')
                                                     <button type="button" class="btn btn-danger"
                                                             data-toggle="modal" data-target="#myModal">
@@ -93,8 +94,11 @@
                                                         </div>
                                                     </div>
                                                 @endif
-                                                @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')))
+                                                @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')) && $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] != 'admin')
                                                     <p><a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa
+                                                    fa-times"></span></a></p>
+                                                @elseif($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'admin')
+                                                        <p><a href="{{ route('adminReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa
                                                     fa-times"></span></a></p>
                                                 @endif
                                             </td>
@@ -108,12 +112,12 @@
                                                     @foreach($courts as $court)
                                                         <td>
                                                             @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'simple' || $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'double')
-                                                                {{ $reservations[$day->format('Y-m-d')
-                                                                ][$timeSlot->id][$court->id]['first_team'] }} <br> VS <br> {{
-                                                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['second_team'] }}
+                                                                {!! $reservations[$day->format('Y-m-d')
+                                                                ][$timeSlot->id][$court->id]['first_team'] !!} <br> <span class="text-danger font-bold">VS</span> <br> {!!
+                                                                $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['second_team'] !!}
                                                             @elseif($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'free')
                                                                 <a href="{{ route('playerReservation.create', [$reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['day'], $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['court_id'], $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['timeSlot_id']]) }}"
-                                                                   class="text-white">Réserver</a>
+                                                                   class="text-resa">Réserver</a>
                                                             @elseif($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'admin')
                                                                 <button type="button" class="btn btn-danger"
                                                                         data-toggle="modal" data-target="#myModal">
@@ -149,8 +153,10 @@
                                                                 </div>
 
                                                             @endif
-                                                            @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')))
+                                                            @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')) && $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] != 'admin')
                                                                 <p><a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa fa-times"></span></a></p>
+                                                            @elseif($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'admin')
+                                                                    <p><a href="{{ route('adminReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa fa-times"></span></a></p>
                                                             @endif
                                                         </td>
                                                     @endforeach

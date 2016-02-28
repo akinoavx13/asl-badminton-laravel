@@ -6,7 +6,7 @@
                     <div class="text-center">
                         <span>
                             @if($auth->avatar)
-                                <img src="{{ url($auth->avatar) }}"
+                                <img src="{{ asset($auth->avatar) }}"
                                      class="img-circle" alt="logo" width="50" height="50"/>
                             @else
                                 <img src="{{ asset('img/anonymous.png') }}"
@@ -55,6 +55,36 @@
                         <i class="fa fa-home"></i>
                         <span class="nav-label">Accueil</span>
                     </a>
+                </li>
+            @endif
+
+            @if($auth->hasRole('user'))
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                    <li class="{{ Request::is('dashboard*')? 'active' : '' }}">
+                        <a href="{{ route('dashboard.index') }}">
+                            <i class="fa fa-dashboard"></i>
+                            <span class="nav-label">Tableau de bord</span>
+                        </a>
+                    </li>
+                @endif
+            @endif
+
+            @if($auth->hasRole('admin'))
+                <li class="{{ Request::is('dashboard*') ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i>
+                        <span class="nav-label">Tableau de bord</span>
+                        <span class="fa arrow"></span>
+                    </a>
+
+                    <ul class="nav nav-second-level">
+                        <li class="{{ Request::is('dashboard/index') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>Joueur</a>
+                        </li>
+                        <li class="{{ Request::is('dashboardAdmin/index') ? 'active' : '' }}">
+                            <a href="{{ route('dashboardAdmin.index') }}"><i class="fa fa-dashboard"></i>Section</a>
+                        </li>
+                    </ul>
                 </li>
             @endif
 
@@ -143,7 +173,8 @@
                     </ul>
                     <ul class="nav nav-second-level">
                         <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
-                                    href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du championnat</a></li>
+                                    href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement
+                                du championnat</a></li>
                     </ul>
                 </li>
             @endif
@@ -151,7 +182,8 @@
             @if($auth->hasRole('user'))
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
                     <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
-                                href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du championnat</a></li>
+                                href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du
+                            championnat</a></li>
                     </li>
                 @endif
             @endif
@@ -215,6 +247,44 @@
                 </li>
             @endif
 
+            @if($auth->hasRole('user'))
+                <li class="{{ Request::is('rope') ? 'active' : '' }}">
+                    <a href="{{ route('rope.index') }}">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="nav-label">Cordage</span>
+                    </a>
+                </li>
+            @endif
+
+            @if($auth->hasRole('admin'))
+                <li class="{{ Request::is('rope*')  ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="nav-label">Cordage</span>
+                        <span class="fa arrow"></span>
+                    </a>
+
+                    <ul class="nav nav-second-level">
+                        <li class="{{ Request::is('rope/index') ? 'active' : '' }}"><a
+                                    href="{{ route('rope.index') }}"><i class="fa fa-shopping-cart"></i>Recorder</a>
+                        </li>
+                        <li class="{{ Request::is('rope/create') ? 'active' : '' }}"><a
+                                    href="{{ route('rope.create') }}"><i class="fa
+                                        fa-plus"></i>Ajouter une bobine</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+            @if($auth->hasRole('user') || $auth->hasRole('ce') || $auth->hasRole('admin'))
+                <li class="{{ Request::is('emailToDev') ? 'active' : '' }}">
+                    <a href="{{ route('emailToDev.index') }}">
+                        <i class="fa fa-send"></i>
+                        <span class="nav-label">Email au développeur</span>
+                    </a>
+                </li>
+            @endif
         </ul>
+        <p class="text-center">&copy; <a href="http://maxime.maheo.free.fr">Maxime Maheo</a></p>
     </div>
 </nav>

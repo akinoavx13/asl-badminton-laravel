@@ -6,10 +6,12 @@ use App\Helpers;
 use App\Http\Requests\PlayerListRequest;
 use App\Http\Requests\PlayerStoreRequest;
 use App\Http\Requests\PlayerUpdateRequest;
+use App\Http\Utilities\SendMail;
 use App\Player;
 use App\Season;
 use App\Setting;
 use App\Team;
+use App\User;
 
 /**
  * Manage players
@@ -142,6 +144,30 @@ class PlayerController extends Controller
      */
     public function create()
     {
+
+        $alreadySubscribe = false;
+
+        //on s'inscrit dans la saison active
+        $activeSeason = Season::active()->first();
+
+        //si il y a pas encore de saison
+        if ($activeSeason === null)
+        {
+            return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouverte !");
+        }
+
+        //compte le nombre d'inscription dans lesquels on est inscrit
+        $numberOfPlayerForUserInSelectedSeason = Player::select('players.id')
+            ->withSeason($activeSeason->id)
+            ->where('user_id', $this->user->id)
+            ->count();
+
+        //si on a plus de 1 inscription
+        if ($numberOfPlayerForUserInSelectedSeason >= 1)
+        {
+            $alreadySubscribe = true;
+        }
+
         $player = new Player();
         $setting = Helpers::getInstance()->setting();
 
@@ -150,7 +176,7 @@ class PlayerController extends Controller
         $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id);
         $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id);
 
-        return view('player.create', compact('player', 'setting', 'listPartnerAvailable'));
+        return view('player.create', compact('player', 'setting', 'listPartnerAvailable', 'alreadySubscribe'));
     }
 
     /**
@@ -205,6 +231,22 @@ class PlayerController extends Controller
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
 
+        if ($player->hasFormula('competition'))
+        {
+            SendMail::send($this->user, 'subscribeCompetitionFormula', $this->user->attributesToArray(), 'Inscription
+             formule compétition AS Lectra Badminton');
+        }
+
+        $admin = User::where('email', 'c.maheo@lectra.com')->first();
+
+        if($admin != null)
+        {
+            $data['newValues'] = $player->attributesToArray();
+            $data['userName'] = $this->user->forname . " " . $this->user->name;
+            $data['adminUserName'] = $admin->forname . " " . $admin->name;
+            SendMail::send($admin, 'newSubscribe', $data, 'Nouvelle inscription AS Lectra Badminton');
+        }
+
         return redirect()->route('home.index')->with('success', "Vous êtes bien inscrit !");
     }
 
@@ -222,6 +264,7 @@ class PlayerController extends Controller
         $gender = $this->user->gender;
 
         $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id, $player_id);
+
         $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id, $player_id);
 
         return view('player.edit', compact('player', 'setting', 'listPartnerAvailable'));
@@ -248,6 +291,8 @@ class PlayerController extends Controller
             ]);
         }
 
+        $data['oldValues'] = $player->attributesToArray();
+
         $player->update([
             'formula'       => $request->formula,
             // tshirt inclus dans les formules competition et corpo, pas dans les autres
@@ -265,6 +310,20 @@ class PlayerController extends Controller
         $this->createSimpleTeams($player, $activeSeason);
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
+
+        if ($player->hasFormula('competition'))
+        {
+            SendMail::send($this->user, 'subscribeCompetitionFormula', $this->user->attributesToArray(), 'Inscription
+             formule compétition AS Lectra Badminton');
+        }
+
+        $admin = User::where('email', 'c.maheo@lectra.com')->first();
+        $data['newValues'] = $player->attributesToArray();
+        $data['userName'] = $this->user->forname . " " . $this->user->name;
+        $data['adminUserName'] = $admin->forname . " " . $admin->name;
+
+        SendMail::send($admin, 'updateSubscribe', $data, 'Modification d\'une inscription AS Lectra
+        Badminton');
 
         return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
     }
@@ -441,7 +500,7 @@ class PlayerController extends Controller
             ]);
         }
 
-        $type === 'double' ?  $mixteOrDouble = $player->double : $mixteOrDouble = $player->mixte;
+        $type === 'double' ? $mixteOrDouble = $player->double : $mixteOrDouble = $player->mixte;
 
         if ($mixteOrDouble && $partner_id !== 'search')
         {
@@ -467,7 +526,7 @@ class PlayerController extends Controller
                 $userOne = $player->user->__toString();
                 $userTwo = $partner->user->__toString();
 
-                if($type === 'double')
+                if ($type === 'double')
                 {
                     Team::create([
                         'player_one'   => $userOne < $userTwo ? $player->id : $partner_id,
