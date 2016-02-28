@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\ChampionshipPool;
 use App\Helpers;
+use App\Period;
 use App\Score;
+use App\Season;
 use App\Team;
 use Illuminate\Http\Request;
 
@@ -62,34 +64,48 @@ class ChampionshipResultController extends Controller
 
         $scores = [];
 
-        if($type == 'simple')
+        $activeSeason = Season::active()->first();
+
+        if($activeSeason != null)
         {
-            $scores = Score::select(
-                'userFirstTeam.name as userFirstTeamName', 'userFirstTeam.forname as userFirstTeamForname',
-                'userFirstTeam.id as userFirstTeamId', 'userSecondTeam.name as userSecondTeamName',
-                'userSecondTeam.forname as userSecondTeamForname', 'userSecondTeam.id as userSecondTeamId',
-                'scores.first_set_first_team', 'scores.first_set_second_team', 'scores.second_set_first_team',
-                'scores.second_set_second_team', 'scores.third_set_first_team', 'scores.third_set_second_team',
-                'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId',
-                'scores.first_team_win', 'scores.second_team_win')
-                ->allScoresSimpleInSelectedPool($pool_id)
-                ->get();
-        }
-        else
-        {
-            $scores = Score::select(
-                'userOneFirstTeam.name as userOneFirstTeamName', 'userOneFirstTeam.forname as userOneFirstTeamForname',
-                'userOneFirstTeam.id as userOneFirstTeamId', 'userTwoFirstTeam.name as userTwoFirstTeamName',
-                'userTwoFirstTeam.forname as userTwoFirstTeamForname', 'userTwoFirstTeam.id as userTwoFirstTeamId',
-                'userOneSecondTeam.name as userOneSecondTeamName', 'userOneSecondTeam.forname as userOneSecondTeamForname',
-                'userOneSecondTeam.id as userOneSecondTeamId', 'userTwoSecondTeam.name as userTwoSecondTeamName',
-                'userTwoSecondTeam.forname as userTwoSecondTeamForname', 'userTwoSecondTeam.id as userTwoSecondTeamId',
-                'scores.first_set_first_team', 'scores.first_set_second_team', 'scores.second_set_first_team',
-                'scores.second_set_second_team', 'scores.third_set_first_team', 'scores.third_set_second_team',
-                'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId',
-                'scores.first_team_win', 'scores.second_team_win')
-                ->allScoresDoubleOrMixteInSelectedPool($pool_id)
-                ->get();
+            $currentPeriod = Period::current($activeSeason->id, 'championship')->first();
+
+            if($currentPeriod != null)
+            {
+                if($type == 'simple')
+                {
+                    $scores = Score::select(
+                        'userFirstTeam.name as userFirstTeamName', 'userFirstTeam.forname as userFirstTeamForname',
+                        'userFirstTeam.id as userFirstTeamId', 'userSecondTeam.name as userSecondTeamName',
+                        'userSecondTeam.forname as userSecondTeamForname', 'userSecondTeam.id as userSecondTeamId',
+                        'scores.first_set_first_team', 'scores.first_set_second_team', 'scores.second_set_first_team',
+                        'scores.second_set_second_team', 'scores.third_set_first_team', 'scores.third_set_second_team',
+                        'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId',
+                        'scores.first_team_win', 'scores.second_team_win')
+                        ->allScoresSimpleInSelectedPool($pool_id)
+                        ->where('scores.created_at', '>=', $currentPeriod->start->format('Y-m-d'))
+                        ->where('scores.created_at', '<=', $currentPeriod->end->format('Y-m-d'))
+                        ->get();
+                }
+                else
+                {
+                    $scores = Score::select(
+                        'userOneFirstTeam.name as userOneFirstTeamName', 'userOneFirstTeam.forname as userOneFirstTeamForname',
+                        'userOneFirstTeam.id as userOneFirstTeamId', 'userTwoFirstTeam.name as userTwoFirstTeamName',
+                        'userTwoFirstTeam.forname as userTwoFirstTeamForname', 'userTwoFirstTeam.id as userTwoFirstTeamId',
+                        'userOneSecondTeam.name as userOneSecondTeamName', 'userOneSecondTeam.forname as userOneSecondTeamForname',
+                        'userOneSecondTeam.id as userOneSecondTeamId', 'userTwoSecondTeam.name as userTwoSecondTeamName',
+                        'userTwoSecondTeam.forname as userTwoSecondTeamForname', 'userTwoSecondTeam.id as userTwoSecondTeamId',
+                        'scores.first_set_first_team', 'scores.first_set_second_team', 'scores.second_set_first_team',
+                        'scores.second_set_second_team', 'scores.third_set_first_team', 'scores.third_set_second_team',
+                        'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId',
+                        'scores.first_team_win', 'scores.second_team_win')
+                        ->allScoresDoubleOrMixteInSelectedPool($pool_id)
+                        ->where('scores.created_at', '>=', $currentPeriod->start->format('Y-m-d'))
+                        ->where('scores.created_at', '<=', $currentPeriod->end->format('Y-m-d'))
+                        ->get();
+                }
+            }
         }
 
         $results = [];
