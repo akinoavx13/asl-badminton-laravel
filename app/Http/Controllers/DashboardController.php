@@ -99,9 +99,12 @@ class DashboardController extends Controller
                     })
                     ->first();
 
-                $tableReservation['simple'] = $this->createTableReservation($mySimplePool, 'simple', $activeSeason);
-                $tableReservation['double'] = $this->createTableReservation($myDoublePool, 'double', $activeSeason);
-                $tableReservation['mixte'] = $this->createTableReservation($myMixtePool, 'mixte', $activeSeason);
+                $tableReservation['simple'] = $this->createTableReservation($mySimplePool, 'simple', $activeSeason,
+                    $currentChampionship);
+                $tableReservation['double'] = $this->createTableReservation($myDoublePool, 'double', $activeSeason,
+                    $currentChampionship);
+                $tableReservation['mixte'] = $this->createTableReservation($myMixtePool, 'mixte', $activeSeason,
+                    $currentChampionship);
 
                 $pools = [];
 
@@ -134,7 +137,7 @@ class DashboardController extends Controller
         return redirect()->back()->with('error', 'Tableau de bord indisponible pour le moment !');
     }
 
-    private function createTableReservation($myPool, $type, $season)
+    private function createTableReservation($myPool, $type, $season, $currentChampionship)
     {
         $result = [];
 
@@ -175,10 +178,14 @@ class DashboardController extends Controller
                         'scores.id as scoreId')
                         ->allScoresSimpleInSelectedPool($myPool->id)
                         ->where('firstTeam.id', $myTeam->id)
-                        ->orWhere(function ($query) use ($myTeam, $myPool)
+                        ->where('scores.created_at', '>=', $currentChampionship->start->format('Y-m-d'))
+                        ->where('scores.created_at', '<=', $currentChampionship->end->format('Y-m-d'))
+                        ->orWhere(function ($query) use ($myTeam, $myPool, $currentChampionship)
                         {
                             $query->allScoresSimpleInSelectedPool($myPool->id)
-                                ->where('secondTeam.id', $myTeam->id);
+                                ->where('secondTeam.id', $myTeam->id)
+                                ->where('scores.created_at', '>=', $currentChampionship->start->format('Y-m-d'))
+                                ->where('scores.created_at', '<=', $currentChampionship->end->format('Y-m-d'));
                         })
                         ->get();
                 }
@@ -256,11 +263,17 @@ class DashboardController extends Controller
                         'scores.id as scoreId')
                         ->allScoresDoubleOrMixteInSelectedPool($myPool->id)
                         ->where('firstTeam.id', $myTeam->id)
-                        ->orWhere(function ($query) use ($myTeam, $myPool)
+                        ->where('scores.created_at', '>=', $currentChampionship->start->format('Y-m-d'))
+                        ->where('scores.created_at', '<=', $currentChampionship->end->format('Y-m-d'))
+                        ->orWhere(function ($query) use ($myTeam, $myPool, $currentChampionship)
                         {
-                            $query->where('secondTeam.id', $myTeam->id);
+                            $query->allScoresDoubleOrMixteInSelectedPool($myPool->id)
+                                ->where('secondTeam.id', $myTeam->id)
+                                ->where('scores.created_at', '>=', $currentChampionship->start->format('Y-m-d'))
+                                ->where('scores.created_at', '<=', $currentChampionship->end->format('Y-m-d'));
                         })
                         ->get();
+
                 }
             }
 
