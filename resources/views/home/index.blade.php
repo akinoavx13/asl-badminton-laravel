@@ -23,6 +23,7 @@
                                         <span class="btn btn-primary">
                                             {{ $score->userOneTeamOne_forname }} {{ $score->userOneTeamOne_name }}
                                             @if($score->userTwoTeamOne_forname != null && $score->userTwoTeamOne_name != null)
+                                                <br>
                                                 <span style="font-weight: bold;">&</span>
                                                 <br>
                                                 {{ $score->userTwoTeamOne_forname }} {{ $score->userTwoTeamOne_name }}
@@ -31,6 +32,7 @@
                                     @else
                                         {{ $score->userOneTeamOne_forname }} {{ $score->userOneTeamOne_name }}
                                         @if($score->userTwoTeamOne_forname != null && $score->userTwoTeamOne_name != null)
+                                            <br>
                                             <span style="font-weight: bold;">&</span>
                                             <br>
                                             {{ $score->userTwoTeamOne_forname }} {{ $score->userTwoTeamOne_name }}
@@ -63,6 +65,7 @@
                                         <span class="btn btn-primary">
                                             {{ $score->userOneTeamTwo_forname }} {{ $score->userOneTeamTwo_name }}
                                             @if($score->userTwoTeamTwo_forname != null && $score->userTwoTeamTwo_name != null)
+                                                <br>
                                                 <span style="font-weight: bold;">&</span>
                                                 <br>
                                                 {{ $score->userTwoTeamTwo_forname }} {{ $score->userTwoTeamTwo_name }}
@@ -71,6 +74,7 @@
                                     @else
                                         {{ $score->userOneTeamTwo_forname }} {{ $score->userOneTeamTwo_name }}
                                         @if($score->userTwoTeamTwo_forname != null && $score->userTwoTeamTwo_name != null)
+                                            <br>
                                             <span style="font-weight: bold;">&</span>
                                             <br>
                                             {{ $score->userTwoTeamTwo_forname }} {{ $score->userTwoTeamTwo_name }}
