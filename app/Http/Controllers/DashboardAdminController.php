@@ -31,7 +31,8 @@ class DashboardAdminController extends Controller
 
         $allUsers = User::all();
 
-        $users['nbUsersFirstConnection'] = 0;
+        $users['nbUsersFirstConnection'] = User::where('first_connect', 1)
+            ->get();
         $users['users'] = $allUsers;
         $users['usersMan'] = [];
         $users['usersWoman'] = [];
@@ -43,15 +44,13 @@ class DashboardAdminController extends Controller
         $users['usersSubcontractor'] = [];
         $users['usersHurt'] = [];
         $users['usersHoliday'] = [];
-        $users['nbUsersInvalid'] = count($allUsers) - User::join('players', 'players.user_id', '=', 'users.id')->count();
+        $users['nbUsersInvalid'] =
+        $users['nbUsersNonInscrit'] = User::leftJoin('players', 'players.user_id', '=', 'users.id')
+            ->whereNull('players.id')
+            ->get();
 
         foreach ($allUsers as $index => $user)
         {
-            if ($user->hasFirstConnection(true))
-            {
-                $users['nbUsersFirstConnection'] += $user;
-            }
-
             if ($user->hasGender('man'))
             {
                 $users['usersMan'][$index] = $user;
