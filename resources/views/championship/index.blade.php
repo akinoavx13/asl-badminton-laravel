@@ -46,7 +46,7 @@
                             <h4>Poule
                                 <button class="btn btn-warning btn-circle">{{ $pool_number }}</button>
                                 <div style="float: right;">
-                                    <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
+                                    <a href="{{ route('championshipResult.show', [$pools['pool_id'], $championship->id]) }}" class="btn btn-primary btn-rounded">Résultats
                                         <span class="fa fa-area-chart"></span>
                                     </a>
                                 </div>
@@ -103,7 +103,7 @@
                         <h4>Poule
                             <button class="btn btn-warning btn-circle">{{ $pool_number }}</button>
                             <div style="float: right;">
-                                <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
+                                <a href="{{ route('championshipResult.show', [$pools['pool_id'], $championship->id]) }}" class="btn btn-primary btn-rounded">Résultats
                                     <span class="fa fa-area-chart"></span>
                                 </a>
                             </div>
@@ -162,7 +162,7 @@
                             <h4>Poule
                                 <button class="btn btn-info btn-circle">{{ $pool_number }}</button>
                                 <div style="float: right;">
-                                    <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
+                                    <a href="{{ route('championshipResult.show', [$pools['pool_id'], $championship->id]) }}" class="btn btn-primary btn-rounded">Résultats
                                         <span class="fa fa-area-chart"></span>
                                     </a>
                                 </div>
@@ -219,7 +219,7 @@
                         <h4>Poule
                             <button class="btn btn-info btn-circle">{{ $pool_number }}</button>
                             <div style="float: right;">
-                                <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
+                                <a href="{{ route('championshipResult.show', [$pools['pool_id'], $championship->id]) }}" class="btn btn-primary btn-rounded">Résultats
                                     <span class="fa fa-area-chart"></span>
                                 </a>
                             </div>
@@ -276,7 +276,7 @@
                     <h4>Poule
                         <button class="btn btn-danger btn-circle">{{ $pool_number }}</button>
                         <div style="float: right;">
-                            <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
+                            <a href="{{ route('championshipResult.show', [$pools['pool_id'], $championship->id]) }}" class="btn btn-primary btn-rounded">Résultats
                                 <span class="fa fa-area-chart"></span>
                             </a>
                         </div>
