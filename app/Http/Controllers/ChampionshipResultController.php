@@ -25,9 +25,10 @@ class ChampionshipResultController extends Controller
     {
         //patterns
         $router->pattern('pool_id', '[0-9]+');
+        $router->pattern('period_id', '[0-9]+');
 
         //admin reservation create day
-        $router->get('show/{pool_id}', [
+        $router->get('show/{pool_id}/{period_id}', [
             'uses' => 'ChampionshipResultController@show',
             'as'   => 'championshipResult.show',
         ]);
@@ -39,7 +40,7 @@ class ChampionshipResultController extends Controller
      * @param $pool_id
      * @return \Illuminate\Http\Response
      */
-    public function show($pool_id)
+    public function show($pool_id, $period_id)
     {
         $pool = ChampionshipPool::findOrFail($pool_id);
 
@@ -54,12 +55,12 @@ class ChampionshipResultController extends Controller
             $type = 'double';
         }
 
-        $results = $this->getResults($pool_id, $type);
+        $results = $this->getResults($pool_id, $type, $period_id);
 
         return view('championshipResult.show', compact('pool', 'results', 'type'));
     }
 
-    private function getResults($pool_id, $type)
+    private function getResults($pool_id, $type, $period_id)
     {
 
         $scores = [];
@@ -68,7 +69,7 @@ class ChampionshipResultController extends Controller
 
         if($activeSeason != null)
         {
-            $currentPeriod = Period::current($activeSeason->id, 'championship')->first();
+            $currentPeriod = Period::findOrFail($period_id);
 
             if($currentPeriod != null)
             {
