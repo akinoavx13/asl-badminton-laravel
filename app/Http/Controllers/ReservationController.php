@@ -81,7 +81,7 @@ class ReservationController extends Controller
                 if ($courtType[$playerReservation->court_id] === 'simple')
                 {
                     $courtSimpleAvailable--;
-                    $simpleTeams = Team::select('users.forname', 'users.name')
+                    $simpleTeams = Team::select('users.forname', 'users.name', 'users.id')
                         ->join('players', 'players.id', '=', 'teams.player_one')
                         ->join('users', 'users.id', '=', 'players.user_id')
                         ->where('teams.id', $playerReservation->first_team)
@@ -105,6 +105,7 @@ class ReservationController extends Controller
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id][$playerReservation->court_id]['user_id'] = $playerReservation->user_id;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id][$playerReservation->court_id]['reservation_id'] = $playerReservation->id;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id][$playerReservation->court_id]['type'] = 'simple';
+                            $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id][$playerReservation->court_id]['owner'] = $this->user->id == $firstTeam->id || $this->user->id == $secondTeam->id;
                         }
                     }
                 }
@@ -113,9 +114,9 @@ class ReservationController extends Controller
                 {
                     $courtDoubleAvailable--;
                     $doubleOrMixteTeams = Team::select('userOne.forname AS fornameOne',
-                        'userOne.name AS nameOne',
+                        'userOne.name AS nameOne', 'userOne.id as userOneId',
                         'userTwo.forname AS fornameTwo',
-                        'userTwo.name AS nameTwo')
+                        'userTwo.name AS nameTwo', 'userTwo.id as userTwoId')
                         ->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
                         ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
                         ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
@@ -136,7 +137,7 @@ class ReservationController extends Controller
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
                             ][$playerReservation->court_id]['first_team'] =
                                 $firstTeam->fornameOne . ' ' . $firstTeam->nameOne . '<br> <span class="font-bold"> & </span> <br>' .
-                                $firstTeam->fornameTwo . $firstTeam->nameTwo;
+                                $firstTeam->fornameTwo . ' ' . $firstTeam->nameTwo;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id][$playerReservation->court_id]['second_team'] = $secondTeam->fornameOne . ' ' . $secondTeam->nameOne . '<br> <span class="font-bold"> & </span> <br>' .
                                 $secondTeam->fornameTwo . $secondTeam->nameTwo;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
@@ -145,6 +146,11 @@ class ReservationController extends Controller
                             ][$playerReservation->court_id]['reservation_id'] = $playerReservation->id;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
                             ][$playerReservation->court_id]['type'] = 'double';
+                            $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
+                            ][$playerReservation->court_id]['owner'] = $this->user->id == $firstTeam->userOneId || $this->user->id == $firstTeam->userTwoId
+                                || $this->user->id == $secondTeam->userOneId
+                                || $this->user->id == $secondTeam->userTwoId
+                            ;
                         }
                     }
                 }

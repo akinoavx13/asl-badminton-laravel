@@ -44,7 +44,8 @@
                                 @foreach($allDays as $day)
                                     <tr class="text-center">
                                         <td rowspan="{{ count($timeSlots) }}" style="background: #fbfcfc;" id="{{
-                                        $day->format('Y-m-d') }}" class="{{ $day->format('Y-m-d') == \Carbon\Carbon::today()->format('Y-m-d') ? 'today' : '' }}">
+                                        $day->format('Y-m-d') }}"
+                                            class="{{ $day->format('Y-m-d') == \Carbon\Carbon::today()->format('Y-m-d') ? 'today' : '' }}">
                                             {!! $day->format('Y-m-d') == \Carbon\Carbon::today()->format('Y-m-d') ? ucfirst($day->format('l j F Y')) . '<br>Aujourd\'hui' : ucfirst($day->format('l j F Y')) !!}
                                         </td>
                                         <td>
@@ -53,10 +54,13 @@
                                         @foreach($courts as $court)
                                             <td>
                                                 @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'simple' || $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'double')
-                                                    {!! $reservations[$day->format('Y-m-d')
-                                                    ][$timeSlots[0]->id][$court->id]['first_team'] !!}
-                                                    <br> <span class="text-danger font-bold">VS</span> <br>
-                                                    {!! $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['second_team'] !!}
+                                                    <div class="{{ $reservations[$day->format('Y-m-d')
+                                                    ][$timeSlots[0]->id][$court->id]['owner'] ? 'text-danger' : "" }}">
+                                                        {!! $reservations[$day->format('Y-m-d')
+                                                        ][$timeSlots[0]->id][$court->id]['first_team'] !!}
+                                                        <br> <span class="text-danger font-bold">VS</span> <br>
+                                                        {!! $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['second_team'] !!}
+                                                    </div>
                                                 @elseif($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'free')
                                                     <a href="{{ route('playerReservation.create', [$reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['day'], $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['court_id'], $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['timeSlot_id']]) }}"
                                                        class="text-resa">Réserver</a>
@@ -67,12 +71,16 @@
                                                     </button>
 
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                                         aria-labelledby="myModalLabel">
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                                    <h4 class="modal-title" id="myModalLabel">{{ $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['name'] }}</h4>
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span></button>
+                                                                    <h4 class="modal-title"
+                                                                        id="myModalLabel">{{ $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['name'] }}</h4>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['content'] == null || $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['content'] == "")
@@ -88,17 +96,22 @@
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn
                                                                                 btn-default"
-                                                                            data-dismiss="modal">Fermer</button>
+                                                                            data-dismiss="modal">Fermer
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 @endif
                                                 @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')) && $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] != 'admin')
-                                                    <p><a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa
+                                                    <p>
+                                                        <a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}"
+                                                           class="text-danger"><span class="fa
                                                     fa-times"></span></a></p>
                                                 @elseif($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['type'] == 'admin')
-                                                        <p><a href="{{ route('adminReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa
+                                                    <p>
+                                                        <a href="{{ route('adminReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$court->id]['reservation_id']) }}"
+                                                           class="text-danger"><span class="fa
                                                     fa-times"></span></a></p>
                                                 @endif
                                             </td>
@@ -112,9 +125,13 @@
                                                     @foreach($courts as $court)
                                                         <td>
                                                             @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'simple' || $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'double')
+                                                                <div class="{{ $reservations[$day->format('Y-m-d')
+                                                                ][$timeSlot->id][$court->id]['owner'] ? "text-danger" : "" }}">
                                                                 {!! $reservations[$day->format('Y-m-d')
-                                                                ][$timeSlot->id][$court->id]['first_team'] !!} <br> <span class="text-danger font-bold">VS</span> <br> {!!
+                                                                ][$timeSlot->id][$court->id]['first_team'] !!} <br>
+                                                                <span class="text-danger font-bold">VS</span> <br> {!!
                                                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['second_team'] !!}
+                                                                </div>
                                                             @elseif($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'free')
                                                                 <a href="{{ route('playerReservation.create', [$reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['day'], $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['court_id'], $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['timeSlot_id']]) }}"
                                                                    class="text-resa">Réserver</a>
@@ -125,12 +142,18 @@
                                                                 </button>
 
                                                                 <!-- Modal -->
-                                                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                                <div class="modal fade" id="myModal" tabindex="-1"
+                                                                     role="dialog" aria-labelledby="myModalLabel">
                                                                     <div class="modal-dialog" role="document">
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
-                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                                                <h4 class="modal-title" id="myModalLabel">{{ $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] }}</h4>
+                                                                                <button type="button" class="close"
+                                                                                        data-dismiss="modal"
+                                                                                        aria-label="Close"><span
+                                                                                            aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                                <h4 class="modal-title"
+                                                                                    id="myModalLabel">{{ $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] }}</h4>
                                                                             </div>
                                                                             <div class="modal-body">
                                                                                 @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] == null || $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] == "")
@@ -146,7 +169,8 @@
                                                                             <div class="modal-footer">
                                                                                 <button type="button" class="btn
                                                                                 btn-default"
-                                                                                        data-dismiss="modal">Fermer</button>
+                                                                                        data-dismiss="modal">Fermer
+                                                                                </button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -154,9 +178,15 @@
 
                                                             @endif
                                                             @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] != null && ($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['user_id'] == $auth->id || $auth->hasRole('admin')) && $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] != 'admin')
-                                                                <p><a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa fa-times"></span></a></p>
+                                                                <p>
+                                                                    <a href="{{ route('playerReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}"
+                                                                       class="text-danger"><span
+                                                                                class="fa fa-times"></span></a></p>
                                                             @elseif($reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['type'] == 'admin')
-                                                                    <p><a href="{{ route('adminReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}" class="text-danger"><span class="fa fa-times"></span></a></p>
+                                                                <p>
+                                                                    <a href="{{ route('adminReservation.delete', $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['reservation_id']) }}"
+                                                                       class="text-danger"><span
+                                                                                class="fa fa-times"></span></a></p>
                                                             @endif
                                                         </td>
                                                     @endforeach
