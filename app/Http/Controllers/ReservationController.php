@@ -139,7 +139,7 @@ class ReservationController extends Controller
                                 $firstTeam->fornameOne . ' ' . $firstTeam->nameOne . '<br> <span class="font-bold"> & </span> <br>' .
                                 $firstTeam->fornameTwo . ' ' . $firstTeam->nameTwo;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id][$playerReservation->court_id]['second_team'] = $secondTeam->fornameOne . ' ' . $secondTeam->nameOne . '<br> <span class="font-bold"> & </span> <br>' .
-                                $secondTeam->fornameTwo . $secondTeam->nameTwo;
+                                $secondTeam->fornameTwo . ' ' . $secondTeam->nameTwo;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
                             ][$playerReservation->court_id]['user_id'] = $playerReservation->user_id;
                             $reservations[$playerReservation->date->format('Y-m-d')][$playerReservation->time_slot_id
