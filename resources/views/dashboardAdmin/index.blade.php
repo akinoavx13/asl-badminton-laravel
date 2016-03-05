@@ -791,7 +791,7 @@
                                         @foreach($players['simple'] as $player)
                                             <p class="text-center">
                                                 @if($player->avatar)
-                                                    <img src="{{ asset('img/avatars/' . $player->user_id . 'jpg') }}"
+                                                    <img src="{{ asset('img/avatars/' . $player->user_id . '.jpg') }}"
                                                          alt="logo" width="35" height="35"/>
                                                 @else
                                                     <img src="{{ asset('img/anonymous.png') }}"
@@ -822,7 +822,7 @@
                                         @foreach($players['double'] as $player)
                                             <p class="text-center">
                                                 @if($player->userOneAvatar)
-                                                    <img src="{{ asset('img/avatars/' . $player->userOneId . 'jpg') }}"
+                                                    <img src="{{ asset('img/avatars/' . $player->userOneId . '.jpg') }}"
                                                          alt="logo" width="35" height="35"/>
                                                 @else
                                                     <img src="{{ asset('img/anonymous.png') }}"
@@ -831,7 +831,7 @@
                                                 {{ $player->userOneForname . ' ' . $player->userOneName }} & {{
                                                 $player->userTwoForname . ' ' . $player->userTwoName }}
                                                 @if($player->userTwoAvatar)
-                                                    <img src="{{ asset('img/avatars/' . $player->userTwoId . 'jpg') }}"
+                                                    <img src="{{ asset('img/avatars/' . $player->userTwoId . '.jpg') }}"
                                                          alt="logo" width="35" height="35"/>
                                                 @else
                                                     <img src="{{ asset('img/anonymous.png') }}"
@@ -861,7 +861,7 @@
                                         @foreach($players['mixte'] as $player)
                                             <p class="text-center">
                                                 @if($player->userOneAvatar)
-                                                    <img src="{{ asset('img/avatars/' . $player->userOneId . 'jpg') }}"
+                                                    <img src="{{ asset('img/avatars/' . $player->userOneId . '.jpg') }}"
                                                          alt="logo" width="35" height="35"/>
                                                 @else
                                                     <img src="{{ asset('img/anonymous.png') }}"
@@ -870,7 +870,7 @@
                                                 {{ $player->userOneForname . ' ' . $player->userOneName }} & {{
                                                 $player->userTwoForname . ' ' . $player->userTwoName }}
                                                 @if($player->userTwoAvatar)
-                                                    <img src="{{ asset('img/avatars/' . $player->userTwoId . 'jpg') }}"
+                                                    <img src="{{ asset('img/avatars/' . $player->userTwoId . '.jpg') }}"
                                                          alt="logo" width="35" height="35"/>
                                                 @else
                                                     <img src="{{ asset('img/anonymous.png') }}"
