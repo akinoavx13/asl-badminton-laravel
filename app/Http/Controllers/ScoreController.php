@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
+use Redirect;
 
 class ScoreController extends Controller
 {
@@ -28,13 +30,14 @@ class ScoreController extends Controller
         $router->pattern('pool_id', '[0-9]+');
         $router->pattern('firstTeamName', '[a-zA-Zéèàê&ïôç_-]+');
         $router->pattern('secondTeamName', '[a-zA-Zéèàê&ïôç_-]+');
+        $router->pattern('anchor', '[0-9-a-z_]+');
 
-        $router->get('create/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}', [
+        $router->get('create/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}/{anchor}', [
             'uses' => 'ScoreController@edit',
             'as'   => 'score.edit',
         ]);
 
-        $router->post('create/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}', [
+        $router->post('create/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}/{anchor}', [
             'uses' => 'ScoreController@update',
             'as'   => 'score.update',
         ]);
@@ -47,14 +50,14 @@ class ScoreController extends Controller
      * @param $pool_id
      * @return \Illuminate\Http\Response
      */
-    public function edit($score_id, $pool_id, $firstTeamName, $secondTeamName)
+    public function edit($score_id, $pool_id, $firstTeamName, $secondTeamName, $anchor)
     {
         $score = Score::findOrFail($score_id);
 
         $firstTeamName = str_replace('-', ' ', $firstTeamName);
         $secondTeamName = str_replace('-', ' ', $secondTeamName);
 
-        return view('score.edit', compact('score', 'pool_id', 'firstTeamName', 'secondTeamName'));
+        return view('score.edit', compact('score', 'pool_id', 'firstTeamName', 'secondTeamName', 'anchor'));
     }
 
     /**
@@ -64,13 +67,13 @@ class ScoreController extends Controller
      * @param $score_id
      * @return \Illuminate\Http\Response
      */
-    public function update(ScoreUpdateRequest $request, $score_id, $pool_id, $firstTeamName, $secondTeamName)
+    public function update(ScoreUpdateRequest $request, $score_id, $pool_id, $firstTeamName, $secondTeamName, $anchor)
     {
         $score = Score::findOrFail($score_id);
 
         if ($request->exists('content'))
         {
-            if($request->get('content') != "" || $request->exists('photo'))
+            if ($request->get('content') != "" || $request->exists('photo'))
             {
                 $post = Post::create([
                     'user_id'  => $this->user->id,
@@ -121,7 +124,8 @@ class ScoreController extends Controller
 
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
-            return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
+
+            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success', 'Le score est bien enregistré !');
         }
 
         if ($request->exists('wo') && $request->wo == "my_wo")
@@ -143,7 +147,7 @@ class ScoreController extends Controller
 
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
-            return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
+            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success', 'Le score est bien enregistré !');
         }
 
         if ($request->exists('wo') && $request->wo == "his_wo")
@@ -165,7 +169,7 @@ class ScoreController extends Controller
 
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
-            return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
+            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success', 'Le score est bien enregistré !');
         }
 
         $message = $this->checkScore($firstSet, $secondSet, $thirdSet);
@@ -194,7 +198,7 @@ class ScoreController extends Controller
 
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
-            return redirect()->route('championship.index')->with('success', 'Le score est bien enregistré !');
+            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success', 'Le score est bien enregistré !');
         }
         else
         {
@@ -443,7 +447,8 @@ class ScoreController extends Controller
             ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
             ->where('championship_rankings.championship_pool_id', $pool_id)
             ->where('scores.first_team_id', $first_team_id)
-            ->orWhere(function ($query) use($first_team_id){
+            ->orWhere(function ($query) use ($first_team_id)
+            {
                 $query->where('scores.second_team_id', $first_team_id);
             })
             ->get();
@@ -454,7 +459,8 @@ class ScoreController extends Controller
             ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
             ->where('championship_rankings.championship_pool_id', $pool_id)
             ->where('scores.second_team_id', $second_team_id)
-            ->orWhere(function ($query) use($second_team_id){
+            ->orWhere(function ($query) use ($second_team_id)
+            {
                 $query->where('scores.first_team_id', $second_team_id);
             })
             ->get();
