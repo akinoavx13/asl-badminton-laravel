@@ -66,7 +66,12 @@ class ChampionshipController extends Controller
     {
         $activeSeason = Season::active()->first();
 
+        $isCurrentChampionship = false;
+
         $championships = [];
+        $championship = null;
+
+        $teams = [];
 
         foreach (Period::orderBy('start')->get() as $period)
         {
@@ -88,6 +93,7 @@ class ChampionshipController extends Controller
 
             if ($championship !== null)
             {
+                $isCurrentChampionship = true;
                 if ($championship->hasChampionshipSimpleWoman(true))
                 {
                     $teams['simple']['man'] = $this->getSimpleTeamsViews($activeSeason->id, $championship->id, 'man');
@@ -115,11 +121,11 @@ class ChampionshipController extends Controller
 
                 $teams['mixte'] = $this->getDoubleOrMixteTeamsViews($activeSeason->id, $championship->id, 'mixte', '');
 
-                return view('championship.index', compact('championship', 'teams', 'championships'));
+                return view('championship.index', compact('championship', 'teams', 'championships', 'isCurrentChampionship'));
             }
-            else
+            elseif(count($championships) > 0)
             {
-                return redirect()->route('home.index')->with('error', "Il n'y a pas de championnat pour le moment !");
+                return view('championship.index', compact('championship', 'teams', 'championships', 'isCurrentChampionship'));
             }
         }
 
