@@ -4,7 +4,7 @@
     </div>
     <div class="ibox-content">
 
-        {!! Form::open(['route' => ['score.update', $score->id, $pool_id, str_replace(' ', '-', $firstTeamName), str_replace(' ', '-', $secondTeamName)], 'class' => 'form-horizontal', 'files' => 'true']) !!}
+        {!! Form::open(['route' => ['score.update', $score->id, $pool_id, str_replace(' ', '-', $firstTeamName), str_replace(' ', '-', $secondTeamName), $anchor], 'class' => 'form-horizontal', 'files' => 'true']) !!}
 
         <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 

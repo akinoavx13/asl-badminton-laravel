@@ -74,7 +74,7 @@
                         <td>
                             @if($result['owner'] || $auth->hasRole('admin'))
                                 <a href="{{ route('score.edit', [$result['scoreId'], $pool->id,
-                                str_replace(' ', '-', $result['firstTeam']), str_replace(' ', '-', $result['secondTeam'])]) }}"
+                                str_replace(' ', '-', $result['firstTeam']), str_replace(' ', '-', $result['secondTeam']), $anchor]) }}"
                                    class="btn btn-primary"><span
                                             class="fa fa-edit"></span></a>
                             @else
