@@ -43,7 +43,15 @@ class SendMail
                         }
                         else
                         {
-                            $message->to($user->email, $user)->subject($subject)->cc(Helpers::getInstance()->ccMail());
+                            //mail resa
+                            if ($attachFile !== null)
+                            {
+                                $message->to($user->email, $user)->subject($subject);
+                            }
+                            else
+                            {
+                                $message->to($user->email, $user)->subject($subject)->cc(Helpers::getInstance()->ccMail());
+                            }
                         }
 
                         if ($attachFile !== null)
