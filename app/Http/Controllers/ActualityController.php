@@ -58,18 +58,23 @@ class ActualityController extends Controller
             ]);
         }
 
-        $allUserWithNewletter = User::where('newsletter', true)->get();
+        $allUserWithNewletter = User::where('newsletter', true)
+            ->where('state', '<>', 'inactive')
+            ->get();
         $writter = User::findOrFail($actuality->user_id);
 
-        foreach ($allUserWithNewletter as $user)
+        $users = [];
+
+        foreach ($allUserWithNewletter as $index => $user)
         {
-            $data['forname'] = $user->forname;
-            $data['name'] = $user->name;
-            $data['title'] = $actuality->title;
-            $data['content'] = $actuality->content;
-            $data['writter'] = $writter->forname . ' ' . $writter->name;
-            SendMail::send($user, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+            $users[$index] = $user->email;
         }
+
+        $data['title'] = $actuality->title;
+        $data['content'] = $actuality->content;
+        $data['writter'] = $writter->forname . ' ' . $writter->name;
+
+        SendMail::send($users, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
 
         return redirect()->back()->with('success', 'L\'actualité est bien postée !');
     }
