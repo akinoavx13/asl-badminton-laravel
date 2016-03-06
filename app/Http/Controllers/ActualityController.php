@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actuality;
 use App\Http\Requests\ActualityStoreRequest;
+use App\Http\Utilities\SendMail;
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -54,6 +56,19 @@ class ActualityController extends Controller
             $actuality->update([
                 'photo' => $request->photo,
             ]);
+        }
+
+        $allUserWithNewletter = User::where('newsletter', true)->get();
+        $writter = User::findOrFail($actuality->user_id);
+
+        foreach ($allUserWithNewletter as $user)
+        {
+            $data['forname'] = $user->forname;
+            $data['name'] = $user->name;
+            $data['title'] = $actuality->title;
+            $data['content'] = $actuality->content;
+            $data['writter'] = $writter->forname . ' ' . $writter->name;
+            SendMail::send($user, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
         }
 
         return redirect()->back()->with('success', 'L\'actualité est bien postée !');

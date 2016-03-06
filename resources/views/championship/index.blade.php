@@ -5,7 +5,6 @@
 @stop
 
 @section('content')
-
     @if(count($championships) > 0)
 
         <h1 class="text-center">Choisir un championnat</h1>
@@ -14,7 +13,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-4 col-md-4">
-                {!! Form::select('period_id', $championships, $championship->exists ? $championship->id : old('period_id'),['class' => 'form-control chosen-select', 'required']) !!}
+                {!! Form::select('period_id', $championships, $championship != null && $championship->exists ? $championship->id : old('period_id'),['class' => 'form-control chosen-select', 'required']) !!}
             </div>
         </div>
 
@@ -25,6 +24,8 @@
         {!! Form::close() !!}
         <hr>
     @endif
+
+
 
     @if($championship != null)
         <h1 class="text-center">
@@ -43,10 +44,72 @@
                     </div>
                     <div class="panel-body">
                         @foreach($teams['simple'][$gender] as $pool_number => $pools)
+                            <div id="simple_{{$gender}}_{{$pool_number}}">
+                                <h4>Poule
+                                    <button class="btn btn-warning btn-circle">{{ $pool_number }}</button>
+                                    <div style="float: right;">
+                                        <a href="{{ route('championshipResult.show', [$pools['pool_id'], $championship->id, 'simple_' . $gender . '_' . $pool_number]) }}"
+                                           class="btn btn-primary btn-rounded">Résultats
+                                            <span class="fa fa-area-chart"></span>
+                                        </a>
+                                    </div>
+                                </h4>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center">Rang</th>
+                                        <th class="text-center">Points</th>
+                                        <th class="text-center">Joueur</th>
+                                        <th class="text-center">Matchs</th>
+                                        <th class="text-center">Gagné</th>
+                                        <th class="text-center">Perdu</th>
+                                        <th class="text-center">Non joué</th>
+                                        <th class="text-center">Gagné par forfait</th>
+                                        <th class="text-center">Perdu par forfait</th>
+                                        <th class="text-center">∆ Set</th>
+                                        <th class="text-center">∆ Points</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($pools as $index => $simpleTeam)
+                                        @if($index !== 'pool_id')
+                                            <tr class="text-center {{ $simpleTeam['user_id'] == $auth->id ? 'text-danger' : ''}}">
+                                                <td>{{ $simpleTeam['rank'] }}</td>
+                                                <td>{{ $simpleTeam['points'] }}</td>
+                                                <td>{{ $simpleTeam['name'] }}</td>
+                                                <td>
+                                                    <span class="pie">{{ $simpleTeam['matchs'] }}</span>
+                                                </td>
+                                                <td>{{ $simpleTeam['match_won'] }}</td>
+                                                <td>{{ $simpleTeam['match_lost'] }}</td>
+                                                <td>{{ $simpleTeam['match_unplayed'] }}</td>
+                                                <td>{{ $simpleTeam['match_won_by_wo'] }}</td>
+                                                <td>{{ $simpleTeam['match_lost_by_wo'] }}</td>
+                                                <td>{{ $simpleTeam['total_difference_set'] }}</td>
+                                                <td>{{ $simpleTeam['total_difference_points'] }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        @else
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h1 class="text-center">Championnat de simple</h1>
+                </div>
+                <div class="panel-body">
+                    @foreach($teams['simple'] as $pool_number => $pools)
+                        <div id="simple_{{$pool_number}}">
                             <h4>Poule
                                 <button class="btn btn-warning btn-circle">{{ $pool_number }}</button>
                                 <div style="float: right;">
-                                    <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
+                                    <a href="{{ route('championshipResult.show', [$pools['pool_id'], $championship->id, 'simple_' . $pool_number]) }}"
+                                       class="btn btn-primary btn-rounded">Résultats
                                         <span class="fa fa-area-chart"></span>
                                     </a>
                                 </div>
@@ -89,63 +152,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                        @endforeach
-                    </div>
-                </div>
-            @endforeach
-        @else
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h1 class="text-center">Championnat de simple</h1>
-                </div>
-                <div class="panel-body">
-                    @foreach($teams['simple'] as $pool_number => $pools)
-                        <h4>Poule
-                            <button class="btn btn-warning btn-circle">{{ $pool_number }}</button>
-                            <div style="float: right;">
-                                <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
-                                    <span class="fa fa-area-chart"></span>
-                                </a>
-                            </div>
-                        </h4>
-                        <table class="table table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th class="text-center">Rang</th>
-                                <th class="text-center">Points</th>
-                                <th class="text-center">Joueur</th>
-                                <th class="text-center">Matchs</th>
-                                <th class="text-center">Gagné</th>
-                                <th class="text-center">Perdu</th>
-                                <th class="text-center">Non joué</th>
-                                <th class="text-center">Gagné par forfait</th>
-                                <th class="text-center">Perdu par forfait</th>
-                                <th class="text-center">∆ Set</th>
-                                <th class="text-center">∆ Points</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($pools as $index => $simpleTeam)
-                                @if($index !== 'pool_id')
-                                    <tr class="text-center {{ $simpleTeam['user_id'] == $auth->id ? 'text-danger' : ''}}">
-                                        <td>{{ $simpleTeam['rank'] }}</td>
-                                        <td>{{ $simpleTeam['points'] }}</td>
-                                        <td>{{ $simpleTeam['name'] }}</td>
-                                        <td>
-                                            <span class="pie">{{ $simpleTeam['matchs'] }}</span>
-                                        </td>
-                                        <td>{{ $simpleTeam['match_won'] }}</td>
-                                        <td>{{ $simpleTeam['match_lost'] }}</td>
-                                        <td>{{ $simpleTeam['match_unplayed'] }}</td>
-                                        <td>{{ $simpleTeam['match_won_by_wo'] }}</td>
-                                        <td>{{ $simpleTeam['match_lost_by_wo'] }}</td>
-                                        <td>{{ $simpleTeam['total_difference_set'] }}</td>
-                                        <td>{{ $simpleTeam['total_difference_points'] }}</td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                            </tbody>
-                        </table>
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -159,10 +166,76 @@
                     </div>
                     <div class="panel-body">
                         @foreach($teams['double'][$gender] as $pool_number => $pools)
+                            <div id="double_{{$gender}}_{{$pool_number}}">
+                                <h4>Poule
+                                    <button class="btn btn-info btn-circle">{{ $pool_number }}</button>
+                                    <div style="float: right;">
+                                        <a href="{{ route('championshipResult.show', [$pools['pool_id'],
+                                        $championship->id, 'double_' . $gender . '_' . $pool_number]) }}"
+                                           class="btn btn-primary btn-rounded">Résultats
+                                            <span class="fa fa-area-chart"></span>
+                                        </a>
+                                    </div>
+                                </h4>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center">Rang</th>
+                                        <th class="text-center">Points</th>
+                                        <th class="text-center">Joueur</th>
+                                        <th class="text-center">Matchs</th>
+                                        <th class="text-center">Gagné</th>
+                                        <th class="text-center">Perdu</th>
+                                        <th class="text-center">Non joué</th>
+                                        <th class="text-center">Gagné par forfait</th>
+                                        <th class="text-center">Perdu par forfait</th>
+                                        <th class="text-center">∆ Set</th>
+                                        <th class="text-center">∆ Points</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($pools as $index => $doubleTeam)
+                                        @if($index !== 'pool_id')
+                                            <tr class="text-center {{ $doubleTeam['userOne_id'] == $auth->id || $doubleTeam['userTwo_id'] == $auth->id ? 'text-danger' : ''}}">
+                                                <td>{{ $doubleTeam['rank'] }}</td>
+                                                <td>{{ $doubleTeam['points'] }}</td>
+                                                <td>{{ $doubleTeam['name'] }}</td>
+                                                <td>
+                                                    <span class="pie">{{ $doubleTeam['matchs'] }}</span>
+                                                </td>
+                                                <td>{{ $doubleTeam['match_won'] }}</td>
+                                                <td>{{ $doubleTeam['match_lost'] }}</td>
+                                                <td>{{ $doubleTeam['match_unplayed'] }}</td>
+                                                <td>{{ $doubleTeam['match_won_by_wo'] }}</td>
+                                                <td>{{ $doubleTeam['match_lost_by_wo'] }}</td>
+                                                <td>{{ $doubleTeam['total_difference_set'] }}</td>
+                                                <td>{{ $doubleTeam['total_difference_points'] }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        @else
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h1 class="text-center">Championnat de double</h1>
+                </div>
+                <div class="panel-body">
+                    @foreach($teams['double'] as $pool_number => $pools)
+                        <div id="double_{{$pool_number}}">
+
+
                             <h4>Poule
                                 <button class="btn btn-info btn-circle">{{ $pool_number }}</button>
                                 <div style="float: right;">
-                                    <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
+                                    <a href="{{ route('championshipResult.show', [$pools['pool_id'],
+                                    $championship->id, 'double_' . $pool_number]) }}"
+                                       class="btn btn-primary btn-rounded">Résultats
                                         <span class="fa fa-area-chart"></span>
                                     </a>
                                 </div>
@@ -205,21 +278,25 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                        @endforeach
-                    </div>
+                        </div>
+                    @endforeach
                 </div>
-            @endforeach
-        @else
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h1 class="text-center">Championnat de double</h1>
-                </div>
-                <div class="panel-body">
-                    @foreach($teams['double'] as $pool_number => $pools)
+            </div>
+        @endif
+
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h1 class="text-center">Championnat de mixte</h1>
+            </div>
+            <div class="panel-body">
+                @foreach($teams['mixte'] as $pool_number => $pools)
+                    <div id="mixte_{{$pool_number}}">
                         <h4>Poule
-                            <button class="btn btn-info btn-circle">{{ $pool_number }}</button>
+                            <button class="btn btn-danger btn-circle">{{ $pool_number }}</button>
                             <div style="float: right;">
-                                <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
+                                <a href="{{ route('championshipResult.show', [$pools['pool_id'], $championship->id,
+                                'mixte_' . $pool_number]) }}"
+                                   class="btn btn-primary btn-rounded">Résultats
                                     <span class="fa fa-area-chart"></span>
                                 </a>
                             </div>
@@ -241,84 +318,28 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($pools as $index => $doubleTeam)
+                            @foreach($pools as $index => $mixteTeam)
                                 @if($index !== 'pool_id')
-                                    <tr class="text-center {{ $doubleTeam['userOne_id'] == $auth->id || $doubleTeam['userTwo_id'] == $auth->id ? 'text-danger' : ''}}">
-                                        <td>{{ $doubleTeam['rank'] }}</td>
-                                        <td>{{ $doubleTeam['points'] }}</td>
-                                        <td>{{ $doubleTeam['name'] }}</td>
+                                    <tr class="text-center {{ $mixteTeam['userOne_id'] == $auth->id || $mixteTeam['userTwo_id'] == $auth->id ? 'text-danger' : ''}}">
+                                        <td>{{ $mixteTeam['rank'] }}</td>
+                                        <td>{{ $mixteTeam['points'] }}</td>
+                                        <td>{{ $mixteTeam['name'] }}</td>
                                         <td>
-                                            <span class="pie">{{ $doubleTeam['matchs'] }}</span>
+                                            <span class="pie">{{ $mixteTeam['matchs'] }}</span>
                                         </td>
-                                        <td>{{ $doubleTeam['match_won'] }}</td>
-                                        <td>{{ $doubleTeam['match_lost'] }}</td>
-                                        <td>{{ $doubleTeam['match_unplayed'] }}</td>
-                                        <td>{{ $doubleTeam['match_won_by_wo'] }}</td>
-                                        <td>{{ $doubleTeam['match_lost_by_wo'] }}</td>
-                                        <td>{{ $doubleTeam['total_difference_set'] }}</td>
-                                        <td>{{ $doubleTeam['total_difference_points'] }}</td>
+                                        <td>{{ $mixteTeam['match_won'] }}</td>
+                                        <td>{{ $mixteTeam['match_lost'] }}</td>
+                                        <td>{{ $mixteTeam['match_unplayed'] }}</td>
+                                        <td>{{ $mixteTeam['match_won_by_wo'] }}</td>
+                                        <td>{{ $mixteTeam['match_lost_by_wo'] }}</td>
+                                        <td>{{ $mixteTeam['total_difference_set'] }}</td>
+                                        <td>{{ $mixteTeam['total_difference_points'] }}</td>
                                     </tr>
                                 @endif
                             @endforeach
                             </tbody>
                         </table>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-
-        <div class="panel panel-danger">
-            <div class="panel-heading">
-                <h1 class="text-center">Championnat de mixte</h1>
-            </div>
-            <div class="panel-body">
-                @foreach($teams['mixte'] as $pool_number => $pools)
-                    <h4>Poule
-                        <button class="btn btn-danger btn-circle">{{ $pool_number }}</button>
-                        <div style="float: right;">
-                            <a href="{{ route('championshipResult.show', $pools['pool_id']) }}" class="btn btn-primary btn-rounded">Résultats
-                                <span class="fa fa-area-chart"></span>
-                            </a>
-                        </div>
-                    </h4>
-                    <table class="table table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th class="text-center">Rang</th>
-                            <th class="text-center">Points</th>
-                            <th class="text-center">Joueur</th>
-                            <th class="text-center">Matchs</th>
-                            <th class="text-center">Gagné</th>
-                            <th class="text-center">Perdu</th>
-                            <th class="text-center">Non joué</th>
-                            <th class="text-center">Gagné par forfait</th>
-                            <th class="text-center">Perdu par forfait</th>
-                            <th class="text-center">∆ Set</th>
-                            <th class="text-center">∆ Points</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($pools as $index => $mixteTeam)
-                            @if($index !== 'pool_id')
-                                <tr class="text-center {{ $mixteTeam['userOne_id'] == $auth->id || $mixteTeam['userTwo_id'] == $auth->id ? 'text-danger' : ''}}">
-                                    <td>{{ $mixteTeam['rank'] }}</td>
-                                    <td>{{ $mixteTeam['points'] }}</td>
-                                    <td>{{ $mixteTeam['name'] }}</td>
-                                    <td>
-                                        <span class="pie">{{ $mixteTeam['matchs'] }}</span>
-                                    </td>
-                                    <td>{{ $mixteTeam['match_won'] }}</td>
-                                    <td>{{ $mixteTeam['match_lost'] }}</td>
-                                    <td>{{ $mixteTeam['match_unplayed'] }}</td>
-                                    <td>{{ $mixteTeam['match_won_by_wo'] }}</td>
-                                    <td>{{ $mixteTeam['match_lost_by_wo'] }}</td>
-                                    <td>{{ $mixteTeam['total_difference_set'] }}</td>
-                                    <td>{{ $mixteTeam['total_difference_points'] }}</td>
-                                </tr>
-                            @endif
-                        @endforeach
-                        </tbody>
-                    </table>
+                    </div>
                 @endforeach
             </div>
         </div>
