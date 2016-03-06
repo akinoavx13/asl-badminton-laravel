@@ -71,8 +71,6 @@ class ChampionshipController extends Controller
         $championships = [];
         $championship = null;
 
-        $teams = [];
-
         foreach (Period::orderBy('start')->get() as $period)
         {
             $championships[$period->id] = 'Du ' . $period->start->format('l j F Y') . ' au ' . $period->end->format('l j F Y');

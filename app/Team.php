@@ -142,8 +142,7 @@ class Team extends Model
             ->where('teams.season_id', $activeSeason_id)
             ->where('teams.simple_' . $gender, true)
             ->whereNotNull('teams.player_one')
-            ->whereNull('teams.player_two')
-            ->where('teams.enable', true);
+            ->whereNull('teams.player_two');
     }
 
     public function scopeAllSimpleTeamsLastedChampionshipNoGender($query, $lastedPeriod_id, $activeSeason_id)
@@ -158,15 +157,13 @@ class Team extends Model
             ->where('teams.simple_man', true)
             ->whereNotNull('teams.player_one')
             ->whereNull('teams.player_two')
-            ->where('teams.enable', true)
             ->orWhere(function ($query) use ($activeSeason_id, $lastedPeriod_id)
             {
                 $query->where('championship_pools.period_id', $lastedPeriod_id)
                     ->where('teams.season_id', $activeSeason_id)
                     ->where('teams.simple_woman', true)
                     ->whereNotNull('teams.player_one')
-                    ->whereNull('teams.player_two')
-                    ->where('teams.enable', true);
+                    ->whereNull('teams.player_two');
             });
     }
 
@@ -187,13 +184,11 @@ class Team extends Model
             ->where('championship_pools.period_id', $lastedPeriod_id)
             ->where('teams.season_id', $activeSeason_id)
             ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-            ->where('teams.enable', true)
             ->orWhere(function ($query) use ($type, $gender, $activeSeason_id, $lastedPeriod_id)
             {
                 $query->where('teams.season_id', $activeSeason_id)
                     ->where('championship_pools.period_id', $lastedPeriod_id)
-                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true)
-                    ->where('teams.enable', true);
+                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_' . $gender), true);
             });
     }
 
@@ -213,13 +208,11 @@ class Team extends Model
             ->where('championship_pools.period_id', $lastedPeriod_id)
             ->where('teams.season_id', $activeSeason_id)
             ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_man'), true)
-            ->where('teams.enable', true)
             ->orWhere(function ($query) use ($type, $activeSeason_id, $lastedPeriod_id)
             {
                 $query->where('teams.season_id', $activeSeason_id)
                     ->where('championship_pools.period_id', $lastedPeriod_id)
-                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_woman'), true)
-                    ->where('teams.enable', true);
+                    ->where('teams.' . ($type == 'mixte' ? 'mixte' : $type . '_woman'), true);
             });
     }
 
