@@ -64,8 +64,7 @@ class SendMail
                                 }
                                 else
                                 {
-                                    $message->to([$user->email, 'imaxame@gmail.com'],
-                                        $user)->subject($subject)->cc(Helpers::getInstance()->ccMail());
+                                    $message->to($user->email, $user)->subject($subject)->cc(Helpers::getInstance()->ccMail());
                                 }
                             }
 
