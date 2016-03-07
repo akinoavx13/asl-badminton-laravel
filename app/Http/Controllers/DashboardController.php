@@ -99,29 +99,29 @@ class DashboardController extends Controller
                     })
                     ->first();
 
-                $anchor['simple'] = '';
-                $anchor['double'] = '';
-                $anchor['mixte'] = '';
+                $anchor['simple'] = 'null';
+                $anchor['double'] = 'null';
+                $anchor['mixte'] = 'null';
 
                 if ($currentChampionship->hasChampionshipSimpleWoman(true))
                 {
-                    $anchor['simple'] = $mySimplePool != null ? 'simple_' . $this->user->gender . '_' . $mySimplePool->number : '';
+                    $anchor['simple'] = $mySimplePool != null ? 'simple_' . $this->user->gender . '_' . $mySimplePool->number : 'null';
                 }
                 else
                 {
-                    $anchor['simple'] = $mySimplePool != null ? 'simple_' . $mySimplePool->number : '';
+                    $anchor['simple'] = $mySimplePool != null ? 'simple_' . $mySimplePool->number : 'null';
                 }
 
                 if ($currentChampionship->hasChampionshipDoubleWoman(true))
                 {
-                    $anchor['double'] = $myDoublePool != null ? 'double_' . $this->user->gender . '_' . $myDoublePool->number : '';
+                    $anchor['double'] = $myDoublePool != null ? 'double_' . $this->user->gender . '_' . $myDoublePool->number : 'null';
                 }
                 else
                 {
-                    $anchor['double'] = $myDoublePool != null ? 'double_' . $myDoublePool->number : '';
+                    $anchor['double'] = $myDoublePool != null ? 'double_' . $myDoublePool->number : 'null';
                 }
 
-                $anchor['mixte'] = $myMixtePool != null ? 'mixte_' . $myMixtePool->number : '';
+                $anchor['mixte'] = $myMixtePool != null ? 'mixte_' . $myMixtePool->number : 'null';
 
                 $tableReservation['simple'] = $this->createTableReservation($mySimplePool, 'simple', $activeSeason,
                     $currentChampionship);
