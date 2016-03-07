@@ -273,7 +273,6 @@ class DashboardController extends Controller
                                 ->where('scores.created_at', '<=', $currentChampionship->end->format('Y-m-d'));
                         })
                         ->get();
-
                 }
             }
 
@@ -416,13 +415,17 @@ class DashboardController extends Controller
                         ->join('courts', 'courts.id', '=', 'players_reservations.court_id')
                         ->where('first_team', $score->firstTeamId)
                         ->where('second_team', $score->secondTeamId)
-                        ->orWhere(function ($query) use ($score)
+                        ->where('players_reservations.date', '>=', $currentChampionship->start->format('Y-m-d'))
+                        ->where('players_reservations.date', '<=', $currentChampionship->end->format('Y-m-d'))
+                        ->orWhere(function ($query) use ($score, $currentChampionship)
                         {
                             $query->where('second_team', $score->firstTeamId)
-                                ->where('first_team', $score->secondTeamId);
+                                ->where('first_team', $score->secondTeamId)
+                                ->where('players_reservations.date', '>=', $currentChampionship->start->format('Y-m-d'))
+                                ->where('players_reservations.date', '<=', $currentChampionship->end->format('Y-m-d'));
                         })
                         ->first();
-
+                    
                     $result[$index]['reservation'] = $reservation !== null ?
                         ucfirst(Date::create($reservation->date->year, $reservation->date->month,
                             $reservation->date->day)->format('l j F')) . ' sur le court n° ' .
