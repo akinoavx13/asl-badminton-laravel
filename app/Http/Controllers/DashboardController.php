@@ -99,6 +99,30 @@ class DashboardController extends Controller
                     })
                     ->first();
 
+                $anchor['simple'] = '';
+                $anchor['double'] = '';
+                $anchor['mixte'] = '';
+
+                if ($currentChampionship->hasChampionshipSimpleWoman(true))
+                {
+                    $anchor['simple'] = $mySimplePool != null ? 'simple_' . $this->user->gender . '_' . $mySimplePool->number : '';
+                }
+                else
+                {
+                    $anchor['simple'] = $mySimplePool != null ? 'simple_' . $mySimplePool->number : '';
+                }
+
+                if ($currentChampionship->hasChampionshipDoubleWoman(true))
+                {
+                    $anchor['double'] = $myDoublePool != null ? 'double_' . $this->user->gender . '_' . $myDoublePool->number : '';
+                }
+                else
+                {
+                    $anchor['double'] = $myDoublePool != null ? 'double_' . $myDoublePool->number : '';
+                }
+
+                $anchor['mixte'] = $myMixtePool != null ? 'mixte_' . $myMixtePool->number : '';
+
                 $tableReservation['simple'] = $this->createTableReservation($mySimplePool, 'simple', $activeSeason,
                     $currentChampionship);
                 $tableReservation['double'] = $this->createTableReservation($myDoublePool, 'double', $activeSeason,
@@ -128,8 +152,7 @@ class DashboardController extends Controller
 
                 if (count($tableReservation) > 0)
                 {
-                    return view('dashboard.index',
-                        compact('tableReservation', 'pools'));
+                    return view('dashboard.index', compact('tableReservation', 'pools', 'anchor'));
                 }
             }
         }
@@ -425,7 +448,7 @@ class DashboardController extends Controller
                                 ->where('players_reservations.date', '<=', $currentChampionship->end->format('Y-m-d'));
                         })
                         ->first();
-                    
+
                     $result[$index]['reservation'] = $reservation !== null ?
                         ucfirst(Date::create($reservation->date->year, $reservation->date->month,
                             $reservation->date->day)->format('l j F')) . ' sur le court n° ' .
