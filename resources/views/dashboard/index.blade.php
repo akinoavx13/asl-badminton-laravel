@@ -259,9 +259,9 @@
                                                     @endif
                                                 @else
                                                     @if($resum['imTheFirstTeam'])
-                                                        <a href="mailto:{{ $resum['userOneSecondTeamEmail'] }},{{ $resum['userTwoSecondTeamEmail'] }}?Subject=AS Lectra Badminton réservation"target="_top"><i class="fa fa-send"></i></a>
+                                                        <a href="mailto:{{ $resum['userOneSecondTeamEmail'] }};{{ $resum['userTwoSecondTeamEmail'] }}?Subject=AS Lectra Badminton réservation"target="_top"><i class="fa fa-send"></i></a>
                                                     @else
-                                                        <a href="mailto:{{ $resum['userOneFirstTeamEmail'] }},{{ $resum['userTwoFirstTeamEmail'] }}?Subject=AS Lectra Badminton réservation"target="_top"><i class="fa fa-send"></i></a>
+                                                        <a href="mailto:{{ $resum['userOneFirstTeamEmail'] }};{{ $resum['userTwoFirstTeamEmail'] }}?Subject=AS Lectra Badminton réservation"target="_top"><i class="fa fa-send"></i></a>
                                                     @endif
                                                 @endif
                                             </td>
@@ -269,15 +269,14 @@
                                                 @if($type == 'simple')
                                                     <a href="{{ route('score.edit', [$resum['scoreId'], $pools[$type]['pool_id'],
                                         str_replace(' ', '-', $resum['userFirstTeamName']),
-                                        str_replace(' ', '-', $resum['userSecondTeamName'])
-                                        ]) }}" class="btn btn-primary">
+                                        str_replace(' ', '-', $resum['userSecondTeamName']), $anchor[$type]]) }}" class="btn btn-primary">
                                                         <span class="fa fa-edit"></span>
                                                     </a>
                                                 @else
                                                     <a href="{{ route('score.edit', [$resum['scoreId'], $pools[$type]['pool_id'],
                                         str_replace(' ', '-', $resum['userOneFirstTeamName'] . ' & ' . $resum['userTwoFirstTeamName']),
-                                        str_replace(' ', '-', $resum['userOneSecondTeamName'] . ' & ' . $resum['userTwoSecondTeamName'])
-                                        ]) }}" class="btn btn-primary">
+                                        str_replace(' ', '-', $resum['userOneSecondTeamName'] . ' & ' . $resum['userTwoSecondTeamName']),
+                                        $anchor[$type]]) }}" class="btn btn-primary">
                                                         <span class="fa fa-edit"></span>
                                                     </a>
                                                 @endif
