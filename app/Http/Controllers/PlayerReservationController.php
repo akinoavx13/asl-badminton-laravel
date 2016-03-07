@@ -131,7 +131,7 @@ class PlayerReservationController extends Controller
                         $myMixteTeam->fornameTwo, $myMixteTeam->nameTwo);
                 }
 
-                if ($myDoubleTeam !== null && $myMixteTeam !== null)
+                if ($myDoubleTeam !== null || $myMixteTeam !== null)
                 {
                     //toutes les équipes de double dame
                     $teams['Double dame'] = $this->listTeams('woman', 'double', $myPlayer->id, $seasonActive->id,
@@ -144,7 +144,6 @@ class PlayerReservationController extends Controller
                     //toutes les équipes de double mixte
                     $teams['Double mixte'] = $this->listTeams($user->gender === 'man' ? 'woman' : 'man', 'mixte',
                         $myPlayer->id, $seasonActive->id, $myMixteTeam);
-
                 }
             }
         }
