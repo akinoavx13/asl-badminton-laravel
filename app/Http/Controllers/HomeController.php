@@ -83,8 +83,7 @@ class HomeController extends Controller
             'actualities.created_at', 'actualities.id')
             ->join('users', 'users.id', '=', 'actualities.user_id')
             ->orderBy('actualities.created_at', 'desc')
-            ->take(15)
-            ->get();
+            ->paginate(15);
 
         $postsActualities = Post::select('users.name', 'users.forname', 'users.avatar', 'posts.content',
             'posts.user_id',
