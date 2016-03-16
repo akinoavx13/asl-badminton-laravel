@@ -8,6 +8,7 @@ use App\Period;
 use App\Post;
 use App\Score;
 use App\Season;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -125,7 +126,8 @@ class ScoreController extends Controller
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
 
-            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success', 'Le score est bien enregistré !');
+            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success',
+                'Le score est bien enregistré !');
         }
 
         if ($request->exists('wo') && $request->wo == "my_wo")
@@ -147,7 +149,8 @@ class ScoreController extends Controller
 
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
-            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success', 'Le score est bien enregistré !');
+            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success',
+                'Le score est bien enregistré !');
         }
 
         if ($request->exists('wo') && $request->wo == "his_wo")
@@ -169,7 +172,8 @@ class ScoreController extends Controller
 
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
-            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success', 'Le score est bien enregistré !');
+            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success',
+                'Le score est bien enregistré !');
         }
 
         $message = $this->checkScore($firstSet, $secondSet, $thirdSet);
@@ -198,7 +202,8 @@ class ScoreController extends Controller
 
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
-            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success', 'Le score est bien enregistré !');
+            return Redirect::to(route('championship.index') . '#' . $anchor)->with('success',
+                'Le score est bien enregistré !');
         }
         else
         {
@@ -442,64 +447,92 @@ class ScoreController extends Controller
 
     private function updateRankings($pool_id, $first_team_id, $second_team_id)
     {
-        $allScoresFirstTeam = Score::select('scores.*')
-            ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-            ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
-            ->where('championship_rankings.championship_pool_id', $pool_id)
-            ->where('scores.first_team_id', $first_team_id)
-            ->orWhere(function ($query) use ($first_team_id)
-            {
-                $query->where('scores.second_team_id', $first_team_id);
-            })
-            ->get();
 
+        $activeSeason = Season::active()->first();
 
-        $allScoresSecondTeam = Score::select('scores.*')
-            ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-            ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
-            ->where('championship_rankings.championship_pool_id', $pool_id)
-            ->where('scores.second_team_id', $second_team_id)
-            ->orWhere(function ($query) use ($second_team_id)
-            {
-                $query->where('scores.first_team_id', $second_team_id);
-            })
-            ->get();
-
-        $rankingFirstTeam = ChampionshipRanking::where('team_id', $first_team_id)->first();
-        $infoScoreFirstTeam = $this->getInfoRankings($allScoresFirstTeam, $first_team_id);
-        if ($rankingFirstTeam !== null)
+        if ($activeSeason != null)
         {
-            $rankingFirstTeam->update([
-                'match_played'            => $infoScoreFirstTeam['match_played'],
-                'match_won'               => $infoScoreFirstTeam['match_won'],
-                'match_lost'              => $infoScoreFirstTeam['match_lost'],
-                'match_unplayed'          => $infoScoreFirstTeam['match_unplayed'],
-                'match_won_by_wo'         => $infoScoreFirstTeam['match_won_by_wo'],
-                'match_lost_by_wo'        => $infoScoreFirstTeam['match_lost_by_wo'],
-                'total_difference_set'    => $infoScoreFirstTeam['total_difference_set'],
-                'total_difference_points' => $infoScoreFirstTeam['total_difference_points'],
-                'total_points'            => $infoScoreFirstTeam['total_points'],
-            ]);
-        }
+            $activePeriod = Period::current($activeSeason->id, 'championship')->first();
+            if ($activePeriod != null)
+            {
 
-        $rankingSecondTeam = ChampionshipRanking::where('team_id', $second_team_id)->first();
-        $infoScoreSecondTeam = $this->getInfoRankings($allScoresSecondTeam, $second_team_id);
-        if ($rankingSecondTeam !== null)
-        {
-            $rankingSecondTeam->update([
-                'match_played'            => $infoScoreSecondTeam['match_played'],
-                'match_won'               => $infoScoreSecondTeam['match_won'],
-                'match_lost'              => $infoScoreSecondTeam['match_lost'],
-                'match_unplayed'          => $infoScoreSecondTeam['match_unplayed'],
-                'match_won_by_wo'         => $infoScoreSecondTeam['match_won_by_wo'],
-                'match_lost_by_wo'        => $infoScoreSecondTeam['match_lost_by_wo'],
-                'total_difference_set'    => $infoScoreSecondTeam['total_difference_set'],
-                'total_difference_points' => $infoScoreSecondTeam['total_difference_points'],
-                'total_points'            => $infoScoreSecondTeam['total_points'],
-            ]);
-        }
+                $allScoresFirstTeam = Score::select('scores.*')
+                    ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+                    ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
+                    ->where('championship_rankings.championship_pool_id', $pool_id)
+                    ->where('scores.first_team_id', $first_team_id)
+                    ->where('scores.created_at', '>=', Carbon::create($activePeriod->start->year, $activePeriod->start->month, $activePeriod->start->day)->format('Y-m-d'))
+                    ->where('scores.created_at', '<=', Carbon::create($activePeriod->end->year, $activePeriod->end->month, $activePeriod->end->day)->format('Y-m-d'))
+                    ->orWhere(function ($query) use ($first_team_id, $pool_id, $activePeriod)
+                    {
+                        $query->where('scores.second_team_id', $first_team_id)
+                            ->where('championship_rankings.championship_pool_id', $pool_id)
+                            ->where('scores.created_at', '>=', Carbon::create($activePeriod->start->year, $activePeriod->start->month, $activePeriod->start->day)->format('Y-m-d'))
+                            ->where('scores.created_at', '<=', Carbon::create($activePeriod->end->year, $activePeriod->end->month, $activePeriod->end->day)->format('Y-m-d'))
+                            ;
+                    })
+                    ->get();
 
-        $this->calculRankings($pool_id);
+                $allScoresSecondTeam = Score::select('scores.*')
+                    ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+                    ->join('championship_rankings', 'championship_rankings.team_id', '=', 'teams.id')
+                    ->where('championship_rankings.championship_pool_id', $pool_id)
+                    ->where('scores.second_team_id', $second_team_id)
+                    ->where('scores.created_at', '>=', Carbon::create($activePeriod->start->year, $activePeriod->start->month, $activePeriod->start->day)->format('Y-m-d'))
+                    ->where('scores.created_at', '<=', Carbon::create($activePeriod->end->year, $activePeriod->end->month, $activePeriod->end->day)->format('Y-m-d'))
+                    ->orWhere(function ($query) use ($second_team_id, $pool_id, $activePeriod)
+                    {
+                        $query->where('scores.first_team_id', $second_team_id)
+                            ->where('championship_rankings.championship_pool_id', $pool_id)
+                            ->where('scores.created_at', '>=', Carbon::create($activePeriod->start->year, $activePeriod->start->month, $activePeriod->start->day)->format('Y-m-d'))
+                            ->where('scores.created_at', '<=', Carbon::create($activePeriod->end->year, $activePeriod->end->month, $activePeriod->end->day)->format('Y-m-d'))
+                            ;
+                    })
+                    ->get();
+
+                $rankingFirstTeam = ChampionshipRanking::where('team_id', $first_team_id)
+                    ->where('championship_rankings.championship_pool_id', $pool_id)
+                    ->first();
+
+                $infoScoreFirstTeam = $this->getInfoRankings($allScoresFirstTeam, $first_team_id);
+                if ($rankingFirstTeam !== null)
+                {
+                    $rankingFirstTeam->update([
+                        'match_played'            => $infoScoreFirstTeam['match_played'],
+                        'match_won'               => $infoScoreFirstTeam['match_won'],
+                        'match_lost'              => $infoScoreFirstTeam['match_lost'],
+                        'match_unplayed'          => $infoScoreFirstTeam['match_unplayed'],
+                        'match_won_by_wo'         => $infoScoreFirstTeam['match_won_by_wo'],
+                        'match_lost_by_wo'        => $infoScoreFirstTeam['match_lost_by_wo'],
+                        'total_difference_set'    => $infoScoreFirstTeam['total_difference_set'],
+                        'total_difference_points' => $infoScoreFirstTeam['total_difference_points'],
+                        'total_points'            => $infoScoreFirstTeam['total_points'],
+                    ]);
+                }
+
+                $rankingSecondTeam = ChampionshipRanking::where('team_id', $second_team_id)
+                    ->where('championship_rankings.championship_pool_id', $pool_id)
+                    ->first();
+
+                $infoScoreSecondTeam = $this->getInfoRankings($allScoresSecondTeam, $second_team_id);
+                if ($rankingSecondTeam !== null)
+                {
+                    $rankingSecondTeam->update([
+                        'match_played'            => $infoScoreSecondTeam['match_played'],
+                        'match_won'               => $infoScoreSecondTeam['match_won'],
+                        'match_lost'              => $infoScoreSecondTeam['match_lost'],
+                        'match_unplayed'          => $infoScoreSecondTeam['match_unplayed'],
+                        'match_won_by_wo'         => $infoScoreSecondTeam['match_won_by_wo'],
+                        'match_lost_by_wo'        => $infoScoreSecondTeam['match_lost_by_wo'],
+                        'total_difference_set'    => $infoScoreSecondTeam['total_difference_set'],
+                        'total_difference_points' => $infoScoreSecondTeam['total_difference_points'],
+                        'total_points'            => $infoScoreSecondTeam['total_points'],
+                    ]);
+                }
+
+                $this->calculRankings($pool_id);
+            }
+        }
 
     }
 
