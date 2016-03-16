@@ -16,7 +16,7 @@ class UserChangePasswordRequest extends Request
         $user_id = $this->route()->getParameter('user_id');
         $user = $this->user();
 
-        if ($user->hasOwner($user_id))
+        if ($user->hasOwner($user_id) || $this->user()->hasRole('admin'))
         {
 
             return true;
