@@ -55,7 +55,7 @@
                                 </p>
                             </div>
                         </div>
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover" id="simple_{{ $gender }}">
                             <thead>
                             <tr>
                                 <th class="text-center">Equipe</th>
@@ -117,7 +117,7 @@
                             </p>
                         </div>
                     </div>
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" id="simple">
                         <thead>
                         <tr>
                             <th class="text-center">Equipe</th>
@@ -180,7 +180,7 @@
                                 </p>
                             </div>
                         </div>
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover" id="double_{{ $gender }}">
                             <thead>
                             <tr>
                                 <th class="text-center">Equipe</th>
@@ -250,7 +250,7 @@
                             </p>
                         </div>
                     </div>
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" id="double">
                         <thead>
                         <tr>
                             <th class="text-center">Equipe</th>
@@ -320,7 +320,7 @@
                         </p>
                     </div>
                 </div>
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover" id="mixte">
                     <thead>
                     <tr>
                         <th class="text-center">Equipe</th>
