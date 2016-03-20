@@ -21,6 +21,10 @@ class CreateTournamentsTable extends Migration
             $table->date('end');
             $table->integer('table_number')->unsigned();
             $table->string('name');
+
+            $table->integer('season_id')->unsigned();
+            $table->foreign('season_id')->references('id')->on('seasons')->onDelete('cascade')->onUpdate
+            ('cascade');
         });
     }
 

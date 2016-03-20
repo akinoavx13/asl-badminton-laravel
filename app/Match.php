@@ -20,8 +20,8 @@ class Match extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
-    public function table()
+    public function series()
     {
-        return $this->belongsTo('App\Table');
+        return $this->belongsTo('App\Series');
     }
 }

@@ -17,9 +17,9 @@ class Tournament extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
-    public function tables()
+    public function series()
     {
-        return $this->hasMany('App\Table');
+        return $this->hasMany('App\Series');
     }
 
     public function __toString()

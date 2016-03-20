@@ -20,17 +20,26 @@ class CreateMatchesTable extends Migration
             $table->integer('matches_number_in_table')->unsigned();
 
             $table->integer('first_team_id')->unsigned()->nullable();
+            $table->foreign('first_team_id')->references('id')->on('teams')->onDelete('cascade')->onUpdate
+            ('cascade');
+
             $table->integer('second_team_id')->unsigned()->nullable();
+            $table->foreign('second_team_id')->references('id')->on('teams')->onDelete('cascade')->onUpdate
+            ('cascade');
 
-            $table->integer('table_rank')->unsigned();
+            $table->integer('series_rank')->unsigned();
 
-            $table->integer('table_id')->unsigned();
-            $table->foreign('table_id')->references('id')->on('tables')->onDelete('cascade')->onUpdate
+            $table->integer('series_id')->unsigned();
+            $table->foreign('series_id')->references('id')->on('series')->onDelete('cascade')->onUpdate
             ('cascade');
 
             $table->integer('next_match_winner_id')->unsigned()->nullable();
+            $table->foreign('next_match_winner_id')->references('id')->on('matches')->onDelete('cascade')->onUpdate
+            ('cascade');
 
             $table->integer('next_match_looser_id')->unsigned()->nullable();
+            $table->foreign('next_match_looser_id')->references('id')->on('matches')->onDelete('cascade')->onUpdate
+            ('cascade');
 
         });
     }
