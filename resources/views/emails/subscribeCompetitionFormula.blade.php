@@ -1,7 +1,7 @@
 @extends('emails.layout')
 
 @section('title')
-    Inscription formule compétiti
+    Inscription formule compétition
 @stop
 
 @section('content')
