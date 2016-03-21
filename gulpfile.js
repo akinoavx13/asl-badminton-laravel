@@ -24,7 +24,8 @@ elixir(function (mix) {
         'plugins/dataTables/dataTables.tableTools.min.css',
         'plugins/clockpicker/clockpicker.css',
         'perso.css',
-        'plugins/summernote/summernote.css'
+        'plugins/summernote/summernote.css',
+        'tabledragdrop.css'
     ], 'public/css/app.min.css');
 
     mix.scripts([
@@ -44,6 +45,6 @@ elixir(function (mix) {
         'plugins/clockpicker/clockpicker.js',
         'plugins/summernote/summernote.min.js',
         'plugins/peity/jquery.peity.min.js',
-        'rowsorter.js'
+        'tabledragdrop.js'
     ], 'public/js/app.min.js')
 });

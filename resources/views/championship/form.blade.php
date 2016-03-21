@@ -58,15 +58,17 @@
                         <table class="table table-striped table-hover" id="simple_{{ $gender }}">
                             <thead>
                             <tr>
-                                <th class="text-center">Equipe</th>
-                                <th class="text-center">Actif</th>
-                                <th class="text-center">Rang</th>
-                                <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                                <th class="text-center noDrag"></th>
+                                <th class="text-center noDrag">Equipe</th>
+                                <th class="text-center noDrag">Actif</th>
+                                <th class="text-center noDrag">Rang</th>
+                                <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($teams['simple'][$gender] as $simpleTeam)
                                 <tr class="text-center">
+                                    <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                                     <td>{{ $simpleTeam['name'] }}</td>
                                     <td>
                                         @if($simpleTeam['state'] === 'active')
@@ -120,15 +122,17 @@
                     <table class="table table-striped table-hover" id="simple">
                         <thead>
                         <tr>
-                            <th class="text-center">Equipe</th>
-                            <th class="text-center">Actif</th>
-                            <th class="text-center">Rang</th>
-                            <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                            <th class="text-center noDrag"></th>
+                            <th class="text-center noDrag">Equipe</th>
+                            <th class="text-center noDrag">Actif</th>
+                            <th class="text-center noDrag">Rang</th>
+                            <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($teams['simple'] as $simpleTeam)
                             <tr class="text-center">
+                                <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                                 <td>{{ $simpleTeam['name'] }}</td>
                                 <td>
                                     @if($simpleTeam['state'] === 'active')
@@ -183,15 +187,17 @@
                         <table class="table table-striped table-hover" id="double_{{ $gender }}">
                             <thead>
                             <tr>
-                                <th class="text-center">Equipe</th>
-                                <th class="text-center">Actif</th>
-                                <th class="text-center">Rang</th>
-                                <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                                <th class="text-center noDrag"></th>
+                                <th class="text-center noDrag">Equipe</th>
+                                <th class="text-center noDrag">Actif</th>
+                                <th class="text-center noDrag">Rang</th>
+                                <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($teams['double'][$gender] as $doubleTeam)
                                 <tr class="text-center">
+                                    <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                                     <td>{{ $doubleTeam['name'] }}</td>
                                     <td>
                                         @if($doubleTeam['stateOne'] === 'active')
@@ -253,15 +259,17 @@
                     <table class="table table-striped table-hover" id="double">
                         <thead>
                         <tr>
-                            <th class="text-center">Equipe</th>
-                            <th class="text-center">Actif</th>
-                            <th class="text-center">Rang</th>
-                            <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                            <th class="text-center noDrag"></th>
+                            <th class="text-center noDrag">Equipe</th>
+                            <th class="text-center noDrag">Actif</th>
+                            <th class="text-center noDrag">Rang</th>
+                            <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($teams['double'] as $doubleTeam)
                             <tr class="text-center">
+                                <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                                 <td>{{ $doubleTeam['name'] }}</td>
                                 <td>
                                     @if($doubleTeam['stateOne'] === 'active')
@@ -323,15 +331,17 @@
                 <table class="table table-striped table-hover" id="mixte">
                     <thead>
                     <tr>
-                        <th class="text-center">Equipe</th>
-                        <th class="text-center">Actif</th>
-                        <th class="text-center">Rang</th>
-                        <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                        <th class="text-center noDrag"></th>
+                        <th class="text-center noDrag">Equipe</th>
+                        <th class="text-center noDrag">Actif</th>
+                        <th class="text-center noDrag">Rang</th>
+                        <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($teams['mixte'] as $mixteTeam)
                         <tr class="text-center">
+                            <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                             <td>{{ $mixteTeam['name'] }}</td>
                             <td>
                                 @if($mixteTeam['stateOne'] === 'active')

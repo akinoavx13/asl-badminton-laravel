@@ -15,25 +15,25 @@
 @section('javascript')
     <script>
         if ($("#simple").length != 0) {
-            RowSorter("#simple");
+            $('#simple').tabledragdrop({"selector": "#simple"});
         }
         if ($("#simple_man").length != 0) {
-            RowSorter("#simple_man");
+            $('#simple_man').tabledragdrop({"selector": "#simple_man"});
         }
         if ($("#simple_woman").length != 0) {
-            RowSorter("#simple_woman");
+            $('#simple_woman').tabledragdrop({"selector": "#simple_woman"});
         }
         if ($("#double_man").length != 0) {
-            RowSorter("#double_man");
+            $('#double_man').tabledragdrop({"selector": "#double_man"});
         }
         if ($("#double_woman").length != 0) {
-            RowSorter("#double_woman");
+            $('#double_woman').tabledragdrop({"selector": "#double_woman"});
         }
         if ($("#double").length != 0) {
-            RowSorter("#double");
+            $('#double').tabledragdrop({"selector": "#double"});
         }
         if ($("#mixte").length != 0) {
-            RowSorter("#mixte");
+            $('#mixte').tabledragdrop({"selector": "#mixte"});
         }
     </script>
 @stop
