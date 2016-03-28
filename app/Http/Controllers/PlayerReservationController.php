@@ -306,7 +306,8 @@ class PlayerReservationController extends Controller
                 ->setNoTime(false)
                 ->setLocation("Court n° " . $court->number)
                 ->setAttendees($icsAttendees)
-                ->setUseTimezone(false)
+                //->setUseTimezone(true)
+                ->setUseUtc(false)
                 ->setDtStart(Carbon::create($date->year, $date->month, $date->day, $start[0], $start[1]))
                 ->setDtEnd(Carbon::create($date->year, $date->month, $date->day, $end[0], $end[1]));
 
