@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Court;
 use App\Helpers;
+use App\Http\Requests;
 use App\Http\Requests\PlayerReservationStoreRequest;
 use App\Http\Requests\ReservationStoreRequest;
 use App\Http\Utilities\SendMail;
@@ -11,14 +12,10 @@ use App\PlayersReservation;
 use App\Season;
 use App\Team;
 use App\TimeSlot;
-use App\User;
 use Carbon\Carbon;
 use Eluceo\iCal\Component\Calendar;
 use Eluceo\iCal\Component\Event;
 use Eluceo\iCal\Property\Event\Attendees;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use Illuminate\Support\Facades\File;
 
 class PlayerReservationController extends Controller
@@ -152,6 +149,67 @@ class PlayerReservationController extends Controller
             'teams'));
     }
 
+    private function listTeams($gender, $type, $player_id, $season_id, $myDoubleOrMixteTeam = null)
+    {
+        $teams = [];
+        $allTeams = null;
+
+        if ($type === 'simple')
+        {
+            $allTeams = Team::select('users.forname', 'users.name', 'teams.id')
+                ->allSimpleTeamsWithoutMe($gender, $player_id, $season_id)
+                ->get();
+        }
+        else
+        {
+            if ($myDoubleOrMixteTeam === null)
+            {
+                $allTeams = Team::select('userOne.forname AS fornameOne',
+                    'userOne.name AS nameOne',
+                    'userTwo.forname AS fornameTwo',
+                    'userTwo.name AS nameTwo',
+                    'teams.id')
+                    ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
+                    ->get();
+            }
+            else
+            {
+                $allTeams = Team::select('userOne.forname AS fornameOne',
+                    'userOne.name AS nameOne',
+                    'userTwo.forname AS fornameTwo',
+                    'userTwo.name AS nameTwo',
+                    'teams.id')
+                    ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
+                    ->get();
+
+                $allTeams = $allTeams->reject(function ($item) use ($myDoubleOrMixteTeam)
+                {
+                    return $item->id == $myDoubleOrMixteTeam->id;
+                });
+            }
+        }
+
+        if (count($allTeams) > 0)
+        {
+            foreach ($allTeams as $team)
+            {
+                if ($type === 'simple')
+                {
+                    $teams[$team->id] = Helpers::getInstance()->getTeamName($team->forname, $team->name);
+                }
+                else
+                {
+                    $teams[$team->id] = Helpers::getInstance()->getTeamName($team->fornameOne, $team->nameOne,
+                        $team->fornameTwo, $team->nameTwo);
+                }
+
+            }
+        }
+        asort($teams);
+
+        return $teams;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -248,7 +306,7 @@ class PlayerReservationController extends Controller
                 ->setNoTime(false)
                 ->setLocation("Court n° " . $court->number)
                 ->setAttendees($icsAttendees)
-                ->setUseTimezone(true)
+                ->setUseTimezone(false)
                 ->setDtStart(Carbon::create($date->year, $date->month, $date->day, $start[0], $start[1]))
                 ->setDtEnd(Carbon::create($date->year, $date->month, $date->day, $end[0], $end[1]));
 
@@ -269,67 +327,6 @@ class PlayerReservationController extends Controller
 
         return redirect()->back()->with('error', "La réservation n'est plus disponible !");
 
-    }
-
-    private function listTeams($gender, $type, $player_id, $season_id, $myDoubleOrMixteTeam = null)
-    {
-        $teams = [];
-        $allTeams = null;
-
-        if ($type === 'simple')
-        {
-            $allTeams = Team::select('users.forname', 'users.name', 'teams.id')
-                ->allSimpleTeamsWithoutMe($gender, $player_id, $season_id)
-                ->get();
-        }
-        else
-        {
-            if ($myDoubleOrMixteTeam === null)
-            {
-                $allTeams = Team::select('userOne.forname AS fornameOne',
-                    'userOne.name AS nameOne',
-                    'userTwo.forname AS fornameTwo',
-                    'userTwo.name AS nameTwo',
-                    'teams.id')
-                    ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
-                    ->get();
-            }
-            else
-            {
-                $allTeams = Team::select('userOne.forname AS fornameOne',
-                    'userOne.name AS nameOne',
-                    'userTwo.forname AS fornameTwo',
-                    'userTwo.name AS nameTwo',
-                    'teams.id')
-                    ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
-                    ->get();
-
-                $allTeams = $allTeams->reject(function ($item) use ($myDoubleOrMixteTeam)
-                {
-                    return $item->id == $myDoubleOrMixteTeam->id;
-                });
-            }
-        }
-
-        if (count($allTeams) > 0)
-        {
-            foreach ($allTeams as $team)
-            {
-                if ($type === 'simple')
-                {
-                    $teams[$team->id] = Helpers::getInstance()->getTeamName($team->forname, $team->name);
-                }
-                else
-                {
-                    $teams[$team->id] = Helpers::getInstance()->getTeamName($team->fornameOne, $team->nameOne,
-                        $team->fornameTwo, $team->nameTwo);
-                }
-
-            }
-        }
-        asort($teams);
-
-        return $teams;
     }
 
     /**
