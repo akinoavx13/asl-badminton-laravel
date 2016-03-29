@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests;
 use App\Http\Requests\TournamentStoreRequest;
 use App\Season;
+use App\Series;
 use App\Tournament;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class TournamentController extends Controller
 {
@@ -43,15 +41,28 @@ class TournamentController extends Controller
 
         if ($season !== null)
         {
-            Tournament::create([
-                'start'        => $request->start,
-                'end'          => $request->end,
-                'name'         => $request->name,
-                'table_number' => $request->table_number,
-                'season_id'    => $season->id,
+            $tournament = Tournament::create([
+                'start'         => $request->start,
+                'end'           => $request->end,
+                'name'          => $request->name,
+                'series_number' => $request->series_number,
+                'season_id'     => $season->id,
             ]);
 
-            return redirect()->route('home.index')->with('succes', "Le tournoi vient d'être créé !");
+            for ($i = 1; $i <= $tournament->series_number; $i++)
+            {
+
+                Series::create([
+                    'category'              => 'S',
+                    'display_order'         => $i,
+                    'name'                  => '',
+                    'number_matches_rank_1' => 8,
+                    'number_rank'           => 4,
+                    'tournament_id'         => $tournament->id,
+                ]);
+            }
+
+            return redirect()->route('series.create')->with('succes', "Le tournoi vient d'être créé !");
 
         }
 

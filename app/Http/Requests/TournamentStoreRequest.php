@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
-
 class TournamentStoreRequest extends Request
 {
     /**
@@ -33,10 +31,10 @@ class TournamentStoreRequest extends Request
     public function rules()
     {
         return [
-            'start'        => 'required|date_format:d/m/Y',
-            'end'          => 'required|after:start|date_format:d/m/Y',
-            'name'         => 'required',
-            'table_number' => 'required|numeric|min:1',
+            'start'         => 'required|date_format:d/m/Y',
+            'end'           => 'required|after:start|date_format:d/m/Y',
+            'name'          => 'required',
+            'series_number' => 'required|numeric|min:1',
         ];
     }
 }

@@ -45,12 +45,12 @@
 
         <div class="form-group">
             <div class="col-md-3">
-                {!! Form::label('table_number', 'Nombre de tableau :', ['class' => 'control-label']) !!}
+                {!! Form::label('series_number', 'Nombre de tableau :', ['class' => 'control-label']) !!}
                 <i class="text-navy">*</i>
             </div>
 
             <div class="col-md-9">
-                {!! Form::number('table_number', $tournament->exists ? $tournament->table_number : old('table_number'), ['class' => 'form-control', 'min' => '1',
+                {!! Form::number('series_number', $tournament->exists ? $tournament->series_number : old('series_number'), ['class' => 'form-control', 'min' => '1',
                'required']) !!}
             </div>
         </div>
