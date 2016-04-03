@@ -261,13 +261,19 @@ class PlayerController extends Controller
         $player = Player::findOrFail($player_id);
         $setting = Helpers::getInstance()->setting();
 
-        $gender = $this->user->gender;
+        if($player != null)
+        {
+            $gender = $player->user->gender;
 
-        $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id, $player_id);
+            $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id, $player_id);
 
-        $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id, $player_id);
+            $listPartnerAvailable['mixte'] = Player::listPartnerAvailable('mixte', $gender, $this->user->id, $player_id);
 
-        return view('player.edit', compact('player', 'setting', 'listPartnerAvailable'));
+            return view('player.edit', compact('player', 'setting', 'listPartnerAvailable'));
+        }
+
+        abort(404);
+        return null;
     }
 
     /**

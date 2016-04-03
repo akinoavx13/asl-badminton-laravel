@@ -25,6 +25,7 @@
                                     <th class="text-center">Sexe</th>
                                     <th class="text-center">Taille</th>
                                     <th class="text-center">Relation avec lectra</th>
+                                    <th class="text-center">Etat</th>
                                     <th class="text-center">Newsletter</th>
                                     <th class="text-center">Role</th>
                                     <th class="text-center">Lien création</th>
@@ -61,6 +62,19 @@
                                                 Stagiaire
                                             @elseif($user->hasLectraRelation('subcontractor'))
                                                 Prestataire
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if($user->hasState('active'))
+                                                <i class="text-navy">Actif</i>
+                                            @elseif($user->hasState('inactive'))
+                                                <i class="text-warning">Inactif</i>
+                                            @elseif($user->hasState('holiday'))
+                                                <i class="text-warning">En vacances
+                                                    jusqu'au {{ $user->ending_holiday }}</i>
+                                            @elseif($user->hasState('hurt'))
+                                                <i class="text-danger">Blessé
+                                                    jusqu'au {{ $user->ending_injury }}</i>
                                             @endif
                                         </td>
                                         <td class="text-center">
