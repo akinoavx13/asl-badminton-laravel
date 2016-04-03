@@ -72,7 +72,7 @@
                             @endif
                         </td>
                         <td>
-                            @if($today >= $period->start && $today <= $period->end)
+                            @if($today >= $period->start->format('Y-m-d') && $today <= $period->end->format('Y-m-d'))
                                 @if($result['owner'] || $auth->hasRole('admin'))
                                     <a href="{{ route('score.edit', [$result['scoreId'], $pool->id,
                                 str_replace(' ', '-', $result['firstTeam']), str_replace(' ', '-', $result['secondTeam']), $anchor]) }}"
