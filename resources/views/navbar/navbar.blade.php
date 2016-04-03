@@ -188,7 +188,7 @@
                 @endif
             @endif
 
-            @if($auth->hasRole('admin'))
+            @if($auth->hasRole('admin') && env('APP_ENV') == 'local')
                 <li class="{{ Request::is('tournament*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-trophy"></i>
