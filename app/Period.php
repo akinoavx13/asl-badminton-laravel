@@ -88,6 +88,7 @@ class Period extends Model
         $today = Carbon::today();
         $query->where('type', $type)
             ->where('season_id', $season_id)
-            ->where('end', '<', $today);
+            ->where('end', '<', $today)
+            ->orderBy('end', 'desc');
     }
 }

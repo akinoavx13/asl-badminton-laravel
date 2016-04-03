@@ -12,8 +12,8 @@ class Match extends Model
         'matches_number_in_table',
         'first_team_id',
         'second_team_id',
-        'table_rank',
-        'table_id',
+        'series_rank',
+        'series_id',
         'next_match_winner_id',
         'next_match_looser_id',
     ];

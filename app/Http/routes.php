@@ -28,9 +28,11 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RopeController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TimeSlotController;
+use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\UserController;
 
 // Authentication routes...
@@ -155,4 +157,14 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'notCE', 'notLei
 Route::group(['prefix' => 'dashboardAdmin', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
 {
     DashboardAdminController::routes($router);
+});
+
+Route::group(['prefix' => 'tournament', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    TournamentController::routes($router);
+});
+
+Route::group(['prefix' => 'series', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    SeriesController::routes($router);
 });

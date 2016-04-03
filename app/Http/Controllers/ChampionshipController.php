@@ -389,7 +389,7 @@ class ChampionshipController extends Controller
         if ($combine)
         {
             $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
-                'users.ending_injury', 'teams.id')
+                'users.ending_injury', 'teams.id', 'teams.enable')
                 ->allSimpleTeamsNoGender($season_id)
                 ->orderBy('users.forname')
                 ->orderBy('users.name')
@@ -398,7 +398,7 @@ class ChampionshipController extends Controller
         else
         {
             $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
-                'users.ending_injury', 'teams.id')
+                'users.ending_injury', 'teams.id', 'teams.enable')
                 ->allSimpleTeams($gender, $season_id)
                 ->orderBy('users.forname')
                 ->orderBy('users.name')
@@ -407,6 +407,7 @@ class ChampionshipController extends Controller
 
         foreach ($simpleTeams as $index => $simpleTeam)
         {
+            $playersSimple[$index]['enable'] = $simpleTeam->enable;
             $playersSimple[$index]['rank'] = 'new';
             $playersSimple[$index]['id'] = $simpleTeam->id;
             $playersSimple[$index]['name'] = Helpers::getInstance()->getTeamName($simpleTeam->forname,
@@ -427,7 +428,8 @@ class ChampionshipController extends Controller
         if ($twice)
         {
             $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
-                'users.ending_injury', 'teams.id', 'championship_rankings.rank', 'championship_pools.number')
+                'users.ending_injury', 'teams.id', 'championship_rankings.rank', 'championship_pools.number',
+                'teams.enable')
                 ->allSimpleTeamsLastedChampionshipNoGender($lastedPeriod_id, $activeSeason_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -436,7 +438,8 @@ class ChampionshipController extends Controller
         else
         {
             $simpleTeams = Team::select('users.name', 'users.forname', 'users.state', 'users.ending_holiday',
-                'users.ending_injury', 'teams.id', 'championship_rankings.rank', 'championship_pools.number')
+                'users.ending_injury', 'teams.id', 'championship_rankings.rank', 'championship_pools.number',
+                'teams.enable')
                 ->allSimpleTeamsLastedChampionship($lastedPeriod_id, $activeSeason_id, $gender)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -447,6 +450,7 @@ class ChampionshipController extends Controller
         $playersSimple = [];
         foreach ($simpleTeams as $index => $simpleTeam)
         {
+            $playersSimple[$index]['enable'] = $simpleTeam->enable;
             $playersSimple[$index]['pool_number'] = $simpleTeam->number;
             $playersSimple[$index]['rank'] = $simpleTeam->rank;
             $playersSimple[$index]['id'] = $simpleTeam->id;
@@ -473,7 +477,7 @@ class ChampionshipController extends Controller
                 'userOne.state as stateOne', 'userOne.ending_holiday as ending_holidayOne',
                 'userOne.ending_injury as ending_injuryOne', 'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo',
                 'userTwo.state as stateTwo', 'userTwo.ending_holiday as ending_holidayTwo',
-                'userTwo.ending_injury as ending_injuryTwo', 'teams.id')
+                'userTwo.ending_injury as ending_injuryTwo', 'teams.id', 'teams.enable')
                 ->allDoubleOrMixteActiveTeamsNoGender($type, $season_id)
                 ->orderBy('userOne.forname')
                 ->orderBy('userOne.name')
@@ -487,7 +491,7 @@ class ChampionshipController extends Controller
                 'userOne.state as stateOne', 'userOne.ending_holiday as ending_holidayOne',
                 'userOne.ending_injury as ending_injuryOne', 'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo',
                 'userTwo.state as stateTwo', 'userTwo.ending_holiday as ending_holidayTwo',
-                'userTwo.ending_injury as ending_injuryTwo', 'teams.id')
+                'userTwo.ending_injury as ending_injuryTwo', 'teams.id', 'teams.enable')
                 ->allDoubleOrMixteActiveTeams($type, $gender, $season_id)
                 ->orderBy('userOne.forname')
                 ->orderBy('userOne.name')
@@ -498,6 +502,7 @@ class ChampionshipController extends Controller
 
         foreach ($doubleTeams as $index => $doubleTeam)
         {
+            $players[$index]['enable'] = $doubleTeam->enable;
             $players[$index]['rank'] = 'new';
             $players[$index]['id'] = $doubleTeam->id;
             $players[$index]['name'] = Helpers::getInstance()->getTeamName($doubleTeam->fornameOne,
@@ -533,7 +538,7 @@ class ChampionshipController extends Controller
                 'userOne.ending_injury as ending_injuryOne', 'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo',
                 'userTwo.state as stateTwo', 'userTwo.ending_holiday as ending_holidayTwo',
                 'userTwo.ending_injury as ending_injuryTwo', 'teams.id', 'championship_rankings.rank',
-                'championship_pools.number')
+                'championship_pools.number', 'teams.enable')
                 ->allDoubleOrMixteTeamsLastedChampionshipNoGender($type, $lastedPeriod_id, $season_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -546,7 +551,7 @@ class ChampionshipController extends Controller
                 'userOne.ending_injury as ending_injuryOne', 'userTwo.name as nameTwo', 'userTwo.forname as fornameTwo',
                 'userTwo.state as stateTwo', 'userTwo.ending_holiday as ending_holidayTwo',
                 'userTwo.ending_injury as ending_injuryTwo', 'teams.id', 'championship_rankings.rank',
-                'championship_pools.number')
+                'championship_pools.number', 'teams.enable')
                 ->allDoubleOrMixteTeamsLastedChampionship($type, $gender, $lastedPeriod_id, $season_id)
                 ->orderBy('championship_pools.number')
                 ->orderBy('championship_rankings.rank')
@@ -557,6 +562,7 @@ class ChampionshipController extends Controller
 
         foreach ($doubleTeams as $index => $doubleTeam)
         {
+            $players[$index]['enable'] = $doubleTeam->enable;
             $players[$index]['pool_number'] = $doubleTeam->number;
             $players[$index]['rank'] = $doubleTeam->rank;
             $players[$index]['id'] = $doubleTeam->id;

@@ -189,6 +189,21 @@
             @endif
 
             @if($auth->hasRole('admin'))
+                <li class="{{ Request::is('tournament*') ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-trophy"></i>
+                        <span class="nav-label">Tournoi</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li class="{{ Request::is('tournament/create') ? 'active' : '' }}"><a
+                                    href="{{ route('tournament.create') }}"><i class="fa fa-plus"></i>Créer un
+                                tournoi</a></li>
+                    </ul>
+                </li>
+            @endif
+
+            @if($auth->hasRole('admin'))
                 <li class="{{ Request::is('reservation/index') || Request::is('playerReservation*') || Request::is('adminReservation/create') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-calendar"></i>
