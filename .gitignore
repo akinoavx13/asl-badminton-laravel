@@ -9,3 +9,4 @@ _ide_helper.php
 /public/img/actualities
 /public/ics
 .idea
+composer.lock
