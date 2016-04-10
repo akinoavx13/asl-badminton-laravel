@@ -170,6 +170,7 @@ class UserController extends Controller
         ]);
 
         SendMail::send($this->user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
+        SendMail::send($user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");
     }
