@@ -56,6 +56,9 @@ class CeController extends Controller
         $fun['number'] = 0;
         $fun['price'] = 0;
 
+        $tournament['number'] = 0;
+        $tournament['price'] = 0;
+
         $performance['number'] = 0;
         $performance['price'] = 0;
 
@@ -96,6 +99,13 @@ class CeController extends Controller
             }
 
             //calculate fun formula
+            elseif ($player->hasFormula('tournament'))
+            {
+                $tournament['number']++;
+                $tournament['price'] += $playerPrice['formula'];
+            }
+
+            //calculate fun formula
             elseif ($player->hasFormula('fun'))
             {
                 $fun['number']++;
@@ -125,7 +135,7 @@ class CeController extends Controller
         }
 
         return view('ce.index',
-            compact('players', 'tShirt', 'leisure', 'fun', 'performance', 'corpo', 'competition', 'contributionUnPaid',
+            compact('players', 'tShirt', 'leisure', 'tournament', 'fun', 'performance', 'corpo', 'competition', 'contributionUnPaid',
                 'setting', 'totalPayable', 'totalPaid'));
     }
 }

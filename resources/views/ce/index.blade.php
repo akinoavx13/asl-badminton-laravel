@@ -107,7 +107,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>
+                        <button type="button" class="btn btn-primary m-r-sm">{{ $tournament['number'] }}</button>
+                        <span>
+                            @if($tournament['number'] > 1)
+                                formules
+                            @else
+                                formule
+                            @endif
+                            tournoi : <span class="text-danger">{{ $tournament['price'] }} €</span>
+                        </span>
+                    </td>
                     <td>
                         <button type="button" class="btn btn-warning m-r-sm">{{ $contributionUnPaid['number'] }}</button>
                         <span>
@@ -157,6 +167,8 @@
                                         <td class="text-center">
                                             @if($player->hasFormula('leisure'))
                                                 Loisir
+                                            @elseif($player->hasFormula('tournament'))
+                                                Tournoi
                                             @elseif($player->hasFormula('fun'))
                                                 Fun
                                             @elseif($player->hasFormula('performance'))
