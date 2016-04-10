@@ -223,6 +223,8 @@
                                 <div class="col-md-8">
                                     @if($player->hasFormula('leisure'))
                                         Loisir
+                                    @elseif($player->hasFormula('tournament'))
+                                        Tournoi
                                     @elseif($player->hasFormula('fun'))
                                         Fun
                                     @elseif($player->hasFormula('performance'))

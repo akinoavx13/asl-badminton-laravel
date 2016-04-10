@@ -138,6 +138,7 @@ class DashboardAdminController extends Controller
             $players['t_shirt_buy'] = [];
 
             $players['leisure'] = [];
+            $players['tournament'] = [];
             $players['fun'] = [];
             $players['performance'] = [];
             $players['corpo'] = [];
@@ -307,6 +308,11 @@ class DashboardAdminController extends Controller
                 if ($player->hasFormula('leisure'))
                 {
                     $players['leisure'][$index] = $player;
+                }
+
+                if ($player->hasFormula('tournament'))
+                {
+                    $players['tournament'][$index] = $player;
                 }
 
                 if ($player->hasFormula('fun'))

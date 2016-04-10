@@ -212,7 +212,7 @@ class PlayerController extends Controller
         $player = Player::create([
             'formula'       => $request->formula,
             // tshirt inclus dans les formules competition et corpo, pas dans les autres
-            't_shirt'       => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
+            't_shirt'       => $request->formula === 'leisure' || $request->formula === 'tournament' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
             'simple'        => $request->formula !== 'leisure' ? $request->simple : false,
             'double'        => $request->formula !== 'leisure' ? $request->double : false,
             'mixte'         => $request->formula !== 'leisure' ? $request->mixte : false,
@@ -302,7 +302,7 @@ class PlayerController extends Controller
         $player->update([
             'formula'       => $request->formula,
             // tshirt inclus dans les formules competition et corpo, pas dans les autres
-            't_shirt'       => $request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
+            't_shirt'       => $request->formula === 'leisure' || $request->formula === 'tournament' || $request->formula === 'fun' || $request->formula === 'performance' ? $request->t_shirt : true,
             'simple'        => $request->formula !== 'leisure' ? $request->simple : false,
             'double'        => $request->formula !== 'leisure' ? $request->double : false,
             'mixte'         => $request->formula !== 'leisure' ? $request->mixte : false,
@@ -364,7 +364,7 @@ class PlayerController extends Controller
         else
         {
             //si on a choisit la formule loisir, fun, ou performance, on ne peut pas etre a GBC
-            if ($request->formula === 'leisure' || $request->formula === 'fun' || $request->formula === 'performance')
+            if ($request->formula === 'leisure' || $request->formula === 'tournament' || $request->formula === 'fun' || $request->formula === 'performance')
             {
                 return 'non_applicable';
             }

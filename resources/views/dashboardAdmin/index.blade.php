@@ -386,6 +386,14 @@
                                     <tr>
                                         <td>
                                             <button type="button" class="btn btn-danger m-r-sm">
+                                                {{ count($players['tournament']) }}
+                                            </button>
+                                            Tournoi
+                                            <a href="mailto:@foreach($players['tournament'] as $player){{ $player->email}};@endforeach ?Subject=Badminton"
+                                               target="_top"> <i class="fa fa-send"></i></a>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger m-r-sm">
                                                 {{ count($players['corpo_man']) }}
                                             </button>
                                             Corpo homme
@@ -400,15 +408,23 @@
                                             <a href="mailto:@foreach($players['corpo_woman'] as $player){{ $player->email}};@endforeach ?Subject=Badminton"
                                                target="_top"> <i class="fa fa-send"></i></a>
                                         </td>
+                                    </tr>
+
+                                    <tr>
                                         <td>
-                                            <button type="button" class="btn btn-info m-r-sm">
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary m-r-sm">
                                                 {{ count($players['corpo_mixte']) }}
                                             </button>
                                             Corpo mixte
                                             <a href="mailto:@foreach($players['corpo_mixte'] as $player){{ $player->email}};@endforeach ?Subject=Badminton"
                                                target="_top"> <i class="fa fa-send"></i></a>
                                         </td>
+                                        <td>
+                                        </td>
                                     </tr>
+
                                     </tbody>
                                 </table>
                             </div>

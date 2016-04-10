@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="col-md-9">
-                        {!! Form::select('formula', ['leisure' => 'Loisir','fun' => 'Fun','performance' => 'Performance','corpo'=>'Corpo','competition' => 'Competition'],
+                        {!! Form::select('formula', ['leisure' => 'Loisir', 'tournament' => 'Tournoi', 'fun' => 'Fun','performance' => 'Performance','corpo'=>'Corpo','competition' => 'Competition'],
                         $player->exists ? $player->formula : old('formula'),['class' => 'form-control', $player->exists && $player->hasCeState('contribution_paid') ? 'disabled' : 'required']) !!}
                     </div>
                 </div>
@@ -332,6 +332,49 @@
             </div>
         </div>
 
+        <div id="tournament" style="display:none">
+            <div class="ibox float-e-margins">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3 class="text-center">Formule tournoi</h3>
+                    </div>
+                    <div class="ibox-content">
+                        @if($auth->hasLectraRelation('external'))
+                            <h4 class="text-center"><strong>{{ $setting->leisure_external_price }}€</strong></h4>
+                        @else
+                            <h4 class="text-center"><strong>{{ $setting->leisure_price }}€</strong></h4>
+                        @endif
+
+                        <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
+                                                              aria-hidden="true"></span></p>
+
+                        <p><strong>Réservation de cours : </strong><span class="fa fa-check-circle-o fa-2x text-success"
+                                                                         aria-hidden="true"></span></p>
+
+                        <p><strong>Championnat : </strong></strong><span class="fa fa-times-circle-o fa-2x text-danger"
+                                                                         aria-hidden="true"></span></p>
+
+                        <p><strong>Tournoi play-off : </strong><span class="fa fa-check-circle-o fa-2x text-success"
+                                                                     aria-hidden="true"></span></p>
+
+                        <p><strong>Entrainement : </strong></strong><span class="fa fa-times-circle-o fa-2x text-danger"
+                                                                          aria-hidden="true"></span></p>
+
+                        <p><strong>Corpo : </strong></strong><span class="fa fa-times-circle-o fa-2x text-danger"
+                                                                   aria-hidden="true"></span></p>
+
+                        <p><strong>Soirée double : </strong><i class="text-info">Incluse</i></p>
+
+                        <p><strong>Tournoi FFBAD : </strong></strong><span
+                                    class="fa fa-times-circle-o fa-2x text-danger" aria-hidden="true"></span></p>
+
+                        <p><strong>Entrainement compétition : </strong></strong><span
+                                    class="fa fa-times-circle-o fa-2x text-danger" aria-hidden="true"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="fun" style="display:none">
             <div class="ibox float-e-margins">
                 <div class="ibox float-e-margins">
@@ -532,6 +575,7 @@
             var formula = $('select[name=formula]').val();
 
             if (formula == 'leisure') {
+                $('#tournament').slideUp(400);
                 $('#performance').slideUp(400);
                 $('#corpo').slideUp(400);
                 $('#competition').slideUp(400);
@@ -543,7 +587,20 @@
                 $('#corpo-panel').hide();
                 $('#t_shirt').show();
             }
+            if (formula == 'tournament') {
+                $('#fun').slideUp(400);
+                $('#performance').slideUp(400);
+                $('#corpo').slideUp(400);
+                $('#competition').slideUp(400);
+                $('#leisure').slideUp(400, function () {
+                    $('#tournament').slideDown(400);
+                });
+                $('#championship-panel').show();
+                $('#corpo-panel').hide();
+                $('#t_shirt').show();
+            }
             if (formula == 'fun') {
+                $('#tournament').slideUp(400);
                 $('#performance').slideUp(400);
                 $('#corpo').slideUp(400);
                 $('#competition').slideUp(400);
@@ -555,6 +612,7 @@
                 $('#t_shirt').show();
             }
             if (formula == 'performance') {
+                $('#tournament').slideUp(400);
                 $('#fun').slideUp(400);
                 $('#corpo').slideUp(400);
                 $('#competition').slideUp(400);
@@ -566,6 +624,7 @@
                 $('#t_shirt').show();
             }
             if (formula == 'corpo') {
+                $('#tournament').slideUp(400);
                 $('#performance').slideUp(400);
                 $('#fun').slideUp(400);
                 $('#competition').slideUp(400);
@@ -577,6 +636,7 @@
                 $('#t_shirt').hide();
             }
             if (formula == 'competition') {
+                $('#tournament').slideUp(400);
                 $('#performance').slideUp(400);
                 $('#corpo').slideUp(400);
                 $('#fun').slideUp(400);
