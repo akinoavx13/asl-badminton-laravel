@@ -51,8 +51,7 @@ class ActualityController extends Controller
             'photo'   => 0,
         ]);
 
-        if ($request->exists('photo'))
-        {
+        if ($request->exists('photo')) {
             $actuality->update([
                 'photo' => $request->photo,
             ]);
@@ -65,8 +64,7 @@ class ActualityController extends Controller
 
         $users = [];
 
-        foreach ($allUserWithNewletter as $index => $user)
-        {
+        foreach ($allUserWithNewletter as $index => $user) {
             $users[$index] = $user->email;
         }
 
@@ -74,7 +72,22 @@ class ActualityController extends Controller
         $data['content'] = $actuality->content;
         $data['writter'] = $writter->forname . ' ' . $writter->name;
 
-        SendMail::send($users, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+        $firstPackageUser = [];
+        $secondPackageUser = [];
+
+        if (count($users) > 45) {
+            for ($i = 0; $i < 45; $i++) {
+                $firstPackageUser[$i] = $users[$i];
+            }
+            for ($i = 45; $i < count($users); $i++) {
+                $secondPackageUser[$i] = $users[$i];
+            }
+            SendMail::send($firstPackageUser, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+            SendMail::send($secondPackageUser, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+        } else {
+            SendMail::send($users, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+        }
+
 
         return redirect()->back()->with('success', 'L\'actualité est bien postée !');
     }
