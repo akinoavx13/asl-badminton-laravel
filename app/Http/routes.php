@@ -68,7 +68,7 @@ Route::group(['prefix' => 'season', 'middleware' => ['notCE', 'auth', 'admin']],
     SeasonController::routes($router);
 });
 
-Route::group(['prefix' => 'player', 'middleware' => ['notCE', 'auth']], function () use ($router)
+Route::group(['prefix' => 'player', 'middleware' => ['auth']], function () use ($router)
 {
     PlayerController::routes($router);
 });

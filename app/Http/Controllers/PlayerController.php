@@ -39,63 +39,63 @@ class PlayerController extends Controller
 
         //player list
         $router->get('/index', [
-            'middleware' => ['admin'],
+            'middleware' => ['admin', 'notCE'],
             'uses'       => 'PlayerController@index',
             'as'         => 'player.index',
         ]);
 
         //player list with season
         $router->post('/index', [
-            'middleware' => ['admin'],
+            'middleware' => ['admin', 'notCE'],
             'uses'       => 'PlayerController@index',
             'as'         => 'player.index',
         ]);
 
         //player delete
         $router->get('/delete/{player_id}', [
-            'middleware' => ['admin'],
+            'middleware' => ['admin', 'notCE'],
             'uses'       => 'PlayerController@delete',
             'as'         => 'player.delete',
         ]);
 
         //player edit
         $router->get('/edit/{player_id}', [
-            'middleware' => ['playerOwner', 'settingExists'],
+            'middleware' => ['playerOwner', 'settingExists', 'notCE'],
             'uses'       => 'PlayerController@edit',
             'as'         => 'player.edit',
         ]);
 
         //player update
         $router->post('/edit/{player_id}', [
-            'middleware' => ['playerOwner', 'buyTshirtClose', 'settingExists'],
+            'middleware' => ['playerOwner', 'buyTshirtClose', 'settingExists', 'notCE'],
             'uses'       => 'PlayerController@update',
             'as'         => 'player.update',
         ]);
 
         //player create
         $router->get('/create', [
-            'middleware' => ['enrollOpen', 'settingExists'],
+            'middleware' => ['enrollOpen', 'settingExists', 'notCE'],
             'uses'       => 'PlayerController@create',
             'as'         => 'player.create',
         ]);
 
         //player store
         $router->post('/create', [
-            'middleware' => ['enrollOpen', 'buyTshirtClose', 'settingExists'],
+            'middleware' => ['enrollOpen', 'buyTshirtClose', 'settingExists', 'notCE'],
             'uses'       => 'PlayerController@store',
             'as'         => 'player.store',
         ]);
 
         //player change ce_state to contribution_paid
         $router->get('/ce_state/contribution_paid/{player_id}', [
-            'middleware' => ['admin'],
+            'middleware' => ['notUser'],
             'uses'       => 'PlayerController@changeCeStateToContributionPaid',
             'as'         => 'player.ce_stateTocontribution_paid',
         ]);
 
         //player change gbc_state to valid
         $router->get('/gbc_state/valid/{player_id}', [
-            'middleware' => ['admin'],
+            'middleware' => ['admin', 'notCE'],
             'uses'       => 'PlayerController@changeGbcStateToValid',
             'as'         => 'player.gbc_stateTocontribution_paid',
         ]);
@@ -111,15 +111,11 @@ class PlayerController extends Controller
     {
         $season = null;
 
-        if ($request->exists('season_id'))
-        {
+        if ($request->exists('season_id')) {
             $season = Season::findOrFail($request->season_id);
-        }
-        else
-        {
+        } else {
             $season = Season::active()->first();
-            if ($season == null)
-            {
+            if ($season == null) {
                 // situation anormale, il doit toujours exiter une saison active
                 abort(404);
             }
@@ -151,8 +147,7 @@ class PlayerController extends Controller
         $activeSeason = Season::active()->first();
 
         //si il y a pas encore de saison
-        if ($activeSeason === null)
-        {
+        if ($activeSeason === null) {
             return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouverte !");
         }
 
@@ -163,8 +158,7 @@ class PlayerController extends Controller
             ->count();
 
         //si on a plus de 1 inscription
-        if ($numberOfPlayerForUserInSelectedSeason >= 1)
-        {
+        if ($numberOfPlayerForUserInSelectedSeason >= 1) {
             $alreadySubscribe = true;
         }
 
@@ -191,8 +185,7 @@ class PlayerController extends Controller
         $activeSeason = Season::active()->first();
 
         //si il y a pas encore de saison
-        if ($activeSeason === null)
-        {
+        if ($activeSeason === null) {
             return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouverte !");
         }
 
@@ -203,8 +196,7 @@ class PlayerController extends Controller
             ->count();
 
         //si on a plus de 1 inscription
-        if ($numberOfPlayerForUserInSelectedSeason >= 1)
-        {
+        if ($numberOfPlayerForUserInSelectedSeason >= 1) {
             return redirect()->back()->with('error',
                 "Vous êtes est déjà inscrit !")->withInput($request->input());
         }
@@ -231,16 +223,14 @@ class PlayerController extends Controller
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
 
-        if ($player->hasFormula('competition'))
-        {
+        if ($player->hasFormula('competition')) {
             SendMail::send($this->user, 'subscribeCompetitionFormula', $this->user->attributesToArray(), 'Inscription
              formule compétition AS Lectra Badminton');
         }
 
         $admin = User::where('email', 'c.maheo@lectra.com')->first();
 
-        if($admin != null)
-        {
+        if ($admin != null) {
             $data['newValues'] = $player->attributesToArray();
             $data['userName'] = $this->user->forname . " " . $this->user->name;
             $data['adminUserName'] = $admin->forname . " " . $admin->name;
@@ -261,8 +251,7 @@ class PlayerController extends Controller
         $player = Player::findOrFail($player_id);
         $setting = Helpers::getInstance()->setting();
 
-        if($player != null)
-        {
+        if ($player != null) {
             $gender = $player->user->gender;
 
             $listPartnerAvailable['double'] = Player::listPartnerAvailable('double', $gender, $this->user->id, $player_id);
@@ -289,8 +278,7 @@ class PlayerController extends Controller
         $activeSeason = Season::active()->first();
 
         //si on est admin on peut mettre à jour les 2 champs
-        if ($this->user->hasRole('admin'))
-        {
+        if ($this->user->hasRole('admin')) {
             $player->update([
                 'ce_state'  => $request->ce_state,
                 'gbc_state' => $request->gbc_state,
@@ -317,8 +305,7 @@ class PlayerController extends Controller
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
 
-        if ($player->hasFormula('competition'))
-        {
+        if ($player->hasFormula('competition')) {
             SendMail::send($this->user, 'subscribeCompetitionFormula', $this->user->attributesToArray(), 'Inscription
              formule compétition AS Lectra Badminton');
         }
@@ -357,20 +344,14 @@ class PlayerController extends Controller
     private function onPlayerCreateChoseGbc_state($request)
     {
         //on est l'admin, on peut choisir le champ
-        if ($this->user->hasRole('admin'))
-        {
+        if ($this->user->hasRole('admin')) {
             return $request->gbc_state;
-        }
-        else
-        {
+        } else {
             //si on a choisit la formule loisir, fun, ou performance, on ne peut pas etre a GBC
-            if ($request->formula === 'leisure' || $request->formula === 'tournament' || $request->formula === 'fun' || $request->formula === 'performance')
-            {
+            if ($request->formula === 'leisure' || $request->formula === 'tournament' || $request->formula === 'fun' || $request->formula === 'performance') {
                 return 'non_applicable';
-            }
-            //si on esy en corpo ou competition on doit remettre notre dossier
-            elseif ($request->formula === 'corpo' || $request->formula === 'competition')
-            {
+            } //si on esy en corpo ou competition on doit remettre notre dossier
+            elseif ($request->formula === 'corpo' || $request->formula === 'competition') {
                 return 'entry_must';
             }
         }
@@ -388,8 +369,7 @@ class PlayerController extends Controller
     {
         $player = Player::findOrFail($player_id);
 
-        if ($player->hasCeState('contribution_payable'))
-        {
+        if ($player->hasCeState('contribution_payable')) {
             $player->update([
                 'ce_state' => 'contribution_paid',
             ]);
@@ -409,8 +389,7 @@ class PlayerController extends Controller
     {
         $player = Player::findOrFail($player_id);
 
-        if ($player->hasGbcState('entry_must'))
-        {
+        if ($player->hasGbcState('entry_must')) {
             $player->update([
                 'gbc_state' => 'valid',
             ]);
@@ -437,15 +416,13 @@ class PlayerController extends Controller
             ->first();
 
         //si j'ai une équipe de simple, on met à jour le statut enable
-        if ($allMySimpleTeams !== null)
-        {
+        if ($allMySimpleTeams !== null) {
             $allMySimpleTeams->update([
                 'enable' => $player->simple,
             ]);
         }
 
-        if ($player->hasSimple(true) && $allMySimpleTeams === null)
-        {
+        if ($player->hasSimple(true) && $allMySimpleTeams === null) {
             //si on a pas encore d'équipe, il faut en créer une
             Team::create([
                 'player_one'   => $player->id,
@@ -492,8 +469,7 @@ class PlayerController extends Controller
             ->first();
 
         //on désactive toutes les équipes
-        if ($allMyDoubleOrMixteTeams !== null)
-        {
+        if ($allMyDoubleOrMixteTeams !== null) {
             $allMyDoubleOrMixteTeams->update([
                 'enable' => false,
             ]);
@@ -508,8 +484,7 @@ class PlayerController extends Controller
 
         $type === 'double' ? $mixteOrDouble = $player->double : $mixteOrDouble = $player->mixte;
 
-        if ($mixteOrDouble && $partner_id !== 'search')
-        {
+        if ($mixteOrDouble && $partner_id !== 'search') {
             $partner = Player::findOrFail($partner_id);
 
             $partner->update([
@@ -519,21 +494,17 @@ class PlayerController extends Controller
 
             $myTeam = Team::myDoubleOrMixteTeamsWithPartner($type, $gender, $player->id, $partner_id,
                 $activeSeason->id)->first();
-            if ($myTeam !== null)
-            {
+            if ($myTeam !== null) {
                 $myTeam->update([
                     'enable' => true,
                 ]);
-            }
-            else
-            {
+            } else {
                 $partner = Player::findOrFail($partner_id);
 
                 $userOne = $player->user->__toString();
                 $userTwo = $partner->user->__toString();
 
-                if ($type === 'double')
-                {
+                if ($type === 'double') {
                     Team::create([
                         'player_one'   => $userOne < $userTwo ? $player->id : $partner_id,
                         'player_two'   => $userOne < $userTwo ? $partner_id : $player->id,
@@ -545,9 +516,7 @@ class PlayerController extends Controller
                         'mixte'        => false,
                         'enable'       => true,
                     ]);
-                }
-                else
-                {
+                } else {
                     Team::create([
                         'player_one'   => $gender === 'woman' ? $player->id : $partner_id,
                         'player_two'   => $gender === 'woman' ? $partner_id : $player->id,

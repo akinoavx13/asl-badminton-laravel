@@ -29,29 +29,42 @@
                 </h1>
             </div>
             <div class="panel-body">
-                @foreach($serie as $rankNumber => $matches)
-                    @if($rankNumber != 'info')
-                        <div class="col-md-2">
-                            @foreach($matches as $index => $match)
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <p class="text-center">
-                                            @if($match['edit'])
-                                                <a href="{{ route('score.editTournament', [$match['scoreId'], str_replace(' ', '-', $match['firstTeam']), str_replace(' ', '-', $match['secondTeam'])]) }}" class="text-center">
-                                                    {{ $match['firstTeam'] }} vs {{ $match['secondTeam'] }}
-                                                </a>
-                                            @else
-                                                {{ $match['firstTeam'] }} vs {{ $match['secondTeam'] }}
-                                            @endif
-                                            <a href="{{ route('match.edit', $match['id']) }}" class="btn btn-info"><span
-                                                        class="fa fa-edit"></span></a>
-                                        </p>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-                @endforeach
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover display" id="userList">
+                        <tbody>
+                        @for($nbMatchRank1 = 0; $nbMatchRank1 < $serie['info']->number_matches_rank_1; $nbMatchRank1++)
+                            <tr>
+                                <td>ok</td>
+                            </tr>
+                        @endfor
+                        </tbody>
+                    </table>
+                </div>
+
+                {{--@foreach($serie as $rankNumber => $matches)--}}
+                {{--@if($rankNumber != 'info')--}}
+                {{--<div class="col-md-2">--}}
+                {{--@foreach($matches as $index => $match)--}}
+                {{--<div class="panel panel-default">--}}
+                {{--<div class="panel-body">--}}
+                {{--<p class="text-center">--}}
+                {{--@if($match['edit'])--}}
+                {{--<a href="{{ route('score.editTournament', [$match['scoreId'], str_replace(' ', '-', $match['firstTeam']), str_replace(' ', '-', $match['secondTeam'])]) }}" class="text-center">--}}
+                {{--{{ $match['firstTeam'] }} vs {{ $match['secondTeam'] }}--}}
+                {{--</a>--}}
+                {{--@else--}}
+                {{--{{ $match['firstTeam'] }} vs {{ $match['secondTeam'] }}--}}
+                {{--@endif--}}
+                {{--<a href="{{ route('match.edit', $match['id']) }}" class="btn btn-info"><span--}}
+                {{--class="fa fa-edit"></span></a>--}}
+                {{--</p>--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {{--@endforeach--}}
+                {{--</div>--}}
+                {{--@endif--}}
+                {{--@endforeach--}}
             </div>
         </div>
 
