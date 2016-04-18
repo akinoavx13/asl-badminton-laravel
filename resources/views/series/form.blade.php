@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="col-md-9">
-                            {!! Form::select('category[' . $series->id .']', ['S' => 'S', 'SH' => 'SH', 'SD' => 'SD', 'D' => 'D', 'DH' => 'DH', 'DD' => 'DD', 'M' => 'M'], $series->exists ? $series->category : old('category[' . $series->id .']'),['class' => 'form-control chosen-select', 'required']) !!}
+                            {!! Form::select('category[' . $series->id .']', ['S' => 'Simple', 'SH' => 'Simple homme', 'SD' => 'Simple dame', 'D' => 'Double', 'DH' => 'Double homme', 'DD' => 'Double dame', 'M' => 'Mixte'], $series->exists ? $series->category : old('category[' . $series->id .']'),['class' => 'form-control chosen-select', 'required']) !!}
                         </div>
                     </div>
 
@@ -52,13 +52,13 @@
 
                     <div class="form-group">
                         <div class="col-md-3">
-                            {!! Form::label('number_matches_rank_1[' . $series->id .']', 'Nombre de match de rang 1 :',
+                            {!! Form::label('number_matches_rank_1[' . $series->id .']', 'Matchs de rang 1 :',
                             ['class' => 'control-label']) !!}
                             <i class="text-navy">*</i>
                         </div>
 
                         <div class="col-md-9">
-                            {!! Form::number('number_matches_rank_1[' . $series->id .']', $series->exists ? $series->number_matches_rank_1 : old('number_matches_rank_1[' . $series->id .']'),['class' => 'form-control', 'required', 'min' => 1]) !!}
+                            {!! Form::select('number_matches_rank_1[' . $series->id .']', ['2' => '2', '4' => '4', '8' => '8', '16' => '16', '32' => '32', '64' => '64', '128' => '128', '256' => '256'], $series->exists ? $series->number_matches_rank_1 : old('number_matches_rank_1[' . $series->id .']'),['class' => 'form-control chosen-select', 'required']) !!}
                         </div>
                     </div>
 

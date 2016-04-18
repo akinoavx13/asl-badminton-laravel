@@ -169,7 +169,6 @@ class UserController extends Controller
             'ending_holiday'         => Carbon::now()->format('d/m/Y'),
         ]);
 
-        SendMail::send($this->user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
         SendMail::send($user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
         return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");

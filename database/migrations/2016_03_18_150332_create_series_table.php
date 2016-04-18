@@ -17,7 +17,7 @@ class CreateSeriesTable extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->enum('category', ['S, SH', 'SD', 'D', 'DD', 'DH', 'M']);
+            $table->enum('category', ['S', 'SH', 'SD', 'D', 'DD', 'DH', 'M']);
             $table->integer('display_order')->unsigned();
             $table->string('name');
 

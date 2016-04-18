@@ -40,6 +40,13 @@ class CreateMatchesTable extends Migration
             $table->integer('next_match_looser_id')->unsigned()->nullable();
             $table->foreign('next_match_looser_id')->references('id')->on('matches')->onDelete('cascade')->onUpdate
             ('cascade');
+            
+            $table->integer('team_number_winner')->unsigned()->nullable();
+            $table->integer('team_number_looser')->unsigned()->nullable();
+
+            $table->integer('score_id')->unsigned()->nullable();
+            $table->foreign('score_id')->references('id')->on('scores')->onDelete('cascade')->onUpdate
+            ('cascade');
 
         });
     }
