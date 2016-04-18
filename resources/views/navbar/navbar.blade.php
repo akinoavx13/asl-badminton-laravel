@@ -200,7 +200,21 @@
                                     href="{{ route('tournament.create') }}"><i class="fa fa-plus"></i>Créer un
                                 tournoi</a></li>
                     </ul>
+                    <ul class="nav nav-second-level">
+                        <li class="{{ Request::is('tournament/index') ? 'active' : '' }}"><a
+                                    href="{{ route('tournament.index') }}"><i class="fa fa-eye"></i>Voir le classement
+                                du tournoi</a></li>
+                    </ul>
                 </li>
+            @endif
+
+            @if($auth->hasRole('user') && env('APP_ENV') == 'local')
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                    <li class="{{ Request::is('tournament/index') ? 'active' : '' }}"><a
+                                href="{{ route('tournament.index') }}"><i class="fa fa-eye"></i>Voir le classement du
+                            tournoi</a></li>
+                    </li>
+                @endif
             @endif
 
             @if($auth->hasRole('admin'))

@@ -21,6 +21,7 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailToDevController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerReservationController;
 use App\Http\Controllers\PostController;
@@ -167,4 +168,9 @@ Route::group(['prefix' => 'tournament', 'middleware' => ['auth', 'notCE']], func
 Route::group(['prefix' => 'series', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
 {
     SeriesController::routes($router);
+});
+
+Route::group(['prefix' => 'matches', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    MatchesController::routes($router);
 });

@@ -16,9 +16,16 @@ class Match extends Model
         'series_id',
         'next_match_winner_id',
         'next_match_looser_id',
+        'team_number_winner',
+        'team_number_looser',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
+
+    public function __toString()
+    {
+        return 'Match n° ' . $this->matches_number_in_table;
+    }
 
     public function series()
     {
