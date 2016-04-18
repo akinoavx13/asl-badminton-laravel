@@ -113,7 +113,8 @@ class TournamentController extends Controller
                         }
 
                         $series[$index][$rank][$m]['id'] = $match->id;
-                        $series[$index][$rank][$m]['winnerId'] = $match->next_match_winner_id;
+                        $series[$index][$rank][$m]['scoreId'] = $match->score_id;
+                        $series[$index][$rank][$m]['edit'] = $match->score_id != null && $firstTeamName != "Personne" && $secondTeamName != "Personne";
                         $series[$index][$rank][$m]['firstTeam'] = $firstTeamName;
                         $series[$index][$rank][$m]['secondTeam'] = $secondTeamName;
 

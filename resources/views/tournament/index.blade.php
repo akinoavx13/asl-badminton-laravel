@@ -9,8 +9,10 @@
     <div class="row" id="top">
         <div class="col-md-12 text-center">
             @foreach($series as $serie)
-                <a href="#{{ $serie['info']->name }}" class="btn {{ $serie['info']->category == 'S' || $serie['info']->category == 'SH' || $serie['info']->category == 'SD' ? 'btn-warning' : '' }} {{ $serie['info']->category == 'D' || $serie['info']->category == 'DH' || $serie['info']->category == 'DD' ? 'btn-info'
-         : '' }} {{ $serie['info']->category == 'M' ? 'btn-danger' : '' }}">{{ $serie['info']->name }} <span class="fa fa-bookmark"></span></a>
+                <a href="#{{ $serie['info']->name }}"
+                   class="btn {{ $serie['info']->category == 'S' || $serie['info']->category == 'SH' || $serie['info']->category == 'SD' ? 'btn-warning' : '' }} {{ $serie['info']->category == 'D' || $serie['info']->category == 'DH' || $serie['info']->category == 'DD' ? 'btn-info'
+         : '' }} {{ $serie['info']->category == 'M' ? 'btn-danger' : '' }}">{{ $serie['info']->name }} <span
+                            class="fa fa-bookmark"></span></a>
             @endforeach
         </div>
     </div>
@@ -34,11 +36,15 @@
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <p class="text-center">
-                                            {{ $match['id'] }} && {{ $match['winnerId'] }}
-                                        </p>
-                                        <p class="text-center">
-                                            {{ $match['firstTeam'] }} vs {{ $match['secondTeam'] }}
-                                            <a href="{{ route('match.edit', $match['id']) }}" class="btn btn-info"><span class="fa fa-edit"></span></a>
+                                            @if($match['edit'])
+                                                <a href="{{ route('score.editTournament', [$match['scoreId'], str_replace(' ', '-', $match['firstTeam']), str_replace(' ', '-', $match['secondTeam'])]) }}" class="text-center">
+                                                    {{ $match['firstTeam'] }} vs {{ $match['secondTeam'] }}
+                                                </a>
+                                            @else
+                                                {{ $match['firstTeam'] }} vs {{ $match['secondTeam'] }}
+                                            @endif
+                                            <a href="{{ route('match.edit', $match['id']) }}" class="btn btn-info"><span
+                                                        class="fa fa-edit"></span></a>
                                         </p>
                                     </div>
                                 </div>

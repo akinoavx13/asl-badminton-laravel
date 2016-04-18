@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Http\Requests\SeriesUpdateRequest;
 use App\Match;
+use App\Score;
 use App\Series;
 use App\Tournament;
 use Illuminate\Http\Request;
@@ -71,6 +72,7 @@ class SeriesController extends Controller
                         'next_match_looser_id'    => null,
                         'team_number_winner'      => null,
                         'team_number_looser'      => null,
+                        'score_id'                => null
                     ]);
 
                     $matchNumber++;

@@ -51,6 +51,11 @@ class Score extends Model
         return $this->hasMany('App\Post');
     }
 
+    public function match()
+    {
+        return $this->hasOne('App\Match');
+    }
+
     /******************/
     /*      Has       */
     /******************/

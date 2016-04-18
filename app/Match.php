@@ -18,6 +18,7 @@ class Match extends Model
         'next_match_looser_id',
         'team_number_winner',
         'team_number_looser',
+        'score_id',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -30,5 +31,10 @@ class Match extends Model
     public function series()
     {
         return $this->belongsTo('App\Series');
+    }
+
+    public function score()
+    {
+        return $this->belongsTo('App\Score');
     }
 }

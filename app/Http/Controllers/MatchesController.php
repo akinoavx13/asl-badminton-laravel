@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers;
 use App\Http\Requests\MatchUpdateRequest;
 use App\Match;
+use App\Score;
 use App\Season;
 use App\Team;
 use App\Tournament;
@@ -189,6 +190,19 @@ class MatchesController extends Controller
             $teamNumberLooser = $infoNextMatchLooser[1];
         }
 
+        $score = null;
+
+        if ($match->score_id != null) {
+            $score = Score::findOrFail($match->score_id);
+        }
+
+        if ($match->score_id == null && $request->first_team_id != 'none' && $request->second_team_id != 'none') {
+            $score = Score::create([
+                'first_team_id'  => $request->first_team_id,
+                'second_team_id' => $request->second_team_id,
+            ]);
+        }
+
         $match->update([
             'matches_number_in_table' => $request->matches_number_in_table,
             'first_team_id'           => $request->first_team_id == 'none' ? null : $request->first_team_id,
@@ -197,6 +211,7 @@ class MatchesController extends Controller
             'next_match_looser_id'    => $nextMatchLooserId,
             'team_number_winner'      => $teamNumberWinner,
             'team_number_looser'      => $teamNumberLooser,
+            'score_id'                => $score == null ? null : $score->id,
         ]);
 
         return redirect()->route('tournament.index')->with('success', 'Le match a bien été modifié !');
