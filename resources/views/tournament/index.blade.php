@@ -34,8 +34,22 @@
                     <table class="table table-bordered table-hover display" id="userList">
                         <tbody>
                         @for($nbMatchRank1 = 0; $nbMatchRank1 < $serie['info']->number_matches_rank_1; $nbMatchRank1++)
+
                             <tr>
-                                <td>ok</td>
+                                @for($nbRank = 1; $nbRank <= $serie['info']->number_rank; $nbRank++)
+                                    <td>
+                                        @if(array_key_exists($nbMatchRank1, $serie[$nbRank]))
+                                            @if($serie[$nbRank][$nbMatchRank1]['edit'])
+                                                <a href="{{ route('score.editTournament', [$serie[$nbRank][$nbMatchRank1]['scoreId'], str_replace(' ', '-', $serie[$nbRank][$nbMatchRank1]['firstTeam']), str_replace(' ', '-', $serie[$nbRank][$nbMatchRank1]['secondTeam'])]) }}">{{ $serie[$nbRank][$nbMatchRank1]['firstTeam'] }}
+                                                    VS {{ $serie[$nbRank][$nbMatchRank1]['secondTeam'] }}</a>
+                                            @else
+                                                {{ $serie[$nbRank][$nbMatchRank1]['firstTeam'] }}
+                                                VS {{ $serie[$nbRank][$nbMatchRank1]['secondTeam'] }}
+                                            @endif
+                                                <a href="{{ route('match.edit', $serie[$nbRank][$nbMatchRank1]['id']) }}" class="btn btn-primary"><span class="fa fa-edit"></span></a>
+                                        @endif
+                                    </td>
+                                @endfor
                             </tr>
                         @endfor
                         </tbody>
