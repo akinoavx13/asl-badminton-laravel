@@ -64,6 +64,10 @@
 
         {!! Form::close() !!}
 
+        <div class="form-group text-center">
+            <a href="{{ route('match.nextStep', $match->id) }}" class="btn btn-warning">Passer à la prochaine étape</a>
+        </div>
+
     </div>
 </div>
 

@@ -32,6 +32,10 @@ class MatchesController extends Controller
             'as'   => 'match.update',
         ]);
 
+        $router->get('nextStep/{match_id}', [
+            'uses' => 'MatchesController@nextStep',
+            'as'   => 'match.nextStep',
+        ]);
     }
 
     public function edit($match_id)
@@ -215,6 +219,41 @@ class MatchesController extends Controller
         ]);
 
         return redirect()->route('tournament.index')->with('success', 'Le match a bien été modifié !');
+    }
+
+    public function nextStep($match_id)
+    {
+        $match = Match::findOrFail($match_id);
+
+        if ($match->first_team_id != null) {
+            $nextMatch = Match::findOrFail($match->next_match_winner_id);
+
+            if ($match->team_number_winner == 1) {
+                $nextMatch->update([
+                    'first_team_id' => $match->first_team_id,
+                ]);
+            } else {
+                $nextMatch->update([
+                    'second_team_id' => $match->first_team_id,
+                ]);
+            }
+            return redirect()->route('tournament.index')->with('success', 'Le match a bien été modifié !');
+        } else if ($match->second_team_id != null) {
+            $nextMatch = Match::findOrFail($match->next_match_winner_id);
+
+            if ($match->team_number_winner == 1) {
+                $nextMatch->update([
+                    'first_team_id' => $match->second_team_id,
+                ]);
+            } else {
+                $nextMatch->update([
+                    'second_team_id' => $match->second_team_id,
+                ]);
+            }
+            return redirect()->route('tournament.index')->with('success', 'Le match a bien été modifié !');
+        }
+
+        return redirect()->route('tournament.index')->with('error', 'Il faut au moins une équipe null !');
     }
 
     private function getSimpleMatchTeam($match, $teams)
