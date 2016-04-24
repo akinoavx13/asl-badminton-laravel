@@ -237,6 +237,18 @@ class MatchesController extends Controller
                     'second_team_id' => $match->first_team_id,
                 ]);
             }
+
+            if ($nextMatch->score_id == null && $nextMatch->first_team_id != null && $nextMatch->second_team_id != null) {
+                $score = Score::create([
+                    'first_team_id'  => $nextMatch->first_team_id,
+                    'second_team_id' => $nextMatch->second_team_id,
+                ]);
+
+                $nextMatch->update([
+                    'score_id' => $score->id,
+                ]);
+            }
+
             return redirect()->route('tournament.index')->with('success', 'Le match a bien été modifié !');
         } else if ($match->second_team_id != null) {
             $nextMatch = Match::findOrFail($match->next_match_winner_id);
