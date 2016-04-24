@@ -5,11 +5,11 @@
 @stop
 
 @section('content')
-    <p>Bonjour {{ $forname }} {{ $name }},</p>
+    <p>Bonjour,</p>
     <br>
 
-    <p>Une nouvelle actualité vient d'être écrite sur <a href="http://badminton.aslectra.com/home">AS Lectra
-            badminton</a> par {{ $writter }} !</p>
+    <p>Une nouvelle actualité vient d'être écrite par {{ $writter }}. Merci de ne pas répondre à ce mail mais
+        directement sur <a href="http://badminton.aslectra.com/home">AS Lectra badminton</a> !</p>
 
     <p>Actualité : </p>
 
@@ -20,4 +20,5 @@
     <p class="text-center">
         {!! $content !!}
     </p>
+
 @stop

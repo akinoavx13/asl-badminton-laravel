@@ -72,13 +72,17 @@
                             @endif
                         </td>
                         <td>
-                            @if($result['owner'] || $auth->hasRole('admin'))
-                                <a href="{{ route('score.edit', [$result['scoreId'], $pool->id,
+                            @if($today >= $period->start->format('Y-m-d') && $today <= $period->end->format('Y-m-d'))
+                                @if($result['owner'] || $auth->hasRole('admin'))
+                                    <a href="{{ route('score.edit', [$result['scoreId'], $pool->id,
                                 str_replace(' ', '-', $result['firstTeam']), str_replace(' ', '-', $result['secondTeam']), $anchor]) }}"
-                                   class="btn btn-primary"><span
-                                            class="fa fa-edit"></span></a>
+                                       class="btn btn-primary"><span
+                                                class="fa fa-edit"></span></a>
+                                @else
+                                    <span class="fa fa-times text-danger"></span>
+                                @endif
                             @else
-                                <span class="fa fa-times text-danger"></span>
+                                <a href="#" class="btn btn-danger"><span class="fa fa-clock-o"></span></a>
                             @endif
                         </td>
                     </tr>

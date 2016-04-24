@@ -21,6 +21,7 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailToDevController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerReservationController;
 use App\Http\Controllers\PostController;
@@ -28,9 +29,11 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RopeController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TimeSlotController;
+use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\UserController;
 
 // Authentication routes...
@@ -65,7 +68,7 @@ Route::group(['prefix' => 'season', 'middleware' => ['notCE', 'auth', 'admin']],
     SeasonController::routes($router);
 });
 
-Route::group(['prefix' => 'player', 'middleware' => ['notCE', 'auth']], function () use ($router)
+Route::group(['prefix' => 'player', 'middleware' => ['auth']], function () use ($router)
 {
     PlayerController::routes($router);
 });
@@ -155,4 +158,19 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'notCE', 'notLei
 Route::group(['prefix' => 'dashboardAdmin', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
 {
     DashboardAdminController::routes($router);
+});
+
+Route::group(['prefix' => 'tournament', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    TournamentController::routes($router);
+});
+
+Route::group(['prefix' => 'series', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    SeriesController::routes($router);
+});
+
+Route::group(['prefix' => 'matches', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
+{
+    MatchesController::routes($router);
 });

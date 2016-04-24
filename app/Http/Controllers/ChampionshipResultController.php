@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use App\ChampionshipPool;
 use App\Helpers;
+use App\Http\Requests;
 use App\Period;
 use App\Score;
 use App\Season;
-use App\Team;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class ChampionshipResultController extends Controller
 {
@@ -45,20 +42,24 @@ class ChampionshipResultController extends Controller
     {
         $pool = ChampionshipPool::findOrFail($pool_id);
 
+        $period = Period::findOrFail($period_id);
+
         $type = $pool->type;
 
-        if($pool->type == 'simple' || $pool->type == 'simple_man' || $pool->type == 'simple_woman')
+        if ($pool->type == 'simple' || $pool->type == 'simple_man' || $pool->type == 'simple_woman')
         {
             $type = 'simple';
         }
-        elseif($pool->type == 'double' || $pool->type == 'double_man' || $pool->type == 'double_woman')
+        elseif ($pool->type == 'double' || $pool->type == 'double_man' || $pool->type == 'double_woman')
         {
             $type = 'double';
         }
 
         $results = $this->getResults($pool_id, $type, $period_id);
 
-        return view('championshipResult.show', compact('pool', 'results', 'type', 'anchor'));
+        $today = Carbon::today()->format('Y-m-d');
+
+        return view('championshipResult.show', compact('pool', 'results', 'type', 'anchor', 'period', 'today'));
     }
 
     private function getResults($pool_id, $type, $period_id)
@@ -68,13 +69,13 @@ class ChampionshipResultController extends Controller
 
         $activeSeason = Season::active()->first();
 
-        if($activeSeason != null)
+        if ($activeSeason != null)
         {
             $currentPeriod = Period::findOrFail($period_id);
 
-            if($currentPeriod != null)
+            if ($currentPeriod != null)
             {
-                if($type == 'simple')
+                if ($type == 'simple')
                 {
                     $scores = Score::select(
                         'userFirstTeam.name as userFirstTeamName', 'userFirstTeam.forname as userFirstTeamForname',
@@ -92,12 +93,17 @@ class ChampionshipResultController extends Controller
                 else
                 {
                     $scores = Score::select(
-                        'userOneFirstTeam.name as userOneFirstTeamName', 'userOneFirstTeam.forname as userOneFirstTeamForname',
+                        'userOneFirstTeam.name as userOneFirstTeamName',
+                        'userOneFirstTeam.forname as userOneFirstTeamForname',
                         'userOneFirstTeam.id as userOneFirstTeamId', 'userTwoFirstTeam.name as userTwoFirstTeamName',
-                        'userTwoFirstTeam.forname as userTwoFirstTeamForname', 'userTwoFirstTeam.id as userTwoFirstTeamId',
-                        'userOneSecondTeam.name as userOneSecondTeamName', 'userOneSecondTeam.forname as userOneSecondTeamForname',
-                        'userOneSecondTeam.id as userOneSecondTeamId', 'userTwoSecondTeam.name as userTwoSecondTeamName',
-                        'userTwoSecondTeam.forname as userTwoSecondTeamForname', 'userTwoSecondTeam.id as userTwoSecondTeamId',
+                        'userTwoFirstTeam.forname as userTwoFirstTeamForname',
+                        'userTwoFirstTeam.id as userTwoFirstTeamId',
+                        'userOneSecondTeam.name as userOneSecondTeamName',
+                        'userOneSecondTeam.forname as userOneSecondTeamForname',
+                        'userOneSecondTeam.id as userOneSecondTeamId',
+                        'userTwoSecondTeam.name as userTwoSecondTeamName',
+                        'userTwoSecondTeam.forname as userTwoSecondTeamForname',
+                        'userTwoSecondTeam.id as userTwoSecondTeamId',
                         'scores.first_set_first_team', 'scores.first_set_second_team', 'scores.second_set_first_team',
                         'scores.second_set_second_team', 'scores.third_set_first_team', 'scores.third_set_second_team',
                         'scores.my_wo', 'scores.his_wo', 'scores.unplayed', 'scores.id as scoreId',
@@ -114,7 +120,7 @@ class ChampionshipResultController extends Controller
 
         foreach ($scores as $index => $score)
         {
-            if($type == 'simple')
+            if ($type == 'simple')
             {
                 $results[$index]['firstTeam'] = Helpers::getInstance()->getTeamName($score->userFirstTeamForname,
                     $score->userFirstTeamName);

@@ -51,25 +51,43 @@ class ActualityController extends Controller
             'photo'   => 0,
         ]);
 
-        if ($request->exists('photo'))
-        {
+        if ($request->exists('photo')) {
             $actuality->update([
                 'photo' => $request->photo,
             ]);
         }
 
-        $allUserWithNewletter = User::where('newsletter', true)->get();
+        $allUserWithNewletter = User::where('newsletter', true)
+            ->where('state', '<>', 'inactive')
+            ->get();
         $writter = User::findOrFail($actuality->user_id);
 
-        foreach ($allUserWithNewletter as $user)
-        {
-            $data['forname'] = $user->forname;
-            $data['name'] = $user->name;
-            $data['title'] = $actuality->title;
-            $data['content'] = $actuality->content;
-            $data['writter'] = $writter->forname . ' ' . $writter->name;
-            SendMail::send($user, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+        $users = [];
+
+        foreach ($allUserWithNewletter as $index => $user) {
+            $users[$index] = $user->email;
         }
+
+        $data['title'] = $actuality->title;
+        $data['content'] = $actuality->content;
+        $data['writter'] = $writter->forname . ' ' . $writter->name;
+
+        $firstPackageUser = [];
+        $secondPackageUser = [];
+
+        if (count($users) > 45) {
+            for ($i = 0; $i < 45; $i++) {
+                $firstPackageUser[$i] = $users[$i];
+            }
+            for ($i = 45; $i < count($users); $i++) {
+                $secondPackageUser[$i] = $users[$i];
+            }
+            SendMail::send($firstPackageUser, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+            SendMail::send($secondPackageUser, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+        } else {
+            SendMail::send($users, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
+        }
+
 
         return redirect()->back()->with('success', 'L\'actualité est bien postée !');
     }

@@ -105,6 +105,8 @@
                                             <td class="text-center">
                                                 @if($player->hasFormula('leisure'))
                                                     Loisir
+                                                @elseif($player->hasFormula('tournament'))
+                                                    Tournoi
                                                 @elseif($player->hasFormula('fun'))
                                                     Fun
                                                 @elseif($player->hasFormula('performance'))

@@ -138,6 +138,7 @@ class DashboardAdminController extends Controller
             $players['t_shirt_buy'] = [];
 
             $players['leisure'] = [];
+            $players['tournament'] = [];
             $players['fun'] = [];
             $players['performance'] = [];
             $players['corpo'] = [];
@@ -159,8 +160,8 @@ class DashboardAdminController extends Controller
                 'userTwo.forname as userTwoForname')
                 ->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
                 ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
-                ->join('users as userOne', 'userOne.id', '=', 'playerOne.id')
-                ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.id')
+                ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+                ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.user_id')
                 ->where('teams.season_id', $activeSeason->id)
                 ->where('teams.enable', true)
                 ->where('teams.double_man', true)
@@ -185,8 +186,8 @@ class DashboardAdminController extends Controller
                 'userTwo.forname as userTwoForname')
                 ->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
                 ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
-                ->join('users as userOne', 'userOne.id', '=', 'playerOne.id')
-                ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.id')
+                ->join('users as userOne', 'userOne.id', '=', 'playerOne.user_id')
+                ->join('users as userTwo', 'userTwo.id', '=', 'playerTwo.user_id')
                 ->where('teams.season_id', $activeSeason->id)
                 ->where('teams.enable', true)
                 ->where('teams.mixte', true)
@@ -307,6 +308,11 @@ class DashboardAdminController extends Controller
                 if ($player->hasFormula('leisure'))
                 {
                     $players['leisure'][$index] = $player;
+                }
+
+                if ($player->hasFormula('tournament'))
+                {
+                    $players['tournament'][$index] = $player;
                 }
 
                 if ($player->hasFormula('fun'))

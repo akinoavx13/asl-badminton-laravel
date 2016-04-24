@@ -16,7 +16,7 @@ class CreatePlayersTable extends Migration
         {
             $table->increments('id')->index();
 
-            $table->enum('formula', ['leisure', 'fun', 'performance', 'corpo', 'competition']);
+            $table->enum('formula', ['leisure', 'tournament', 'fun', 'performance', 'corpo', 'competition']);
             $table->enum('ce_state', ['contribution_payable', 'contribution_paid']);
             $table->enum('gbc_state', ['non_applicable', 'entry_must', 'valid']);
 

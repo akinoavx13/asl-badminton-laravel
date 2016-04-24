@@ -12,8 +12,8 @@
             <i class="fa fa-send"></i>
         </button>
 
-        <label title="Upload image file" for="inputImage" class="btn btn-primary btn-outline">
-            {!! Form::file('photo', ['class' => 'hide', 'accept' => 'image/*', 'id' => 'inputImage']) !!}
+        <label title="Upload image file" class="btn btn-primary btn-outline">
+            {!! Form::file('photo', ['class' => 'hide', 'accept' => 'image/*']) !!}
             <span class="fa fa-file-image-o"></span>
         </label>
     </div>

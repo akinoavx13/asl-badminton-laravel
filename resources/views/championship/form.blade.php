@@ -46,38 +46,47 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <p class="text-center">
-                                    Nombre de poule de 3 : <span class="text-navy">{{ $poolsNumber['simple'][$gender]['3'] }}</span>
+                                    Nombre de poule de 3 : <span
+                                            class="text-navy">{{ $poolsNumber['simple'][$gender]['3'] }}</span>
                                 </p>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-center">
-                                    Nombre de poule de 4 : <span class="text-navy">{{ $poolsNumber['simple'][$gender]['4'] }}</span>
+                                    Nombre de poule de 4 : <span
+                                            class="text-navy">{{ $poolsNumber['simple'][$gender]['4'] }}</span>
                                 </p>
                             </div>
                         </div>
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover" id="simple_{{ $gender }}">
                             <thead>
                             <tr>
-                                <th class="text-center">Equipe</th>
-                                <th class="text-center">Actif</th>
-                                <th class="text-center">Rang</th>
-                                <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                                <th class="text-center noDrag"></th>
+                                <th class="text-center noDrag">Equipe</th>
+                                <th class="text-center noDrag">Actif</th>
+                                <th class="text-center noDrag">Rang</th>
+                                <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($teams['simple'][$gender] as $simpleTeam)
                                 <tr class="text-center">
+                                    <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                                     <td>{{ $simpleTeam['name'] }}</td>
                                     <td>
-                                        @if($simpleTeam['state'] === 'active')
-                                            <i class="text-navy">Actif</i>
-                                        @elseif($simpleTeam['state'] === 'inactive')
-                                            <i class="text-warning">Inactif</i>
-                                        @elseif($simpleTeam['state'] === 'holiday')
-                                            <i class="text-warning">En vacances jusqu'au {{ $simpleTeam['ending_holiday'] }}</i>
-                                        @elseif($simpleTeam['state'] === 'hurt')
-                                            <i class="text-danger">Blessé
-                                                jusqu'au {{ $simpleTeam['ending_injury'] }}</i>
+                                        @if(!$simpleTeam['enable'])
+                                            <i class="text-danger">Arrêt championnat</i>
+                                        @else
+                                            @if($simpleTeam['state'] === 'active')
+                                                <i class="text-navy">Actif</i>
+                                            @elseif($simpleTeam['state'] === 'inactive')
+                                                <i class="text-warning">Inactif</i>
+                                            @elseif($simpleTeam['state'] === 'holiday')
+                                                <i class="text-warning">En vacances
+                                                    jusqu'au {{ $simpleTeam['ending_holiday'] }}</i>
+                                            @elseif($simpleTeam['state'] === 'hurt')
+                                                <i class="text-danger">Blessé
+                                                    jusqu'au {{ $simpleTeam['ending_injury'] }}</i>
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
@@ -117,29 +126,36 @@
                             </p>
                         </div>
                     </div>
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" id="simple">
                         <thead>
                         <tr>
-                            <th class="text-center">Equipe</th>
-                            <th class="text-center">Actif</th>
-                            <th class="text-center">Rang</th>
-                            <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                            <th class="text-center noDrag"></th>
+                            <th class="text-center noDrag">Equipe</th>
+                            <th class="text-center noDrag">Actif</th>
+                            <th class="text-center noDrag">Rang</th>
+                            <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($teams['simple'] as $simpleTeam)
                             <tr class="text-center">
+                                <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                                 <td>{{ $simpleTeam['name'] }}</td>
                                 <td>
-                                    @if($simpleTeam['state'] === 'active')
-                                        <i class="text-navy">Actif</i>
-                                    @elseif($simpleTeam['state'] === 'inactive')
-                                        <i class="text-warning">Inactif</i>
-                                    @elseif($simpleTeam['state'] === 'holiday')
-                                        <i class="text-warning">En vacances jusqu'au {{ $simpleTeam['ending_holiday'] }}</i>
-                                    @elseif($simpleTeam['state'] === 'hurt')
-                                        <i class="text-danger">Blessé
-                                            jusqu'au {{ $simpleTeam['ending_injury'] }}</i>
+                                    @if(!$simpleTeam['enable'])
+                                        <i class="text-danger">Arrêt championnat</i>
+                                    @else
+                                        @if($simpleTeam['state'] === 'active')
+                                            <i class="text-navy">Actif</i>
+                                        @elseif($simpleTeam['state'] === 'inactive')
+                                            <i class="text-warning">Inactif</i>
+                                        @elseif($simpleTeam['state'] === 'holiday')
+                                            <i class="text-warning">En vacances
+                                                jusqu'au {{ $simpleTeam['ending_holiday'] }}</i>
+                                        @elseif($simpleTeam['state'] === 'hurt')
+                                            <i class="text-danger">Blessé
+                                                jusqu'au {{ $simpleTeam['ending_injury'] }}</i>
+                                        @endif
                                     @endif
                                 </td>
                                 <td>
@@ -171,47 +187,59 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <p class="text-center">
-                                    Nombre de poule de 3 : <span class="text-navy">{{ $poolsNumber['double'][$gender]['3'] }}</span>
+                                    Nombre de poule de 3 : <span
+                                            class="text-navy">{{ $poolsNumber['double'][$gender]['3'] }}</span>
                                 </p>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-center">
-                                    Nombre de poule de 4 : <span class="text-navy">{{ $poolsNumber['double'][$gender]['4'] }}</span>
+                                    Nombre de poule de 4 : <span
+                                            class="text-navy">{{ $poolsNumber['double'][$gender]['4'] }}</span>
                                 </p>
                             </div>
                         </div>
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover" id="double_{{ $gender }}">
                             <thead>
                             <tr>
-                                <th class="text-center">Equipe</th>
-                                <th class="text-center">Actif</th>
-                                <th class="text-center">Rang</th>
-                                <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                                <th class="text-center noDrag"></th>
+                                <th class="text-center noDrag">Equipe</th>
+                                <th class="text-center noDrag">Actif</th>
+                                <th class="text-center noDrag">Rang</th>
+                                <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($teams['double'][$gender] as $doubleTeam)
                                 <tr class="text-center">
+                                    <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                                     <td>{{ $doubleTeam['name'] }}</td>
                                     <td>
-                                        @if($doubleTeam['stateOne'] === 'active')
-                                            <i class="text-navy">Actif</i>
-                                        @elseif($doubleTeam['stateOne'] === 'inactive')
-                                            <i class="text-warning">Inactif</i>
-                                        @elseif($doubleTeam['stateOne'] === 'holiday')
-                                            <i class="text-warning">En vacances jusqu'au {{ $doubleTeam['ending_holidayOne'] }}</i>
-                                        @elseif($doubleTeam['stateOne'] === 'hurt')
-                                            <i class="text-danger">Blessé jusqu'au {{ $doubleTeam['ending_injuryOne'] }}</i>
-                                        @endif
-                                        &
-                                        @if($doubleTeam['stateTwo'] === 'active')
-                                            <i class="text-navy">Actif</i>
-                                        @elseif($doubleTeam['stateTwo'] === 'inactive')
-                                            <i class="text-warning">Inactif</i>
-                                        @elseif($doubleTeam['stateTwo'] === 'holiday')
-                                            <i class="text-warning">En vacances jusqu'au {{ $doubleTeam['ending_holidayTwo'] }}</i>
-                                        @elseif($doubleTeam['stateTwo'] === 'hurt')
-                                            <i class="text-danger">Blessé jusqu'au {{ $doubleTeam['ending_injuryTwo'] }}</i>
+                                        @if(!$doubleTeam['enable'])
+                                            <i class="text-danger">Arrêt championnat</i>
+                                        @else
+                                            @if($doubleTeam['stateOne'] === 'active')
+                                                <i class="text-navy">Actif</i>
+                                            @elseif($doubleTeam['stateOne'] === 'inactive')
+                                                <i class="text-warning">Inactif</i>
+                                            @elseif($doubleTeam['stateOne'] === 'holiday')
+                                                <i class="text-warning">En vacances
+                                                    jusqu'au {{ $doubleTeam['ending_holidayOne'] }}</i>
+                                            @elseif($doubleTeam['stateOne'] === 'hurt')
+                                                <i class="text-danger">Blessé
+                                                    jusqu'au {{ $doubleTeam['ending_injuryOne'] }}</i>
+                                            @endif
+                                            &
+                                            @if($doubleTeam['stateTwo'] === 'active')
+                                                <i class="text-navy">Actif</i>
+                                            @elseif($doubleTeam['stateTwo'] === 'inactive')
+                                                <i class="text-warning">Inactif</i>
+                                            @elseif($doubleTeam['stateTwo'] === 'holiday')
+                                                <i class="text-warning">En vacances
+                                                    jusqu'au {{ $doubleTeam['ending_holidayTwo'] }}</i>
+                                            @elseif($doubleTeam['stateTwo'] === 'hurt')
+                                                <i class="text-danger">Blessé
+                                                    jusqu'au {{ $doubleTeam['ending_injuryTwo'] }}</i>
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
@@ -250,38 +278,48 @@
                             </p>
                         </div>
                     </div>
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" id="double">
                         <thead>
                         <tr>
-                            <th class="text-center">Equipe</th>
-                            <th class="text-center">Actif</th>
-                            <th class="text-center">Rang</th>
-                            <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                            <th class="text-center noDrag"></th>
+                            <th class="text-center noDrag">Equipe</th>
+                            <th class="text-center noDrag">Actif</th>
+                            <th class="text-center noDrag">Rang</th>
+                            <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($teams['double'] as $doubleTeam)
                             <tr class="text-center">
+                                <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                                 <td>{{ $doubleTeam['name'] }}</td>
                                 <td>
-                                    @if($doubleTeam['stateOne'] === 'active')
-                                        <i class="text-navy">Actif</i>
-                                    @elseif($doubleTeam['stateOne'] === 'inactive')
-                                        <i class="text-warning">Inactif</i>
-                                    @elseif($doubleTeam['stateOne'] === 'holiday')
-                                        <i class="text-warning">En vacances jusqu'au {{ $doubleTeam['ending_holidayOne'] }}</i>
-                                    @elseif($doubleTeam['stateOne'] === 'hurt')
-                                        <i class="text-danger">Blessé jusqu'au {{ $doubleTeam['ending_injuryOne'] }}</i>
-                                    @endif
-                                    &
-                                    @if($doubleTeam['stateTwo'] === 'active')
-                                        <i class="text-navy">Actif</i>
-                                    @elseif($doubleTeam['stateTwo'] === 'inactive')
-                                        <i class="text-warning">Inactif</i>
-                                    @elseif($doubleTeam['stateTwo'] === 'holiday')
-                                        <i class="text-warning">En vacances jusqu'au {{ $doubleTeam['ending_holidayTwo'] }}</i>
-                                    @elseif($doubleTeam['stateTwo'] === 'hurt')
-                                        <i class="text-danger">Blessé jusqu'au {{ $doubleTeam['ending_injuryTwo'] }}</i>
+                                    @if(!$doubleTeam['enable'])
+                                        <i class="text-danger">Arrêt championnat</i>
+                                    @else
+                                        @if($doubleTeam['stateOne'] === 'active')
+                                            <i class="text-navy">Actif</i>
+                                        @elseif($doubleTeam['stateOne'] === 'inactive')
+                                            <i class="text-warning">Inactif</i>
+                                        @elseif($doubleTeam['stateOne'] === 'holiday')
+                                            <i class="text-warning">En vacances
+                                                jusqu'au {{ $doubleTeam['ending_holidayOne'] }}</i>
+                                        @elseif($doubleTeam['stateOne'] === 'hurt')
+                                            <i class="text-danger">Blessé
+                                                jusqu'au {{ $doubleTeam['ending_injuryOne'] }}</i>
+                                        @endif
+                                        &
+                                        @if($doubleTeam['stateTwo'] === 'active')
+                                            <i class="text-navy">Actif</i>
+                                        @elseif($doubleTeam['stateTwo'] === 'inactive')
+                                            <i class="text-warning">Inactif</i>
+                                        @elseif($doubleTeam['stateTwo'] === 'holiday')
+                                            <i class="text-warning">En vacances
+                                                jusqu'au {{ $doubleTeam['ending_holidayTwo'] }}</i>
+                                        @elseif($doubleTeam['stateTwo'] === 'hurt')
+                                            <i class="text-danger">Blessé
+                                                jusqu'au {{ $doubleTeam['ending_injuryTwo'] }}</i>
+                                        @endif
                                     @endif
                                 </td>
                                 <td>
@@ -320,38 +358,48 @@
                         </p>
                     </div>
                 </div>
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover" id="mixte">
                     <thead>
                     <tr>
-                        <th class="text-center">Equipe</th>
-                        <th class="text-center">Actif</th>
-                        <th class="text-center">Rang</th>
-                        <th class="text-center">N° poule <i class="text-navy">*</i></th>
+                        <th class="text-center noDrag"></th>
+                        <th class="text-center noDrag">Equipe</th>
+                        <th class="text-center noDrag">Actif</th>
+                        <th class="text-center noDrag">Rang</th>
+                        <th class="text-center noDrag">N° poule <i class="text-navy">*</i></th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($teams['mixte'] as $mixteTeam)
                         <tr class="text-center">
+                            <th class="text-center"><span class="fa fa-arrows fa-2x"></span></th>
                             <td>{{ $mixteTeam['name'] }}</td>
                             <td>
-                                @if($mixteTeam['stateOne'] === 'active')
-                                    <i class="text-navy">Actif</i>
-                                @elseif($mixteTeam['stateOne'] === 'inactive')
-                                    <i class="text-warning">Inactif</i>
-                                @elseif($mixteTeam['stateOne'] === 'holiday')
-                                    <i class="text-warning">En vacances jusqu'au {{ $mixteTeam['ending_holidayOne'] }}</i>
-                                @elseif($mixteTeam['stateOne'] === 'hurt')
-                                    <i class="text-danger">Blessé jusqu'au {{ $mixteTeam['ending_injuryOne'] }}</i>
-                                @endif
-                                &
-                                @if($mixteTeam['stateTwo'] === 'active')
-                                    <i class="text-navy">Actif</i>
-                                @elseif($mixteTeam['stateTwo'] === 'inactive')
-                                    <i class="text-warning">Inactif</i>
-                                @elseif($mixteTeam['stateTwo'] === 'holiday')
-                                    <i class="text-warning">En vacances jusqu'au {{ $mixteTeam['ending_holidayTwo'] }}</i>
-                                @elseif($mixteTeam['stateTwo'] === 'hurt')
-                                    <i class="text-danger">Blessé jusqu'au {{ $mixteTeam['ending_injuryTwo'] }}</i>
+                                @if(!$mixteTeam['enable'])
+                                    <i class="text-danger">Arrêt championnat</i>
+                                @else
+                                    @if($mixteTeam['stateOne'] === 'active')
+                                        <i class="text-navy">Actif</i>
+                                    @elseif($mixteTeam['stateOne'] === 'inactive')
+                                        <i class="text-warning">Inactif</i>
+                                    @elseif($mixteTeam['stateOne'] === 'holiday')
+                                        <i class="text-warning">En vacances
+                                            jusqu'au {{ $mixteTeam['ending_holidayOne'] }}</i>
+                                    @elseif($mixteTeam['stateOne'] === 'hurt')
+                                        <i class="text-danger">Blessé
+                                            jusqu'au {{ $mixteTeam['ending_injuryOne'] }}</i>
+                                    @endif
+                                    &
+                                    @if($mixteTeam['stateTwo'] === 'active')
+                                        <i class="text-navy">Actif</i>
+                                    @elseif($mixteTeam['stateTwo'] === 'inactive')
+                                        <i class="text-warning">Inactif</i>
+                                    @elseif($mixteTeam['stateTwo'] === 'holiday')
+                                        <i class="text-warning">En vacances
+                                            jusqu'au {{ $mixteTeam['ending_holidayTwo'] }}</i>
+                                    @elseif($mixteTeam['stateTwo'] === 'hurt')
+                                        <i class="text-danger">Blessé
+                                            jusqu'au {{ $mixteTeam['ending_injuryTwo'] }}</i>
+                                    @endif
                                 @endif
                             </td>
                             <td>

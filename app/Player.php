@@ -172,11 +172,11 @@ class Player extends Model
         }
 
         //calculate leisure formula
-        if ($this->hasFormula('leisure'))
+        if ($this->hasFormula('leisure') || $this->hasFormula('tournament'))
         {
             $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->leisure_external_price : $setting->leisure_price;
         }
-
+        
         //calculate fun formula
         elseif ($this->hasFormula('fun'))
         {

@@ -99,6 +99,30 @@ class DashboardController extends Controller
                     })
                     ->first();
 
+                $anchor['simple'] = 'null';
+                $anchor['double'] = 'null';
+                $anchor['mixte'] = 'null';
+
+                if ($currentChampionship->hasChampionshipSimpleWoman(true))
+                {
+                    $anchor['simple'] = $mySimplePool != null ? 'simple_' . $this->user->gender . '_' . $mySimplePool->number : 'null';
+                }
+                else
+                {
+                    $anchor['simple'] = $mySimplePool != null ? 'simple_' . $mySimplePool->number : 'null';
+                }
+
+                if ($currentChampionship->hasChampionshipDoubleWoman(true))
+                {
+                    $anchor['double'] = $myDoublePool != null ? 'double_' . $this->user->gender . '_' . $myDoublePool->number : 'null';
+                }
+                else
+                {
+                    $anchor['double'] = $myDoublePool != null ? 'double_' . $myDoublePool->number : 'null';
+                }
+
+                $anchor['mixte'] = $myMixtePool != null ? 'mixte_' . $myMixtePool->number : 'null';
+
                 $tableReservation['simple'] = $this->createTableReservation($mySimplePool, 'simple', $activeSeason,
                     $currentChampionship);
                 $tableReservation['double'] = $this->createTableReservation($myDoublePool, 'double', $activeSeason,
@@ -128,8 +152,7 @@ class DashboardController extends Controller
 
                 if (count($tableReservation) > 0)
                 {
-                    return view('dashboard.index',
-                        compact('tableReservation', 'pools'));
+                    return view('dashboard.index', compact('tableReservation', 'pools', 'anchor'));
                 }
             }
         }
@@ -273,7 +296,6 @@ class DashboardController extends Controller
                                 ->where('scores.created_at', '<=', $currentChampionship->end->format('Y-m-d'));
                         })
                         ->get();
-
                 }
             }
 
@@ -416,10 +438,14 @@ class DashboardController extends Controller
                         ->join('courts', 'courts.id', '=', 'players_reservations.court_id')
                         ->where('first_team', $score->firstTeamId)
                         ->where('second_team', $score->secondTeamId)
-                        ->orWhere(function ($query) use ($score)
+                        ->where('players_reservations.date', '>=', $currentChampionship->start->format('Y-m-d'))
+                        ->where('players_reservations.date', '<=', $currentChampionship->end->format('Y-m-d'))
+                        ->orWhere(function ($query) use ($score, $currentChampionship)
                         {
                             $query->where('second_team', $score->firstTeamId)
-                                ->where('first_team', $score->secondTeamId);
+                                ->where('first_team', $score->secondTeamId)
+                                ->where('players_reservations.date', '>=', $currentChampionship->start->format('Y-m-d'))
+                                ->where('players_reservations.date', '<=', $currentChampionship->end->format('Y-m-d'));
                         })
                         ->first();
 
