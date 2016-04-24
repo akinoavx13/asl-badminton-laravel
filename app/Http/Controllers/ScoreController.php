@@ -402,8 +402,8 @@ class ScoreController extends Controller
                 $secondTeamId = $matchLooser->second_team_id;
 
                 $matchLooser->update([
-                    'first_team_id'  => $currentMatch->team_number_winner == 1 ? $looserId : $firstTeamId,
-                    'second_team_id' => $currentMatch->team_number_winner == 2 ? $looserId : $secondTeamId,
+                    'first_team_id'  => $currentMatch->team_number_looser == 1 ? $looserId : $firstTeamId,
+                    'second_team_id' => $currentMatch->team_number_looser == 2 ? $looserId : $secondTeamId,
                 ]);
 
                 $scoreId = $matchLooser->score_id;
