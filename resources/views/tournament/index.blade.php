@@ -45,6 +45,8 @@
                                                 <div class="panel-body" style="padding: 10px;">
                                                     <div class="text-center">
 
+                                                        <span>N°{{ $serie[$rank][$nbMatchRank1]['matchNumber'] }}</span>
+
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null)
                                                             @if($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true))
                                                                 <span class="text-navy">{{ $serie[$rank][$nbMatchRank1]['firstTeamName'] }}</span>

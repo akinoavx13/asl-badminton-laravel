@@ -169,7 +169,8 @@ class TournamentController extends Controller
                                         }
                                     }
                                 }
-
+                                
+                                $series[$index][$col][$ligne]['matchNumber'] = $match->matches_number_in_table;
                                 $series[$index][$col][$ligne]['firstTeamName'] = $firstTeamName;
                                 $series[$index][$col][$ligne]['secondTeamName'] = $secondTeamName;
                                 $series[$index][$col][$ligne]['score'] = $match->score;
@@ -250,6 +251,7 @@ class TournamentController extends Controller
                                     }
                                 }
                                 
+                                $series[$index][$col][$ligne]['matchNumber'] = $match->matches_number_in_table;
                                 $series[$index][$col][$ligne]['firstTeamName'] = $firstTeamName;
                                 $series[$index][$col][$ligne]['secondTeamName'] = $secondTeamName;
                                 $series[$index][$col][$ligne]['score'] = $match->score;
