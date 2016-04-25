@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Fin de la création du tournoi
+    Classement du tournoi
 @stop
 
 @section('content')
