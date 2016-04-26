@@ -19,7 +19,7 @@ class FirstConnection
         $user_id = $request->route()->getParameter('user_id');
         $token_first_connection = $request->route()->getParameter('token_first_connection');
         $user = User::where('id', $user_id)->where('token_first_connection', $token_first_connection)->first();
-
+        
         if ($user !== null && $user->hasFirstConnection(true))
         {
             return $next($request);
