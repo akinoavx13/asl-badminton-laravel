@@ -58,7 +58,7 @@ Route::group(['prefix' => 'home', 'middleware' => ['notCE', 'auth']], function (
     HomeController::routes($router);
 });
 
-Route::group(['prefix' => 'user', 'middleware' => ['notCE', 'auth']], function () use ($router)
+Route::group(['prefix' => 'user', 'middleware' => ['notCE']], function () use ($router)
 {
     UserController::routes($router);
 });

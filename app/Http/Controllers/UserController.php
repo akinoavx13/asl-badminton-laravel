@@ -40,51 +40,53 @@ class UserController extends Controller
     {
         //pattern
         $router->pattern('user_id', '[0-9]+');
+        $router->pattern('token_first_connection', '[0-9-a-z-A-Z_]+');
 
         //user list
         $router->get('/index', [
-            'middleware' => ['admin'],
+            'middleware' => ['auth', 'admin'],
             'uses'       => 'UserController@index',
             'as'         => 'user.index',
         ]);
 
         //users edit
         $router->get('/edit/{user_id}', [
-            'middleware' => ['userOwner'],
+            'middleware' => ['auth', 'userOwner'],
             'uses'       => 'UserController@edit',
             'as'         => 'user.edit',
         ]);
 
         //users update
         $router->post('/edit/{user_id}', [
-            'middleware' => ['userOwner'],
+            'middleware' => ['auth', 'userOwner'],
             'uses'       => 'UserController@update',
             'as'         => 'user.update',
         ]);
 
         //users delete
         $router->get('/delete/{user_id}', [
-            'middleware' => ['admin'],
+            'middleware' => ['auth', 'admin'],
             'uses'       => 'UserController@delete',
             'as'         => 'user.delete',
         ]);
 
         //users show
         $router->get('/show/{user_id}', [
+            'middleware' => 'auth',
             'uses' => 'UserController@show',
             'as'   => 'user.show',
         ]);
 
         //users create
         $router->get('/create', [
-            'middleware' => ['admin'],
+            'middleware' => ['auth', 'admin'],
             'uses'       => 'UserController@create',
             'as'         => 'user.create',
         ]);
 
         //users store
         $router->post('/store', [
-            'middleware' => ['admin', 'settingExists'],
+            'middleware' => ['auth', 'admin', 'settingExists'],
             'uses'       => 'UserController@store',
             'as'         => 'user.store',
         ]);
@@ -105,21 +107,21 @@ class UserController extends Controller
 
         //users send creation link again
         $router->get('/send_creation_link/{user_id}', [
-            'middleware' => ['admin', 'settingExists'],
+            'middleware' => ['auth', 'admin', 'settingExists'],
             'uses'       => 'UserController@sendCreationLink',
             'as'         => 'user.send_creation_link',
         ]);
 
         //users create
         $router->get('/changePassword/{user_id}', [
-            'middleware' => ['userOwner'],
+            'middleware' => ['auth', 'userOwner'],
             'uses'       => 'UserController@changePassword',
             'as'         => 'user.changePassword',
         ]);
 
         //users store
         $router->post('/changePassword/{user_id}', [
-            'middleware' => ['userOwner'],
+            'middleware' => ['auth', 'userOwner'],
             'uses'       => 'UserController@updatePassword',
             'as'         => 'user.updatePassword',
         ]);
@@ -324,6 +326,7 @@ class UserController extends Controller
      */
     public function getFirstConnection($user_id, $token_first_connection)
     {
+
         $user = User::where('id', $user_id)
             ->where('token_first_connection', $token_first_connection)
             ->first();
@@ -346,6 +349,7 @@ class UserController extends Controller
      */
     public function postFirstConnection(UserFirstConnectionRequest $request, $user_id, $token_first_connection)
     {
+
         $user = User::where('id', $user_id)
             ->where('token_first_connection', $token_first_connection)
             ->first();

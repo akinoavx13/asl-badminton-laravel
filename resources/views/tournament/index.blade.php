@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Fin de la création du tournoi
+    Classement du tournoi
 @stop
 
 @section('content')
@@ -44,6 +44,8 @@
                                             <div class="panel panel-default" style="margin-bottom: 0;">
                                                 <div class="panel-body" style="padding: 10px;">
                                                     <div class="text-center">
+
+                                                        <span>N°{{ $serie[$rank][$nbMatchRank1]['matchNumber'] }}</span>
 
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null)
                                                             @if($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true))
