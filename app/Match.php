@@ -19,6 +19,8 @@ class Match extends Model
         'team_number_winner',
         'team_number_looser',
         'score_id',
+        'info_winner',
+        'info_looser'
     ];
 
     protected $dates = ['created_at', 'updated_at'];
