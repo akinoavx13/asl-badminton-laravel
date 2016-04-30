@@ -274,16 +274,12 @@ class TournamentController extends Controller
 
     private function depart($col)
     {
-        if ($col == 1) {
-            return 0;
-        } else {
-            return ($col - 1) * ($col - 2) + 1;
-        }
+        return pow(2, $col - 1) - 1;
     }
 
     private function interligne($col)
     {
-        return $col * ($col - 1) + 1;
+        return pow(2, $col) - 1;
     }
 
     public function create()
