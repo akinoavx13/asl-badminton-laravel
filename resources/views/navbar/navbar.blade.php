@@ -188,7 +188,7 @@
                 @endif
             @endif
 
-            @if($auth->hasRole('admin') && env('APP_ENV') == 'local')
+            @if($auth->hasRole('admin'))
                 <li class="{{ Request::is('tournament*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-trophy"></i>
@@ -208,7 +208,7 @@
                 </li>
             @endif
 
-            @if($auth->hasRole('user') && env('APP_ENV') == 'local')
+            @if($auth->hasRole('user'))
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
                     <li class="{{ Request::is('tournament/index') ? 'active' : '' }}"><a
                                 href="{{ route('tournament.index') }}"><i class="fa fa-eye"></i>Voir le classement du
