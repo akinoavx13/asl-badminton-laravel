@@ -48,6 +48,9 @@ class CreateMatchesTable extends Migration
             $table->foreign('score_id')->references('id')->on('scores')->onDelete('cascade')->onUpdate
             ('cascade');
 
+            $table->string('info_winner')->nullable();
+            $table->string('info_looser')->nullable();
+
         });
     }
 
