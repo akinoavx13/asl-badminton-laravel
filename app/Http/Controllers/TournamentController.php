@@ -130,8 +130,7 @@ class TournamentController extends Controller
                                             return $item->id == $match->first_team_id;
                                         });
 
-                                        $firstTeamName = Helpers::getInstance()->getTeamName($firstTeam->first()->fornameOne, $firstTeam->first()->nameOne,
-                                            $firstTeam->first()->fornameTwo, $firstTeam->first()->nameTwo);
+                                        $firstTeamName = $firstTeam->first()->fornameOne . ' ' . $firstTeam->first()->nameOne . '<br>&<br>' . $firstTeam->first()->fornameTwo . ' ' . $firstTeam->first()->nameTwo;
 
                                         if($firstTeam->first()->userOneId == $this->user->id || $firstTeam->first()->userTwoId == $this->user->id)
                                         {
@@ -160,8 +159,7 @@ class TournamentController extends Controller
                                             return $item->id == $match->second_team_id;
                                         });
 
-                                        $secondTeamName = Helpers::getInstance()->getTeamName($secondTeam->first()->fornameOne, $secondTeam->first()->nameOne,
-                                            $secondTeam->first()->fornameTwo, $secondTeam->first()->nameTwo);
+                                        $secondTeamName = $secondTeam->first()->fornameOne . ' ' . $secondTeam->first()->nameOne . '<br>&<br>' . $secondTeam->first()->fornameTwo . ' ' . $secondTeam->first()->nameTwo;
 
                                         if($secondTeam->first()->userOneId == $this->user->id || $secondTeam->first()->userTwoId == $this->user->id)
                                         {
@@ -210,8 +208,7 @@ class TournamentController extends Controller
                                             return $item->id == $match->first_team_id;
                                         });
 
-                                        $firstTeamName = Helpers::getInstance()->getTeamName($firstTeam->first()->fornameOne, $firstTeam->first()->nameOne,
-                                            $firstTeam->first()->fornameTwo, $firstTeam->first()->nameTwo);
+                                        $firstTeamName = $firstTeam->first()->fornameOne . ' ' . $firstTeam->first()->nameOne . '<br>&<br>' . $firstTeam->first()->fornameTwo . ' ' . $firstTeam->first()->nameTwo;
 
                                         if($firstTeam->first()->userOneId == $this->user->id || $firstTeam->first()->userTwoId == $this->user->id)
                                         {
@@ -240,8 +237,7 @@ class TournamentController extends Controller
                                             return $item->id == $match->second_team_id;
                                         });
 
-                                        $secondTeamName = Helpers::getInstance()->getTeamName($secondTeam->first()->fornameOne, $secondTeam->first()->nameOne,
-                                            $secondTeam->first()->fornameTwo, $secondTeam->first()->nameTwo);
+                                        $secondTeamName = $secondTeam->first()->fornameOne . ' ' . $secondTeam->first()->nameOne . '<br>&<br>' . $secondTeam->first()->fornameTwo . ' ' . $secondTeam->first()->nameTwo;
 
                                         if($secondTeam->first()->userOneId == $this->user->id || $secondTeam->first()->userTwoId == $this->user->id)
                                         {
