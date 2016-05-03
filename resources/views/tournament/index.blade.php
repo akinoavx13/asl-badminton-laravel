@@ -62,7 +62,7 @@
                                             <table class="table table-bordered" style="margin-bottom: 5px; {{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) ? 'background: #DFF0D8;' : '' }}">
                                                 <tr class="text-center">
                                                     <td>
-                                                        {{ $serie[$rank][$nbMatchRank1]['firstTeamName'] }}
+                                                        {!! $serie[$rank][$nbMatchRank1]['firstTeamName'] !!}
                                                     </td>
                                                     <td>
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null && ($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) || $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true)))
@@ -90,7 +90,9 @@
 
                                             <table class="table table-bordered" style="{{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true) ? 'background: #DFF0D8;' : '' }}">
                                                 <tr class="text-center">
-                                                    <td>{{ $serie[$rank][$nbMatchRank1]['secondTeamName'] }}</td>
+                                                    <td>
+                                                        {!! $serie[$rank][$nbMatchRank1]['secondTeamName'] !!}
+                                                    </td>
                                                     <td>
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null && ($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) || $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true)))
                                                             {{ $serie[$rank][$nbMatchRank1]['score']->first_set_second_team }}
