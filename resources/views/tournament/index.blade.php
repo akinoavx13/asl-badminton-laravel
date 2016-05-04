@@ -38,10 +38,10 @@
                             <tr style="border: none">
                                 @for($rank = 1; $rank <= $serie['info']->number_rank; $rank++)
                                     @if($serie[$rank][$nbMatchRank1] == "vide")
-                                        <td style="border: none"></td>
+                                        <td style="border: none; padding: 0;"></td>
                                     @else
 
-                                        <td style="border: none">
+                                        <td style="border: none; padding: 0 0 0 20px;">
 
                                             <span style="font-weight: bold;">
                                                 N°{{ $serie[$rank][$nbMatchRank1]['matchNumber'] }}
@@ -59,26 +59,26 @@
                                                 </span>
                                             @endif
 
-                                            <table class="table table-bordered" style="margin-bottom: 5px; {{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) ? 'background: #DFF0D8;' : '' }}">
-                                                <tr class="text-center">
-                                                    <td>
-                                                        {!! $serie[$rank][$nbMatchRank1]['firstTeamName'] !!}
+                                            <table class="table table-bordered" style="margin-bottom: -1px; {{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) ? 'background: #DFF0D8;' : '' }}">
+                                                <tr>
+                                                    <td style="padding: 3px 5px 3px 5px;">
+                                                        {{ $serie[$rank][$nbMatchRank1]['firstTeamName'] }}
                                                     </td>
-                                                    <td>
+                                                    <td style="padding: 3px 5px 3px 5px; width: 20px">
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null && ($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) || $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true)))
                                                             {{ $serie[$rank][$nbMatchRank1]['score']->first_set_first_team }}
                                                         @else
                                                             Ø
                                                         @endif
                                                     </td>
-                                                    <td>
+                                                    <td style="padding: 3px 5px 3px 5px; width: 20px">
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null && ($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) || $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true)))
                                                             {{ $serie[$rank][$nbMatchRank1]['score']->second_set_first_team }}
                                                         @else
                                                             Ø
                                                         @endif
                                                     </td>
-                                                    <td>
+                                                    <td style="padding: 3px 5px 3px 5px; width: 20px">
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null && ($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) || $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true)))
                                                             {{ $serie[$rank][$nbMatchRank1]['score']->third_set_first_team }}
                                                         @else
@@ -88,26 +88,26 @@
                                                 </tr>
                                             </table>
 
-                                            <table class="table table-bordered" style="{{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true) ? 'background: #DFF0D8;' : '' }}">
-                                                <tr class="text-center">
-                                                    <td>
-                                                        {!! $serie[$rank][$nbMatchRank1]['secondTeamName'] !!}
+                                            <table class="table table-bordered" style="margin-bottom: 5px;  {{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true) ? 'background: #DFF0D8;' : '' }}">
+                                                <tr>
+                                                    <td style="padding: 3px 5px 3px 5px;">
+                                                        {{ $serie[$rank][$nbMatchRank1]['secondTeamName'] }}
                                                     </td>
-                                                    <td>
+                                                    <td style="padding: 3px 5px 3px 5px; width: 20px">
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null && ($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) || $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true)))
                                                             {{ $serie[$rank][$nbMatchRank1]['score']->first_set_second_team }}
                                                         @else
                                                             Ø
                                                         @endif
                                                     </td>
-                                                    <td>
+                                                    <td style="padding: 3px 5px 3px 5px; width: 20px">
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null && ($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) || $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true)))
                                                             {{ $serie[$rank][$nbMatchRank1]['score']->second_set_second_team }}
                                                         @else
                                                             Ø
                                                         @endif
                                                     </td>
-                                                    <td>
+                                                    <td style="padding: 3px 5px 3px 5px; width: 20px">
                                                         @if($serie[$rank][$nbMatchRank1]['score'] != null && ($serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) || $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true)))
                                                             {{ $serie[$rank][$nbMatchRank1]['score']->third_set_second_team }}
                                                         @else
