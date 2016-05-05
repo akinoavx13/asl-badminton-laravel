@@ -58,6 +58,28 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('display', 'Afficher :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('display', '1', $match->exists ? $match->hasDisplay(true) ? true : false : false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('display', '0', $match->exists ? $match->hasDisplay(false) ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group text-center">
             {!! Form::submit('Sauvegarder', ['class' => 'btn btn-primary']) !!}
         </div>
