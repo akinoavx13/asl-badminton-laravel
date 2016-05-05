@@ -19,8 +19,13 @@ class Match extends Model
         'team_number_winner',
         'team_number_looser',
         'score_id',
-        'info_winner',
-        'info_looser'
+        'info_looser_first_team',
+        'info_looser_second_team',
+        'display'
+    ];
+
+    protected $casts = [
+        'display'        => 'boolean',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -38,5 +43,10 @@ class Match extends Model
     public function score()
     {
         return $this->belongsTo('App\Score');
+    }
+
+    public function hasDisplay($display)
+    {
+        return $this->display === $display;
     }
 }
