@@ -51,12 +51,14 @@ class MatchesController extends Controller
 
             if ($match->next_match_winner_id != null && $match->team_number_winner != null) {
                 $nextMatchWinner[$match->next_match_winner_id . '-' . $match->team_number_winner] = $matchSeries->name . ' , Match n° ' . $match->matches_number_in_table . ', Équipe n° ' . $match->team_number_winner;
+                $nextMatchWinner['none'] = 'Aucun';
             } else {
                 $nextMatchWinner['none'] = 'Aucun';
             }
 
             if ($match->next_match_looser_id != null && $match->team_number_looser != null) {
                 $nextMatchLooser[$match->next_match_looser_id . '-' . $match->team_number_looser] = $matchSeries->name . ' , Match n° ' . $match->matches_number_in_table . ', Équipe n° ' . $match->team_number_looser;
+                $nextMatchLooser['none'] = 'Aucun';
             } else {
                 $nextMatchLooser['none'] = 'Aucun';
             }
@@ -207,6 +209,31 @@ class MatchesController extends Controller
             ]);
         }
 
+        if ($nextMatchLooserId != null) {
+            $matchLooser = Match::findOrFail($nextMatchLooserId);
+
+            $infoLooser = 'Perdant du match n° ' . $match->matches_number_in_table . ' du ' . $match->series->name;
+
+            if ($teamNumberLooser == 1) {
+                $matchLooser->update([
+                    'info_looser_first_team' => $infoLooser,
+                ]);
+            } elseif ($teamNumberLooser == 2) {
+                $matchLooser->update([
+                    'info_looser_second_team' => $infoLooser,
+                ]);
+            }
+
+        } elseif ($nextMatchLooserId == null && $match->next_match_looser_id != null)
+        {
+            $matchLooser = Match::findOrFail($match->next_match_looser_id);
+
+            $matchLooser->update([
+                'info_looser_first_team' => null,
+                'info_looser_second_team' => null,
+            ]);
+        }
+
         $match->update([
             'matches_number_in_table' => $request->matches_number_in_table,
             'first_team_id'           => $request->first_team_id == 'none' ? null : $request->first_team_id,
@@ -216,7 +243,9 @@ class MatchesController extends Controller
             'team_number_winner'      => $teamNumberWinner,
             'team_number_looser'      => $teamNumberLooser,
             'score_id'                => $score == null ? null : $score->id,
+            'display'                 => $request->display,
         ]);
+
 
         return redirect()->route('tournament.index')->with('success', 'Le match a bien été modifié !');
     }

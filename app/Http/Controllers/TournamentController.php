@@ -106,8 +106,8 @@ class TournamentController extends Controller
 
                                 $match = $orderedMatches[$col][$matchLine[$col]];
 
-                                $firstTeamName = "Personne";
-                                $secondTeamName = "Personne";
+                                $firstTeamName = "";
+                                $secondTeamName = "";
                                 $isOwner = false;
 
                                 if ($match->first_team_id != null) {
@@ -169,12 +169,15 @@ class TournamentController extends Controller
                                 }
                                 
                                 $series[$index][$col][$ligne]['matchNumber'] = $match->matches_number_in_table;
+                                $series[$index][$col][$ligne]['infoLooserFirstTeam'] = $match->info_looser_first_team;
+                                $series[$index][$col][$ligne]['infoLooserSecondTeam'] = $match->info_looser_second_team;
+                                $series[$index][$col][$ligne]['display'] = $match->display;
                                 $series[$index][$col][$ligne]['firstTeamName'] = $firstTeamName;
                                 $series[$index][$col][$ligne]['secondTeamName'] = $secondTeamName;
                                 $series[$index][$col][$ligne]['score'] = $match->score;
                                 $series[$index][$col][$ligne]['id'] = $match->id;
                                 $series[$index][$col][$ligne]['scoreId'] = $match->score_id;
-                                $series[$index][$col][$ligne]['edit'] = $match->score_id != null && $firstTeamName != "Personne" && $secondTeamName != "Personne" && ($isOwner || $this->user->hasRole('admin'));
+                                $series[$index][$col][$ligne]['edit'] = $match->score_id != null && $firstTeamName != "" && $secondTeamName != "" && ($isOwner || $this->user->hasRole('admin'));
 
                             }
                         } else {
@@ -184,8 +187,8 @@ class TournamentController extends Controller
 
                                 $match = $orderedMatches[$col][$matchLine[$col]];
 
-                                $firstTeamName = "Personne";
-                                $secondTeamName = "Personne";
+                                $firstTeamName = "";
+                                $secondTeamName = "";
                                 $isOwner = false;
 
                                 if ($match->first_team_id != null) {
@@ -248,12 +251,15 @@ class TournamentController extends Controller
                                 }
                                 
                                 $series[$index][$col][$ligne]['matchNumber'] = $match->matches_number_in_table;
+                                $series[$index][$col][$ligne]['infoLooserFirstTeam'] = $match->info_looser_first_team;
+                                $series[$index][$col][$ligne]['infoLooserSecondTeam'] = $match->info_looser_second_team;
+                                $series[$index][$col][$ligne]['display'] = $match->display;
                                 $series[$index][$col][$ligne]['firstTeamName'] = $firstTeamName;
                                 $series[$index][$col][$ligne]['secondTeamName'] = $secondTeamName;
                                 $series[$index][$col][$ligne]['score'] = $match->score;
                                 $series[$index][$col][$ligne]['id'] = $match->id;
                                 $series[$index][$col][$ligne]['scoreId'] = $match->score_id;
-                                $series[$index][$col][$ligne]['edit'] = $match->score_id != null && $firstTeamName != "Personne" && $secondTeamName != "Personne" && ($isOwner || $this->user->hasRole('admin'));
+                                $series[$index][$col][$ligne]['edit'] = $match->score_id != null && $firstTeamName != "" && $secondTeamName != "" && ($isOwner || $this->user->hasRole('admin'));
                             } else {
                                 $series[$index][$col][$ligne] = "vide";
                             }
