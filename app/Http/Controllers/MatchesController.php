@@ -210,6 +210,15 @@ class MatchesController extends Controller
         }
 
         if ($nextMatchLooserId != null) {
+
+            if ($match->next_match_looser_id != null) {
+                $previousLooserMatch = Match::findOrFail($match->next_match_looser_id);
+                $previousLooserMatch->update([
+                    'info_looser_first_team'  => null,
+                    'info_looser_second_team' => null,
+                ]);
+            }
+
             $matchLooser = Match::findOrFail($nextMatchLooserId);
 
             $infoLooser = 'Perdant du match n° ' . $match->matches_number_in_table . ' du ' . $match->series->name;
@@ -224,12 +233,11 @@ class MatchesController extends Controller
                 ]);
             }
 
-        } elseif ($nextMatchLooserId == null && $match->next_match_looser_id != null)
-        {
+        } elseif ($nextMatchLooserId == null && $match->next_match_looser_id != null) {
             $matchLooser = Match::findOrFail($match->next_match_looser_id);
 
             $matchLooser->update([
-                'info_looser_first_team' => null,
+                'info_looser_first_team'  => null,
                 'info_looser_second_team' => null,
             ]);
         }
