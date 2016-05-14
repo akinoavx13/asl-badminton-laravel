@@ -35,7 +35,7 @@
                         <tbody>
 
                         @for($nbMatchRank1 = 1; $nbMatchRank1 <= $serie['info']->number_matches_rank_1 * 2 - 1; $nbMatchRank1++)
-                            <tr style="border: none">
+                            <tr style="border: none;">
                                 @for($rank = 1; $rank <= $serie['info']->number_rank; $rank++)
 
                                     @if($serie[$rank][$nbMatchRank1] == "vide")
@@ -45,25 +45,26 @@
                                         <td style="border: none; padding: 0 0 0 20px;">
                                             @if($serie[$rank][$nbMatchRank1]['display'] || $auth->hasRole('admin'))
                                                 <span style="font-weight: bold;">
-                                                N°{{ $serie[$rank][$nbMatchRank1]['matchNumber'] }}
-                                            </span>
+                                                    N°{{ $serie[$rank][$nbMatchRank1]['matchNumber'] }}
+                                                </span>
 
                                                 @if($serie[$rank][$nbMatchRank1]['edit'])
                                                     <span>
-                                                    <a href="{{ route('score.editTournament', [$serie[$rank][$nbMatchRank1]['scoreId'], str_replace(' ', '-', $serie[$rank][$nbMatchRank1]['firstTeamName']), str_replace(' ', '-', $serie[$rank][$nbMatchRank1]['secondTeamName'])]) }}">Editer</a>
-                                                </span>
+                                                        <a href="{{ route('score.editTournament', [$serie[$rank][$nbMatchRank1]['scoreId'], str_replace(' ', '-', $serie[$rank][$nbMatchRank1]['firstTeamName']), str_replace(' ', '-', $serie[$rank][$nbMatchRank1]['secondTeamName'])]) }}">Editer</a>
+                                                    </span>
                                                 @endif
 
                                                 @if($auth->hasRole('admin'))
                                                     <span>
-                                                    <a href="{{ route('match.edit', $serie[$rank][$nbMatchRank1]['id']) }}"
-                                                       class="text-danger">Administrer</a>
-                                                </span>
+                                                        <a href="{{ route('match.edit', $serie[$rank][$nbMatchRank1]['id']) }}" class="text-danger">Administrer</a>
+                                                    </span>
                                                 @endif
                                             @endif
+
                                             @if($serie[$rank][$nbMatchRank1]['display'])
-                                                <table class="table table-bordered"
-                                                       style="margin-bottom: -1px; {{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) ? 'background: #DFF0D8;' : '' }}">
+                                                <table class="table table-bordered {{ $serie[$rank][$nbMatchRank1]['owner'] ? 'text-white' : '' }}"
+                                                       style="margin-bottom: -1px; {{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasFirstTeamWin(true) ? 'background: #DFF0D8;' : '' }}
+                                                               {{ $serie[$rank][$nbMatchRank1]['owner'] ? 'background: #21B9BB;' : '' }}">
                                                     <tr>
                                                         <td style="padding: 3px 5px 3px 5px;">
                                                             @if($serie[$rank][$nbMatchRank1]['firstTeamName'] == "" && $serie[$rank][$nbMatchRank1]['infoLooserFirstTeam'] != null)
@@ -96,8 +97,9 @@
                                                     </tr>
                                                 </table>
 
-                                                <table class="table table-bordered"
-                                                       style="margin-bottom: 5px;  {{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true) ? 'background: #DFF0D8;' : '' }}">
+                                                <table class="table table-bordered {{ $serie[$rank][$nbMatchRank1]['owner'] ? 'text-white' : '' }}"
+                                                       style="margin-bottom: 5px;  {{ $serie[$rank][$nbMatchRank1]['score'] != null && $serie[$rank][$nbMatchRank1]['score']->hasSecondTeamWin(true) ? 'background: #DFF0D8;' : '' }}
+                                                       {{ $serie[$rank][$nbMatchRank1]['owner'] ? 'background: #21B9BB;' : '' }}">
                                                     <tr>
                                                         <td style="padding: 3px 5px 3px 5px;">
                                                             @if($serie[$rank][$nbMatchRank1]['secondTeamName'] == "" && $serie[$rank][$nbMatchRank1]['infoLooserSecondTeam'] != null)

@@ -167,7 +167,12 @@ class TournamentController extends Controller
                                         }
                                     }
                                 }
-                                
+
+
+
+                                $authName = $this->user->forname . ' ' . $this->user->name;
+
+                                $series[$index][$col][$ligne]['owner'] = stripos($firstTeamName, $authName) !== false || stripos($secondTeamName, $authName) !== false;
                                 $series[$index][$col][$ligne]['matchNumber'] = $match->matches_number_in_table;
                                 $series[$index][$col][$ligne]['infoLooserFirstTeam'] = $match->info_looser_first_team;
                                 $series[$index][$col][$ligne]['infoLooserSecondTeam'] = $match->info_looser_second_team;
@@ -249,7 +254,9 @@ class TournamentController extends Controller
 
                                     }
                                 }
-                                
+                                $authName = $this->user->forname . ' ' . $this->user->name;
+
+                                $series[$index][$col][$ligne]['owner'] = stripos($firstTeamName, $authName) !== false || stripos($secondTeamName, $authName) !== false;
                                 $series[$index][$col][$ligne]['matchNumber'] = $match->matches_number_in_table;
                                 $series[$index][$col][$ligne]['infoLooserFirstTeam'] = $match->info_looser_first_team;
                                 $series[$index][$col][$ligne]['infoLooserSecondTeam'] = $match->info_looser_second_team;
