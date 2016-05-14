@@ -50,7 +50,7 @@
                                         <td style="border: none; padding: 0;"></td>
                                     @else
 
-                                        <td style="border: none; padding: 0 0 0 20px;">
+                                        <td style="border: none; padding: 0 0 0 20px;" id="#{{ $serie['info']->name . '-' . $serie[$rank][$nbMatchRank1]['matchNumber'] }}">
                                             @if($serie[$rank][$nbMatchRank1]['display'] || $auth->hasRole('admin'))
                                                 <span style="font-weight: bold;">
                                                     N°{{ $serie[$rank][$nbMatchRank1]['matchNumber'] }}
@@ -64,7 +64,7 @@
 
                                                 @if($auth->hasRole('admin'))
                                                     <span>
-                                                        <a href="{{ route('match.edit', $serie[$rank][$nbMatchRank1]['id']) }}" class="text-danger">Administrer</a>
+                                                        <a href="{{ route('match.edit', [$serie[$rank][$nbMatchRank1]['id'], $serie['info']->name . '-' . $serie[$rank][$nbMatchRank1]['matchNumber']]) }}" class="text-danger">Administrer</a>
                                                     </span>
                                                 @endif
                                             @endif
