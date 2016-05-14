@@ -94,7 +94,7 @@ class SeriesController extends Controller
                         ->where('series_id', $serie_id)
                         ->first();
 
-                    $teamNumberOfTheWinner = floor(($matchNumber + 1) / 2) == ($matchNumber + 1) / 2 ? 2 : 1;
+                    $teamNumberOfTheWinner = floor(($matchNumber + 1) / 2) == ($matchNumber + 1) / 2 ? 1 : 2;
 
                     if ($currentMatch != null && $winnerMatch != null) {
                         $currentMatch->update([

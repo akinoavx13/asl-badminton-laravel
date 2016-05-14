@@ -3,7 +3,7 @@
         <h1 class="text-center">Rentrer un score</h1>
     </div>
     <div class="ibox-content">
-        {!! Form::open(['route' => ['score.updateTournament', $score->id, str_replace(' ', '-', $firstTeamName), str_replace(' ', '-', $secondTeamName)], 'class' => 'form-horizontal', 'files' => 'true']) !!}
+        {!! Form::open(['route' => ['score.updateTournament', $score->id, str_replace(' ', '-', $firstTeamName), str_replace(' ', '-', $secondTeamName), $anchorTournament], 'class' => 'form-horizontal', 'files' => 'true']) !!}
 
         <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 
