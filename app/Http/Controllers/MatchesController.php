@@ -200,6 +200,11 @@ class MatchesController extends Controller
 
         if ($match->score_id != null) {
             $score = Score::findOrFail($match->score_id);
+            
+            $score->update([
+                'first_team_id'  => $request->first_team_id,
+                'second_team_id' => $request->second_team_id,
+            ]);
         }
 
         if ($match->score_id == null && $request->first_team_id != 'none' && $request->second_team_id != 'none') {
