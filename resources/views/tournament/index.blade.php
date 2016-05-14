@@ -58,7 +58,7 @@
 
                                                 @if($serie[$rank][$nbMatchRank1]['edit'])
                                                     <span>
-                                                        <a href="{{ route('score.editTournament', [$serie[$rank][$nbMatchRank1]['scoreId'], str_replace(' ', '-', $serie[$rank][$nbMatchRank1]['firstTeamName']), str_replace(' ', '-', $serie[$rank][$nbMatchRank1]['secondTeamName'])]) }}">Editer</a>
+                                                        <a href="{{ route('score.editTournament', [$serie[$rank][$nbMatchRank1]['scoreId'], str_replace(' ', '-', $serie[$rank][$nbMatchRank1]['firstTeamName']), str_replace(' ', '-', $serie[$rank][$nbMatchRank1]['secondTeamName']), $serie['info']->name . '-' . $serie[$rank][$nbMatchRank1]['matchNumber']]) }}">Editer</a>
                                                     </span>
                                                 @endif
 

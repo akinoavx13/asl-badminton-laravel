@@ -30,6 +30,7 @@ class ScoreController extends Controller
         $router->pattern('firstTeamName', '[a-zA-Zéèàê&ïôç_-]+');
         $router->pattern('secondTeamName', '[a-zA-Zéèàê&ïôç_-]+');
         $router->pattern('anchor', '[0-9-a-z_]+');
+        $router->pattern('anchorTournament', '[0-9-a-zA-Z_-]+');
 
         $router->get('update/{score_id}/{pool_id}/{firstTeamName}/{secondTeamName}/{anchor}', [
             'uses' => 'ScoreController@edit',
@@ -41,12 +42,12 @@ class ScoreController extends Controller
             'as'   => 'score.update',
         ]);
 
-        $router->get('update/{score_id}/{firstTeamName}/{secondTeamName}', [
+        $router->get('update/{score_id}/{firstTeamName}/{secondTeamName}/{anchorTournament}', [
             'uses' => 'ScoreController@editTournament',
             'as'   => 'score.editTournament',
         ]);
 
-        $router->post('update/{score_id}/{firstTeamName}/{secondTeamName}', [
+        $router->post('update/{score_id}/{firstTeamName}/{secondTeamName}/{anchorTournament}', [
             'uses' => 'ScoreController@updateTournament',
             'as'   => 'score.updateTournament',
         ]);
@@ -211,17 +212,17 @@ class ScoreController extends Controller
 
     }
 
-    public function editTournament($score_id, $firstTeamName, $secondTeamName)
+    public function editTournament($score_id, $firstTeamName, $secondTeamName, $anchorTournament)
     {
         $score = Score::findOrFail($score_id);
 
         $firstTeamName = str_replace('-', ' ', $firstTeamName);
         $secondTeamName = str_replace('-', ' ', $secondTeamName);
 
-        return view('score.editTournament', compact('score', 'firstTeamName', 'secondTeamName'));
+        return view('score.editTournament', compact('score', 'firstTeamName', 'secondTeamName', 'anchorTournament'));
     }
 
-    public function updateTournament(ScoreTournamentUpdateRequest $request, $score_id, $firstTeamName, $secondTeamName)
+    public function updateTournament(ScoreTournamentUpdateRequest $request, $score_id, $firstTeamName, $secondTeamName, $anchorTournament)
     {
         $score = Score::findOrFail($score_id);
 
@@ -277,7 +278,7 @@ class ScoreController extends Controller
                     'second_team_win'        => false,
                 ]);
 
-                return redirect()->route('tournament.index')->with('success', 'Le score est bien enregistré !');
+                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score est bien enregistré !');
             }
 
             if ($request->exists('wo') && $request->wo == "my_wo") {
@@ -298,7 +299,7 @@ class ScoreController extends Controller
 
                 $this->setNextMatch($match, $score->second_team_id, $score->first_team_id);
 
-                return redirect()->route('tournament.index')->with('success', 'Le score est bien enregistré !');
+                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score est bien enregistré !');
             }
 
             if ($request->exists('wo') && $request->wo == "his_wo") {
@@ -318,8 +319,7 @@ class ScoreController extends Controller
                 ]);
 
                 $this->setNextMatch($match, $score->first_team_id, $score->second_team_id);
-
-                return redirect()->route('tournament.index')->with('success', 'Le score est bien enregistré !');
+                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score est bien enregistré !');
             }
 
             $message = $this->checkScore($firstSet, $secondSet, $thirdSet);
@@ -350,8 +350,7 @@ class ScoreController extends Controller
                 } else {
                     $this->setNextMatch($match, $score->second_team_id, $score->first_team_id);
                 }
-
-                return redirect()->route('tournament.index')->with('success', 'Le score est bien enregistré !');
+                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score est bien enregistré !');
             }
             return redirect()->back()->withInput($request->all())->with('error', $message);
         }
