@@ -13,13 +13,13 @@
         <span class="font-bold">{{ $tournament->end->format('l j F Y') }}</span>
     </h1>
     <hr>
-
+    {{--#6B256D--}}
     <div class="row" id="top">
         <div class="col-md-12 text-center">
             @foreach($series as $serie)
                 <a href="#{{ $serie['info']->name }}"
-                   class="btn {{ $serie['info']->category == 'S' || $serie['info']->category == 'SH' || $serie['info']->category == 'SD' ? 'btn-warning' : '' }} {{ $serie['info']->category == 'D' || $serie['info']->category == 'DH' || $serie['info']->category == 'DD' ? 'btn-info'
-         : '' }} {{ $serie['info']->category == 'M' ? 'btn-danger' : '' }}">{{ $serie['info']->name }} <span
+                   class="btn {{ $serie['info']->category == 'S' || $serie['info']->category == 'SH' ? 'btn-warning' : '' }} {{ $serie['info']->category == 'SD' || $serie['info']->category == 'DD' ? 'text-white' : ''}} {{ $serie['info']->category == 'D' || $serie['info']->category == 'DH' ? 'btn-info'
+         : '' }} {{ $serie['info']->category == 'M' ? 'btn-danger' : '' }}" style="{{ $serie['info']->category == 'SD' ? 'background: #FF4C83;' : ''}} {{$serie['info']->category == 'DD' ? 'background: #6B256D;' : ''}} }}">{{ $serie['info']->name }} <span
                             class="fa fa-bookmark"></span></a>
             @endforeach
         </div>
@@ -28,9 +28,9 @@
     <br>
 
     @foreach($series as $serie)
-        <div class="panel {{ $serie['info']->category == 'S' || $serie['info']->category == 'SH' || $serie['info']->category == 'SD' ? 'panel-warning' : '' }} {{ $serie['info']->category == 'D' || $serie['info']->category == 'DH' || $serie['info']->category == 'DD' ? 'panel-info'
-         : '' }} {{ $serie['info']->category == 'M' ? 'panel-danger' : '' }}" id="{{ $serie['info']->name }}">
-            <div class="panel-heading">
+        <div class="panel {{ $serie['info']->category == 'S' || $serie['info']->category == 'SH' ? 'panel-warning' : '' }} {{ $serie['info']->category == 'D' || $serie['info']->category == 'DH' ? 'panel-info'
+         : '' }} {{ $serie['info']->category == 'M' ? 'panel-danger' : '' }}" id="{{ $serie['info']->name }}" style="{{ $serie['info']->category == 'SD' ? 'border-color: #FF4C83;' : '' }} {{ $serie['info']->category == 'DD' ? 'border-color: #6B256D;' : '' }}">
+            <div class="panel-heading {{ $serie['info']->category == 'SD' || $serie['info']->category == 'DD' ? 'text-white' : '' }}" style="{{ $serie['info']->category == 'SD' ? 'background: #FF4C83;' : '' }} {{ $serie['info']->category == 'DD' ? 'background: #6B256D;' : '' }}">
                 <h1 class="text-center">
                     {{ $serie['info']->name }}
                     <a href="#top" class="pull-right"><span class="fa fa-caret-square-o-up"></span></a>
