@@ -275,7 +275,7 @@ class TournamentController extends Controller
                 }
             }
 
-            return view('tournament.index', compact('series'));
+            return view('tournament.index', compact('series', 'tournament'));
         }
 
         return redirect()->route('home.index')->with('error', "Il n'y a pas d'anciens tournoi");

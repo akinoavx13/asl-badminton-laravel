@@ -6,6 +6,14 @@
 
 @section('content')
 
+    <h1 class="text-center">
+        Tournoi du
+        <span class="font-bold">{{ $tournament->start->format('l j F Y') }}</span>
+        au
+        <span class="font-bold">{{ $tournament->end->format('l j F Y') }}</span>
+    </h1>
+    <hr>
+
     <div class="row" id="top">
         <div class="col-md-12 text-center">
             @foreach($series as $serie)
