@@ -216,16 +216,29 @@ class MatchesController extends Controller
             ]);
         }
 
-        if ($nextMatchLooserId != null) {
-
-            if ($match->next_match_looser_id != null) {
-                $previousLooserMatch = Match::findOrFail($match->next_match_looser_id);
-                $previousLooserMatch->update([
-                    'info_looser_first_team'  => null,
-                    'info_looser_second_team' => null,
-                ]);
+        if ($match->next_match_looser_id != null) {
+            $previousLooserMatch = Match::findOrFail($match->next_match_looser_id);
+            $currentMatchSerieName = $match->series->name;
+            $currentMatchNumber = $match->matches_number_in_table;
+            if ($previousLooserMatch->info_looser_first_team != null) {
+                $previousLooserMatchExplode = explode(" ", $previousLooserMatch->info_looser_first_team);
+                if ($previousLooserMatchExplode[6] == $currentMatchSerieName && $previousLooserMatchExplode[4] == $currentMatchNumber) {
+                    $previousLooserMatch->update([
+                        'info_looser_first_team'  => null,
+                    ]);
+                }
             }
+            if ($previousLooserMatch->info_looser_second_team != null) {
+                $previousLooserMatchExplode = explode(" ", $previousLooserMatch->info_looser_second_team);
+                if ($previousLooserMatchExplode[6] == $currentMatchSerieName && $previousLooserMatchExplode[4] == $currentMatchNumber) {
+                    $previousLooserMatch->update([
+                        'info_looser_second_team'  => null,
+                    ]);
+                }
+            }
+        }
 
+        if ($nextMatchLooserId != null) {
             $matchLooser = Match::findOrFail($nextMatchLooserId);
 
             $infoLooser = 'Perdant du match n° ' . $match->matches_number_in_table . ' du ' . $match->series->name;
@@ -240,13 +253,6 @@ class MatchesController extends Controller
                 ]);
             }
 
-        } elseif ($nextMatchLooserId == null && $match->next_match_looser_id != null) {
-            $matchLooser = Match::findOrFail($match->next_match_looser_id);
-
-            $matchLooser->update([
-                'info_looser_first_team'  => null,
-                'info_looser_second_team' => null,
-            ]);
         }
 
         $match->update([
