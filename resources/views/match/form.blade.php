@@ -4,7 +4,7 @@
     </div>
     <div class="ibox-content">
 
-        {!! Form::open(['route' => ['match.update', $match->id], 'class' => 'form-horizontal']) !!}
+        {!! Form::open(['route' => ['match.update', $match->id, $anchor], 'class' => 'form-horizontal']) !!}
 
         <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 
@@ -87,7 +87,7 @@
         {!! Form::close() !!}
 
         <div class="form-group text-center">
-            <a href="{{ route('match.nextStep', $match->id) }}" class="btn btn-warning">Passer à la prochaine étape</a>
+            <a href="{{ route('match.nextStep', [$match->id, $anchor]) }}" class="btn btn-warning">Passer à la prochaine étape</a>
         </div>
 
     </div>
