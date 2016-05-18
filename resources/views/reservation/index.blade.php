@@ -5,6 +5,19 @@
 @stop
 
 @section('content')
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center">
+                <button type="button" class="btn btn-warning btn-outline dim" onclick="location.href='{{ route('sportHall.index') }}'">
+                    Qui est disponible pour du jeu libre ?
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
     <div class="row">
         <div class="col-md-12">
             @if((count($timeSlots) > 0 || count($courts) > 0) && $lastDayMonth)
