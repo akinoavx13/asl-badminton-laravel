@@ -31,6 +31,7 @@ use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SportHallController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TimeSlotController;
 use App\Http\Controllers\TournamentController;
@@ -173,4 +174,9 @@ Route::group(['prefix' => 'series', 'middleware' => ['auth', 'notCE', 'admin']],
 Route::group(['prefix' => 'matches', 'middleware' => ['auth', 'notCE', 'admin']], function () use ($router)
 {
     MatchesController::routes($router);
+});
+
+Route::group(['prefix' => 'sportHall', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
+{
+    SportHallController::routes($router);
 });
