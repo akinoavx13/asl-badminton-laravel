@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Personnes présente pour du jeu libre
+    Personnes présentes pour du jeu libre
 @stop
 
 @section('content')
 
-    <h1 class="text-center">Personnes présente pour du jeu libre</h1>
+    <h1 class="text-center">Personnes présentes pour du jeu libre</h1>
 
     <hr>
 
