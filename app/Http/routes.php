@@ -176,7 +176,7 @@ Route::group(['prefix' => 'matches', 'middleware' => ['auth', 'notCE', 'admin']]
     MatchesController::routes($router);
 });
 
-Route::group(['prefix' => 'sportHall', 'middleware' => ['auth', 'notCE', 'notLeisure']], function () use ($router)
+Route::group(['prefix' => 'sportHall', 'middleware' => ['auth', 'notCE']], function () use ($router)
 {
     SportHallController::routes($router);
 });
