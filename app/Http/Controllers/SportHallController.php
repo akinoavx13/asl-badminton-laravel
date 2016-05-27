@@ -40,7 +40,14 @@ class SportHallController extends Controller
         $presentPeopleToday = PresentPeopleSportHall::where('day', Carbon::today())->get();
         $presentPeopleTomorrow = PresentPeopleSportHall::where('day', Carbon::tomorrow())->get();
 
-        return view('sportHall.index', compact('presentPeopleYesterday', 'presentPeopleToday', 'presentPeopleTomorrow'));
+        $mostPresentPeoples = PresentPeopleSportHall::select('user_id')
+            ->selectRaw('count(*) as count')
+            ->groupBy('user_id')
+            ->orderBy('count', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('sportHall.index', compact('presentPeopleYesterday', 'presentPeopleToday', 'presentPeopleTomorrow', 'mostPresentPeoples'));
     }
 
     public function create($date, $user_id)
