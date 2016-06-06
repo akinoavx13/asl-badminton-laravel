@@ -313,6 +313,16 @@
                     </a>
                 </li>
             @endif
+
+            @if($auth->hasRole('admin'))
+                <li class="">
+                    <a href="http://badminton.api.aslectra.com/">
+                        <i class="fa fa-key"></i>
+                        <span class="nav-label">Lectra API</span>
+                    </a>
+                </li>
+            @endif
+
         </ul>
         <p class="text-center">&copy; <a href="http://maxime.maheo.free.fr">Maxime Maheo</a></p>
     </div>
