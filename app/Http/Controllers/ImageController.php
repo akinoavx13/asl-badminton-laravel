@@ -20,10 +20,10 @@ class ImageController extends Controller
 
     public function show($user_id) {
 
-        $path = public_path() . '/img/avatars/' . $user_id . '.png';
+        $path = public_path() . '/img/avatars/' . $user_id . '.jpg';
 
         if (File::exists($path)) {
-            $img = Image::make($path)->response('png');
+            $img = Image::make($path)->response('jpg');
 
             return $img;
         }
