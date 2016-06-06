@@ -21,6 +21,7 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailToDevController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerReservationController;
@@ -179,4 +180,9 @@ Route::group(['prefix' => 'matches', 'middleware' => ['auth', 'notCE', 'admin']]
 Route::group(['prefix' => 'sportHall', 'middleware' => ['auth', 'notCE']], function () use ($router)
 {
     SportHallController::routes($router);
+});
+
+Route::group(['prefix' => 'images', 'middleware' => []], function () use ($router)
+{
+    ImageController::routes($router);
 });
