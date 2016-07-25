@@ -226,7 +226,11 @@ class PlayerController extends Controller
         if ($player->hasFormula('competition')) {
             SendMail::send($this->user, 'subscribeCompetitionFormula', $this->user->attributesToArray(), 'Inscription
              formule compétition AS Lectra Badminton');
+        } elseif ($player->hasFormula('corpo')) {
+            SendMail::send($this->user, 'subscribeCorpoFormula', $this->user->attributesToArray(), 'Inscription
+             formule corpo AS Lectra Badminton');
         }
+
 
         $admin = User::where('email', 'c.maheo@lectra.com')->first();
 
