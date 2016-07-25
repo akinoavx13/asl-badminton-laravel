@@ -1,7 +1,7 @@
 @extends('emails.layout')
 
 @section('title')
-    Inscription formule compétition
+    Inscription formule corpo
 @stop
 
 @section('content')
@@ -9,7 +9,7 @@
     <br>
 
     <p>
-        Nous vous informons que votre inscription à la formule compétition à bien été enregistré.
+        Nous vous informons que votre inscription à la formule corpo à bien été enregistré.
     </p>
 
     <p>
