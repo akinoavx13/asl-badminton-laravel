@@ -10,6 +10,7 @@ use App\Series;
 use App\Team;
 use App\Tournament;
 use App\User;
+use Illuminate\Http\Request;
 
 class TournamentController extends Controller
 {
@@ -19,6 +20,11 @@ class TournamentController extends Controller
         $router->get('index', [
             'uses' => 'TournamentController@index',
             'as'   => 'tournament.index',
+        ]);
+
+        $router->post('index', [
+            'uses' => 'TournamentController@index',
+            'as' => 'tournament.index',
         ]);
 
         $router->get('create', [
@@ -43,10 +49,23 @@ class TournamentController extends Controller
         parent::__constructor();
     }
 
-    public function index()
+    public function index(Request $request)
     {
 
-        $tournament = Tournament::lasted()->first();
+        $tournaments = [];
+
+        foreach (Tournament::orderBy('start')->get() as $value) {
+            $tournaments[$value->id] = 'Du ' . $value->start->format('l j F Y') . ' au ' . $value->end->format('l j F Y');
+        }
+
+        $tournament = null;
+
+        if ($request->isMethod('GET')) {
+            $tournament = Tournament::lasted()->first();
+        } elseif ($request->isMethod('POST')) {
+            $tournament = Tournament::findOrFail($request->tournament_id);
+        }
+
 
         if ($tournament != null) {
 
@@ -275,7 +294,7 @@ class TournamentController extends Controller
                 }
             }
 
-            return view('tournament.index', compact('series', 'tournament'));
+            return view('tournament.index', compact('series', 'tournament', 'tournaments'));
         }
 
         return redirect()->route('home.index')->with('error', "Il n'y a pas d'anciens tournoi");

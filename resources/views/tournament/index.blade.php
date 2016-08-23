@@ -6,6 +6,26 @@
 
 @section('content')
 
+    @if(count($tournaments) > 0)
+
+        <h1 class="text-center">Choisir un tournoi</h1>
+
+        {!! Form::open(['route' => 'tournament.index', 'class' => 'form-horizontal']) !!}
+
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-4">
+                {!! Form::select('tournament_id', $tournaments, $tournament != null && $tournament->exists ? $tournament->id : old('tournament_id'), ['class' => 'form-control chosen-select', 'required']) !!}
+            </div>
+        </div>
+
+        <div class="form-group text-center">
+            {!! Form::submit('Voir', ['class' => 'btn btn-primary']) !!}
+        </div>
+
+        {!! Form::close() !!}
+        <hr>
+    @endif
+
     <h1 class="text-center">
         Tournoi du
         <span class="font-bold">{{ $tournament->start->format('l j F Y') }}</span>

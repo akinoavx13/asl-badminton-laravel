@@ -77,7 +77,6 @@ class ChampionshipController extends Controller
 
         if ($request->isMethod('GET')) {
             $activeSeason = Season::active()->first();
-
             $championship = Period::current($activeSeason->id, 'championship')->first();
         } elseif ($request->isMethod('POST')) {
             $activeSeason = Period::findOrFail($request->period_id)->season;

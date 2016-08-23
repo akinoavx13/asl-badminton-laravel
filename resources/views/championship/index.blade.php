@@ -13,7 +13,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-4 col-md-4">
-                {!! Form::select('period_id', $championships, $championship != null && $championship->exists ? $championship->id : old('period_id'),['class' => 'form-control chosen-select', 'required']) !!}
+                {!! Form::select('period_id', $championships, $championship != null && $championship->exists ? $championship->id : old('period_id'), ['class' => 'form-control chosen-select', 'required']) !!}
             </div>
         </div>
 
