@@ -616,7 +616,9 @@ class ScoreController extends Controller
                     ->orderBy('total_difference_points', 'desc')
                     ->get();
 
-                //on cherche les exaequo
+                //on cherche les exaequo. La structure exaequo est un tableau double dimension.
+                // Le premier indice est le nombre total de points,
+                // A 0 le deuxième indice donne ne nombre d'exaequo, à 1 il donne le ranking du premier exaequo, à 2 le deuxième...
                 $allTotalPoints = [];
                 $nbExaequo = [];
 
@@ -626,27 +628,28 @@ class ScoreController extends Controller
                 }
 
                 // on cherche le nombre de fois ou l'on trouve le meme nombre de points
-                foreach ($rankings as $ranking) {
+                foreach ($rankings as $index => $ranking) {
+                    $ranking->rank = $index + 1;
                     $allTotalPoints[$ranking->id] = $ranking->total_points;
                     $nbExaequo[$ranking->total_points][0] += 1;
                     $nbExaequo[$ranking->total_points][$nbExaequo[$ranking->total_points][0]] = $ranking;
                 }
 
-                $rank = 1;
-
-                foreach ($rankings as $index => $ranking) {
-                    if ($nbExaequo[$ranking->total_points][0] == 2) {
+                //$rank = 1;
+                //dd($rankings);
+                foreach ($nbExaequo as $index => $exaequo) {
+                    if ($exaequo[0] == 2) {
                         // deux exaequo qu'il faut departager au match particulier...
                         // on cherche si il y a un score entre ces 2 joueurs dans la periode, si il y a en plusieurs (erreurs de saisie) on prend le dernier
 
-                        $score = Score::where('first_team_id', '=', $nbExaequo[$ranking->total_points][1]->team_id)
-                            ->where('second_team_id', '=', $nbExaequo[$ranking->total_points][2]->team_id)
+                        $score = Score::where('first_team_id', '=', $exaequo[1]->team_id)
+                            ->where('second_team_id', '=', $exaequo[2]->team_id)
                             ->where('created_at', '>=', $activePeriod->start)
                             ->where('created_at', '<=', $activePeriod->end)
                             ->orderBy('created_at', 'desc')
-                            ->orWhere(function ($query) use ($nbExaequo, $activePeriod, $ranking) {
-                                $query->where('first_team_id', $nbExaequo[$ranking->total_points][2]->team_id)
-                                    ->where('second_team_id', $nbExaequo[$ranking->total_points][1]->team_id)
+                            ->orWhere(function ($query) use ($exaequo, $activePeriod, $ranking) {
+                                $query->where('first_team_id', $exaequo[2]->team_id)
+                                    ->where('second_team_id', $exaequo[1]->team_id)
                                     ->where('created_at', '>=', $activePeriod->start)
                                     ->where('created_at', '<=', $activePeriod->end)
                                     ->orderBy('created_at', 'desc');
@@ -656,17 +659,15 @@ class ScoreController extends Controller
                         if ($score != null) {
                             // il y a un score on cherche qui est le gagnant si c'est le deuxieme joueur on inverse le ranking
                             if ($score->my_wo) {
-                                if ($nbExaequo[$ranking->total_points][1]->team_id == $ranking->team_id) {
-                                    $ranking->rank = $rank + 1;
-                                } else {
-                                    $ranking->rank = $rank;
+                                if ($exaequo[1]->team_id == $score->first_team_id) {
+                                    $exaequo[1]->rank = $exaequo[1]->rank + 1;
+                                    $exaequo[2]->rank = $exaequo[2]->rank - 1;
                                 }
 
                             } elseif ($score->his_wo) {
-                                if ($nbExaequo[$ranking->total_points][1]->team_id == $ranking->team_id) {
-                                    $ranking->rank = $rank;
-                                } else {
-                                    $ranking->rank = $rank - 1;
+                                if ($exaequo[1]->team_id == $score->second_team_id) {
+                                    $exaequo[1]->rank = $exaequo[1]->rank + 1;
+                                    $exaequo[2]->rank = $exaequo[2]->rank - 1;
                                 }
                             } else {
                                 $firstTeamWonSet = 0;
@@ -693,33 +694,37 @@ class ScoreController extends Controller
                                         $secondTeamWonSet++;
                                     }
                                 }
-
                                 if ($firstTeamWonSet > $secondTeamWonSet) {
-                                    if ($nbExaequo[$ranking->total_points][1]->team_id == $ranking->team_id) {
-                                        $ranking->rank = $rank;
-                                    } else {
-                                        $ranking->rank = $rank - 1;
+                                  // si le premier exaequo est le vainqueur on ne change pas le ranking
+                                  // sinon on intervit le classement
+                                    if ($exaequo[2]->team_id == $score->first_team_id) {
+                                      //dd($exaequo[2]->rank);
+                                      $exaequo[1]->rank = $exaequo[1]->rank + 1;
+                                      $exaequo[2]->rank = $exaequo[2]->rank - 1;
+                                      //dd($exaequo[2]->rank);
                                     }
                                 } else {
-                                    if ($nbExaequo[$ranking->total_points][1]->team_id == $ranking->team_id) {
-                                        $ranking->rank = $rank;
-                                    } else {
-                                        $ranking->rank = $rank;
+                                    if ($exaequo[2]->team_id == $score->second_team_id) {
+                                      $exaequo[1]->rank = $exaequo[1]->rank + 1;
+                                      $exaequo[2]->rank = $exaequo[2]->rank - 1;
                                     }
                                 }
                             }
                         } else {
                             // pas de score on garde le ranking donné par la requete
-                            $ranking->rank = $rank;
+                            //$ranking->rank = $rank;
                         }
 
                     } else {
                         // ici pas besoin de vérifier si il y a 3 exaequo ou plus, car la requete est deja triée par difference de set puis de points
-                        $ranking->rank = $rank;
+                        //$ranking->rank = $rank;
                     }
 
+                    //$ranking->save();
+                    //$rank++;
+                }
+                foreach ($rankings as $index => $ranking) {
                     $ranking->save();
-                    $rank++;
                 }
             }
         }
