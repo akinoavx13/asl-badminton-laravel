@@ -26,15 +26,15 @@ class Player extends Model
     ];
 
     protected $casts = [
-        'simple'        => 'boolean',
-        'double'        => 'boolean',
-        'mixte'         => 'boolean',
+        'simple' => 'boolean',
+        'double' => 'boolean',
+        'mixte' => 'boolean',
         'search_double' => 'boolean',
-        'search_mixte'  => 'boolean',
-        'corpo_man'     => 'boolean',
-        'corpo_woman'   => 'boolean',
-        'corpo_mixte'   => 'boolean',
-        't_shirt'       => 'boolean',
+        'search_mixte' => 'boolean',
+        'corpo_man' => 'boolean',
+        'corpo_woman' => 'boolean',
+        'corpo_mixte' => 'boolean',
+        't_shirt' => 'boolean',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -166,38 +166,24 @@ class Player extends Model
         $price['formula'] = 0;
 
         //calculate t-shirt but not corpo and competition player
-        if ($this->hasTShirt(true) && ! $this->hasFormula('corpo') && ! $this->hasFormula('competition'))
-        {
+        if ($this->hasTShirt(true) && !$this->hasFormula('corpo') && !$this->hasFormula('competition')) {
             $price['t_shirt'] += $setting->t_shirt_price;
         }
 
         //calculate leisure formula
-        if ($this->hasFormula('leisure') || $this->hasFormula('tournament'))
-        {
+        if ($this->hasFormula('leisure') || $this->hasFormula('tournament')) {
             $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->leisure_external_price : $setting->leisure_price;
-        }
-        
-        //calculate fun formula
-        elseif ($this->hasFormula('fun'))
-        {
+        } //calculate fun formula
+        elseif ($this->hasFormula('fun')) {
             $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->fun_external_price : $setting->fun_price;
-        }
-
-        //calculate performance formula
-        elseif ($this->hasFormula('performance'))
-        {
+        } //calculate performance formula
+        elseif ($this->hasFormula('performance')) {
             $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->performance_external_price : $setting->performance_price;
-        }
-
-        //calculate corpo formula
-        elseif ($this->hasFormula('corpo'))
-        {
+        } //calculate corpo formula
+        elseif ($this->hasFormula('corpo')) {
             $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->corpo_external_price : $setting->corpo_price;
-        }
-
-        //calculate competition formula
-        elseif ($this->hasFormula('competition'))
-        {
+        } //calculate competition formula
+        elseif ($this->hasFormula('competition')) {
             $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->competition_external_price : $setting->competition_price;
         }
 
@@ -206,15 +192,14 @@ class Player extends Model
 
     public static function listPartnerAvailable($type, $gender, $user_id, $player_id = null)
     {
-        if ($player_id !== null)
-        {
-            $activeSeason = Season::active()->first();
+        $activeSeason = Season::active()->first();
+
+        if ($player_id !== null) {
 
             $myTeam = Team::allMyDoubleOrMixteActiveTeams($type, $gender, $player_id, $activeSeason->id)
                 ->first();
 
-            if ($myTeam !== null)
-            {
+            if ($myTeam !== null) {
                 $partnerId = $myTeam->player_one == $player_id ? $myTeam->player_two : $myTeam->player_one;
 
                 $partner = Player::findOrFail($partnerId);
@@ -222,20 +207,20 @@ class Player extends Model
                 $listPartnerAvailable[$partnerId] = $partner->user->__toString();
             }
         }
-
+        
         $playersResarch = Player::select('players.id', 'users.name', 'users.forname')
             ->with('user')
             ->join('users', 'users.id', '=', 'players.user_id')
             ->where('users.id', '<>', $user_id)
             ->where('users.gender', '=', $type === 'mixte' ? $gender === 'man' ? 'woman' : 'man' : $gender)
+            ->where('players.season_id', $activeSeason->id)
             ->playerResearchByType($type)
             ->orderByForname()
             ->get();
 
         $listPartnerAvailable['search'] = 'En recherche';
 
-        foreach ($playersResarch as $player)
-        {
+        foreach ($playersResarch as $player) {
             $listPartnerAvailable[$player->id] = $player->forname . ' ' . $player->name;
         }
 
