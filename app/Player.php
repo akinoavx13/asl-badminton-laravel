@@ -207,7 +207,7 @@ class Player extends Model
                 $listPartnerAvailable[$partnerId] = $partner->user->__toString();
             }
         }
-        
+
         $playersResarch = Player::select('players.id', 'users.name', 'users.forname')
             ->with('user')
             ->join('users', 'users.id', '=', 'players.user_id')
