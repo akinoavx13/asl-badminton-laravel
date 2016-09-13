@@ -6,6 +6,23 @@
 
 @section('content')
 
+    <h1 class="text-center">Choisir un tournoi</h1>
+
+    {!! Form::open(['route' => 'ce.index', 'class' => 'form-horizontal']) !!}
+
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-4">
+            {!! Form::select('season_id', $seasons, $season != null && $season->exists ? $season->id : old('season_id'), ['class' => 'form-control chosen-select', 'required']) !!}
+        </div>
+    </div>
+
+    <div class="form-group text-center">
+        {!! Form::submit('Voir', ['class' => 'btn btn-primary']) !!}
+    </div>
+
+    {!! Form::close() !!}
+    <hr>
+
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-danger text-center">
