@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Player;
 use App\Season;
 use App\Setting;
+use Illuminate\Http\Request;
 
 /**
  * Manage Lectra budget
@@ -27,6 +28,13 @@ class CeController extends Controller
             'uses'       => 'CeController@index',
             'as'         => 'ce.index',
         ]);
+
+        //Lectra budget
+        $router->post('/', [
+            'middleware' => 'settingExists',
+            'uses'       => 'CeController@index',
+            'as'         => 'ce.index',
+        ]);
     }
 
     /**
@@ -34,9 +42,19 @@ class CeController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
+        $seasons = [];
+
+        foreach (Season::orderBy('created_at')->get() as $value) {
+            $seasons[$value->id] = 'Saison ' . $value->name;
+        }
+
         $season = Season::active()->first();
+
+        if ($request->isMethod('POST')) {
+            $season = Season::findOrFail($request->season_id);
+        }
 
         $setting = Helpers::getInstance()->setting();
 
@@ -136,6 +154,6 @@ class CeController extends Controller
 
         return view('ce.index',
             compact('players', 'tShirt', 'leisure', 'tournament', 'fun', 'performance', 'corpo', 'competition', 'contributionUnPaid',
-                'setting', 'totalPayable', 'totalPaid'));
+                'setting', 'totalPayable', 'totalPaid', 'seasons', 'season'));
     }
 }
