@@ -54,7 +54,7 @@
                                         </a>
                                     </div>
                                 </h4>
-                                <table class="table table-striped table-hover">
+                                <table class="table table-striped table-hover table-responsive">
                                     <thead>
                                     <tr>
                                         <th class="text-center">Rang</th>
@@ -98,7 +98,8 @@
                 </div>
             @endforeach
         @else
-            <div class="panel panel-warning">
+            @if(count($teams['simple']) > 0)
+                <div class="panel panel-warning">
                 <div class="panel-heading">
                     <h1 class="text-center">Championnat de simple</h1>
                 </div>
@@ -114,7 +115,7 @@
                                     </a>
                                 </div>
                             </h4>
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover table-responsive">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Rang</th>
@@ -156,6 +157,7 @@
                     @endforeach
                 </div>
             </div>
+            @endif
         @endif
 
         @if($championship->hasChampionshipDoubleWoman(true))
@@ -177,7 +179,7 @@
                                         </a>
                                     </div>
                                 </h4>
-                                <table class="table table-striped table-hover">
+                                <table class="table table-striped table-hover table-responsive">
                                     <thead>
                                     <tr>
                                         <th class="text-center">Rang</th>
@@ -221,7 +223,8 @@
                 </div>
             @endforeach
         @else
-            <div class="panel panel-info">
+            @if(count($teams['double']) > 0)
+                <div class="panel panel-info">
                 <div class="panel-heading">
                     <h1 class="text-center">Championnat de double</h1>
                 </div>
@@ -240,7 +243,7 @@
                                     </a>
                                 </div>
                             </h4>
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover table-responsive">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Rang</th>
@@ -282,9 +285,10 @@
                     @endforeach
                 </div>
             </div>
+            @endif
         @endif
-
-        <div class="panel panel-danger">
+        @if(count($teams['mixte']) > 0)
+            <div class="panel panel-danger">
             <div class="panel-heading">
                 <h1 class="text-center">Championnat de mixte</h1>
             </div>
@@ -301,7 +305,7 @@
                                 </a>
                             </div>
                         </h4>
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover table-responsive">
                             <thead>
                             <tr>
                                 <th class="text-center">Rang</th>
@@ -343,7 +347,7 @@
                 @endforeach
             </div>
         </div>
-
+        @endif
     @else
         <h1 class="text-center text-danger">Pas de championnat en ce moment !</h1>
     @endif
