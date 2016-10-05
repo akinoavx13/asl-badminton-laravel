@@ -180,7 +180,7 @@
             @endif
 
             @if($auth->hasRole('user'))
-                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure') || $myPlayer == null)
                     <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
                                 href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du
                             championnat</a></li>
@@ -209,7 +209,7 @@
             @endif
 
             @if($auth->hasRole('user'))
-                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure') || $myPlayer == null)
                     <li class="{{ Request::is('tournament/index') ? 'active' : '' }}"><a
                                 href="{{ route('tournament.index') }}"><i class="fa fa-eye"></i>Voir le classement du
                             tournoi</a></li>
