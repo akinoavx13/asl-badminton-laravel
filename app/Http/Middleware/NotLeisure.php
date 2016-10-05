@@ -28,12 +28,9 @@ class NotLeisure
             }
             $player = Helpers::getInstance()->myPlayer();
 
-            if ($player !== null)
+            if ($player !== null && ! $player->hasFormula('leisure') || $player == null)
             {
-                if (! $player->hasFormula('leisure'))
-                {
-                    return $next($request);
-                }
+                return $next($request);
             }
 
         }
