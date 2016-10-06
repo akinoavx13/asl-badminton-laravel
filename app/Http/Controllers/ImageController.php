@@ -28,7 +28,7 @@ class ImageController extends Controller
             return $img;
         }
 
-        return abort(404);
+        return Image::make(public_path() . '/img/anonymous.png')->response('png');
 
     }
 }
