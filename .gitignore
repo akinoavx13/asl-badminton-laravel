@@ -10,3 +10,5 @@ _ide_helper.php
 /public/ics
 .idea
 composer.lock
+config/push-notification.php
+public/push-notification/

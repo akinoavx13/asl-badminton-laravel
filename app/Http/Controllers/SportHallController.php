@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Device;
 use App\PresentPeopleSportHall;
 use App\User;
 use Carbon\Carbon;
+use Davibennun\LaravelPushNotification\Facades\PushNotification;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -71,6 +73,19 @@ class SportHallController extends Controller
                     'user_id' => $user_id,
                     'day'     => $presentDate
                 ]);
+
+                $devices = Device::all();
+
+                $messageDate = $date == 'today' ? 'aujourd\'hui' : 'demain';
+
+                $message = $user->forname . ' ' . $user->name . ' vient au jeu libre ' . $messageDate;
+
+                foreach ($devices as $device) {
+                    PushNotification::app('BadmintonIOS')
+                        ->to($device->token)
+                        ->send($message);
+                }
+
                 return redirect()->back()->with('success', "C'est bien vous faites du sport !");
             } else {
                 return redirect()->back()->with('error', "Vous êtes déjà présent !");
