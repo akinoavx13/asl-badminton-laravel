@@ -22,17 +22,17 @@ class SportHallController extends Controller
 
         $router->get('index', [
             'uses' => 'SportHallController@index',
-            'as'   => 'sportHall.index',
+            'as' => 'sportHall.index',
         ]);
 
         $router->get('create/{date}/{user_id}', [
             'uses' => 'SportHallController@create',
-            'as'   => 'sportHall.create',
+            'as' => 'sportHall.create',
         ]);
 
         $router->get('delete/{sportHall_id}', [
             'uses' => 'SportHallController@delete',
-            'as'   => 'sportHall.delete',
+            'as' => 'sportHall.delete',
         ]);
     }
 
@@ -71,7 +71,7 @@ class SportHallController extends Controller
             if ($alreadyPresent == 0) {
                 PresentPeopleSportHall::create([
                     'user_id' => $user_id,
-                    'day'     => $presentDate
+                    'day' => $presentDate
                 ]);
 
                 $devices = Device::all();
@@ -81,9 +81,12 @@ class SportHallController extends Controller
                 $message = $user->forname . ' ' . $user->name . ' vient au jeu libre ' . $messageDate;
 
                 foreach ($devices as $device) {
-                    PushNotification::app('BadmintonIOS')
-                        ->to($device->token)
-                        ->send($message);
+
+                    if (env('APP_ENV') == 'local') {
+                        PushNotification::app('BadmintonIOS-DEV')->to($device->token)->send($message);
+                    } else {
+                        PushNotification::app('BadmintonIOS-PROD')->to($device->token)->send($message);
+                    }
                 }
 
                 return redirect()->back()->with('success', "C'est bien vous faites du sport !");
