@@ -29,6 +29,7 @@ class Calendar
         {
             $period = Period::current($season->id, 'championship')->first();
             $tournament = Tournament::current($season->id)->first();
+
             if($period !== null)
             {
                 $lastDay = $period->end;
