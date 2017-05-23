@@ -11,6 +11,7 @@ namespace App\Http\Utilities;
 
 use App\Period;
 use App\Season;
+use App\Tournament;
 use Carbon\Carbon;
 use Jenssegers\Date\Date;
 
@@ -27,9 +28,13 @@ class Calendar
         if($season !== null)
         {
             $period = Period::current($season->id, 'championship')->first();
+            $tournament = Tournament::current($season->id)->first();
+
             if($period !== null)
             {
                 $lastDay = $period->end;
+            } else if($tournament !== null) {
+                $lastDay = $tournament->end;
             }
         }
 
