@@ -85,8 +85,8 @@ class SportHallController extends Controller
                     if (env('APP_ENV') == 'local') {
                         PushNotification::app('BadmintonIOS-DEV')->to($device->token)->send($message);
                     } else {
-                        PushNotification::app('BadmintonIOS-DEV')->to($device->token)->send($message);
-                        //PushNotification::app('BadmintonIOS-PROD')->to($device->token)->send($message);
+                        //PushNotification::app('BadmintonIOS-DEV')->to($device->token)->send($message);
+                        PushNotification::app('BadmintonIOS-PROD')->to($device->token)->send($message);
                     }
                 }
 
