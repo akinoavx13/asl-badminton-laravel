@@ -49,6 +49,15 @@
                 </div>
             </li>
 
+            @if($auth->hasRole('admin'))
+                <li class="{{ Request::is('administration*')? 'active' : '' }}">
+                    <a href="{{ route('administration.index') }}">
+                        <i class="fa fa-lock text-danger"></i>
+                        <span class="nav-label text-danger">Administration</span>
+                    </a>
+                </li>
+            @endif
+
             @if(! $auth->hasRole('ce'))
                 <li class="{{ Request::is('home') ? 'active' : '' }}">
                     <a href="{{ route('home.index') }}">
@@ -58,7 +67,7 @@
                 </li>
             @endif
 
-            @if($auth->hasRole('user'))
+            @if(! $auth->hasRole('ce'))
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
                     <li class="{{ Request::is('dashboard*')? 'active' : '' }}">
                         <a href="{{ route('dashboard.index') }}">
@@ -69,185 +78,32 @@
                 @endif
             @endif
 
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('dashboard*') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-dashboard"></i>
-                        <span class="nav-label">Tableau de bord</span>
-                        <span class="fa arrow"></span>
-                    </a>
-
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('dashboard/index') ? 'active' : '' }}">
-                            <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>Joueur</a>
-                        </li>
-                        <li class="{{ Request::is('dashboardAdmin/index') ? 'active' : '' }}">
-                            <a href="{{ route('dashboardAdmin.index') }}"><i class="fa fa-dashboard"></i>Section</a>
-                        </li>
-                    </ul>
-                </li>
-            @endif
-
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('setting*') || Request::is('court*') || Request::is('timeSlot*') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-cogs"></i>
-                        <span class="nav-label">Paramètres</span>
-                        <span class="fa arrow"></span>
-                    </a>
-
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('setting/index') ? 'active' : '' }}">
-                            <a href="{{ route('setting.index') }}"><i class="fa fa-cogs"></i>Global</a>
-                        </li>
-                        <li class="{{ Request::is('court/index') ? 'active' : '' }}">
-                            <a href="{{ route('court.index') }}"><i class="fa fa-cogs"></i>Court</a>
-                        </li>
-                        <li class="{{ Request::is('timeSlot/index') ? 'active' : '' }}">
-                            <a href="{{ route('timeSlot.index') }}"><i class="fa fa-cogs"></i>Créneaux</a>
-                        </li>
-                    </ul>
-                </li>
-            @endif
-
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('user*') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-user"></i>
-                        <span class="nav-label">Utilisateurs</span>
-                        <span class="fa arrow"></span>
-                    </a>
-
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('user/index') ? 'active' : '' }}"><a
-                                    href="{{ route('user.index') }}"><i class="fa fa-list"></i>Liste des
-                                utilisateurs</a>
-                        </li>
-                        <li class="{{ Request::is('user/create') ? 'active' : '' }}"><a
-                                    href="{{ route('user.create') }}"><i class="fa fa-user-plus"></i>Créer un
-                                utilisateur</a>
-                        </li>
-                    </ul>
-                </li>
-            @endif
-
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('player/index') ? 'active' : '' }}">
-                    <a href="{{ route('player.index') }}">
-                        <i class="fa fa-group"></i>
-                        <span class="nav-label">Liste des joueurs</span>
-                    </a>
-                </li>
-            @endif
-
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('season*') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-star-half-full"></i>
-                        <span class="nav-label">Saisons</span>
-                        <span class="fa arrow"></span>
-                    </a>
-
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('season/index') ? 'active' : '' }}"><a
-                                    href="{{ route('season.index') }}"><i class="fa fa-list"></i>Liste des
-                                saisons</a></li>
-                        <li class="{{ Request::is('season/create') ? 'active' : '' }}"><a
-                                    href="{{ route('season.create') }}"><i class="fa fa-plus"></i>Créer une
-                                saison</a></li>
-                    </ul>
-                </li>
-            @endif
-
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('championship*') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-trophy"></i>
-                        <span class="nav-label">Championnat</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('championship/create') ? 'active' : '' }}"><a
-                                    href="{{ route('championship.create') }}"><i class="fa fa-plus"></i>Créer un
-                                championnat</a></li>
-                    </ul>
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
-                                    href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement
-                                du championnat</a></li>
-                    </ul>
-                </li>
-            @endif
-
-            @if($auth->hasRole('user'))
+            @if(!$auth->hasRole('ce'))
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure') || $myPlayer == null)
                     <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a
-                                href="{{ route('championship.index') }}"><i class="fa fa-eye"></i>Voir le classement du
-                            championnat</a></li>
+                                href="{{ route('championship.index') }}"><i class="fa fa-trophy"></i>Championnat</a></li>
                     </li>
                 @endif
             @endif
 
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('tournament*') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-trophy"></i>
-                        <span class="nav-label">Tournoi</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('tournament/create') ? 'active' : '' }}"><a
-                                    href="{{ route('tournament.create') }}"><i class="fa fa-plus"></i>Créer un
-                                tournoi</a></li>
-                    </ul>
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('tournament/index') ? 'active' : '' }}"><a
-                                    href="{{ route('tournament.index') }}"><i class="fa fa-eye"></i>Voir le classement
-                                du tournoi</a></li>
-                    </ul>
-                </li>
-            @endif
-
-            @if($auth->hasRole('user'))
+            @if(!$auth->hasRole('ce'))
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure') || $myPlayer == null)
                     <li class="{{ Request::is('tournament/index') ? 'active' : '' }}"><a
-                                href="{{ route('tournament.index') }}"><i class="fa fa-eye"></i>Voir le classement du
-                            tournoi</a></li>
+                                href="{{ route('tournament.index') }}"><i class="fa fa-cubes"></i>Tournoi</a></li>
                     </li>
                 @endif
             @endif
 
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('reservation/index') || Request::is('playerReservation*') || Request::is('adminReservation/create') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-calendar"></i>
-                        <span class="nav-label">Réservation</span>
-                        <span class="fa arrow"></span>
-                    </a>
-
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('reservation/index') ? 'active' : '' }}"><a
-                                    href="{{ route('reservation.index') }}"><i class="fa fa-plus"></i>Réserver
-                                un terrain</a>
-                        </li>
-                        <li class="{{ Request::is('adminReservation/create') ? 'active' : '' }}"><a
-                                    href="{{ route('adminReservation.create') }}"><i class="fa
-                                        fa-times"></i>Bloquer une réservation</a>
-                        </li>
-                    </ul>
-                </li>
-            @endif
-
-            @if($auth->hasRole('user') || $auth->hasRole('admin'))
+            @if(!$auth->hasRole('ce'))
                 <li class="{{ Request::is('player/create') ? 'active' : '' }}">
                     <a href="{{ route('player.create') }}">
                         <i class="fa fa-ticket"></i>
-                        <span class="nav-label">S'inscrire à une saison</span>
+                        <span class="nav-label">S'inscrire</span>
                     </a>
                 </li>
             @endif
 
-            @if($auth->hasRole('user'))
+            @if(!$auth->hasRole('ce'))
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
                     <li class="{{ Request::is('reservation/index') || Request::is('playerReservation*') ? 'active' : '' }}">
                         <a href="{{ route('reservation.index') }}">
@@ -258,16 +114,7 @@
                 @endif
             @endif
 
-            @if($auth->hasRole('user') || $auth->hasRole('admin'))
-                <li class="{{ Request::is('testimonial/index') ? 'active' : '' }}">
-                    <a href="{{ route('testimonial.index') }}">
-                        <i class="fa fa-bookmark"></i>
-                        <span class="nav-label">Témoignages</span>
-                    </a>
-                </li>
-            @endif
-
-            @if($auth->hasRole('ce') || $auth->hasRole('admin'))
+            @if($auth->hasRole('ce'))
                 <li class="{{ Request::is('ce') ? 'active' : '' }}">
                     <a href="{{ route('ce.index') }}">
                         <i class="fa fa-money"></i>
@@ -276,7 +123,7 @@
                 </li>
             @endif
 
-            @if($auth->hasRole('user'))
+            @if(!$auth->hasRole('ce'))
                 <li class="{{ Request::is('rope') ? 'active' : '' }}">
                     <a href="{{ route('rope.index') }}">
                         <i class="fa fa-shopping-cart"></i>
@@ -285,40 +132,11 @@
                 </li>
             @endif
 
-            @if($auth->hasRole('admin'))
-                <li class="{{ Request::is('rope*')  ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span class="nav-label">Cordage</span>
-                        <span class="fa arrow"></span>
-                    </a>
-
-                    <ul class="nav nav-second-level">
-                        <li class="{{ Request::is('rope/index') ? 'active' : '' }}"><a
-                                    href="{{ route('rope.index') }}"><i class="fa fa-shopping-cart"></i>Recorder</a>
-                        </li>
-                        <li class="{{ Request::is('rope/create') ? 'active' : '' }}"><a
-                                    href="{{ route('rope.create') }}"><i class="fa
-                                        fa-plus"></i>Ajouter une bobine</a>
-                        </li>
-                    </ul>
-                </li>
-            @endif
-
-            @if($auth->hasRole('user') || $auth->hasRole('ce') || $auth->hasRole('admin'))
+            @if($auth)
                 <li class="{{ Request::is('emailToDev') ? 'active' : '' }}">
                     <a href="{{ route('emailToDev.index') }}">
                         <i class="fa fa-send"></i>
                         <span class="nav-label">Email au développeur</span>
-                    </a>
-                </li>
-            @endif
-
-            @if($auth->hasRole('admin'))
-                <li class="">
-                    <a href="http://badminton.api.aslectra.com/">
-                        <i class="fa fa-key"></i>
-                        <span class="nav-label">Lectra API</span>
                     </a>
                 </li>
             @endif

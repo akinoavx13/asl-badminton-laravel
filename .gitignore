@@ -12,3 +12,4 @@ _ide_helper.php
 composer.lock
 config/push-notification.php
 public/push-notification/
+.DS_Store

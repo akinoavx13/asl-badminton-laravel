@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\ActualityController;
+use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\AdminReservationController;
 use App\Http\Controllers\CeController;
 use App\Http\Controllers\ChampionshipController;
@@ -185,4 +186,8 @@ Route::group(['prefix' => 'sportHall', 'middleware' => ['auth', 'notCE']], funct
 Route::group(['prefix' => 'images', 'middleware' => []], function () use ($router)
 {
     ImageController::routes($router);
+});
+
+Route::group(['prefix' => 'administration', 'middleware' => ['auth', 'notCE', 'admin']], function() use ($router) {
+   AdministrationController::routes($router);
 });
