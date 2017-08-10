@@ -30,13 +30,13 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-md-4">
-                            <a href="{{ route('setting.index') }}" class="btn btn-primary btn-outline btn-block"><i class="fa fa-cogs"></i> Global</a>
+                            <a href="{{ route('setting.index') }}" class="btn btn-primary btn-outline btn-block">Global</a>
                         </div>
                         <div class="col-md-4">
-                            <a href="{{ route('court.index') }}" class="btn btn-success btn-outline btn-block"><i class="fa fa-cogs"></i> Court</a>
+                            <a href="{{ route('court.index') }}" class="btn btn-success btn-outline btn-block">Court</a>
                         </div>
                         <div class="col-md-4">
-                            <a href="{{ route('timeSlot.index') }}" class="btn btn-danger btn-outline btn-block"><i class="fa fa-cogs"></i> Crénaux</a>
+                            <a href="{{ route('timeSlot.index') }}" class="btn btn-danger btn-outline btn-block">Crénaux</a>
                         </div>
                     </div>
                 </div>
