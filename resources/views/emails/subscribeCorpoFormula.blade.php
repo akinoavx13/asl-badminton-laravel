@@ -35,12 +35,4 @@
             </p>
         </li>
     </ul>
-
-    <p>
-        <a href="{{ asset('documents/badminton-Formulaire Certificat Medical 2015-2016.pdf') }}">Certificat médical</a>
-    </p>
-
-    <p>
-        <a href="{{ asset('documents/badminton-Formulaire demande de licence 2015-2016.pdf') }}">Demande de licence</a>
-    </p>
 @stop

@@ -14,8 +14,7 @@
 
     <p>
         Pour finaliser votre inscription, merci de bien vouloir remplir les formulaires ci-dessous et les transmettre le
-        plus tôt
-        possible à Christophe Mahéo
+        plus tôt possible à Christophe Mahéo
     </p>
 
     <ul>
@@ -35,12 +34,4 @@
             </p>
         </li>
     </ul>
-
-    <p>
-        <a href="{{ asset('documents/badminton-Formulaire Certificat Medical 2015-2016.pdf') }}">Certificat médical</a>
-    </p>
-
-    <p>
-        <a href="{{ asset('documents/badminton-Formulaire demande de licence 2015-2016.pdf') }}">Demande de licence</a>
-    </p>
 @stop
