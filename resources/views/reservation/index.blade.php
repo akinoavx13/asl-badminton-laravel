@@ -31,12 +31,10 @@
 
                         <div class="row">
                             <div class="col-md-6 text-center text-navy">
-                                <h2>Courts de simple libres</h2>
-                                {{ $courtSimpleAvailable }} jusqu'au {{ $lastDayMonth->format('l j F Y') }}
+                                <h2>Encore <span style="font-weight: bold;">{{ $courtSimpleAvailable }} créneaux</span> de simple libres</h2>
                             </div>
                             <div class="col-md-6 text-center text-info">
-                                <h2>Courts de double libres</h2>
-                                {{ $courtDoubleAvailable }} jusqu'au {{ $lastDayMonth->format('l j F Y') }}
+                                <h2>Encore <span style="font-weight: bold;">{{ $courtDoubleAvailable }} créneaux</span> de double libres</h2>
                             </div>
                         </div>
                         <hr>
