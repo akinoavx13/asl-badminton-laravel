@@ -51,6 +51,7 @@ class ReservationController extends Controller
         $allDays = Calendar::getAllDaysMonth();
 
         $lastDayMonth = end($allDays);
+        $firstDayMonth = $allDays[0];
 
         $playerReservations = PlayersReservation::where('date', '>=', Carbon::today())
             ->where('date', '<=', $lastDayMonth)
@@ -59,6 +60,7 @@ class ReservationController extends Controller
 
         $adminReservationsNotRecurring = AdminsReservation::whereNull('end')
             ->where('start', '<=', $lastDayMonth)
+            ->where('start', '>=', $firstDayMonth)
             ->orderBy('start')
             ->get();
 
@@ -203,6 +205,7 @@ class ReservationController extends Controller
                 {
                     foreach ($adminReservationNotRecurring->timeSlots as $timeSlot)
                     {
+                        $court->hasType('simple') ? $courtSimpleAvailable-- : $courtDoubleAvailable--;
                         $reservations[$adminReservationNotRecurring->start->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
                             $adminReservationNotRecurring->title;
                         $reservations[$adminReservationNotRecurring->start->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
@@ -226,13 +229,16 @@ class ReservationController extends Controller
                 {
                     foreach ($adminReservationRecurring->timeSlots as $timeSlot)
                     {
-                        $day = Carbon::create($adminReservationRecurring->start->year,
-                        $adminReservationRecurring->start->month, $adminReservationRecurring->start->day);
+                        //$day = Carbon::create($adminReservationRecurring->start->year,
+                        //$adminReservationRecurring->start->month, $adminReservationRecurring->start->day);
+                        $day = Carbon::create($firstDayMonth->year, $firstDayMonth->month, $firstDayMonth->day);
 
-                        while ($day <= $adminReservationRecurring->end)
+                        //while ($day <= $adminReservationRecurring->end)
+                        while ($day <= $lastDayMonth)
                         {
                             if($adminReservationRecurring->monday == true && $day->isMonday())
                             {
+                                $court->hasType('simple') ? $courtSimpleAvailable-- : $courtDoubleAvailable--;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
                                     $adminReservationRecurring->title;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
@@ -246,6 +252,7 @@ class ReservationController extends Controller
                             }
                             if($adminReservationRecurring->tuesday == true && $day->isTuesday())
                             {
+                                $court->hasType('simple') ? $courtSimpleAvailable-- : $courtDoubleAvailable--;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
                                     $adminReservationRecurring->title;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
@@ -259,6 +266,7 @@ class ReservationController extends Controller
                             }
                             if($adminReservationRecurring->wednesday == true && $day->isWednesday())
                             {
+                                $court->hasType('simple') ? $courtSimpleAvailable-- : $courtDoubleAvailable--;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
                                     $adminReservationRecurring->title;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
@@ -272,6 +280,7 @@ class ReservationController extends Controller
                             }
                             if($adminReservationRecurring->thursday == true && $day->isThursday())
                             {
+                                $court->hasType('simple') ? $courtSimpleAvailable-- : $courtDoubleAvailable--;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
                                     $adminReservationRecurring->title;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
@@ -285,6 +294,7 @@ class ReservationController extends Controller
                             }
                             if($adminReservationRecurring->friday == true && $day->isFriday())
                             {
+                                $court->hasType('simple') ? $courtSimpleAvailable-- : $courtDoubleAvailable--;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['name'] =
                                     $adminReservationRecurring->title;
                                 $reservations[$day->format('Y-m-d')][$timeSlot->id][$court->id]['content'] =
