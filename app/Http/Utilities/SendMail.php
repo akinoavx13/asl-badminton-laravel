@@ -37,8 +37,11 @@ class SendMail
 
                             if ($setting !== null)
                             {
-                                $message->to($setting->cestas_sport_email,
-                                    "Cestas Sports")->subject($subject)->cc(Helpers::getInstance()->ccMail());
+                                $message
+                                ->to($setting->cestas_sport_email,"Cestas Sports")
+                                ->subject($subject)
+                                ->cc(Helpers::getInstance()->ccMail())
+                                ->cc($user->email);
                             }
                         }
                         else
