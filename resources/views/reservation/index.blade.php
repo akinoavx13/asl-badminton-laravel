@@ -32,9 +32,11 @@
                         <div class="row">
                             <div class="col-md-6 text-center text-navy">
                                 <h2>Encore <span style="font-weight: bold;">{{ $courtSimpleAvailable }} créneaux</span> de simple libres</h2>
+                                <h3>il reste {{ $nbSimpleMen + $nbSimpleWomen}} simples à jouer dont {{ $nbSimpleBooked }} déjà réservés</h3>
                             </div>
                             <div class="col-md-6 text-center text-info">
                                 <h2>Encore <span style="font-weight: bold;">{{ $courtDoubleAvailable }} créneaux</span> de double libres</h2>
+                                <h3>il reste {{ $nbDoubleMen + $nbDoubleWomen + $nbMixte }} doubles à jouer dont {{ $nbDoubleBooked }} déjà réservés</h3>
                             </div>
                         </div>
                         <hr>
