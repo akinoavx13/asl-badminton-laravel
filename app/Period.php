@@ -91,4 +91,14 @@ class Period extends Model
             ->where('end', '<', $today)
             ->orderBy('end', 'desc');
     }
+
+    // ici on retrouve la dernière période de la saison même si la période et en cours
+    public function scopeVeryLasted($query, $season_id, $type)
+    {
+        $today = Carbon::today();
+        $query->where('type', $type)
+            ->where('season_id', $season_id)
+            //->where('end', '<', $today) 
+            ->orderBy('end', 'desc');
+    }
 }

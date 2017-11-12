@@ -134,7 +134,7 @@ class ChampionshipController extends Controller
         $setting = Helpers::getInstance()->setting();
 
         if ($activeSeason !== null) {
-            $lastedPeriod = Period::lasted($activeSeason->id, 'championship')->first();
+            $lastedPeriod = Period::veryLasted($activeSeason->id, 'championship')->first();
 
             $teams = [];
             $poolsNumber = [];
@@ -182,7 +182,6 @@ class ChampionshipController extends Controller
                     $teams['simple'] = $this->getTeamsLastedChampionship($lastedPeriod->id, $activeSeason->id,
                         $teams['simple'], 'simple', '', true);
                     $poolsNumber['simple'] = $this->getNumberOfPool($teams['simple']);
-
                 }
 
                 if ($setting->hasChampionshipDoubleWoman(true)) {
