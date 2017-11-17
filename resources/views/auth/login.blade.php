@@ -13,7 +13,7 @@
         </div>
         <div class="panel-body">
 
-            {!! Form::open(['url' => '/auth/login']) !!}
+            {!! Form::open(['url' => '/login']) !!}
 
             <div class="form-group">
                 {!! Form::email('email', old('email'), ['placeholder' => 'Email', 'class' => 'form-control', 'required']) !!}
@@ -28,7 +28,7 @@
             </div>
 
             <p class="help-block text-center">
-                <a href="{{ url('password/email') }}" class="text-info">Mot de passe oublié ?</a>
+                <a href="{{ url('password/reset') }}" class="text-info">Mot de passe oublié ?</a>
             </p>
 
             <div class="form-group text-center">

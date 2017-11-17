@@ -2,6 +2,8 @@
 
 return [
 
+    'name' => 'ASL-Badminton',
+
     'env' => env('APP_ENV', 'production'),
 
     /*
@@ -128,6 +130,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
         /*
          * Application Service Providers...
          */

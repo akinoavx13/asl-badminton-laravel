@@ -17,7 +17,7 @@
         </div>
         <div class="panel-body">
 
-            {!! Form::open(['url' => '/password/email']) !!}
+            {!! Form::open(['url' => 'password/email']) !!}
 
             <div class="form-group">
                 {!! Form::email('email', old('email'), ['placeholder' => 'Email', 'class' => 'form-control', 'required']) !!}

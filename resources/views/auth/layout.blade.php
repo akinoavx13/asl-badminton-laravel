@@ -50,7 +50,6 @@
     </div>
 </div>
 
-<script src="{{ asset('js/app.min.js') }}"></script>
 
 @yield('javascript')
 

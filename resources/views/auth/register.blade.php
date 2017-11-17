@@ -19,7 +19,7 @@
 
             <p class="text-right"><i class="text-navy">* Champs obligatoires</i></p>
 
-            {!! Form::open(['url' => '/auth/register', 'class' => 'form-horizontal']) !!}
+            {!! Form::open(['url' => '/register', 'class' => 'form-horizontal']) !!}
 
             <div class="form-group">
 

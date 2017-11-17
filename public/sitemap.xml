@@ -7,9 +7,9 @@
 <!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
 <url>
-  <loc>http://badminton.aslectra.com/auth/login</loc>
+  <loc>http://badminton.aslectra.com/login</loc>
 </url>
 <url>
-  <loc>http://badminton.aslectra.com/password/email</loc>
+  <loc>http://badminton.aslectra.com/password/reset</loc>
 </url>
 </urlset>
