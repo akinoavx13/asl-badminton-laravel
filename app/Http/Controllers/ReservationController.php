@@ -53,7 +53,8 @@ class ReservationController extends Controller
         $allDays = Calendar::getAllDaysMonth();
 
         $lastDayMonth = end($allDays);
-        $firstDayMonth = $allDays[0];
+        $firstDayMonth =$allDays[0];
+        $today = Carbon::create($firstDayMonth->year, $firstDayMonth->month, $firstDayMonth->day)->format('Y-m-d');
 
         $playerReservations = PlayersReservation::where('date', '>=', Carbon::today())
             ->where('date', '<=', $lastDayMonth)
@@ -62,7 +63,7 @@ class ReservationController extends Controller
 
         $adminReservationsNotRecurring = AdminsReservation::whereNull('end')
             ->where('start', '<=', $lastDayMonth)
-            ->where('start', '>=', $firstDayMonth)
+            ->where('start', '>=', $today)
             ->orderBy('start')
             ->get();
 
@@ -78,7 +79,7 @@ class ReservationController extends Controller
         $courtDoubleAvailable = 0;
 
         // recherche du nb de match non joues
-        $today = Carbon::create($firstDayMonth->year, $firstDayMonth->month, $firstDayMonth->day)->format('Y-m-d');
+
         $currentPeriod = Period::select(
           'id', 'start', 'end')
           ->where('periods.start', '<=', $today)
