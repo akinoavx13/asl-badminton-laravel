@@ -6,7 +6,8 @@
 
 @section('content')
 
-    <h1 class="text-center">Tableau de bord</h1>
+    <h1 class="text-center">Tableau de bord </h1>
+    <h2 class="text-center"> <a href="{{ route('stat.show', $userID) }}">(nouveau: vos statistiques en simple)</a></h2>
     <hr>
 
     @if(count($tableReservation['simple']) <= 0 && count($tableReservation['double']) <= 0 && count($tableReservation['mixte']) <= 0)
