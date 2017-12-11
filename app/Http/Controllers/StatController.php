@@ -132,7 +132,7 @@ class StatController extends Controller
               $cumulStat['nbPoint'] += $simple->first_set_first_team - $simple->first_set_second_team + $simple->second_set_first_team - $simple->second_set_second_team + $simple->third_set_first_team - $simple->third_set_second_team;
             }
           }
-          $cumulStat['percentWin'] = (int)(100 * $cumulStat['nbWin'] / ($cumulStat['nbLost'] + $cumulStat['nbWin']));
+          if ($cumulStat['nbMatch']) $cumulStat['percentWin'] = (int)(100 * $cumulStat['nbWin'] / ($cumulStat['nbLost'] + $cumulStat['nbWin']));
 
         return view('stat.show', compact('results', 'user','type', 'cumulStat'));
     }
