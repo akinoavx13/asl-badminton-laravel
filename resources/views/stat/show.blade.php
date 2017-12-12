@@ -11,10 +11,18 @@
         <h1 class="text-center">Résultat en simple</h1>
     </div>
     <div class="panel-body">
-        {{ $user }} a gagné {{ $cumulStat['nbWin'] }} et perdu {{ $cumulStat['nbLost'] }} matchs soit {{ $cumulStat['percentWin']}}% de victoire. </br>
-        La différence de set est de {{ $cumulStat['nbSet'] }} et de points de {{ $cumulStat['nbPoint'] }} </br>
-        Le nombre de forfait est de {{ $cumulStat['nbMyWO'] }} (et forfait de l'adversaire {{ $cumulStat['nbHisWO'] }}) </br>
-        Le nombre de match non joué est de {{ $cumulStat['nbUnplayed'] }}
+        {{ $user }} a {{ $cumulStat['percentWin']}}% de victoire. </br>
+        {{ $cumulStat['nbMatchWon'] }} matchs gagnés ({{ $cumulStat['nbMatchWonTwoSets']}} en 2 sets et {{ $cumulStat['nbMatchWonThreeSets']}} en 3 sets) </br>
+        {{ $cumulStat['nbMatchLost'] }} matchs perdus ({{ $cumulStat['nbMatchLostTwoSets']}} en 2 sets et {{ $cumulStat['nbMatchLostThreeSets']}} en 3 sets) </br>
+
+        En moyenne il gagne un match avec {{ $cumulStat['averageSetMatchWon'] }} sets d'avance (La différence de set pour les matchs gagnés est de {{ $cumulStat['diffSetMatchWon'] }}) </br>
+        En moyenne il perd un match avec {{ $cumulStat['averageSetMatchLost'] }} sets de retard (La différence de set pour les matchs perdus est de {{ $cumulStat['diffSetMatchLost'] }}) </br>
+
+        En moyenne il gagne un set avec {{ $cumulStat['averagePointSetWon'] }} points d'avance (La différence de point pour les sets {{ $cumulStat['nbSetWon'] }} gagnés est de {{ $cumulStat['diffPointSetWon'] }}) </br>
+        En moyenne il perd un set avec {{ $cumulStat['averagePointSetLost'] }} points de retard (La différence de point pour les sets {{ $cumulStat['nbSetLost'] }} perdus est de {{ $cumulStat['diffPointSetLost'] }}) </br>
+
+        Il a été forfait {{ $cumulStat['nbMyWO'] }} fois et ses adversaires {{ $cumulStat['nbHisWO'] }} fois. </br>
+        Le nombre de match non joué est de {{ $cumulStat['nbUnplayed'] }}.
         <table class="table table-striped table-hover">
             <thead>
             <tr>
