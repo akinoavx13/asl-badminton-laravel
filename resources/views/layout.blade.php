@@ -33,7 +33,8 @@
     </div>
 
     <script src="{{ asset('js/app.min.js') }}"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    
     @yield('javascript')
     @include('flash.flash-alert')
 

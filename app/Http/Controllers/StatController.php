@@ -24,6 +24,12 @@ class StatController extends Controller
       ]);
 
     }
+
+
+    public function incrementArray(&$array, $key)
+    {
+      if (array_key_exists($key, $array)) $array[$key]++; else $array[$key] = 1;
+    }
     /**
      * Display the specified resource.
      *
@@ -71,7 +77,15 @@ class StatController extends Controller
           ->get();
 
           $results = [];
+          $opponentsWon = [];
+          $opponentsLost = [];
+          $opponentID = [];
+          $setsDiffPoint = [];
+          $setsOpponent = [];
+          $setsBackgroundColor = [];
+          $setsBordergroundColor = [];
           $type = 'simple';
+          $nbSetPlayed = 0;
           $cumulStat = [];
           $cumulStat['nbMatch'] = 0;
           $cumulStat['nbMatchWon'] = 0;
@@ -97,7 +111,101 @@ class StatController extends Controller
           $cumulStat['nbHisWO'] = 0;
           $cumulStat['nbUnplayed'] = 0;
 
+          $allBorderColor = ["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"];
+          $allBackgroundColor = ["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"];
+          $nbColors = 6;
           foreach ($simples as $index => $simple) {
+
+            // construction de la liste des adversaires
+            if (!$simple->unplayed && !$simple->hisWO && !$simple->myWO) {
+              if ($simple->userOneFirstTeamId == $id && $simple->first_team_win) {
+                if (array_key_exists(Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName), $opponentsWon))
+                  $opponentsWon[Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName)]++;
+                else {
+                  $opponentsWon[Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName)] = 1;
+                }
+                $opponentID[Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName)] = $simple->userOneSecondTeamId;
+              }
+
+              if ($simple->userOneFirstTeamId == $id && $simple->second_team_win) {
+                if (array_key_exists(Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName), $opponentsLost))
+                  $opponentsLost[Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName)]++;
+                else {
+                  $opponentsLost[Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName)] = 1;
+                }
+                $opponentID[Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName)] = $simple->userOneSecondTeamId;
+              }
+
+              if ($simple->userOneSecondTeamId == $id && $simple->first_team_win) {
+                if (array_key_exists(Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName), $opponentsLost))
+                  $opponentsLost[Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName)]++;
+                else {
+                  $opponentsLost[Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName)] = 1;
+                }
+                $opponentID[Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName)] = $simple->userOneFirstTeamId;
+              }
+
+              if ($simple->userOneSecondTeamId == $id && $simple->second_team_win) {
+                if (array_key_exists(Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName), $opponentsWon))
+                  $opponentsWon[Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName)]++;
+                else {
+                  $opponentsWon[Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName)] = 1;
+                }
+                $opponentID[Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName)] = $simple->userOneFirstTeamId;
+              }
+            }
+
+
+            $borderColor = $allBorderColor[$index % 7];
+            $backgroundColor = $allBackgroundColor[$index % 7];
+            if (!$simple->unplayed && !$simple->myWO && !$simple->hisWO) {
+              if ($simple->userOneFirstTeamId == $id) {
+                // premier set
+                $setsOpponent[$nbSetPlayed] = Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName);
+                $setsBorderColor[$nbSetPlayed] = $borderColor;
+                $setsBackgroundColor[$nbSetPlayed] = $backgroundColor;
+                $setsDiffPoint[$nbSetPlayed] = $simple->first_set_first_team - $simple->first_set_second_team;
+                $nbSetPlayed++;
+                // second set
+                $setsOpponent[$nbSetPlayed] = Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName);
+                $setsBorderColor[$nbSetPlayed] = $borderColor;
+                $setsBackgroundColor[$nbSetPlayed] = $backgroundColor;
+                $setsDiffPoint[$nbSetPlayed] = $simple->second_set_first_team - $simple->second_set_second_team;
+                $nbSetPlayed++;
+                // troisieme set
+                if ($simple->third_set_first_team !=0 && $simple->third_set_second_team !=0) {
+                  $setsOpponent[$nbSetPlayed] = Helpers::getInstance()->getTeamName($simple->userOneSecondTeamForname, $simple->userOneSecondTeamName);
+                  $setsBorderColor[$nbSetPlayed] = $borderColor;
+                  $setsBackgroundColor[$nbSetPlayed] = $backgroundColor;
+                  $setsDiffPoint[$nbSetPlayed] = $simple->third_set_first_team - $simple->third_set_second_team;
+                  $nbSetPlayed++;
+                }
+              } else {
+                // premier set
+                $setsOpponent[$nbSetPlayed] = Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userFirstSecondTeamName);
+                $setsBorderColor[$nbSetPlayed] = $borderColor;
+                $setsBackgroundColor[$nbSetPlayed] = $backgroundColor;
+                $setsDiffPoint[$nbSetPlayed] = $simple->first_set_second_team - $simple->first_set_first_team;
+                $nbSetPlayed++;
+                // second set
+                $setsOpponent[$nbSetPlayed] = Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userFirstSecondTeamName);
+                $setsBorderColor[$nbSetPlayed] = $borderColor;
+                $setsBackgroundColor[$nbSetPlayed] = $backgroundColor;
+                $setsDiffPoint[$nbSetPlayed] = $simple->second_set_second_team - $simple->second_set_first_team;
+                $nbSetPlayed++;
+                // troisieme set
+                if ($simple->third_set_first_team !=0 && $simple->third_set_second_team !=0) {
+                  $setsOpponent[$nbSetPlayed] = Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName);
+                  $setsBorderColor[$nbSetPlayed] = $borderColor;
+                  $setsBackgroundColor[$nbSetPlayed] = $backgroundColor;
+                  $setsDiffPoint[$nbSetPlayed] = $simple->third_set_second_team - $simple->third_set_first_team;
+                  $nbSetPlayed++;
+                }
+              }
+            }
+
+
+
             $results[$index]['date'] = $simple->updated_at;
             $results[$index]['firstTeamWin'] = $simple->first_team_win;
             $results[$index]['firstTeam'] = Helpers::getInstance()->getTeamName($simple->userOneFirstTeamForname, $simple->userOneFirstTeamName);
@@ -199,6 +307,9 @@ class StatController extends Controller
             }
           }
 
+          arsort($opponentsLost);
+          arsort($opponentsWon);
+
           $cumulStat['nbMatchTotal'] = $cumulStat['nbMatchWon'] + $cumulStat['nbMatchLost'];
           if ($cumulStat['nbMatchTotal']) $cumulStat['percentWin'] = (int)(100 * $cumulStat['nbMatchWon'] / $cumulStat['nbMatchTotal']);
           if($cumulStat['nbMatchWon']) $cumulStat['averageSetMatchWon'] = (int)(100 * $cumulStat['diffSetMatchWon'] / $cumulStat['nbMatchWon']) / 100;
@@ -209,7 +320,7 @@ class StatController extends Controller
           $cumulStat['nbMatchWonThreeSets'] = 2 * $cumulStat['nbMatchWon'] - $cumulStat['diffSetMatchWon'];
           $cumulStat['nbMatchLostTwoSets'] = - $cumulStat['diffSetMatchLost'] - $cumulStat['nbMatchLost'];
           $cumulStat['nbMatchLostThreeSets'] =  2 * $cumulStat['nbMatchLost'] + $cumulStat['diffSetMatchLost'];
-        return view('stat.show', compact('results', 'user','type', 'cumulStat', 'gender'));
+        return view('stat.show', compact('results', 'user','type', 'cumulStat', 'gender', 'opponentsWon', 'opponentsLost', 'opponentID', 'setsOpponent', 'setsDiffPoint', 'setsBackgroundColor', 'setsBorderColor'));
     }
 
 

@@ -8,21 +8,77 @@
 
 <div class="panel {{ $type == 'simple' ? 'panel-warning' : '' }} {{ $type == 'double' ? 'panel-info' : '' }} {{ $type == 'mixte' ? 'panel-danger' : '' }}">
     <div class="panel-heading">
-        <h1 class="text-center">Résultat en simple</h1>
+        <h1 class="text-center">Statistiques en simple de {{ $user }}</h1>
     </div>
     <div class="panel-body">
-        {{ $user }} a {{ $cumulStat['percentWin']}}% de victoire. </br>
-        {{ $cumulStat['nbMatchWon'] }} matchs gagnés ({{ $cumulStat['nbMatchWonTwoSets']}} en 2 sets et {{ $cumulStat['nbMatchWonThreeSets']}} en 3 sets) </br>
-        {{ $cumulStat['nbMatchLost'] }} matchs perdus ({{ $cumulStat['nbMatchLostTwoSets']}} en 2 sets et {{ $cumulStat['nbMatchLostThreeSets']}} en 3 sets) </br>
 
-        En moyenne il gagne un match avec {{ $cumulStat['averageSetMatchWon'] }} sets d'avance (La différence de set pour les matchs gagnés est de {{ $cumulStat['diffSetMatchWon'] }}) </br>
-        En moyenne il perd un match avec {{ $cumulStat['averageSetMatchLost'] }} sets de retard (La différence de set pour les matchs perdus est de {{ $cumulStat['diffSetMatchLost'] }}) </br>
+      <div class="col-lg-3">
+        <ul class="stat-list">
+          <li>
+              <h2 class="no-margins">{{ $cumulStat['nbMatchWonTwoSets']}}/{{ $cumulStat['nbMatchTotal']}}</h2>
+              <small>Matchs gagnés en deux sets</small>
+              <div class="stat-percent">{{  (int)(0.5 + 100* $cumulStat['nbMatchWonTwoSets']/ $cumulStat['nbMatchTotal'])}}% <i class="fa fa-bolt text-navy"></i></div>
+              <div class="progress progress-mini">
+                  <div style="width: {{ 100* $cumulStat['nbMatchWonTwoSets']/ $cumulStat['nbMatchTotal']}}%;" class="progress-bar"></div>
+              </div>
+          </li>
+          <li>
+              <h2 class="no-margins ">{{ $cumulStat['nbMatchWonThreeSets']}}/{{ $cumulStat['nbMatchTotal']}}</h2>
+              <small>Matchs gagnés en trois sets</small>
+              <div class="stat-percent">{{ (int) (0.5 + 100* $cumulStat['nbMatchWonThreeSets'] / $cumulStat['nbMatchTotal'])}}% <i class="fa fa-bolt text-navy"></i></div>
+              <div class="progress progress-mini">
+                  <div style="width: {{ 100* $cumulStat['nbMatchWonThreeSets'] / $cumulStat['nbMatchTotal']}}%;" class="progress-bar progress-bar-info"></div>
+              </div>
+          </li>
+          <li>
+              <h2 class="no-margins ">{{ $cumulStat['nbMatchLostThreeSets']}}/{{ $cumulStat['nbMatchTotal']}}</h2>
+              <small>Matchs perdus en trois sets</small>
+              <div class="stat-percent">{{ (int) (0.5 + 100 * $cumulStat['nbMatchLostThreeSets'] / $cumulStat['nbMatchTotal'])}}% <i class="fa fa-bolt text-navy"></i></div>
+              <div class="progress progress-mini">
+                  <div style="width: {{ 100 * $cumulStat['nbMatchLostThreeSets'] / $cumulStat['nbMatchTotal']}}%;" class="progress-bar progress-bar-warning"></div>
+              </div>
+          </li>
+          <li>
+              <h2 class="no-margins ">{{ $cumulStat['nbMatchLostTwoSets']}}/{{ $cumulStat['nbMatchTotal']}}</h2>
+              <small>Matchs perdus en deux sets</small>
+              <div class="stat-percent">{{ (int) (0.5 + 100 * $cumulStat['nbMatchLostTwoSets'] / $cumulStat['nbMatchTotal'])}}% <i class="fa fa-bolt text-navy"></i></div>
+              <div class="progress progress-mini">
+                  <div style="width: {{ 100 * $cumulStat['nbMatchLostTwoSets'] / $cumulStat['nbMatchTotal']}}%;" class="progress-bar progress-bar-danger"></div>
+              </div>
+          </li>
 
-        En moyenne il gagne un set avec {{ $cumulStat['averagePointSetWon'] }} points d'avance (La différence de point pour les sets {{ $cumulStat['nbSetWon'] }} gagnés est de {{ $cumulStat['diffPointSetWon'] }}) </br>
-        En moyenne il perd un set avec {{ $cumulStat['averagePointSetLost'] }} points de retard (La différence de point pour les sets {{ $cumulStat['nbSetLost'] }} perdus est de {{ $cumulStat['diffPointSetLost'] }}) </br>
+          </ul>
+      </div>
 
-        Il a été forfait {{ $cumulStat['nbMyWO'] }} fois et ses adversaires {{ $cumulStat['nbHisWO'] }} fois. </br>
-        Le nombre de match non joué est de {{ $cumulStat['nbUnplayed'] }}.
+      <div class="col-lg-3">
+        <canvas id="myChart" class="chartjs" width="320" height="160" style="display: block; width: 320px; height: 160px;"></canvas>
+        <h2 class="text-center">{{ $cumulStat['percentWin'] }}% de Victoire</h2>
+        <h3 class="text-center">{{ $cumulStat['nbMyWO'] }}<small> Forfaits déclarés</small></h3>
+        <h3 class="text-center">{{ $cumulStat['nbHisWO'] }}<small> Forfaits reçus</small></h3>
+        <h3 class="text-center">{{ $cumulStat['nbUnplayed'] }}<small> Non joués</small></h3>
+      </div>
+
+<div class="col-lg-3">
+  <h3>Les adversaires battus sont </h3>
+@foreach($opponentsWon as $opponentWon => $nbMatch)
+  - <a href="{{ route('stat.show', $opponentID[$opponentWon]) }}">{{ $opponentWon}}</a> battu {{ $nbMatch }} fois </br>
+@endforeach
+</div>
+
+<div class="col-lg-3">
+  <h3>Les adversaires vainqueurs sont </h3>
+@foreach($opponentsLost as $opponentLost => $nbMatch)
+  - <a href="{{ route('stat.show', $opponentID[$opponentLost]) }}">{{ $opponentLost}}</a> vainqueur {{ $nbMatch }} fois </br>
+@endforeach
+</div>
+
+<div class="col-lg-12">
+  <canvas id="lineChart" class="chartjs" height="150" style="display: block; width: 575px; height: 268px;" width="575"></canvas>
+</div>
+
+
+<div class="col-lg-12">
+  <h2>Historique des matchs</h2>
         <table class="table table-striped table-hover">
             <thead>
             <tr>
@@ -91,7 +147,87 @@
             @endforeach
             </tbody>
         </table>
+      </div>
     </div>
 </div>
+
+@stop
+
+
+@section('javascript')
+<script>
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'doughnut',
+
+    // The data for our dataset
+    data: {
+        labels: ["Gagné", "Perdu"],
+        datasets: [{
+            label: "My First dataset",
+            backgroundColor: ["#1ab394", "#f5f5f5"],
+            borderColor: '#f5f5f5',
+            data: [{{ $cumulStat['nbMatchWonTwoSets'] + $cumulStat['nbMatchWonThreeSets']}} ,{{ $cumulStat['nbMatchLostTwoSets'] + $cumulStat['nbMatchLostThreeSets']}}],
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+      rotation: -Math.PI,
+      circumference: Math.PI,
+      "legend": {display: false}
+    }
+});
+
+var myBarChart = new Chart(
+  document.getElementById("lineChart"),{
+    "type":"bar",
+    "data":{
+      "labels": [
+      @foreach($setsOpponent as $opponentName)
+      "{{$opponentName}}",
+      @endforeach
+      ""
+    ],
+      "datasets":[{
+        "label":"Différence de point par set",
+        "data":[
+        @foreach($setsDiffPoint as $diffPoint)
+        "{{$diffPoint}}",
+        @endforeach
+        ""
+      ],
+        "fill":false,
+        "backgroundColor":[
+          @foreach($setsBackgroundColor as $backgroundColor)
+          "{{$backgroundColor}}",
+          @endforeach
+          ""
+        ],
+        "borderColor":[
+          @foreach($setsBorderColor as $borderColor)
+          "{{$borderColor}}",
+          @endforeach
+          ""
+        ],
+        "borderWidth":3}]},
+      "options":{
+        "scales":{
+          "xAxes":[{"ticks":{"display":false}
+            }],
+          "yAxes":[{
+            "ticks":{
+              "beginAtZero":true,
+              "Max":21,
+              "Min":-21,
+              "stepSize":5
+            }}]},
+        "legend": {display: false}
+      }
+    });
+
+</script>
 
 @stop
