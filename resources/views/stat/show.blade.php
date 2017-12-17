@@ -228,6 +228,7 @@ var myBarChart = new Chart(
       }
     });
 
+
 </script>
 
 @stop
