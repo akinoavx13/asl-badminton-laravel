@@ -38,6 +38,7 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TimeSlotController;
 use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StatController;
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -190,4 +191,8 @@ Route::group(['prefix' => 'images', 'middleware' => []], function () use ($route
 
 Route::group(['prefix' => 'administration', 'middleware' => ['auth', 'notCE', 'admin']], function() use ($router) {
    AdministrationController::routes($router);
+});
+
+Route::group(['prefix' => 'stat', 'middleware' => ['auth', 'notCE']], function() use ($router) {
+   StatController::routes($router);
 });

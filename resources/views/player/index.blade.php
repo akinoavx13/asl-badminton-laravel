@@ -67,7 +67,7 @@
                                         <tr>
                                             <td class="text-center">{{ $player->user->forname }}</td>
                                             <td class="text-center">{{ $player->user->name }}</td>
-                                            <td class="text-center">{{ $player->user->email }}</td>
+                                            <td class="text-center"><a href="{{ route('stat.show', $player->user->id) }}">{{ $player->user->email }}</a></td>
                                             <td class="text-center">
                                                 @if($player->user->hasGender('man'))
                                                     Homme

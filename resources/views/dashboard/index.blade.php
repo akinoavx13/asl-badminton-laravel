@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1 class="text-center">Tableau de bord</h1>
+    <h1 class="text-center">Tableau de bord </h1>
     <hr>
 
     @if(count($tableReservation['simple']) <= 0 && count($tableReservation['double']) <= 0 && count($tableReservation['mixte']) <= 0)
@@ -20,7 +20,11 @@
                     <div class="col-md-12">
                         <div class="panel {{ $type == 'simple' ? 'panel-warning' : '' }} {{ $type == 'double' ? 'panel-info' : '' }} {{ $type == 'mixte' ? 'panel-danger' : '' }}">
                             <div class="panel-heading">
-                                <h1 class="text-center">Championnat de {{ $type }} (Poule n° {{ $pools[$type]['pool_number'] }})</h1>
+                                <h1 class="text-center">Championnat de {{ $type }} (Poule n° {{ $pools[$type]['pool_number'] }})
+                                  <a href="{{ route('stat.show', $userID) }}"> / (new: statistiques
+                                    <i class="fa fa-area-chart"></i>)
+                                  </a>
+                                </h1>
                             </div>
                             <div class="panel-body">
                                 <table class="table table-striped table-hover">

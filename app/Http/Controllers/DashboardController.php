@@ -152,7 +152,8 @@ class DashboardController extends Controller
 
                 if (count($tableReservation) > 0)
                 {
-                    return view('dashboard.index', compact('tableReservation', 'pools', 'anchor'));
+                    $userID = $this->user->id;
+                    return view('dashboard.index', compact('tableReservation', 'pools', 'anchor', 'userID'));
                 }
             }
         }
