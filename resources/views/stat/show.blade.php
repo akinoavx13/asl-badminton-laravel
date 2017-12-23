@@ -6,8 +6,12 @@
 
 @section('content')
 
+
 @foreach(['simple', 'double', 'mixte'] as $type)
+
+
   <div class="panel {{ $type == 'simple' ? 'panel-warning' : '' }} {{ $type == 'double' ? 'panel-info' : '' }} {{ $type == 'mixte' ? 'panel-danger' : '' }}">
+
       <div class="panel-heading">
           <h1 class="text-center">Statistiques en {{$type}} de {{ $user }}</h1>
       </div>
@@ -99,7 +103,7 @@
     <h3>Série de victoires: <span class="label label-primary">{{ $longuestWonSerie[$type]}}</span></h3>
     <h3>Les adversaires battus sont </h3>
   @foreach($opponentsWon[$type] as $opponentWon => $nbMatch)
-    - <a href="{{ route('stat.show', $opponentID[$type][$opponentWon]) }}">{{ $opponentWon}}</a> battu {{ $nbMatch }} fois </br>
+    - <a href="{{ route('stat.show', $opponentID[$type][$opponentWon]) }}">{{ $opponentWon}}</a> ({{ $nbMatch }} fois) </br>
   @endforeach
   </div>
 
@@ -107,18 +111,31 @@
     <h3>Série de défaites: <span class="label label-warning">{{ $longuestLostSerie[$type]}}</span></h3>
     <h3>Les adversaires vainqueurs sont </h3>
   @foreach($opponentsLost[$type] as $opponentLost => $nbMatch)
-    - <a href="{{ route('stat.show', $opponentID[$type][$opponentLost]) }}">{{ $opponentLost}}</a> vainqueur {{ $nbMatch }} fois </br>
+    - <a href="{{ route('stat.show', $opponentID[$type][$opponentLost]) }}">{{ $opponentLost}}</a> ({{ $nbMatch }} fois) </br>
   @endforeach
   </div>
 
   <div class="col-lg-12">
-    <canvas id="lineChart{{$type}}" class="chartjs" height="150" style="display: block; width: 575px; height: 268px;" width="575"></canvas>
-    <small>Différence de points par set</small>
-  </div>
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseDiffSet{{$type}}">Différence de points par set</a>
+        </h2>
 
+    </div>
+    <div id="collapseDiffSet{{$type}}" class="panel-collapse collapse in">
+    <canvas id="lineChart{{$type}}" class="chartjs" height="150" style="display: block; width: 575px; height: 268px;" width="575"></canvas>
+  </div>
+</div>
 
   <div class="col-lg-12">
-    <h2>Historique des matchs</h2>
+
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseHistorique{{$type}}">Historique des matchs</a>
+        </h2>
+
+    </div>
+    <div id="collapseHistorique{{$type}}" class="panel-collapse collapse in">
           <table class="table table-striped table-hover">
               <thead>
               <tr>
@@ -187,6 +204,7 @@
               @endforeach
               </tbody>
           </table>
+        </div>
         </div>
       </div>
   </div>
