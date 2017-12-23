@@ -224,6 +224,8 @@ class StatController extends Controller
       $name = preg_replace( '#(ü)+#', 'u', $name );
       $name = preg_replace( '#(û)+#', 'u', $name );
 
+      $name = preg_replace( '#(&)+#', '-', $name );
+
       $name = preg_replace( '#(ç)+#', 'c', $name );
 
       return $name;
