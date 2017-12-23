@@ -78,6 +78,17 @@
                 @endif
             @endif
 
+            @if(! $auth->hasRole('ce'))
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                    <li class="{{ Request::is('stat*')? 'active' : '' }}">
+                        <a href="{{ route('stat.show', $auth) }}">
+                            <i class="fa fa-area-chart"></i>
+                            <span class="nav-label">Statistiques</span>
+                        </a>
+                    </li>
+                @endif
+            @endif
+
             @if(!$auth->hasRole('ce'))
                 @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure') || $myPlayer == null)
                     <li class="{{ Request::is('championship/index') ? 'active' : '' }}"><a

@@ -20,11 +20,7 @@
                     <div class="col-md-12">
                         <div class="panel {{ $type == 'simple' ? 'panel-warning' : '' }} {{ $type == 'double' ? 'panel-info' : '' }} {{ $type == 'mixte' ? 'panel-danger' : '' }}">
                             <div class="panel-heading">
-                                <h1 class="text-center">Championnat de {{ $type }} (Poule n° {{ $pools[$type]['pool_number'] }})
-                                  <a href="{{ route('stat.show', $userID) }}"> / (new: statistiques
-                                    <i class="fa fa-area-chart"></i>)
-                                  </a>
-                                </h1>
+                                <h1 class="text-center">Championnat de {{ $type }} (Poule n° {{ $pools[$type]['pool_number'] }})</h1>
                             </div>
                             <div class="panel-body">
                                 <table class="table table-striped table-hover">
