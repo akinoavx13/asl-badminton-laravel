@@ -312,7 +312,7 @@ class PlayerReservationController extends Controller
                 ->setDtEnd(Carbon::create($date->year, $date->month, $date->day, $end[0], $end[1]));
 
             $icsCalendar->addComponent($icsEvent);
-dd($icsCalendar->render());
+
             $icsFile = fopen(public_path() . "/ics/reservation$reservation->id.ics", 'a');
             File::put(public_path() . "/ics/reservation$reservation->id.ics", $icsCalendar->render());
             fclose($icsFile);
