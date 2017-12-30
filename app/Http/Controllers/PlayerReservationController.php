@@ -256,7 +256,7 @@ class PlayerReservationController extends Controller
                     $firstUserFirstTeam = $firstPlayerFirstTeam->user;
                     if ($firstUserFirstTeam !== null)
                     {
-                        $icsAttendees->add($firstUserFirstTeam->email);
+                        $icsAttendees->add($firstUserFirstTeam->email, ['RSVP' => 'TRUE']);
                         $icsName .= $firstUserFirstTeam->forname . " " . $firstUserFirstTeam->name;
                     }
                 }
@@ -265,7 +265,7 @@ class PlayerReservationController extends Controller
                     $seconUserFirstTeam = $secondPlayerFirstTeam->user;
                     if ($seconUserFirstTeam !== null)
                     {
-                        $icsAttendees->add($seconUserFirstTeam->email);
+                        $icsAttendees->add($seconUserFirstTeam->email, ['RSVP' => 'TRUE']);
                         $icsName .= ' & ' . $seconUserFirstTeam->forname . " " . $seconUserFirstTeam->name;
                     }
                 }
@@ -281,7 +281,7 @@ class PlayerReservationController extends Controller
                     $firstUserSecondTeam = $firstPlayerSecondTeam->user;
                     if ($firstUserSecondTeam !== null)
                     {
-                        $icsAttendees->add($firstUserSecondTeam->email);
+                        $icsAttendees->add($firstUserSecondTeam->email, ['RSVP' => 'TRUE']);
                         $icsName .= ' VS ' . $firstUserSecondTeam->forname . " " . $firstUserSecondTeam->name;
                     }
                 }
@@ -290,7 +290,7 @@ class PlayerReservationController extends Controller
                     $seconUserSecondTeam = $secondPlayerSecondTeam->user;
                     if ($seconUserSecondTeam !== null)
                     {
-                        $icsAttendees->add($seconUserSecondTeam->email);
+                        $icsAttendees->add($seconUserSecondTeam->email, ['RSVP' => 'TRUE']);
                         $icsName .= ' & ' . $seconUserSecondTeam->forname . " " . $seconUserSecondTeam->name;
                     }
                 }
