@@ -33,7 +33,7 @@ class AvailabilityController extends Controller
       $router->pattern('user_id', '[0-9]+');
       $router->pattern('formule', '[0-9-a-z_]+');
       //user list
-      
+
       $router->get('/index/{formule}', [
           'uses' => 'AvailabilityController@index',
           'as'   => 'availability.index',
@@ -186,7 +186,7 @@ class AvailabilityController extends Controller
       }
 
       return view('availability.index',
-          compact('timeSlots', 'opponents', 'allDays', 'reservations', 'lastDayMonth', 'userId'));
+          compact('timeSlots', 'opponents', 'allDays', 'reservations', 'lastDayMonth', 'userId', 'formule'));
     }
 
     /**

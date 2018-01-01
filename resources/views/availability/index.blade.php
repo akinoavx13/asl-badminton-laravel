@@ -8,7 +8,7 @@
 
 
     <div class="row">
-      {!! Form::open(['route' => ['availability.index'], 'class' => 'form-horizontal']) !!}
+      {!! Form::open(['route' => ['availability.index', $formule], 'class' => 'form-horizontal']) !!}
         <div class="col-md-12">
             @if((count($timeSlots) > 0 || count($opponents) > 0) && $lastDayMonth)
                 <div class="ibox float-e-margins">
