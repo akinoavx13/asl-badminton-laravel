@@ -85,6 +85,8 @@ class ReservationController extends Controller
           ->where('periods.start', '<=', $today)
           ->where('periods.end', '>=', $today)
           ->get();
+          //dd($currentPeriod->count());
+        if ($currentPeriod->count() == 0) return redirect()->back()->with('error', "Pas de championnat ni tournoi en cours..");
         //dd($currentPeriod[0]->start);
         $mixtes = Score::select(
               'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.mixte')
