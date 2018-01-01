@@ -125,6 +125,17 @@
                 @endif
             @endif
 
+            @if(!$auth->hasRole('ce'))
+                @if($myPlayer !== null && ! $myPlayer->hasFormula('leisure'))
+                    <li class="{{ Request::is('availability*') ? 'active' : '' }}">
+                        <a href="{{ route('availability.index','all') }}">
+                            <i class="fa fa-users"></i>
+                            <span class="nav-label">Disponibilités</span>
+                        </a>
+                    </li>
+                @endif
+            @endif
+
             @if($auth->hasRole('ce'))
                 <li class="{{ Request::is('ce') ? 'active' : '' }}">
                     <a href="{{ route('ce.index') }}">

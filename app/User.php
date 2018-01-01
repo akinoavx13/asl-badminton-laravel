@@ -88,6 +88,11 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\AdminsReservation');
     }
 
+    public function availability()
+    {
+        return $this->hasMany('App\Availability');
+    }
+
     public function testimonials()
     {
         return $this->hasMany('App\Testimonial');

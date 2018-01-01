@@ -26,6 +26,11 @@ class TimeSlot extends Model
         return $this->belongsToMany('App\AdminsReservation');
     }
 
+    public function availability()
+    {
+        return $this->hasMany('App\Availability');
+    }
+
     public function __toString()
     {
         return $this->start . ' - ' . $this->end;
