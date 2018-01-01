@@ -39,6 +39,7 @@ use App\Http\Controllers\TimeSlotController;
 use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatController;
+use App\Http\Controllers\AvailabilityController;
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -195,4 +196,8 @@ Route::group(['prefix' => 'administration', 'middleware' => ['auth', 'notCE', 'a
 
 Route::group(['prefix' => 'stat', 'middleware' => ['auth', 'notCE']], function() use ($router) {
    StatController::routes($router);
+});
+
+Route::group(['prefix' => 'availability', 'middleware' => ['auth', 'notCE']], function() use ($router) {
+   AvailabilityController::routes($router);
 });
