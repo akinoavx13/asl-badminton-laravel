@@ -59,7 +59,8 @@ class AvailabilityController extends Controller
             ->where('teams.enable', true)
             ->where('userOne.id', $userId)
             ->where('championship_pools.period_id', $currentPeriodId)
-            ->firstOrFail();
+            ->first();
+        if($pool == null) return $results;
 
         $poolId = $pool->championshipPoolId;
         $opponents = ChampionshipRanking::select('userOne.name as userName', 'userOne.forname as userForname', 'userOne.id as userId')
@@ -97,7 +98,9 @@ class AvailabilityController extends Controller
                 ->where('userTwo.id', $userId)
                 ->where('championship_pools.period_id', $currentPeriodId);
             })
-            ->firstOrFail();
+            ->first();
+
+        if($pool == null) return $results;
 
         $poolId = $pool->championshipPoolId;
         $opponents = ChampionshipRanking::select('userOne.name as userOneName', 'userOne.forname as userOneForname', 'userOne.id as userOneId', 'userTwo.name as userTwoName', 'userTwo.forname as userTwoForname', 'userTwo.id as userTwoId')
