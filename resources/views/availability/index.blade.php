@@ -111,7 +111,7 @@
             @endif
         </div>
         <div class="form-group text-center">
-            {!! Form::submit('Mise à jour de vos dispo', ['class' => 'btn btn-primary']) !!}
+            {!! Form::submit('Mise à jour de vos dispos', ['class' => 'btn btn-primary']) !!}
         </div>
       {!! Form::close() !!}
     </div>
