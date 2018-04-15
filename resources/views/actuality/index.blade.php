@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <hr>
-                @if(count($actuality['posts']) > 0)
+                @if($actuality['posts'] != null && count($actuality['posts']) > 0)
                     @foreach($actuality['posts'] as $post)
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-md-1">
