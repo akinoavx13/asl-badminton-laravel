@@ -25,44 +25,45 @@
                         <hr>
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th rowspan="{{ count($timeSlots) }}" class="text-center">Jour</th>
-                                    <th class="text-center">Créneaux</th>
-                                    @foreach($opponents as $opponent)
-                                        <th class="text-center">{{ $opponent }}</th>
-                                    @endforeach
-                                </tr>
-                                </thead>
-
                                 <tbody>
-                                @foreach($allDays as $day)
+                                @foreach($allDays as $index => $day)
+                                  @if ($index == 0 || $day->dayOfWeek == 1)
+                                    <thead>
+                                      <tr>
+                                          <th class="text-center" style="padding:3px">Jour</th>
+                                          <th class="text-center" style="padding:3px">Créneaux</th>
+                                          @foreach($opponents as $opponent)
+                                              <th class="text-center" style="padding:3px">{{ $opponent }}</th>
+                                          @endforeach
+                                      </tr>
+                                    </thead>
+                                  @endif
                                     <tr class="text-center">
-                                        <td rowspan="{{ count($timeSlots) }}" style="background: #fbfcfc;" id="{{
+                                        <td rowspan="{{ count($timeSlots) }}" style="padding:3px;background: #fbfcfc;" id="{{
                                         $day->format('Y-m-d') }}"
                                             class="{{ $day->format('Y-m-d') == \Carbon\Carbon::today()->format('Y-m-d') ? 'today' : '' }}">
                                             {!! $day->format('Y-m-d') == \Carbon\Carbon::today()->format('Y-m-d') ? ucfirst($day->format('l j F Y')) . '<br>Aujourd\'hui' : ucfirst($day->format('l j F Y')) !!}
                                         </td>
-                                        <td>
+                                        <td style="padding:3px">
                                             {{ $timeSlots[0] }}
                                         </td>
                                         @foreach($opponents as $index => $opponent)
-                                            <td>
+                                            <td style="padding:3px">
                                                 @if($reservations[$day->format('Y-m-d')][$timeSlots[0]->id][$opponent]['type'] == 1)
                                                   @if($index == $userId)
                                                        <div class="form-group">
-                                                         <span class="btn btn-primary btn-rounded">{!! Form::checkbox($index ."__" . $day->format('Y-m-d') ."__".$timeSlots[0]->id, 1, true) !!}</span>
+                                                         <span class="btn btn-primary btn-rounded btn-sm">{!! Form::checkbox($index ."__" . $day->format('Y-m-d') ."__".$timeSlots[0]->id, 1, true) !!}</span>
                                                       </div>
                                                   @else
-                                                      <span class="btn btn-primary btn-rounded">Dispo</span>
+                                                      <span class="btn btn-primary btn-rounded btn-sm">Dispo</span>
                                                   @endif
                                                 @else
                                                   @if($index == $userId)
                                                        <div class="form-group">
-                                                         <span class="btn btn-danger">{!! Form::checkbox($index ."__" . $day->format('Y-m-d') ."__".$timeSlots[0]->id, 1, false) !!}</span>
+                                                         <span class="btn btn-danger btn-sm">{!! Form::checkbox($index ."__" . $day->format('Y-m-d') ."__".$timeSlots[0]->id, 1, false) !!}</span>
                                                       </div>
                                                   @else
-                                                      <span class="btn btn-danger">Non</span>
+                                                      <span class="btn btn-danger btn-sm">Non</span>
                                                   @endif
                                                 @endif
                                             </td>
@@ -72,24 +73,24 @@
                                         @foreach($timeSlots as $timeSlot)
                                             @if($timeSlot != $timeSlots[0])
                                                 <tr class="text-center">
-                                                    <td>{{ $timeSlot }}</td>
+                                                    <td style="padding:3px">{{ $timeSlot }}</td>
                                                     @foreach($opponents as $index => $opponent)
-                                                        <td>
+                                                        <td style="padding:3px">
                                                             @if($reservations[$day->format('Y-m-d')][$timeSlot->id][$opponent]['type'] == 1)
                                                                 @if($index == $userId)
                                                                     <div class="form-group">
-                                                                      <span class="btn btn-primary btn-rounded">{!! Form::checkbox($index ."__" . $day->format('Y-m-d') ."__". $timeSlot->id, 1, true) !!}</span>
+                                                                      <span class="btn btn-primary btn-rounded btn-sm">{!! Form::checkbox($index ."__" . $day->format('Y-m-d') ."__". $timeSlot->id, 1, true) !!}</span>
                                                                    </div>
                                                                @else
-                                                                   <span class="btn btn-primary btn-rounded">Dispo</span>
+                                                                   <span class="btn btn-primary btn-rounded btn-sm">Dispo</span>
                                                                @endif
                                                             @else
                                                                 @if($index == $userId)
                                                                     <div class="form-group">
-                                                                      <span class="btn btn-danger">{!! Form::checkbox($index ."__" . $day->format('Y-m-d') ."__". $timeSlot->id, 1, false) !!}</span>
+                                                                      <span class="btn btn-danger btn-sm">{!! Form::checkbox($index ."__" . $day->format('Y-m-d') ."__". $timeSlot->id, 1, false) !!}</span>
                                                                    </div>
                                                                @else
-                                                                   <span class="btn btn-danger">Non</span>
+                                                                   <span class="btn btn-danger btn-sm">Non</span>
                                                                @endif
                                                             @endif
                                                         </td>
