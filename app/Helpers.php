@@ -99,4 +99,14 @@ class Helpers
             return $fornameOne . ' ' . $nameOne . ' & ' . $fornameTwo . ' ' . $nameTwo;
         }
     }
+
+    public static function nbDifference($data, $key1, $key2)
+    {
+        $nbDiff = 0;
+        foreach ($data[$key1] as $index => $value) {
+            if ($value != $data[$key2][$index]) $nbDiff++;
+        }
+
+        return $nbDiff;
+    }
 }

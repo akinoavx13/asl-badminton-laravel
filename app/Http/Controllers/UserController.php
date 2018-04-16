@@ -257,7 +257,7 @@ class UserController extends Controller
             $data['userName'] = $user->forname . " " . $user->name;
             $data['adminUserName'] = $admin->forname . " " . $admin->name;
 
-            SendMail::send($admin, 'updateProfil', $data, 'Modification d\'un profil AS Lectra Badminton');
+            if (Helpers::nbDifference($data,'oldValues', 'newValues') > 1) SendMail::send($admin, 'updateProfil', $data, 'Modification d\'un profil AS Lectra Badminton');
         }
 
         return redirect()->route('user.show', $user->id)->with('success',

@@ -309,6 +309,7 @@ class PlayerController extends Controller
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->double_partner, 'double');
         $this->createDoubleOrMixteTeams($player, $activeSeason, $request->mixte_partner, 'mixte');
 
+
         if ($player->hasFormula('competition') && $data['oldValues']['formula'] != 'competition') {
             SendMail::send($this->user, 'subscribeCompetitionFormula', $this->user->attributesToArray(), 'Inscription
              formule compétition AS Lectra Badminton');
@@ -321,9 +322,8 @@ class PlayerController extends Controller
         $data['newValues'] = $player->attributesToArray();
         $data['userName'] = $this->user->forname . " " . $this->user->name;
         $data['adminUserName'] = $admin->forname . " " . $admin->name;
-
-        SendMail::send($admin, 'updateSubscribe', $data, 'Modification d\'une inscription AS Lectra
-        Badminton');
+        
+        if (Helpers::nbDifference($data,'oldValues', 'newValues') > 1) SendMail::send($admin, 'updateSubscribe', $data, 'Modification d\'une inscription AS Lectra Badminton');
 
         return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
     }
