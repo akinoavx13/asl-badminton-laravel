@@ -46,31 +46,10 @@ class SendMail
                         }
                         else
                         {
-                            if (count($user) > 1)
-                            {
-                                //mail resa
-                                if ($attachFile !== null)
-                                {
-                                    $message->to($user)->subject($subject);
-                                }
-                                else
-                                {
-                                    $message->to($user)->subject($subject)->cc(Helpers::getInstance()->ccMail());
-                                }
-                            }
-                            elseif (count($user) == 1)
-                            {
-                                //mail resa
-                                if ($attachFile !== null)
-                                {
-                                    $message->to($user->email, $user)->subject($subject);
-                                }
-                                else
-                                {
-                                    $message->to($user->email, $user)->subject($subject)->cc(Helpers::getInstance()->ccMail());
-                                }
-                            }
-
+                            if (is_array($user) == true) $message->to($user)->subject($subject);
+                            if (is_object($user) == true) $message->to($user->email, $user)->subject($subject);
+                            //si pas attachement c'est un mail de resa on ne met pas le president en copie
+                            if ($attachFile == null) $message->cc(Helpers::getInstance()->ccMail());
                         }
 
                         if ($attachFile !== null)

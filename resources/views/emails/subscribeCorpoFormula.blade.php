@@ -14,8 +14,7 @@
 
     <p>
         Pour finaliser votre inscription, merci de bien vouloir remplir les formulaires ci-dessous et les transmettre le
-        plus tôt
-        possible à Christophe Mahéo
+        plus tôt possible à Christophe Mahéo
     </p>
 
     <ul>

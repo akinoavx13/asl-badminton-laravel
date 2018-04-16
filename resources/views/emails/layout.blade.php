@@ -9,22 +9,11 @@
 
 <body>
 
-<h1 class="text-center">
-    AS Lectra Badminton
-</h1>
-
-<hr>
-
-<h3 class="text-center">
-    @yield('title')
-</h3>
-
 @yield('content')
 
 <br>
-<p>Cordialement, </p>
-
-<p>L'AS Lectra Badminton</p>
+<p>Cordialement, <br>
+L'AS Lectra Badminton</p>
 </body>
 
 </html>
