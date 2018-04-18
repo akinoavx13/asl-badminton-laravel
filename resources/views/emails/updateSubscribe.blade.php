@@ -28,25 +28,25 @@
                 <td>
                     @if($oldValues[$index] === true)
                         @if($oldValues[$index] !== $newValue)
-                            <strong class="text-danger">true</strong>
+                            <span class="btn btn-primary btn-rounded btn-sm">true</span>
                         @else
                             true
                         @endif
                     @elseif($oldValues[$index] === false)
                         @if($oldValues[$index] !== $newValue)
-                            <strong class="text-danger">false</strong>
+                            <span class="btn btn-primary btn-rounded btn-sm">false</span>
                         @else
                             false
                         @endif
                     @elseif($oldValues[$index] === null)
                         @if($oldValues[$index] !== $newValue)
-                            <strong class="text-danger">null</strong>
+                            <span class="btn btn-primary btn-rounded btn-sm">null</span>
                         @else
                             null
                         @endif
                     @else
                         @if($oldValues[$index] !== $newValue)
-                            <strong class="text-danger">{{ $oldValues[$index] }}</strong>
+                            <span class="btn btn-primary btn-rounded btn-sm">{{ $oldValues[$index] }}</span>
                         @else
                             {{ $oldValues[$index] }}
                         @endif
@@ -55,25 +55,25 @@
                 <td>
                     @if($newValue === true)
                         @if($oldValues[$index] !== $newValue)
-                            <strong class="text-danger">true</strong>
+                            <span class="btn btn-primary btn-rounded btn-sm">true</span>
                         @else
                             true
                         @endif
                     @elseif($newValue === false)
                         @if($oldValues[$index] !== $newValue)
-                            <strong class="text-danger">false</strong>
+                            <span class="btn btn-primary btn-rounded btn-sm">false</span>
                         @else
                             false
                         @endif
                     @elseif($newValue === null)
                         @if($oldValues[$index] !== $newValue)
-                            <strong class="text-danger">null</strong>
+                            <span class="btn btn-primary btn-rounded btn-sm">null</span>
                         @else
                             null
                         @endif
                     @else
                         @if($oldValues[$index] !== $newValue)
-                            <strong class="text-danger">{{ $newValue }}</strong>
+                            <span class="btn btn-primary btn-rounded btn-sm">{{ $newValue }}</span>
                         @else
                             {{ $newValue }}
                         @endif

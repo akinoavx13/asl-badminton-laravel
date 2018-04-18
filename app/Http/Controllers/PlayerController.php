@@ -290,6 +290,8 @@ class PlayerController extends Controller
         }
 
         $data['oldValues'] = $player->attributesToArray();
+        $data['oldValues']['player-double'] = "";
+        $data['oldValues']['player-mixte'] = "";
 
         $player->update([
             'formula'       => $request->formula,
@@ -320,9 +322,23 @@ class PlayerController extends Controller
 
         $admin = User::where('email', 'c.maheo@lectra.com')->first();
         $data['newValues'] = $player->attributesToArray();
+        $data['newValues']['player-double'] = "";
+        $data['newValues']['player-mixte'] = "";
+        if ($request->double_partner != 'search') 
+            {
+                $doublePartner =  Player::findOrFail($request->double_partner);
+                $data['newValues']['player-double'] = Helpers::getInstance()->getTeamName($doublePartner->user->forname, $doublePartner->user->name);
+            }
+
+        if ($request->mixte_partner != 'search') 
+            {
+                $mixtePartner =  Player::findOrFail($request->mixte_partner);
+                $data['newValues']['player-mixte'] = Helpers::getInstance()->getTeamName($mixtePartner->user->forname, $mixtePartner->user->name);
+            }
+
         $data['userName'] = $this->user->forname . " " . $this->user->name;
         $data['adminUserName'] = $admin->forname . " " . $admin->name;
-        
+
         if (Helpers::nbDifference($data,'oldValues', 'newValues') > 1) SendMail::send($admin, 'updateSubscribe', $data, 'Modification d\'une inscription AS Lectra Badminton');
 
         return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
