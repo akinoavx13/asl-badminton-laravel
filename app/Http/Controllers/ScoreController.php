@@ -644,18 +644,18 @@ class ScoreController extends Controller
 
                         $score = Score::where('first_team_id', '=', $exaequo[1]->team_id)
                             ->where('second_team_id', '=', $exaequo[2]->team_id)
-                            ->where('created_at', '>=', $activePeriod->start)
-                            ->where('created_at', '<=', $activePeriod->end)
+                            ->where('created_at', '>=', $activePeriod->start->format('Y-m-d'))
+                            ->where('created_at', '<=', $activePeriod->end->format('Y-m-d'))
                             ->orderBy('created_at', 'desc')
                             ->orWhere(function ($query) use ($exaequo, $activePeriod, $ranking) {
                                 $query->where('first_team_id', $exaequo[2]->team_id)
                                     ->where('second_team_id', $exaequo[1]->team_id)
-                                    ->where('created_at', '>=', $activePeriod->start)
-                                    ->where('created_at', '<=', $activePeriod->end)
+                                    ->where('created_at', '>=', $activePeriod->start->format('Y-m-d'))
+                                    ->where('created_at', '<=', $activePeriod->end->format('Y-m-d'))
                                     ->orderBy('created_at', 'desc');
                             })
                             ->first();
-
+                        
                         if ($score != null) {
                             // il y a un score on cherche qui est le gagnant si c'est le deuxieme joueur on inverse le ranking
                             if ($score->my_wo) {
