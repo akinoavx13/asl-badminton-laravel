@@ -86,57 +86,66 @@ class ReservationController extends Controller
           ->where('periods.end', '>=', $today)
           ->get();
           //dd($currentPeriod->count());
-        if ($currentPeriod->count() == 0) return redirect()->back()->with('error', "Pas de championnat ni tournoi en cours..");
-        //dd($currentPeriod[0]->start);
-        $mixtes = Score::select(
-              'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.mixte')
-              ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-              ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-              ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
-              ->where('scores.unplayed', true)
-              ->where('teams.mixte', true)
-              ->get();
-        $nbMixte = $mixtes->count();
+        
+        $nbMixte = 0;
+        $nbDoubleMen =0;
+        $nbDoubleWomen = 0;
+        $nbSimpleMen = 0;
+        $nbSimpleWomen=0;
+        
+        if ($currentPeriod->count() != 0) 
+        {
+            //dd($currentPeriod[0]->start);
+            $mixtes = Score::select(
+                  'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.mixte')
+                  ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
+                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.unplayed', true)
+                  ->where('teams.mixte', true)
+                  ->get();
+            $nbMixte = $mixtes->count();
 
-        $doublesMen = Score::select(
-              'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.double_man')
-              ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-              ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-              ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
-              ->where('scores.unplayed', true)
-              ->where('teams.double_man', true)
-              ->get();
-        $nbDoubleMen = $doublesMen->count();
+            $doublesMen = Score::select(
+                  'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.double_man')
+                  ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
+                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.unplayed', true)
+                  ->where('teams.double_man', true)
+                  ->get();
+            $nbDoubleMen = $doublesMen->count();
 
-        $doublesWomen = Score::select(
-              'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.double_woman')
-              ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-              ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-              ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
-              ->where('scores.unplayed', true)
-              ->where('teams.double_woman', true)
-              ->get();
-        $nbDoubleWomen = $doublesWomen->count();
+            $doublesWomen = Score::select(
+                  'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.double_woman')
+                  ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
+                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.unplayed', true)
+                  ->where('teams.double_woman', true)
+                  ->get();
+            $nbDoubleWomen = $doublesWomen->count();
 
-        $simpleMen = Score::select(
-              'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.simple_man')
-              ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-              ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-              ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
-              ->where('scores.unplayed', true)
-              ->where('teams.simple_man', true)
-              ->get();
-        $nbSimpleMen = $simpleMen->count();
+            $simpleMen = Score::select(
+                  'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.simple_man')
+                  ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
+                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.unplayed', true)
+                  ->where('teams.simple_man', true)
+                  ->get();
+            $nbSimpleMen = $simpleMen->count();
 
-        $simpleWomen = Score::select(
-              'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.simple_woman')
-              ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-              ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-              ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
-              ->where('scores.unplayed', true)
-              ->where('teams.simple_woman', true)
-              ->get();
-        $nbSimpleWomen = $simpleWomen->count();
+            $simpleWomen = Score::select(
+                  'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.simple_woman')
+                  ->join('teams', 'teams.id', '=', 'scores.first_team_id')
+                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
+                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.unplayed', true)
+                  ->where('teams.simple_woman', true)
+                  ->get();
+            $nbSimpleWomen = $simpleWomen->count();
+        }
 
         $nbSimpleBooked = 0;
         $nbDoubleBooked = 0;

@@ -25,57 +25,57 @@
         @foreach($newValues as $index => $newValue)
             <tr class="text-center">
                 <td>{{ $index }}</td>
-                <td>
+                
                     @if($oldValues[$index] === true)
                         @if($oldValues[$index] !== $newValue)
-                            <span class="btn btn-primary btn-rounded btn-sm">true</span>
+                            <td style="background-color: #4CAF50;color: white;font-weight: bold;">true
                         @else
-                            true
+                            <td>true
                         @endif
                     @elseif($oldValues[$index] === false)
                         @if($oldValues[$index] !== $newValue)
-                            <span class="btn btn-primary btn-rounded btn-sm">false</span>
+                            <td style="background-color: #4CAF50;color: white;font-weight: bold;">false
                         @else
-                            false
+                            <td>false
                         @endif
                     @elseif($oldValues[$index] === null)
                         @if($oldValues[$index] !== $newValue)
-                            <span class="btn btn-primary btn-rounded btn-sm">null</span>
+                            <td style="background-color: #4CAF50;color: white;font-weight: bold;">null
                         @else
-                            null
+                            <td>null
                         @endif
                     @else
                         @if($oldValues[$index] !== $newValue)
-                            <span class="btn btn-primary btn-rounded btn-sm">{{ $oldValues[$index] }}</span>
+                            <td style="background-color: #4CAF50;color: white;font-weight: bold;">{{ $oldValues[$index] }}
                         @else
-                            {{ $oldValues[$index] }}
+                            <td>{{ $oldValues[$index] }}
                         @endif
                     @endif
                 </td>
-                <td>
+                
                     @if($newValue === true)
                         @if($oldValues[$index] !== $newValue)
-                            <span class="btn btn-primary btn-rounded btn-sm">true</span>
+                            <td style="background-color: #4CAF50;color: white;font-weight: bold;">true
                         @else
-                            true
+                            <td>true
                         @endif
                     @elseif($newValue === false)
                         @if($oldValues[$index] !== $newValue)
-                            <span class="btn btn-primary btn-rounded btn-sm">false</span>
+                            <td style="background-color: #4CAF50;color: white;font-weight: bold;">false
                         @else
-                            false
+                            <td>false
                         @endif
                     @elseif($newValue === null)
                         @if($oldValues[$index] !== $newValue)
-                            <span class="btn btn-primary btn-rounded btn-sm">null</span>
+                            <td style="background-color: #4CAF50;color: white;font-weight: bold;">null
                         @else
-                            null
+                            <td>null
                         @endif
                     @else
                         @if($oldValues[$index] !== $newValue)
-                            <span class="btn btn-primary btn-rounded btn-sm">{{ $newValue }}</span>
+                            <td style="background-color: #4CAF50;color: white;font-weight: bold;">{{ $newValue }}
                         @else
-                            {{ $newValue }}
+                            <td>{{ $newValue }}
                         @endif
                     @endif
                 </td>

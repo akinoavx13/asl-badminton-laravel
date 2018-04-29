@@ -141,7 +141,7 @@ class AvailabilityController extends Controller
         ->where('periods.end', '>=', $today)
         ->first();
 
-      if($currentPeriod == null) return redirect()->back()->with('error', "Pas de championnat ni tournoi en cours..");
+      if($currentPeriod == null) return redirect()->back()->with('error', "Pas de championnat en cours..");
 
       // on cherche les adversaires
       $opponents = [];

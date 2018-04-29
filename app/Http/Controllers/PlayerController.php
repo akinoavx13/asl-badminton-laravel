@@ -236,7 +236,7 @@ class PlayerController extends Controller
 
         if ($admin != null) {
             $data['newValues'] = $player->attributesToArray();
-            $data['userName'] = $this->user->forname . " " . $this->user->name;
+            $data['userName'] = $player->user->forname . " " . $player->user->name;
             $data['adminUserName'] = $admin->forname . " " . $admin->name;
             SendMail::send($admin, 'newSubscribe', $data, 'Nouvelle inscription AS Lectra Badminton');
         }
@@ -336,7 +336,7 @@ class PlayerController extends Controller
                 $data['newValues']['player-mixte'] = Helpers::getInstance()->getTeamName($mixtePartner->user->forname, $mixtePartner->user->name);
             }
 
-        $data['userName'] = $this->user->forname . " " . $this->user->name;
+        $data['userName'] = $player->user->forname . " " . $player->user->name;
         $data['adminUserName'] = $admin->forname . " " . $admin->name;
 
         if (Helpers::nbDifference($data,'oldValues', 'newValues') > 1) SendMail::send($admin, 'updateSubscribe', $data, 'Modification d\'une inscription AS Lectra Badminton');
