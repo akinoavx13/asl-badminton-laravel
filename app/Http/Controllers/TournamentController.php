@@ -69,7 +69,7 @@ class TournamentController extends Controller
 
         if ($tournament != null) {
 
-            $allSimpleTeam = User::select('users.name', 'users.forname', 'teams.id', 'users.id as userId')
+            $allSimpleTeam = User::select('users.name', 'users.forname', 'teams.id', 'users.id as userId', 'users.email')
                 ->join('players', 'players.user_id', '=', 'users.id')
                 ->join('teams', 'teams.player_one', '=', 'players.id')
                 ->get();
@@ -78,9 +78,11 @@ class TournamentController extends Controller
                 'userOne.forname AS fornameOne',
                 'userOne.name AS nameOne',
                 'userOne.id AS userOneId',
+                'userOne.email AS emailOne',
                 'userTwo.forname AS fornameTwo',
                 'userTwo.name AS nameTwo',
                 'userTwo.id AS userTwoId',
+                'userTwo.email AS emailTwo',
                 'teams.id')
                 ->join('players as playerOne', 'playerOne.id', '=', 'teams.player_one')
                 ->join('players as playerTwo', 'playerTwo.id', '=', 'teams.player_two')
@@ -127,6 +129,8 @@ class TournamentController extends Controller
 
                                 $firstTeamName = "";
                                 $secondTeamName = "";
+                                $firstTeamEmail = "";
+                                $secondTeamEmail = "";
                                 $isOwner = false;
 
                                 if ($match->first_team_id != null) {
@@ -137,6 +141,7 @@ class TournamentController extends Controller
                                         });
 
                                         $firstTeamName = Helpers::getInstance()->getTeamName($firstTeam->first()->forname, $firstTeam->first()->name);
+                                        $firstTeamEmail = $firstTeam->first()->email;
 
                                         if($firstTeam->first()->userId == $this->user->id)
                                         {
@@ -150,7 +155,8 @@ class TournamentController extends Controller
                                         });
 
                                         $firstTeamName = Helpers::getInstance()->getTeamName($firstTeam->first()->fornameOne, $firstTeam->first()->nameOne, $firstTeam->first()->fornameTwo, $firstTeam->first()->nameTwo);
-
+                                        $firstTeamEmail = $firstTeam->first()->emailOne . ';' . $firstTeam->first()->emailTwo ;
+                                        
                                         if($firstTeam->first()->userOneId == $this->user->id || $firstTeam->first()->userTwoId == $this->user->id)
                                         {
                                             $isOwner = true;
@@ -166,6 +172,7 @@ class TournamentController extends Controller
                                         });
 
                                         $secondTeamName = Helpers::getInstance()->getTeamName($secondTeam->first()->forname, $secondTeam->first()->name);
+                                        $secondTeamEmail = $secondTeam->first()->email;
 
                                         if($secondTeam->first()->userId == $this->user->id)
                                         {
@@ -179,6 +186,7 @@ class TournamentController extends Controller
                                         });
 
                                         $secondTeamName = Helpers::getInstance()->getTeamName($secondTeam->first()->fornameOne, $secondTeam->first()->nameOne, $secondTeam->first()->fornameTwo, $secondTeam->first()->nameTwo);
+                                        $secondTeamEmail = $secondTeam->first()->emailOne . ';' . $secondTeam->first()->emailTwo ;
 
                                         if($secondTeam->first()->userOneId == $this->user->id || $secondTeam->first()->userTwoId == $this->user->id)
                                         {
@@ -198,6 +206,8 @@ class TournamentController extends Controller
                                 $series[$index][$col][$ligne]['display'] = $match->display;
                                 $series[$index][$col][$ligne]['firstTeamName'] = $firstTeamName;
                                 $series[$index][$col][$ligne]['secondTeamName'] = $secondTeamName;
+                                $series[$index][$col][$ligne]['firstTeamEmail'] = $firstTeamEmail;
+                                $series[$index][$col][$ligne]['secondTeamEmail'] = $secondTeamEmail;
                                 $series[$index][$col][$ligne]['score'] = $match->score;
                                 $series[$index][$col][$ligne]['id'] = $match->id;
                                 $series[$index][$col][$ligne]['scoreId'] = $match->score_id;
@@ -223,6 +233,7 @@ class TournamentController extends Controller
                                         });
 
                                         $firstTeamName = Helpers::getInstance()->getTeamName($firstTeam->first()->forname, $firstTeam->first()->name);
+                                        $firstTeamEmail = $firstTeam->first()->email;
 
                                         if($firstTeam->first()->userId == $this->user->id)
                                         {
@@ -236,6 +247,7 @@ class TournamentController extends Controller
                                         });
 
                                         $firstTeamName = Helpers::getInstance()->getTeamName($firstTeam->first()->fornameOne, $firstTeam->first()->nameOne, $firstTeam->first()->fornameTwo, $firstTeam->first()->nameTwo);
+                                        $firstTeamEmail = $firstTeam->first()->emailOne . ';' . $firstTeam->first()->emailTwo ;
 
                                         if($firstTeam->first()->userOneId == $this->user->id || $firstTeam->first()->userTwoId == $this->user->id)
                                         {
@@ -252,6 +264,7 @@ class TournamentController extends Controller
                                         });
 
                                         $secondTeamName = Helpers::getInstance()->getTeamName($secondTeam->first()->forname, $secondTeam->first()->name);
+                                        $secondTeamEmail = $secondTeam->first()->email;
 
                                         if($secondTeam->first()->userId == $this->user->id)
                                         {
@@ -265,6 +278,7 @@ class TournamentController extends Controller
                                         });
 
                                         $secondTeamName = Helpers::getInstance()->getTeamName($secondTeam->first()->fornameOne, $secondTeam->first()->nameOne, $secondTeam->first()->fornameTwo, $secondTeam->first()->nameTwo);
+                                        $secondTeamEmail = $secondTeam->first()->emailOne . ';' . $secondTeam->first()->emailTwo ;
 
                                         if($secondTeam->first()->userOneId == $this->user->id || $secondTeam->first()->userTwoId == $this->user->id)
                                         {
@@ -282,6 +296,8 @@ class TournamentController extends Controller
                                 $series[$index][$col][$ligne]['display'] = $match->display;
                                 $series[$index][$col][$ligne]['firstTeamName'] = $firstTeamName;
                                 $series[$index][$col][$ligne]['secondTeamName'] = $secondTeamName;
+                                $series[$index][$col][$ligne]['firstTeamEmail'] = $firstTeamEmail;
+                                $series[$index][$col][$ligne]['secondTeamEmail'] = $secondTeamEmail;
                                 $series[$index][$col][$ligne]['score'] = $match->score;
                                 $series[$index][$col][$ligne]['id'] = $match->id;
                                 $series[$index][$col][$ligne]['scoreId'] = $match->score_id;

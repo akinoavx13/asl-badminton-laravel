@@ -99,6 +99,10 @@
                                                                 {{ $serie[$rank][$nbMatchRank1]['infoLooserFirstTeam'] }}
                                                             @else
                                                                 {{ $serie[$rank][$nbMatchRank1]['firstTeamName'] }}
+                                                                @if($serie[$rank][$nbMatchRank1]['firstTeamName'])
+                                                                    <a href="mailto:{{ $serie[$rank][$nbMatchRank1]['firstTeamEmail'] }} ?Subject=AS Lectra Badminton réservation" target="_top"><i class="fa fa-send"></i></a>
+                                                                @endif
+                                                                
                                                             @endif
                                                         </td>
                                                         <td style="padding: 3px 5px 3px 5px; width: 20px">
@@ -134,6 +138,9 @@
                                                                 {{ $serie[$rank][$nbMatchRank1]['infoLooserSecondTeam'] }}
                                                             @else
                                                                 {{ $serie[$rank][$nbMatchRank1]['secondTeamName'] }}
+                                                                @if($serie[$rank][$nbMatchRank1]['secondTeamName'])
+                                                                    <a href="mailto:{{ $serie[$rank][$nbMatchRank1]['secondTeamEmail'] }} ?Subject=AS Lectra Badminton réservation" target="_top"><i class="fa fa-send"></i></a>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                         <td style="padding: 3px 5px 3px 5px; width: 20px">
