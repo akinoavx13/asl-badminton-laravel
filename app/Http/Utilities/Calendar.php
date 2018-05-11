@@ -27,7 +27,7 @@ class Calendar
 
         if($season !== null)
         {
-            $period = Period::current($season->id, 'championship')->first();
+            $period = Period::getCurrentPeriod();
             $tournament = Tournament::current($season->id)->first();
 
             if($period !== null)

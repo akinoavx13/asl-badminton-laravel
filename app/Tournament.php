@@ -50,6 +50,18 @@ class Tournament extends Model
         $this->attributes['end'] = Carbon::createFromFormat('d/m/Y', $end)->format('Y-m-d');
     }
 
+    public static function getCurrentTournament()
+    {
+        $today = Carbon::today()->format('Y-m-d');
+        $currentTournament = Tournament::select(
+            'id', 'start', 'end')
+        ->where('tournaments.start', '<=', $today)
+        ->where('tournaments.end', '>=', $today)
+        ->first();
+
+        return $currentTournament;
+    }
+
     /******************/
     /*     scopes     */
     /******************/

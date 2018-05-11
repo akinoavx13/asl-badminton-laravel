@@ -70,13 +70,25 @@ class Period extends Model
         return $this->championship_double_woman === $championshipDoubleWoman;
     }
 
+    public static function getCurrentPeriod()
+    {
+        $today = Carbon::today()->format('Y-m-d');
+        $currentPeriod = Period::select(
+            'id', 'start', 'end')
+        ->where('periods.start', '<=', $today)
+        ->where('periods.end', '>=', $today)
+        ->first();
+
+        return $currentPeriod;
+    }
+
     /******************/
     /*     scopes     */
     /******************/
 
     public function scopeCurrent($query, $season_id, $type)
     {
-        $today = Carbon::today();
+        $today = Carbon::today()->format('Y-m-d');
         $query->where('type', $type)
             ->where('season_id', $season_id)
             ->where('start', '<=', $today)
@@ -85,7 +97,7 @@ class Period extends Model
 
     public function scopeLasted($query, $season_id, $type)
     {
-        $today = Carbon::today();
+        $today = Carbon::today()->format('Y-m-d');
         $query->where('type', $type)
             ->where('season_id', $season_id)
             ->where('end', '<', $today)
@@ -95,7 +107,7 @@ class Period extends Model
     // ici on retrouve la dernière période de la saison même si la période et en cours
     public function scopeVeryLasted($query, $season_id, $type)
     {
-        $today = Carbon::today();
+        $today = Carbon::today()->format('Y-m-d');
         $query->where('type', $type)
             ->where('season_id', $season_id)
             //->where('end', '<', $today) 

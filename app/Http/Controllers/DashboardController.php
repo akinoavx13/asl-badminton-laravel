@@ -40,7 +40,7 @@ class DashboardController extends Controller
         if ($activeSeason !== null)
         {
 
-            $currentChampionship = Period::current($activeSeason->id, 'championship')->first();
+            $currentChampionship = Period::getCurrentPeriod();
 
             if ($currentChampionship !== null)
             {

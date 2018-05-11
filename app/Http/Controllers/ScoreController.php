@@ -434,7 +434,7 @@ class ScoreController extends Controller
         $activeSeason = Season::active()->first();
 
         if ($activeSeason != null) {
-            $activePeriod = Period::current($activeSeason->id, 'championship')->first();
+            $activePeriod = Period::getCurrentPeriod();
             if ($activePeriod != null) {
 
                 $allScoresFirstTeam = Score::select('scores.*')
@@ -608,7 +608,7 @@ class ScoreController extends Controller
 
         $activeSeason = Season::active()->first();
         if ($activeSeason != null) {
-            $activePeriod = Period::current($activeSeason->id, 'championship')->first();
+            $activePeriod = Period::getCurrentPeriod();
             if ($activePeriod != null) {
                 $rankings = ChampionshipRanking::where('championship_pool_id', $pool_id)
                     ->orderBy('total_points', 'desc')

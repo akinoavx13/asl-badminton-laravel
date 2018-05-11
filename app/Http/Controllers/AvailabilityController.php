@@ -248,17 +248,9 @@ class AvailabilityController extends Controller
     	$firstDayMonth =$allDays[0];
     	$today = Carbon::create($firstDayMonth->year, $firstDayMonth->month, $firstDayMonth->day)->format('Y-m-d');
     	$reservations = [];
-    	$currentPeriod = Period::select(
-    		'id', 'start', 'end')
-    	->where('periods.start', '<=', $today)
-    	->where('periods.end', '>=', $today)
-    	->first();
-
-    	$currentTournament = Tournament::select(
-    		'id', 'start', 'end')
-    	->where('tournaments.start', '<=', $today)
-    	->where('tournaments.end', '>=', $today)
-    	->first();
+    	
+    	$currentPeriod = Period::getCurrentPeriod();
+    	$currentTournament = Tournament::getCurrentTournament();
     	
 
     	if($currentPeriod == null && $currentTournament == null) return redirect()->back()->with('error', "Pas de championnat ni tournoi en cours...");
