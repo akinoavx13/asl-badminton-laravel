@@ -182,7 +182,7 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label>Newsletter :</label>
+                                    <label>Email d'actualité :</label>
                                 </div>
                                 <div class="col-md-8">
                                     @if($user->hasNewsletter(true))

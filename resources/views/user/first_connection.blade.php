@@ -211,7 +211,7 @@
 
             <div class="form-group">
                 <div class="col-md-3">
-                    {!! Form::label('newsletter', "S'inscrire à la newsletter", ['class' => 'control-label']) !!}
+                    {!! Form::label('newsletter', "Email pour les actualités", ['class' => 'control-label']) !!}
                     <i class="text-navy">*</i>
                 </div>
 

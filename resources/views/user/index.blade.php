@@ -26,7 +26,7 @@
                                     <th class="text-center">Taille</th>
                                     <th class="text-center">Relation avec lectra</th>
                                     <th class="text-center">Etat</th>
-                                    <th class="text-center">Newsletter</th>
+                                    <th class="text-center">Email Actu</th>
                                     <th class="text-center">Role</th>
                                     <th class="text-center">Lien création</th>
                                     <th class="text-center">Voir</th>
