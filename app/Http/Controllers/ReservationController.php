@@ -10,7 +10,9 @@ use App\PlayersReservation;
 use App\Team;
 use App\TimeSlot;
 use App\Period;
+use App\Tournament;
 use App\Score;
+use App\Match;
 use Carbon\Carbon;
 use App\Http\Requests;
 use Jenssegers\Date\Date;
@@ -54,7 +56,7 @@ class ReservationController extends Controller
 
         $lastDayMonth = end($allDays);
         $firstDayMonth =$allDays[0];
-        $today = Carbon::create($firstDayMonth->year, $firstDayMonth->month, $firstDayMonth->day)->format('Y-m-d');
+        $today = Carbon::today()->format('Y-m-d');
 
         $playerReservations = PlayersReservation::where('date', '>=', Carbon::today())
             ->where('date', '<=', $lastDayMonth)
@@ -79,28 +81,37 @@ class ReservationController extends Controller
         $courtDoubleAvailable = 0;
 
         // recherche du nb de match non joues
+        $start = null;
+        $end = null;
 
-        $currentPeriod = Period::select(
-          'id', 'start', 'end')
-          ->where('periods.start', '<=', $today)
-          ->where('periods.end', '>=', $today)
-          ->get();
-          //dd($currentPeriod->count());
-        
+        $currentPeriod = Period::getCurrentPeriod();
+        if ($currentPeriod != null) 
+        {
+            $start = $currentPeriod->start->format('Y-m-d');
+            $end = $currentPeriod->end->format('Y-m-d');
+        }
+
+        $currentTournament = Tournament::getCurrentTournament();
+        if ($currentTournament != null) 
+        {
+            $start = $currentTournament->start->format('Y-m-d');
+            $end = $currentTournament->end->format('Y-m-d');
+        }
+
         $nbMixte = 0;
         $nbDoubleMen =0;
         $nbDoubleWomen = 0;
         $nbSimpleMen = 0;
         $nbSimpleWomen=0;
         
-        if ($currentPeriod->count() != 0) 
+        // on recherche les matchs non joués crée entre le debut et fin d'un championnat ou d'un tournoi.
+        if ($start != null && $end != null)
         {
-            //dd($currentPeriod[0]->start);
             $mixtes = Score::select(
                   'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.mixte')
                   ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.created_at', '>=', $start)
+                  ->where('scores.created_at', '<=', $end)
                   ->where('scores.unplayed', true)
                   ->where('teams.mixte', true)
                   ->get();
@@ -109,8 +120,8 @@ class ReservationController extends Controller
             $doublesMen = Score::select(
                   'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.double_man')
                   ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.created_at', '>=', $start)
+                  ->where('scores.created_at', '<=', $end)
                   ->where('scores.unplayed', true)
                   ->where('teams.double_man', true)
                   ->get();
@@ -119,8 +130,8 @@ class ReservationController extends Controller
             $doublesWomen = Score::select(
                   'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.double_woman')
                   ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.created_at', '>=', $start)
+                  ->where('scores.created_at', '<=', $end)
                   ->where('scores.unplayed', true)
                   ->where('teams.double_woman', true)
                   ->get();
@@ -129,8 +140,8 @@ class ReservationController extends Controller
             $simpleMen = Score::select(
                   'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.simple_man')
                   ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.created_at', '>=', $start)
+                  ->where('scores.created_at', '<=', $end)
                   ->where('scores.unplayed', true)
                   ->where('teams.simple_man', true)
                   ->get();
@@ -139,12 +150,47 @@ class ReservationController extends Controller
             $simpleWomen = Score::select(
                   'scores.id', 'scores.created_at', 'scores.unplayed', 'scores.first_team_id', 'teams.id', 'teams.simple_woman')
                   ->join('teams', 'teams.id', '=', 'scores.first_team_id')
-                  ->where('scores.created_at', '>=', $currentPeriod[0]->start->format('Y-m-d'))
-                  ->where('scores.created_at', '<=', $currentPeriod[0]->end->format('Y-m-d'))
+                  ->where('scores.created_at', '>=', $start)
+                  ->where('scores.created_at', '<=', $end)
                   ->where('scores.unplayed', true)
                   ->where('teams.simple_woman', true)
                   ->get();
             $nbSimpleWomen = $simpleWomen->count();
+        }
+
+        $nbSimpleMatchs = 0;
+        $nbDoubleMatchs = 0;
+        $nbMixteMatchs = 0;
+
+        // si on est en tournoi il y a aussi des matchs à faire dont les équipes ne sont pas encore connues et qui donc n'ont pas de score
+        if ($currentTournament != null)
+        {
+            $allSimpleMatches = Match::select('matches.id')
+                ->join('series', 'matches.series_id', '=', 'series.id')
+                ->where('series.tournament_id', $currentTournament->id)
+                ->where('series.category', 'like', 'S%')
+                ->where('matches.score_id', '=', null)
+                ->where('matches.display', '=', 1)
+                ->get();
+            $nbSimpleMatchs = $allSimpleMatches->count();
+
+            $allDoubleMatches = Match::select('matches.id')
+                ->join('series', 'matches.series_id', '=', 'series.id')
+                ->where('series.tournament_id', $currentTournament->id)
+                ->where('series.category', 'like', 'D%')
+                ->where('matches.score_id', '=', null)
+                ->where('matches.display', '=', 1)
+                ->get();
+            $nbDoubleMatchs = $allDoubleMatches->count();
+
+            $allMixteMatches = Match::select('matches.id')
+                ->join('series', 'matches.series_id', '=', 'series.id')
+                ->where('series.tournament_id', $currentTournament->id)
+                ->where('series.category', 'like', 'M%')
+                ->where('matches.score_id', '=', null)
+                ->where('matches.display', '=', 1)
+                ->get();
+            $nbMixteMatchs = $allMixteMatches->count();
         }
 
         $nbSimpleBooked = 0;
@@ -394,6 +440,7 @@ class ReservationController extends Controller
 
         return view('reservation.index',
             compact('timeSlots', 'courts', 'allDays', 'reservations', 'courtSimpleAvailable', 'courtDoubleAvailable',
-                'lastDayMonth', 'nbMixte', 'nbDoubleMen', 'nbDoubleWomen', 'nbSimpleMen', 'nbSimpleWomen', 'nbSimpleBooked', 'nbDoubleBooked'));
+                'lastDayMonth', 'nbMixte', 'nbDoubleMen', 'nbDoubleWomen', 'nbSimpleMen', 'nbSimpleWomen', 'nbSimpleBooked', 'nbDoubleBooked',
+                'nbSimpleMatchs', 'nbDoubleMatchs', 'nbMixteMatchs'));
     }
 }
