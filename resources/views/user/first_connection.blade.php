@@ -219,14 +219,8 @@
                 <div class="col-md-9">
                     <div class="radio-inline">
                         <label>
-                            {!! Form::radio('newsletter', '1', false, ['required']) !!}
+                            {!! Form::radio('newsletter', '1', true, ['required']) !!}
                             Oui
-                        </label>
-                    </div>
-                    <div class="radio-inline">
-                        <label>
-                            {!! Form::radio('newsletter', '0', false, ['required']) !!}
-                            Non
                         </label>
                     </div>
                 </div>

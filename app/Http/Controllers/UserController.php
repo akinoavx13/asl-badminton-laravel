@@ -367,7 +367,7 @@ class UserController extends Controller
                 'license'             => $request->license !== "" ? $request->license : null,
                 'state'               => $request->state,
                 'lectra_relationship' => $request->lectra_relationship,
-                'newsletter'          => $request->newsletter,
+                'newsletter'          => true,
                 'password'            => bcrypt($request->password),
                 'avatar'              => $request->avatar,
                 'first_connect'       => false,
