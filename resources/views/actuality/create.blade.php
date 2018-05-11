@@ -64,6 +64,29 @@
                     </div>
                 </div>
 
+            @if($auth->hasRole('admin'))
+                <div class="form-group">
+                <div class="col-md-3">
+                    {!! Form::label('force_mail', 'Force Mail :', ['class' => 'control-label']) !!}
+                </div>
+
+                <div class="col-md-9">
+                    <div class="radio-inline">
+                        <label>
+                            {!! Form::radio('force_mail', 1, false) !!}
+                            Oui
+                        </label>
+                    </div>
+                    <div class="radio-inline">
+                        <label>
+                            {!! Form::radio('force_mail', 0, true) !!}
+                            Non
+                        </label>
+                    </div>
+                </div>
+                </div>
+            @endif
+
                 <div class="form-group text-center">
                     {!! Form::submit('Poster', ['class' => 'btn btn-primary']) !!}
                 </div>

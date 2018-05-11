@@ -57,13 +57,29 @@ class ActualityController extends Controller
             ]);
         }
 
-        $allUserWithNewletter = User::select('users.email')
-            ->where('newsletter', true)
-            ->where('state', '<>', 'inactive')
-            ->get()
-            ->chunk(45)
-            ->toArray();
 
+        if ($request->exists('force_mail')) {
+            $force_mail = $request->force_mail == 1? true:false;
+        } else {
+            $force_mail = false;
+        }
+
+        if ($force_mail == true) {
+            $allUserWithNewletter = User::select('users.email')
+                ->where('state', '<>', 'inactive')
+                ->orderBy('users.email', 'asc')
+                ->get()
+                ->chunk(45)
+                ->toArray();
+        } else {
+            $allUserWithNewletter = User::select('users.email')
+                ->where('newsletter', true)
+                ->where('state', '<>', 'inactive')
+                ->orderBy('users.email', 'asc')
+                ->get()
+                ->chunk(45)
+                ->toArray();
+        }
         $allUserWithNewletter2 = [];
 
         foreach ($allUserWithNewletter as $index => $users) {
