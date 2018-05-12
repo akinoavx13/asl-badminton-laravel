@@ -67,20 +67,20 @@
             @if($auth->hasRole('admin'))
                 <div class="form-group">
                 <div class="col-md-3">
-                    {!! Form::label('force_mail', 'Force Mail :', ['class' => 'control-label']) !!}
+                    {!! Form::label('force_mail', 'Force email aux:', ['class' => 'control-label']) !!}
                 </div>
 
                 <div class="col-md-9">
                     <div class="radio-inline">
                         <label>
-                            {!! Form::radio('force_mail', 1, false) !!}
-                            Oui
+                            {!! Form::radio('force_mail', 'Players', false) !!}
+                            Joueurs (actif)
                         </label>
                     </div>
                     <div class="radio-inline">
                         <label>
-                            {!! Form::radio('force_mail', 0, true) !!}
-                            Non
+                            {!! Form::radio('force_mail', 'Users', false) !!}
+                            Utilisateurs (actif)
                         </label>
                     </div>
                 </div>

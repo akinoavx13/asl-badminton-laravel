@@ -6,6 +6,8 @@ use App\Actuality;
 use App\Http\Requests\ActualityStoreRequest;
 use App\Http\Utilities\SendMail;
 use App\User;
+use App\Player;
+use App\Season;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -64,17 +66,36 @@ class ActualityController extends Controller
             $force_mail = false;
         }
 
-        if ($force_mail == true) {
-            $allUserWithNewletter = User::select('users.email')
-                ->where('state', '<>', 'inactive')
-                ->orderBy('users.email', 'asc')
-                ->get()
-                ->chunk(45)
-                ->toArray();
+        $season = Season::Active()->first()->id;
+        if ($request->exists('force_mail')) {
+            $force_mail = $request->force_mail;
+            if ($force_mail == 'Players') {
+                // actu de l'admin a tous les joueurs (actif)
+                $allUserWithNewletter = Player::select('users.email')
+                    ->join('users', 'users.id', '=', 'players.user_id')
+                    ->where('users.state', '<>', 'inactive')
+                    ->where('players.season_id', '=', $season)
+                    ->orderBy('users.email', 'asc')
+                    ->get()
+                    ->chunk(45)
+                    ->toArray();
+            } else {
+                // actu de l'admin à tous les utilisateurs (actif)
+                $allUserWithNewletter = User::select('users.email')
+                    ->where('state', '<>', 'inactive')
+                    ->orderBy('users.email', 'asc')
+                    ->get()
+                    ->chunk(45)
+                    ->toArray();
+            }
+
         } else {
-            $allUserWithNewletter = User::select('users.email')
-                ->where('newsletter', true)
-                ->where('state', '<>', 'inactive')
+            // actu standard envoyé aux joueurs (actif) inscrit à la newsletter
+            $allUserWithNewletter = Player::select('users.email')
+                ->join('users', 'users.id', '=', 'players.user_id')
+                ->where('users.state', '<>', 'inactive')
+                ->where('users.newsletter', true)
+                ->where('players.season_id', '=', $season)
                 ->orderBy('users.email', 'asc')
                 ->get()
                 ->chunk(45)
