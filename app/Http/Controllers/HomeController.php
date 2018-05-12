@@ -8,6 +8,7 @@ use App\Http\Utilities\SendMail;
 use App\Post;
 use App\Score;
 use Jenssegers\Date\Date;
+use Auth;
 
 /**
  * View scores
@@ -163,6 +164,11 @@ class HomeController extends Controller
                     $postsScores[$index]['postId'] = $post->id;
                 }
             }
+        }
+
+        if ($this->user->state == 'inactive' && $this->user->role != 'admin') {
+            Auth::logout();
+            return redirect()->back()->with('error', "compte inactif, contactez l'administrateur");
         }
 
         return view('home.index', compact('scores', 'actualities', 'postsScores'));
