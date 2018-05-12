@@ -457,6 +457,8 @@ class UserController extends Controller
     {
         $users = User::select('*')
             ->where('state', '<>', 'inactive')
+            ->where('role', '<>', 'ce')
+            ->where('role', '<>', 'admin')
             ->OrderByForname()
             ->get();
 
