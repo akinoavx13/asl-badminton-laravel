@@ -126,6 +126,12 @@ class UserController extends Controller
             'as'         => 'user.updatePassword',
         ]);
 
+        //desactive des utilisateurs
+        $router->get('/inactive', [
+            'middleware' => ['auth', 'admin'],
+            'uses'       => 'UserController@inactive',
+            'as'         => 'user.inactive',
+        ]);
     }
 
     /**
@@ -439,6 +445,58 @@ class UserController extends Controller
 
         return redirect()->route('user.show', $user_id)->with('success', "Le mot de passe a bien été changé !");
 
+    }
+
+    /**
+     * desactive les utiliseurs qui ne sont pas enregistrés sur les deux dernières saison
+     *
+     * @param $user_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function inactive()
+    {
+        $users = User::select('*')
+            ->where('state', '<>', 'inactive')
+            ->OrderByForname()
+            ->get();
+
+        $season = Season::select('id', 'name', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $usersInLastSeason = [];
+        $usersInPreviousSeason = [];
+        $updatedUsers = "";
+        $nbUpdatedUsers = 0;
+
+        if ($season->count() >= 2) {
+            $inLastSeason = User::select('users.id')
+                ->join('players', 'users.id', '=', 'players.user_id')
+                ->where('players.season_id', '=', $season[0]->id)
+                ->get()->toArray();
+            
+            foreach ($inLastSeason as $index => $value) {
+                $usersInLastSeason[$value['id']] = $value['id'];
+            }
+
+            $inPreviousSeason = User::select('users.id')
+                ->join('players', 'users.id', '=', 'players.user_id')
+                ->where('players.season_id', '=', $season[1]->id)
+                ->get();
+
+            foreach ($inPreviousSeason as $index => $value) {
+                $usersInPreviousSeason[$value['id']] = $value['id'];
+            }
+        
+            foreach ($users as $index => $user) {
+                if (array_key_exists($user->id, $usersInLastSeason) == false && array_key_exists($user->id, $usersInPreviousSeason) == false && $user->created_at < $season[1]->created_at) {
+                    $updatedUsers = $updatedUsers . " "  . $user->forname . " " . $user->name . "\n";
+                    $nbUpdatedUsers++;
+                    $user->update(['state' => 'inactive']);
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', "$nbUpdatedUsers utilisateurs non inscrit aux deux dernières saisons sont desactivés ! ($updatedUsers)");
     }
 }
 

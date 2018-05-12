@@ -43,24 +43,28 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h3>Utilisateurs</h3>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <a href="{{ route('user.index') }}" class="btn btn-primary btn-outline btn-block"><i class="fa fa-list"></i> Lister</a>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <a href="{{ route('user.create') }}" class="btn btn-success btn-outline btn-block"><i class="fa fa-user-plus"></i> Créer</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ route('user.inactive') }}" class="btn btn-danger btn-outline btn-block"><i class="fa fa-times"></i> Desactive</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+    </div>
+    <div class="row">
         <div class="col-md-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -75,9 +79,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 
-    <div class="row">
+    
         <div class="col-md-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -125,7 +129,8 @@
                 </div>
             </div>
         </div>
-
+    </div>
+    <div class="row">
         <div class="col-md-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -140,9 +145,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 
-    <div class="row">
+    
         <div class="col-md-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
