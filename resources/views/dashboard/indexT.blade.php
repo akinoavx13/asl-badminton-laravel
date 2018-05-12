@@ -9,18 +9,19 @@
     <h1 class="text-center">Tableau de bord </h1>
     <hr>
 
-    @if(count($tableReservation['simple']) <= 0 && count($tableReservation['double']) <= 0 && count($tableReservation['mixte']) <= 0)
+    @if(count($tableTournament['simple']) <= 0 && count($tableTournament['double']) <= 0 && count($tableTournament['mixte']) <= 0)
         <h2 class="text-center text-danger">
-            Vous ne participez pas au championnat : simple, double, mixte
+            Vous ne participez pas au tournoi : simple, double, mixte
         </h2>
         @else
         @foreach(['simple', 'double', 'mixte'] as $type)
-            @if(count($tableReservation[$type]) > 0)
+            @if(count($tableTournament[$type]) > 0)
+            @foreach($tableTournament[$type] as $index => $serie)
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel {{ $type == 'simple' ? 'panel-warning' : '' }} {{ $type == 'double' ? 'panel-info' : '' }} {{ $type == 'mixte' ? 'panel-danger' : '' }}">
                             <div class="panel-heading">
-                                <h1 class="text-center">Championnat de {{ $type }} (Poule n° {{ $pools[$type]['pool_number'] }})</h1>
+                                <h1 class="text-center">Tournoi série {{ $index }}</h1>
                             </div>
                             <div class="panel-body">
                                 <table class="table table-striped table-hover">
@@ -28,7 +29,6 @@
                                     <tr>
                                         <th class="text-center">Photo</th>
                                         <th class="text-center">Adversaire</th>
-                                        <th class="text-center">Rang</th>
                                         <th class="text-center">État</th>
                                         <th class="text-center">Réserver</th>
                                         <th class="text-center">Résultat</th>
@@ -37,10 +37,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($tableReservation[$type] as $resum)
+                                    @foreach($serie as $resum)
                                         <tr class="text-center">
                                             <td>
                                                 @if($type == 'simple')
+                                                    @if($resum['isOpponentKnown'])
                                                     @if($resum['imTheFirstTeam'])
                                                         @if($resum['userSecondTeamAvatar'])
                                                             <img src="{{ asset('img/avatars/' . $resum['userSecondTeamId'] . '.jpg') }}"
@@ -58,7 +59,9 @@
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @endif
                                                     @endif
+                                                    @endif
                                                 @else
+                                                    @if($resum['isOpponentKnown'])
                                                     @if($resum['imTheFirstTeam'])
                                                         @if($resum['userOneSecondTeamAvatar'])
                                                             <img src="{{ asset('img/avatars/' . $resum['userOneSecondTeamId'] . '.jpg') }}"
@@ -90,16 +93,26 @@
                                                                  class="img-circle" alt="logo" width="50" height="50"/>
                                                         @endif
                                                     @endif
+                                                    @endif
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($type == 'simple')
+                                                    @if($resum['isOpponentKnown'])
                                                     @if($resum['imTheFirstTeam'])
                                                         <a href="{{ route('user.show', $resum['userSecondTeamId']) }}">{{ $resum['userSecondTeamName'] }}</a>
                                                     @else
                                                         <a href="{{ route('user.show', $resum['userFirstTeamId']) }}">{{ $resum['userFirstTeamName'] }}</a>
                                                     @endif
+                                                    @else
+                                                    @if($resum['imTheFirstTeam'])
+                                                        Adversaire non définie pour le moment. {{ $resum['userSecondTeamName'] }}
+                                                    @else
+                                                        Adversaire non définie pour le moment. {{ $resum['userFirstTeamName'] }}
+                                                    @endif
+                                                    @endif
                                                 @else
+                                                    @if($resum['isOpponentKnown'])
                                                     @if($resum['imTheFirstTeam'])
                                                         <a href="{{ route('user.show', $resum['userOneSecondTeamId']) }}">{{ $resum['userOneSecondTeamName'] }}</a>
                                                         &
@@ -109,24 +122,14 @@
                                                         &
                                                         <a href="{{ route('user.show', $resum['userTwoFirstTeamId']) }}">{{ $resum['userTwoFirstTeamName'] }}</a>
                                                     @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($resum['imTheFirstTeam'])
-                                                    @if($resum['rankSecondTeam'] == 0)
-                                                        <span class="text-danger">
-                                                    Pas encore classé
-                                                </span>
                                                     @else
-                                                        {{ $resum['rankSecondTeam'] }}
+                                                     @if($resum['imTheFirstTeam'])
+                                                        Adversaire non définie pour le moment. {{ $resum['userOneSecondTeamName'] }}
+                                                        
+                                                    @else
+                                                        Adversaire non définie pour le moment. {{ $resum['userOneFirstTeamName'] }}
+                                                        
                                                     @endif
-                                                @else
-                                                    @if($resum['rankFirstTeam'] == 0)
-                                                        <span class="text-danger">
-                                                    Pas encore classé
-                                                </span>
-                                                    @else
-                                                        {{ $resum['rankFirstTeam'] }}
                                                     @endif
                                                 @endif
                                             </td>
@@ -164,7 +167,9 @@
                                                         @elseif($resum['userOneSecondTeamState'] == 'inactive')
                                                             <span class="text-danger">Inactif</span>
                                                         @endif
+                                                        @if($resum['isOpponentKnown'])
                                                         &
+                                                        @endif
                                                         @if($resum['userTwoSecondTeamState'] == 'holiday')
                                                             <span class="text-danger">En vacances jusqu'au {{ $resum['userTwoSecondTeamEndingHoliday'] }}</span>
                                                         @elseif($resum['userTwoSecondTeamState'] == 'hurt')
@@ -184,7 +189,9 @@
                                                         @elseif($resum['userOneFirstTeamState'] == 'inactive')
                                                             <span class="text-danger">Inactif</span>
                                                         @endif
+                                                        @if($resum['isOpponentKnown'])
                                                         &
+                                                        @endif
                                                         @if($resum['userTwoFirstTeamState'] == 'holiday')
                                                             <span class="text-danger">En vacances jusqu'au {{ $resum['userTwoFirstTeamEndingHoliday'] }}</span>
                                                         @elseif($resum['userTwoFirstTeamState'] == 'hurt')
@@ -199,14 +206,16 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                @if($resum['isOpponentKnown'])
                                                 @if($resum['reservation'] == null)
                                                     <a href="{{ route('reservation.index') }}">Réserver un terrain</a>
                                                 @else
                                                     {{ $resum['reservation'] }}
                                                 @endif
+                                                @endif
                                             </td>
                                             <td>
-                                                @if($resum['scoreID'])
+                                                @if($resum['isOpponentKnown'])
                                                 @if($resum['unplayed'])
                                                     <span class="text-danger">Non joué</span>
                                                 @elseif($resum['imTheFirstTeam'])
@@ -251,6 +260,7 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                @if($resum['isOpponentKnown'])
                                                 @if($type == 'simple')
                                                     @if($resum['imTheFirstTeam'])
                                                         <a href="mailto:{{ $resum['userSecondTeamEmail'] }}?Subject=AS Lectra Badminton réservation"
@@ -266,21 +276,24 @@
                                                         <a href="mailto:{{ $resum['userOneFirstTeamEmail'] }};{{ $resum['userTwoFirstTeamEmail'] }}?Subject=AS Lectra Badminton réservation"target="_top"><i class="fa fa-send"></i></a>
                                                     @endif
                                                 @endif
+                                                @endif
                                             </td>
                                             <td>
+                                                @if($resum['isOpponentKnown'])
                                                 @if($type == 'simple')
-                                                    <a href="{{ route('score.edit', [$resum['scoreId'], $pools[$type]['pool_id'],
+                                                    <a href="{{ route('score.edit', [$resum['scoreId'],
                                         str_replace(' ', '-', $resum['userFirstTeamName']),
-                                        str_replace(' ', '-', $resum['userSecondTeamName']), $anchor[$type]]) }}" class="btn btn-primary">
+                                        str_replace(' ', '-', $resum['userSecondTeamName']), $index]) }}" class="btn btn-primary">
                                                         <span class="fa fa-edit"></span>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('score.edit', [$resum['scoreId'], $pools[$type]['pool_id'],
+                                                    <a href="{{ route('score.edit', [$resum['scoreId'],
                                         str_replace(' ', '-', $resum['userOneFirstTeamName'] . ' & ' . $resum['userTwoFirstTeamName']),
                                         str_replace(' ', '-', $resum['userOneSecondTeamName'] . ' & ' . $resum['userTwoSecondTeamName']),
-                                        $anchor[$type]]) }}" class="btn btn-primary">
+                                        $index]) }}" class="btn btn-primary">
                                                         <span class="fa fa-edit"></span>
                                                     </a>
+                                                @endif
                                                 @endif
                                             </td>
                                         </tr>
@@ -291,6 +304,7 @@
                         </div>
                     </div>
                 </div>
+            @endforeach
             @endif
         @endforeach
     @endif
