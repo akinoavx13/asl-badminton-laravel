@@ -31,6 +31,8 @@
                                     <th class="text-center">Lien création</th>
                                     <th class="text-center">Voir</th>
                                     <th class="text-center">Supprimer</th>
+                                    <th class="text-center">Derniere Saison</th>
+                                    <th class="text-center">Saison Précédente</th>
                                 </tr>
                                 </thead>
 
@@ -117,6 +119,24 @@
                                             <a href="{{ route('user.delete', $user->id) }}" class="btn btn-danger dim">
                                                 <i class="fa fa-trash-o"></i>
                                             </a>
+                                        </td>
+                                        <td>
+                                                @if (array_key_exists($user->id,$usersInLastSeason))
+                                                    <span class="fa fa-check-circle-o fa-2x text-success"
+                                                          aria-hidden="true"><span hidden>Derniere Saison</span></span>
+                                                @else
+                                                    <span class="fa fa-times-circle-o fa-2x text-danger"
+                                                      aria-hidden="true"><span hidden>Pas derniere Saison</span></span>
+                                                @endif
+                                        </td>
+                                        <td>
+                                                @if (array_key_exists($user->id,$usersInPreviousSeason))
+                                                    <span class="fa fa-check-circle-o fa-2x text-success"
+                                                          aria-hidden="true"><span hidden>Precedente Saison</span></span>
+                                                @else
+                                                    <span class="fa fa-times-circle-o fa-2x text-danger"
+                                                      aria-hidden="true"><span hidden>Pas precedente Saison</span></span>
+                                                @endif
                                         </td>
                                     </tr>
                                 @endforeach

@@ -137,7 +137,33 @@ class UserController extends Controller
     {
         $users = User::OrderByForname()->get();
 
-        return view('user.index', compact('users'));
+        $season = Season::select('id', 'name')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $usersInLastSeason = [];
+        $usersInPreviousSeason = [];
+
+        if ($season->count() >= 2) {
+            $inLastSeason = User::select('users.id')
+                ->join('players', 'users.id', '=', 'players.user_id')
+                ->where('players.season_id', '=', $season[0]->id)
+                ->get()->toArray();
+            
+            foreach ($inLastSeason as $index => $value) {
+                $usersInLastSeason[$value['id']] = $value['id'];
+            }
+
+            $inPreviousSeason = User::select('users.id')
+                ->join('players', 'users.id', '=', 'players.user_id')
+                ->where('players.season_id', '=', $season[1]->id)
+                ->get();
+
+            foreach ($inPreviousSeason as $index => $value) {
+                $usersInPreviousSeason[$value['id']] = $value['id'];
+            }
+        }
+        
+        return view('user.index', compact('users', 'usersInLastSeason', 'usersInPreviousSeason'));
     }
 
     /**
