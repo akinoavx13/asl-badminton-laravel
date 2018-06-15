@@ -229,6 +229,8 @@ class PlayerController extends Controller
         } elseif ($player->hasFormula('corpo')) {
             SendMail::send($this->user, 'subscribeCorpoFormula', $this->user->attributesToArray(), 'Inscription
              formule corpo AS Lectra Badminton');
+        } else {
+            SendMail::send($this->user, 'subscribeFormula', $this->user->attributesToArray(), 'Inscription à la section Badminton');
         }
 
 
@@ -318,6 +320,8 @@ class PlayerController extends Controller
         } elseif ($player->hasFormula('corpo') && $data['oldValues']['formula'] != 'corpo') {
             SendMail::send($this->user, 'subscribeCorpoFormula', $this->user->attributesToArray(), 'Inscription
              formule corpo AS Lectra Badminton');
+        } elseif ($player->formula != $data['oldValues']['formula']){
+            SendMail::send($this->user, 'subscribeFormula', $this->user->attributesToArray(), 'Inscription à la section Badminton');
         }
 
         $admin = User::where('email', 'c.maheo@lectra.com')->first();

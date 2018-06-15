@@ -16,7 +16,8 @@
     </p>
 
     <p>
-        Tu pourras ensuite via le site et le menu « s’inscrire à une saison » compléter ton profil et choisir ta formule de jeu (loisir, fun, performance etc...) ainsi que les séries (simple, double et mixte). Pour information en double et mixte les partenaires actuellement en recherche sont affichés. Si tu te mets en recherche d'autres joueurs pourrons par la suite te choisir comme partenaire.
+        Tu pourras ensuite via le site et le menu « s’inscrire à une saison » compléter ton profil et choisir ta formule de jeu (loisir, fun, performance etc...) ainsi que les séries (simple, double et mixte). Pour information en double et mixte les partenaires actuellement en recherche sont affichés. Si tu te mets en recherche d'autres joueurs pourrons par la suite te choisir comme partenaire. </br> 
+        Note: Il faut également s'incrire sur le <a href="https://www.celectra.fr/">site du CE</a> qui permet de faire le paiement de la cotisation associée (une petite subtilité, afin de pouvoir s'inscrire via le site du CE à la section badminton il faut également faire son inscription à l'AS Lectra).
     </p>
 
     <p>

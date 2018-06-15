@@ -9,7 +9,8 @@
     <br>
 
     <p>
-        Nous vous informons que votre inscription à la formule compétition à bien été enregistré.
+        Nous vous informons que votre inscription à la formule compétition a bien été enregistré.</br>
+        <strong style="color:red;">Si ce n'est pas déjà le cas, merci de faire votre inscription sur le site du CE afin de payer votre cotisation.</strong>
     </p>
 
     <p>
