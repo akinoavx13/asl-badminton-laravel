@@ -106,9 +106,9 @@
                                                     @endif
                                                     @else
                                                     @if($resum['imTheFirstTeam'])
-                                                        Adversaire non définie pour le moment. {{ $resum['userSecondTeamName'] }}
+                                                        Adversaire non défini pour le moment. {{ $resum['userSecondTeamName'] }}
                                                     @else
-                                                        Adversaire non définie pour le moment. {{ $resum['userFirstTeamName'] }}
+                                                        Adversaire non défini pour le moment. {{ $resum['userFirstTeamName'] }}
                                                     @endif
                                                     @endif
                                                 @else
@@ -124,10 +124,10 @@
                                                     @endif
                                                     @else
                                                      @if($resum['imTheFirstTeam'])
-                                                        Adversaire non définie pour le moment. {{ $resum['userOneSecondTeamName'] }}
+                                                        Adversaire non défini pour le moment. {{ $resum['userOneSecondTeamName'] }}
                                                         
                                                     @else
-                                                        Adversaire non définie pour le moment. {{ $resum['userOneFirstTeamName'] }}
+                                                        Adversaire non défini pour le moment. {{ $resum['userOneFirstTeamName'] }}
                                                         
                                                     @endif
                                                     @endif
