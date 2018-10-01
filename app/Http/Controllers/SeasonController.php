@@ -135,7 +135,7 @@ class SeasonController extends Controller
             'name'   => $request->name,
         ]);
 
-        return redirect()->route('season.index')->with('success', "Les modifications sont bien prise en compte !");
+        return redirect()->route('season.index')->with('success', "Les modifications sont bien prises en compte !");
     }
 
     /**

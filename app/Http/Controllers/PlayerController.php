@@ -345,7 +345,7 @@ class PlayerController extends Controller
 
         if (Helpers::nbDifference($data,'oldValues', 'newValues') > 1) SendMail::send($admin, 'updateSubscribe', $data, 'Modification d\'une inscription AS Lectra Badminton');
 
-        return redirect()->route('home.index')->with('success', "Les modifications sont bien prise en compte !");
+        return redirect()->route('home.index')->with('success', "Les modifications sont bien prises en compte !");
     }
 
     /**

@@ -136,7 +136,7 @@ class CourtController extends Controller
             'number'   => $request->number,
         ]);
 
-        return redirect()->route('court.index')->with('success', "Les modifications sont bien prise en compte !");
+        return redirect()->route('court.index')->with('success', "Les modifications sont bien prises en compte !");
     }
 
     /**

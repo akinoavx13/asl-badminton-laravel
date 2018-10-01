@@ -136,7 +136,7 @@ class TimeSlotController extends Controller
             'end'   => $request->end,
         ]);
 
-        return redirect()->route('timeSlot.index')->with('success', "Les modifications sont bien prise en compte !");
+        return redirect()->route('timeSlot.index')->with('success', "Les modifications sont bien prises en compte !");
     }
 
     /**
