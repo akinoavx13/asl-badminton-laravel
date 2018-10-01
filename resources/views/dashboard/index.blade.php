@@ -206,7 +206,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($resum['scoreID'])
+                                                @if($resum['scoreId'])
                                                 @if($resum['unplayed'])
                                                     <span class="text-danger">Non joué</span>
                                                 @elseif($resum['imTheFirstTeam'])

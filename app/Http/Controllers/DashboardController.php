@@ -683,6 +683,7 @@ private function createTableTournament($type, $serie, $currentTournament, $userI
                                 ->where('scores.created_at', '<=', $currentChampionship->end->format('Y-m-d'));
                         })
                         ->get();
+
                 }
             }
             else
@@ -929,7 +930,7 @@ private function createTableTournament($type, $serie, $currentTournament, $userI
                 }
             }
         }
-
+        
         return $result;
     }
 }
