@@ -50,10 +50,10 @@ class EmailToDevController extends Controller
 
                 SendMail::send($dev, 'emailToDev', $data, 'Email au développeur AS Lectra Badminton');
 
-                return redirect()->route('home.index')->with('success', 'Le mail a bien été envoyé !');
+                return redirect()->route('home.index')->with('success', 'L\'email a bien été envoyé !');
             }
         }
 
-        return redirect()->route('home.index')->with('error', 'Le mail n\'a été envoyé, une erreur est survenue !');
+        return redirect()->route('home.index')->with('error', 'L\'email n\'a été envoyé, une erreur est survenue !');
     }
 }

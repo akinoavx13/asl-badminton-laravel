@@ -168,7 +168,7 @@ class HomeController extends Controller
 
         if ($this->user->state == 'inactive' && $this->user->role != 'admin') {
             Auth::logout();
-            return redirect()->back()->with('error', "compte inactif, contactez l'administrateur");
+            return redirect()->back()->with('error', "compte inactif: contactez l'administrateur");
         }
 
         return view('home.index', compact('scores', 'actualities', 'postsScores'));

@@ -85,10 +85,10 @@ class SettingController extends Controller
                 'championship_double_woman'  => false,
             ]);
 
-            return redirect()->route('setting.index')->with('success', "Les paramètres sont crées !");
+            return redirect()->route('setting.index')->with('success', "Les paramètres sont créés !");
         }
 
-        return redirect()->route('setting.index')->with('error', "Les paramètres existe déjà !");
+        return redirect()->route('setting.index')->with('error', "Les paramètres existent déjà !");
     }
 
     /**

@@ -101,7 +101,7 @@ class RopeController extends Controller
 
         $rest = $rope->rest;
 
-        return redirect()->back()->with('success', "L'approvisionnement de $rest cordage est bien enregistré");
+        return redirect()->back()->with('success', "L'approvisionnement de $rest cordage a bien été enregistré");
     }
 
 }

@@ -42,7 +42,7 @@ class SeriesController extends Controller
 
         foreach ($request->category as $serie_id => $category) {
             if (pow(2, $request->number_rank[$serie_id] - 1) > $request->number_matches_rank_1[$serie_id]) {
-                return redirect()->back()->withInput()->with('error', 'Le nombre de rang est incohérent avec le nombre de match de rang 1 pour la série n° ' . $request->display_order[$serie_id]);
+                return redirect()->back()->withInput()->with('error', 'Le nombre de rangs est incohérent avec le nombre de matchs de rang 1 pour la série n° ' . $request->display_order[$serie_id]);
             }
         }
 

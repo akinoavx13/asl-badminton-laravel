@@ -148,7 +148,7 @@ class PlayerController extends Controller
 
         //si il y a pas encore de saison
         if ($activeSeason === null) {
-            return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouverte !");
+            return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouvertes !");
         }
 
         //compte le nombre d'inscription dans lesquels on est inscrit
@@ -186,7 +186,7 @@ class PlayerController extends Controller
 
         //si il y a pas encore de saison
         if ($activeSeason === null) {
-            return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouverte !");
+            return redirect()->route('home.index')->with('error', "Les inscriptions ne sont pas ouvertes !");
         }
 
         //compte le nombre d'inscription dans lesquels on est inscrit

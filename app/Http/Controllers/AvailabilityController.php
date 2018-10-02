@@ -253,7 +253,7 @@ class AvailabilityController extends Controller
     	$currentTournament = Tournament::getCurrentTournament();
     	
 
-    	if($currentPeriod == null && $currentTournament == null) return redirect()->back()->with('error', "Pas de championnat ni tournoi en cours...");
+    	if($currentPeriod == null && $currentTournament == null) return redirect()->back()->with('error', "Pas de championnat ni de tournoi en cours...");
 
       // on cherche les adversaires
     	$opponents = [];
@@ -387,7 +387,7 @@ class AvailabilityController extends Controller
     		}
     	}
 
-    	return redirect()->back()->with('success', "vos disponibilités sont mises à jour.");
+    	return redirect()->back()->with('success', "Vos disponibilités sont mises à jour.");
     }
 
     /**

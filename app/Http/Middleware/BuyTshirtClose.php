@@ -30,7 +30,7 @@ class BuyTshirtClose
         {
             if ($setting->hasBuyTShirt(false) && $player === null && $request->t_shirt == '1' || $setting->hasBuyTShirt(false) && $player !== null && $player->t_shirt != $request->t_shirt)
             {
-                return redirect()->back()->with('error', "Vous ne pouvez plus demander de t-shirt !");
+                return redirect()->back()->with('error', "Vous ne pouvez plus demander de tee-shirt !");
             }
 
             return $next($request);

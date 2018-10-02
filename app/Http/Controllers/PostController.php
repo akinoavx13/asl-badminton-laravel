@@ -67,7 +67,7 @@ class PostController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Le commentaire est bien ajouté !');
+        return redirect()->back()->with('success', 'Le commentaire a bien été ajouté !');
     }
 
     public function storeScorePost(PostStoreRequest $request, $score_id)
@@ -87,7 +87,7 @@ class PostController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Le commentaire est bien ajouté !');
+        return redirect()->back()->with('success', 'Le commentaire a est bien été ajouté !');
     }
 
     public function delete($post_id)

@@ -24,6 +24,6 @@ class SettingExists
             return $next($request);
         }
 
-        return redirect()->back()->with('error', "Il faut d'abord créer la page paramètre !");
+        return redirect()->back()->with('error', "Il faut d'abord créer la page Paramètres !");
     }
 }

@@ -279,7 +279,7 @@ class DashboardController extends Controller
             }
         }
 
-        return redirect()->back()->with('error', "Tableau de bord indisponible, il n'y a pas de championnat ni tournoi en cours pour le moment !");
+        return redirect()->back()->with('error', "Tableau de bord indisponible, il n'y a pas de championnat ni de tournoi en cours pour le moment !");
     }
 
 

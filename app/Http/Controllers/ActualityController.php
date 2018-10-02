@@ -119,7 +119,7 @@ class ActualityController extends Controller
             SendMail::send($users, 'newActuality', $data, 'Nouvelle actualité AS Lectra Badminton');
         }
 
-        return redirect()->back()->with('success', 'L\'actualité est bien postée !');
+        return redirect()->back()->with('success', 'L\'actualité a bien été postée !');
     }
 
     public function delete($actuality_id)

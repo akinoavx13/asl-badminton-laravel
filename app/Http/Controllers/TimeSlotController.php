@@ -93,7 +93,7 @@ class TimeSlotController extends Controller
             'end'   => $request->end,
         ]);
 
-        return redirect()->route('timeSlot.index')->with('success', "Le crénaux $timeSlot vient d'être créé !");
+        return redirect()->route('timeSlot.index')->with('success', "Le créneau $timeSlot vient d'être créé !");
     }
 
     /**

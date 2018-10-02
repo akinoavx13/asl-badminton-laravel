@@ -133,7 +133,7 @@ class ScoreController extends Controller
 
 
             return Redirect::to(route('championship.index') . '#' . $anchor)->with('success',
-                'Le score est bien enregistré !');
+                'Le score a bien été enregistré !');
         }
 
         if ($request->exists('wo') && $request->wo == "my_wo") {
@@ -155,7 +155,7 @@ class ScoreController extends Controller
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
             return Redirect::to(route('championship.index') . '#' . $anchor)->with('success',
-                'Le score est bien enregistré !');
+                'Le score a bien été enregistré !');
         }
 
         if ($request->exists('wo') && $request->wo == "his_wo") {
@@ -177,7 +177,7 @@ class ScoreController extends Controller
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
             return Redirect::to(route('championship.index') . '#' . $anchor)->with('success',
-                'Le score est bien enregistré !');
+                'Le score a bien été enregistré !');
         }
 
         $message = $this->checkScore($firstSet, $secondSet, $thirdSet);
@@ -206,7 +206,7 @@ class ScoreController extends Controller
             $this->updateRankings($pool_id, $score->first_team_id, $score->second_team_id);
 
             return Redirect::to(route('championship.index') . '#' . $anchor)->with('success',
-                'Le score est bien enregistré !');
+                'Le score a bien été enregistré !');
         }
         return redirect()->back()->withInput($request->all())->with('error', $message);
 
@@ -278,7 +278,7 @@ class ScoreController extends Controller
                     'second_team_win'        => false,
                 ]);
 
-                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score est bien enregistré !');
+                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score a bien été enregistré !');
             }
 
             if ($request->exists('wo') && $request->wo == "my_wo") {
@@ -299,7 +299,7 @@ class ScoreController extends Controller
 
                 $this->setNextMatch($match, $score->second_team_id, $score->first_team_id);
 
-                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score est bien enregistré !');
+                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score a bien été enregistré !');
             }
 
             if ($request->exists('wo') && $request->wo == "his_wo") {
@@ -319,7 +319,7 @@ class ScoreController extends Controller
                 ]);
 
                 $this->setNextMatch($match, $score->first_team_id, $score->second_team_id);
-                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score est bien enregistré !');
+                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score a bien été enregistré !');
             }
 
             $message = $this->checkScore($firstSet, $secondSet, $thirdSet);
@@ -350,11 +350,11 @@ class ScoreController extends Controller
                 } else {
                     $this->setNextMatch($match, $score->second_team_id, $score->first_team_id);
                 }
-                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score est bien enregistré !');
+                return Redirect::to(route('tournament.index') . '##' . $anchorTournament)->with('success', 'Le score a bien été enregistré !');
             }
             return redirect()->back()->withInput($request->all())->with('error', $message);
         }
-        return redirect()->back()->withInput($request->all())->with('error', 'Le match du score est null !');
+        return redirect()->back()->withInput($request->all())->with('error', 'Le score du match est null !');
 
     }
 

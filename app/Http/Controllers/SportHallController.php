@@ -90,14 +90,14 @@ class SportHallController extends Controller
                     }
                 }
 
-                return redirect()->back()->with('success', "C'est bien vous faites du sport !");
+                return redirect()->back()->with('success', "C'est bien, vous faites du sport !");
             } else {
                 return redirect()->back()->with('error', "Vous êtes déjà présent !");
             }
 
         }
 
-        return redirect()->back()->with('error', "Vous ne pouvez y aller que aujourd'hui ou demain");
+        return redirect()->back()->with('error', "Vous ne pouvez y aller qu'aujourd'hui ou demain");
     }
 
     public function delete($sportHall_id)

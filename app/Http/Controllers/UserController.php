@@ -205,7 +205,7 @@ class UserController extends Controller
 
         SendMail::send($user, 'newUser', $user->attributesToArray(), 'Création de compte AS Lectra Badminton');
 
-        return redirect()->back()->with('success', "L'utilisateur $user vient d'être crée !");
+        return redirect()->back()->with('success', "L'utilisateur $user vient d'être créé !");
     }
 
     /**
@@ -409,7 +409,7 @@ class UserController extends Controller
 
             Auth::login($user);
 
-            return redirect()->route('home.index')->with('success', "L'utilisateur $user vient d'être crée !");
+            return redirect()->route('home.index')->with('success', "L'utilisateur $user vient d'être créé !");
         }
 
         abort(401, 'Unauthorized action.');
@@ -443,7 +443,7 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return redirect()->route('user.show', $user_id)->with('success', "Le mot de passe a bien été changé !");
+        return redirect()->route('user.show', $user_id)->with('success', "Le mot de passe a bien été modifié !");
 
     }
 
@@ -498,7 +498,7 @@ class UserController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', "$nbUpdatedUsers utilisateurs non inscrit aux deux dernières saisons sont desactivés ! ($updatedUsers)");
+        return redirect()->back()->with('success', "$nbUpdatedUsers utilisateurs non inscrits aux deux dernières saisons sont désactivés ! ($updatedUsers)");
     }
 }
 
