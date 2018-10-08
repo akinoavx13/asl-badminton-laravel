@@ -73,7 +73,7 @@
                                     </td>
                                     <td>
                                         <span class="text-navy">
-                                            {{ \Jenssegers\Date\Date::create($rope->created_at->year, $rope->created_at->month, $rope->created_at->day, $rope->created_at->hour, $rope->created_at->minute, $rope->created_at->second)->ago() }}
+                                            {{ $rope->created_at }}
                                         </span>
                                     </td>
                                     <td>
