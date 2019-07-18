@@ -658,55 +658,58 @@ class ScoreController extends Controller
                         
                         if ($score != null) {
                             // il y a un score on cherche qui est le gagnant si c'est le deuxieme joueur on inverse le ranking
-                            if ($score->my_wo) {
-                                if ($exaequo[1]->team_id == $score->first_team_id) {
-                                    $exaequo[1]->rank = $exaequo[1]->rank + 1;
-                                    $exaequo[2]->rank = $exaequo[2]->rank - 1;
-                                }
+                            // EN FAIT IL Y A TOUJOURS UN SCORE PUISQU'ON LES CREES A L'INITIALISATION...
+                            if (!$score->unplayed) {
+                                if ($score->my_wo) {
+                                    if ($exaequo[1]->team_id == $score->first_team_id) {
+                                        $exaequo[1]->rank = $exaequo[1]->rank + 1;
+                                        $exaequo[2]->rank = $exaequo[2]->rank - 1;
+                                    }
 
-                            } elseif ($score->his_wo) {
-                                if ($exaequo[1]->team_id == $score->second_team_id) {
-                                    $exaequo[1]->rank = $exaequo[1]->rank + 1;
-                                    $exaequo[2]->rank = $exaequo[2]->rank - 1;
-                                }
-                            } else {
-                                $firstTeamWonSet = 0;
-                                $secondTeamWonSet = 0;
-
-                                if ($score->first_set_first_team > $score->first_set_second_team) {
-                                    $firstTeamWonSet++;
+                                } elseif ($score->his_wo) {
+                                    if ($exaequo[1]->team_id == $score->second_team_id) {
+                                        $exaequo[1]->rank = $exaequo[1]->rank + 1;
+                                        $exaequo[2]->rank = $exaequo[2]->rank - 1;
+                                    }
                                 } else {
-                                    $secondTeamWonSet++;
-                                }
+                                    $firstTeamWonSet = 0;
+                                    $secondTeamWonSet = 0;
 
-                                if ($score->second_set_first_team > $score->second_set_second_team) {
-                                    $firstTeamWonSet++;
-                                } else {
-                                    $secondTeamWonSet++;
-                                }
-
-                                if ($score->third_set_first_team != 0 &&
-                                    $score->third_set_second_team != 0
-                                ) {
-                                    if ($score->third_set_first_team > $score->third_set_second_team) {
+                                    if ($score->first_set_first_team > $score->first_set_second_team) {
                                         $firstTeamWonSet++;
                                     } else {
                                         $secondTeamWonSet++;
                                     }
-                                }
-                                if ($firstTeamWonSet > $secondTeamWonSet) {
-                                  // si le premier exaequo est le vainqueur on ne change pas le ranking
-                                  // sinon on intervit le classement
-                                    if ($exaequo[2]->team_id == $score->first_team_id) {
-                                      //dd($exaequo[2]->rank);
-                                      $exaequo[1]->rank = $exaequo[1]->rank + 1;
-                                      $exaequo[2]->rank = $exaequo[2]->rank - 1;
-                                      //dd($exaequo[2]->rank);
+
+                                    if ($score->second_set_first_team > $score->second_set_second_team) {
+                                        $firstTeamWonSet++;
+                                    } else {
+                                        $secondTeamWonSet++;
                                     }
-                                } else {
-                                    if ($exaequo[2]->team_id == $score->second_team_id) {
-                                      $exaequo[1]->rank = $exaequo[1]->rank + 1;
-                                      $exaequo[2]->rank = $exaequo[2]->rank - 1;
+
+                                    if ($score->third_set_first_team != 0 &&
+                                        $score->third_set_second_team != 0
+                                    ) {
+                                        if ($score->third_set_first_team > $score->third_set_second_team) {
+                                            $firstTeamWonSet++;
+                                        } else {
+                                            $secondTeamWonSet++;
+                                        }
+                                    }
+                                    if ($firstTeamWonSet > $secondTeamWonSet) {
+                                      // si le premier exaequo est le vainqueur on ne change pas le ranking
+                                      // sinon on intervit le classement
+                                        if ($exaequo[2]->team_id == $score->first_team_id) {
+                                          //dd($exaequo[2]->rank);
+                                          $exaequo[1]->rank = $exaequo[1]->rank + 1;
+                                          $exaequo[2]->rank = $exaequo[2]->rank - 1;
+                                          //dd($exaequo[2]->rank);
+                                        }
+                                    } else {
+                                        if ($exaequo[2]->team_id == $score->second_team_id) {
+                                          $exaequo[1]->rank = $exaequo[1]->rank + 1;
+                                          $exaequo[2]->rank = $exaequo[2]->rank - 1;
+                                        }
                                     }
                                 }
                             }
