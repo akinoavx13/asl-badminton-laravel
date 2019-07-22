@@ -93,6 +93,28 @@
 
         <div class="form-group">
             <div class="col-md-3">
+                {!! Form::label('can_enroll_tournament', 'Inscription tournoi  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('can_enroll_tournament', '1', $setting->exists ? $setting->hasEnrollTournament(true) ? true : false : false, ['required']) !!}
+                        Ouvert
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('can_enroll_tournament', '0', $setting->exists ? $setting->hasEnrollTournament(false) ? true : false : true, ['required']) !!}
+                        Fermée
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
                 {!! Form::label('leisure_price', 'Prix loisir :', ['class' => 'control-label']) !!}
                 <i class="text-navy">*</i>
             </div>
