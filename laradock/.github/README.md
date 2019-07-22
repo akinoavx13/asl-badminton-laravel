@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://s19.postimg.org/jblfytw9f/laradock-logo.jpg" alt="Laradock Logo"/>
+    <img src="/.github/home-page-images/laradock-logo.jpg?raw=true" alt="Laradock Logo"/>
 </p>
 
 <p align="center">A Docker PHP development environment that facilitates running PHP Apps on Docker</p>
@@ -16,7 +16,7 @@
 <h4 align="center" style="color:#7d58c2">Use Docker First And Learn About It Later</h4>
 
 <p align="center">
-    <a href="https://zalt.me"><img src="http://forthebadge.com/images/badges/built-by-developers.svg" alt="forthebadge" width="240" ></a>
+    <a href="http://zalt.me"><img src="http://forthebadge.com/images/badges/built-by-developers.svg" alt="forthebadge" width="240" ></a>
 </p>
 
 
@@ -24,16 +24,12 @@
 
 <p align="center">
 	<a href="http://laradock.io">
-	   <img src="https://s19.postimg.org/ecnn9vdw3/Screen_Shot_2017-08-01_at_5.08.54_AM.png" width=300px" alt="Laradock Docs"/>
+	   <img src="https://raw.githubusercontent.com/laradock/laradock/master/.github/home-page-images/documentation-button.png" width=300px" alt="Laradock Docs"/>
 	</a>
 </p>
 
 
-## Sponsors
-
-Support this project by becoming a sponsor. 
-
-Your logo will show up on the [github repository](https://github.com/laradock/laradock/) index page and the [documentation](http://laradock.io/) main page, with a link to your website. [[Become a sponsor](https://opencollective.com/laradock#sponsor)]
+## Sponsors 
 
 <a href="https://opencollective.com/laradock/sponsor/0/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/laradock/sponsor/1/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/1/avatar.svg"></a>
@@ -43,9 +39,10 @@ Your logo will show up on the [github repository](https://github.com/laradock/la
 <a href="https://opencollective.com/laradock/sponsor/5/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/5/avatar.svg"></a>
 <a href="https://opencollective.com/laradock/sponsor/6/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/6/avatar.svg"></a>
 <a href="https://opencollective.com/laradock/sponsor/7/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/laradock/sponsor/8/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/laradock/sponsor/9/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/9/avatar.svg"></a>
 
+For basic sponsorships go to [Open Collective](https://opencollective.com/laradock#sponsor), for golden sponsorships contact <a href = "mailto: support@laradock.io">support@laradock.io</a>.
+
+*Your logo will show up on the [github repository](https://github.com/laradock/laradock/) index page and the [documentation](http://laradock.io/) main page, with a link to your website.* 
 
 ## Contributors
 
@@ -74,17 +71,17 @@ Your logo will show up on the [github repository](https://github.com/laradock/la
 > Help keeping the project development going, by [contributing](http://laradock.io/contributing) or donating a little. 
 > Thanks in advance.
 
-Donate directly via [Paypal](https://www.paypal.me/mzalt)
+Donate directly via [Paypal](https://paypal.me/mzmmzz)
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/mzalt) 
-
-or become a backer on [Open Collective](https://opencollective.com/laradock#backer)
-
-<a href="https://opencollective.com/laradock#backers" target="_blank"><img src="https://opencollective.com/laradock/backers.svg?width=890"></a>
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/mzmmzz) 
 
 or show your support via [Beerpay](https://beerpay.io/laradock/laradock) 
 
 [![Beerpay](https://beerpay.io/laradock/laradock/badge.svg?style=flat)](https://beerpay.io/laradock/laradock)
+
+or become a backer on [Open Collective](https://opencollective.com/laradock#backer)
+
+<a href="https://opencollective.com/laradock#backers" target="_blank"><img src="https://opencollective.com/laradock/backers.svg?width=890"></a>
 
 
 ## License
