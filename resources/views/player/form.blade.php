@@ -33,8 +33,13 @@
                     </div>
 
                     <div class="col-md-9">
-                        {!! Form::select('formula', ['leisure' => 'Loisir', 'tournament' => 'Tournoi', 'fun' => 'Fun','performance' => 'Performance','corpo'=>'Corpo','competition' => 'Competition'],
-                        $player->exists ? $player->formula : old('formula'),['class' => 'form-control', $player->exists && $player->hasCeState('contribution_paid') ? 'disabled' : 'required']) !!}
+                        @if($setting->hasEnrollTournament(true))
+                            {!! Form::select('formula', ['leisure' => 'Loisir', 'tournament' => 'Tournoi', 'fun' => 'Fun','performance' => 'Performance','corpo'=>'Corpo','competition' => 'Competition'],
+                            $player->exists ? $player->formula : old('formula'),['class' => 'form-control', $player->exists && $player->hasCeState('contribution_paid') ? 'disabled' : 'required']) !!}
+                        @else
+                            {!! Form::select('formula', ['leisure' => 'Loisir', 'fun' => 'Fun','performance' => 'Performance','corpo'=>'Corpo','competition' => 'Competition'],
+                            $player->exists ? $player->formula : old('formula'),['class' => 'form-control', $player->exists && $player->hasCeState('contribution_paid') ? 'disabled' : 'required']) !!}
+                        @endif
                     </div>
                 </div>
 

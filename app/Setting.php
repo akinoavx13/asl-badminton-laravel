@@ -15,6 +15,7 @@ class Setting extends Model
         'cc_email',
         'can_buy_t_shirt',
         'can_enroll',
+        'can_enroll_tournament',
         'leisure_price',
         'fun_price',
         'performance_price',
@@ -35,6 +36,7 @@ class Setting extends Model
     protected $casts = [
         'can_buy_t_shirt'           => 'boolean',
         'can_enroll'                => 'boolean',
+        'can_enroll_tournament'     => 'boolean',
         'championship_simple_woman' => 'boolean',
         'championship_double_woman' => 'boolean',
     ];
@@ -51,6 +53,11 @@ class Setting extends Model
     public function hasEnroll($can_enroll)
     {
         return $this->can_enroll === $can_enroll;
+    }
+
+    public function hasEnrollTournament($can_enroll_tournament)
+    {
+        return $this->can_enroll_tournament === $can_enroll_tournament;
     }
 
     public function hasChampionshipSimpleWoman($championshipSimpleWoman)
