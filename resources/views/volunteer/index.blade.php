@@ -1,17 +1,17 @@
 @extends('layout')
 
 @section('title')
-    Liste des volontaires
+    Gestion du set
 @stop
 
 @section('content')
 
-    <h1 class="text-center">Liste des volontaires pour gérer le set de la section</h1>
+    <h1 class="text-center">Gestion du set de la section </h1>
 
     <div class="row">
         <div class="col-md-12">
             <h2 class="text-center">
-                Les dix personnes le plus engagés sont:
+                Les personnes qui s’en occupent le plus souvent sont :
             </h2>
             <div class="row">
 
@@ -32,7 +32,7 @@
             </div>
     </div>
 
-    <h1 class="text-center">Liste des volontaires par date (30 derniers)</h1>
+    <h1 class="text-center">Historique (30 derniers)</h1>
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped reservation">
