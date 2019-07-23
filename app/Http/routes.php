@@ -40,6 +40,7 @@ use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatController;
 use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\VolunteerController;
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -183,6 +184,11 @@ Route::group(['prefix' => 'matches', 'middleware' => ['auth', 'notCE', 'admin']]
 Route::group(['prefix' => 'sportHall', 'middleware' => ['auth', 'notCE']], function () use ($router)
 {
     SportHallController::routes($router);
+});
+
+Route::group(['prefix' => 'volunteer', 'middleware' => ['auth', 'notCE']], function () use ($router)
+{
+    VolunteerController::routes($router);
 });
 
 Route::group(['prefix' => 'images', 'middleware' => []], function () use ($router)

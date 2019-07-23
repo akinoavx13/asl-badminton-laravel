@@ -107,6 +107,10 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\PresentPeopleSportHall');
     }
 
+    public function volunteer() {
+        return $this->hasMany('App\Volunteer');
+    }
+
     public function __toString()
     {
         return ucfirst($this->forname) . ' ' . ucfirst($this->name);
