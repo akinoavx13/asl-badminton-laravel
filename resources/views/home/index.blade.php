@@ -101,9 +101,9 @@
                         <li>Fermer le casier des poteaux en fin de séance</li>
                         <li>Vérifier que les volants sont tous rangés dans le bon sens dans les tubes</li>
                         <li>M'assurer que tout le monde quitte les vestiaires à 13h10 au plus tard</li>
-                        <li>Ramener le set complet au plus à 14h à la R&D SW</li>
+                        <li>Ramener le set complet au plus tard à 14h à la R&D SW</li>
                     </ol>
-                    <p class="text-muted text-center">Note: Il est possible d'annuler depuis le site en cas de changement d'avis ou pb d'agenda</p>
+                    <p class="text-muted text-center">Note : Il est possible d'annuler depuis le site en cas de changement d'avis ou problème d'agenda</p>
                     <div class="form-group text-center">
                         {!! Form::hidden('dateresp', 'today', ['class' => 'form-control', 'required']) !!}
                         {!! Form::submit("Je suis d’accord pour respecter ces engagements", ['class' => 'btn btn-danger']) !!}
@@ -138,9 +138,9 @@
                             <li>Fermer le casier des poteaux en fin de séance</li>
                             <li>Vérifier que les volants sont tous rangés dans le bon sens dans les tubes</li>
                             <li>M'assurer que tout le monde quitte les vestiaires à 13h10 au plus tard</li>
-                            <li>Ramener le set complet au plus à 14h à la R&D SW</li>
+                            <li>Ramener le set complet au plus tard à 14h à la R&D SW</li>
                         </ol>
-                        <p class="text-muted text-center">Note: Il est possible d'annuler depuis le site en cas de changement d'avis ou pb d'agenda</p>
+                        <p class="text-muted text-center">Note : Il est possible d'annuler depuis le site en cas de changement d'avis ou problème d'agenda</p>
                         <div class="form-group text-center">
                             {!! Form::hidden('dateresp', 'tomorrow', ['class' => 'form-control', 'required']) !!}
                             {!! Form::submit("Je suis d’accord pour respecter ces engagements", ['class' => 'btn btn-danger']) !!}
