@@ -1,22 +1,3 @@
-<div class="row">
-
-    <div class="col-md-6">
-        <div class="text-center">
-            <button type="button" class="btn btn-primary btn-outline dim" data-toggle="modal"
-                    data-target=".actuality">Poster une actualité
-            </button>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="text-center">
-            <button type="button" class="btn btn-warning btn-outline dim" onclick="location.href='{{ route('sportHall.index') }}'">
-                Qui est disponible pour du jeu libre ?
-            </button>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade actuality" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

@@ -9,6 +9,8 @@ use App\Post;
 use App\Score;
 use Jenssegers\Date\Date;
 use Auth;
+use App\Volunteer;
+use Carbon\Carbon;
 
 /**
  * View scores
@@ -171,6 +173,10 @@ class HomeController extends Controller
             return redirect()->back()->with('error', "compte inactif: contactez l'administrateur");
         }
 
-        return view('home.index', compact('scores', 'actualities', 'postsScores'));
+        $volunteerYesterday = Volunteer::where('day', Carbon::yesterday())->get();
+        $volunteerToday = Volunteer::where('day', Carbon::today())->get();
+        $volunteerTomorrow = Volunteer::where('day', Carbon::tomorrow())->get();
+
+        return view('home.index', compact('scores', 'actualities', 'postsScores', 'volunteerYesterday', 'volunteerToday', 'volunteerTomorrow'));
     }
 }

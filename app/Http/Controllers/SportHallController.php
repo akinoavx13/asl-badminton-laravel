@@ -41,7 +41,7 @@ class SportHallController extends Controller
         $presentPeopleYesterday = PresentPeopleSportHall::where('day', Carbon::yesterday())->get();
         $presentPeopleToday = PresentPeopleSportHall::where('day', Carbon::today())->get();
         $presentPeopleTomorrow = PresentPeopleSportHall::where('day', Carbon::tomorrow())->get();
-
+        
         $mostPresentPeoples = PresentPeopleSportHall::select('user_id')
             ->selectRaw('count(*) as count')
             ->groupBy('user_id')
@@ -74,7 +74,7 @@ class SportHallController extends Controller
                     'day' => $presentDate
                 ]);
 
-                $devices = Device::all();
+/*                $devices = Device::all();
 
                 $messageDate = $date == 'today' ? 'aujourd\'hui' : 'demain';
 
@@ -88,7 +88,7 @@ class SportHallController extends Controller
                         //PushNotification::app('BadmintonIOS-DEV')->to($device->token)->send($message);
                         PushNotification::app('BadmintonIOS-PROD')->to($device->token)->send($message);
                     }
-                }
+                }*/
 
                 return redirect()->back()->with('success', "C'est bien, vous faites du sport !");
             } else {

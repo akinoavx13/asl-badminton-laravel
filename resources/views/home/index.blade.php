@@ -8,9 +8,152 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h1 class="text-center">Les derniers matchs</h1>
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h1 class="text-center">
+                        Gestion du set de la section 
+                        @if($auth->hasRole('admin'))
+                            <a href="{{ route('volunteer.index') }}" class="text-primary">
+                                 <span class="fa fa-newspaper-o"></span></a>
+                        @endif
+                    </h1>
+                </div>
+                <div class="panel-body">
+                    
+
+                    <div class="col-md-4">
+                        <p class="text-center">Hier</p>
+                        <div class="text-center">
+                                @if (count($volunteerYesterday) ==0)
+                                <button type="button" class="btn btn-danger btn-outline dim" onclick="">
+                                    Personne !!!
+                                </button>
+                            @else
+                                    <h3 class="text-center">{{$volunteerYesterday[0]->user->forname}} {{$volunteerYesterday[0]->user->name}}</h3>
+                            @endif
+                            
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p class="text-center">Aujourd'hui</p>
+                        <div class="text-center">
+                            @if (count($volunteerToday) ==0)
+                                <button type="button" class="btn btn-danger btn-outline dim" data-toggle="modal" data-target=".volunteerToday">
+                                    Je m’occupe du set !
+                                </button>
+                            @else
+                                 @if($auth->id == $volunteerToday[0]->user_id)
+                                    <h3 class="text-center">{{$volunteerToday[0]->user->forname}} {{$volunteerToday[0]->user->name}} 
+                                    <a href="{{ route('volunteer.delete', $volunteerToday[0]->id) }}" class="text-danger"><span
+                                            class="fa fa-times"></span></a></h3>
+                                @else
+                                    <h3 class="text-center">{{$volunteerToday[0]->user->forname}} {{$volunteerToday[0]->user->name}} </h3>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <p class="text-center">Demain</p>
+                                @if (count($volunteerTomorrow) ==0)
+                                <button type="button" class="btn btn-danger btn-outline dim" data-toggle="modal" data-target=".volunteerTomorrow">
+                                    Je m’occupe du set !
+                                </button>
+                            @else
+                                 @if($auth->id == $volunteerTomorrow[0]->user_id)
+                                    <h3 class="text-center">{{$volunteerTomorrow[0]->user->forname}} {{$volunteerTomorrow[0]->user->name}}
+                                    <a href="{{ route('volunteer.delete', $volunteerTomorrow[0]->id) }}" class="text-danger"><span
+                                            class="fa fa-times"></span></a></h3>
+                                @else
+                                    <h3 class="text-center">{{$volunteerTomorrow[0]->user->forname}} {{$volunteerTomorrow[0]->user->name}}</h3> 
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
+
+
+    <div class="modal fade volunteerToday" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="fa fa-times"></span>
+                    </button>
+                    <h2 class="modal-title text-center">Je m’occupe du set</h2>
+                </div>
+
+                <div class="modal-body">
+
+                    {!! Form::open(['route' => 'volunteer.create', 'class' => 'form-horizontal']) !!}
+
+                    <p class="text-left">Je suis volontaire pour apporter ma contribution à la section badminton. 
+                    <strong class='text-danger'>Cela implique que je m’engage à :</strong>
+                    <ol>
+                        <li>Prendre le set de badminton à la R&D SW</li>
+                        <li>Etre au plus tard à 12h à la salle</li>
+                        <li>Fermer le casier des poteaux en fin de séance</li>
+                        <li>Vérifier que les volants sont tous rangés dans le bon sens dans les tubes</li>
+                        <li>M'assurer que tout le monde quitte les vestiaires à 13h10 au plus tard</li>
+                        <li>Ramener le set complet au plus à 14h à la R&D SW</li>
+                    </ol>
+                    <p class="text-muted text-center">Note: Il est possible d'annuler depuis le site en cas de changement d'avis ou pb d'agenda</p>
+                    <div class="form-group text-center">
+                        {!! Form::hidden('dateresp', 'today', ['class' => 'form-control', 'required']) !!}
+                        {!! Form::submit("Je suis d’accord pour respecter ces engagements", ['class' => 'btn btn-danger']) !!}
+                    </div>
+
+                    {!! Form::close() !!}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade volunteerTomorrow" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="fa fa-times"></span>
+                        </button>
+                        <h2 class="modal-title text-center">Je m’occupe du set </h2>
+                    </div>
+
+                    <div class="modal-body">
+
+                        {!! Form::open(['route' => 'volunteer.create', 'class' => 'form-horizontal']) !!}
+
+                        <p class="text-left">Je suis volontaire pour apporter ma contribution à la section badminton. 
+                        <strong class='text-danger'>Cela implique que je m’engage à :</strong>
+                        <ol>
+                            <li>Prendre le set de badminton à la R&D SW</li>
+                            <li>Etre au plus tard à 12h à la salle</li>
+                            <li>Fermer le casier des poteaux en fin de séance</li>
+                            <li>Vérifier que les volants sont tous rangés dans le bon sens dans les tubes</li>
+                            <li>M'assurer que tout le monde quitte les vestiaires à 13h10 au plus tard</li>
+                            <li>Ramener le set complet au plus à 14h à la R&D SW</li>
+                        </ol>
+                        <p class="text-muted text-center">Note: Il est possible d'annuler depuis le site en cas de changement d'avis ou pb d'agenda</p>
+                        <div class="form-group text-center">
+                            {!! Form::hidden('dateresp', 'tomorrow', ['class' => 'form-control', 'required']) !!}
+                            {!! Form::submit("Je suis d’accord pour respecter ces engagements", ['class' => 'btn btn-danger']) !!}
+                        </div>
+
+                        {!! Form::close() !!}
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
 
     @include('actuality.create')
 
@@ -18,6 +161,16 @@
 
     <div class="row">
         <div class="col-md-8">
+            <div class="col-md-6">
+                <div class="text-center">
+                        <button type="button" class="btn btn-primary btn-outline dim" onclick="">Résultats</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-center">
+                        <button type="button" class="btn btn-warning btn-outline dim" onclick="location.href='{{route('sportHall.index')}}'">Jeu libre</button>
+                </div>
+            </div>
             @if(count($scores) > 0)
                 @foreach($scores as $score)
                     <div class="ibox float-e-margins">
@@ -115,6 +268,12 @@
         </div>
 
         <div class="col-md-4">
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary btn-outline dim" data-toggle="modal"
+                            data-target=".actuality">Poster une actualité
+                    </button>
+                </div>
+            
             @include('actuality.index')
         </div>
     </div>
