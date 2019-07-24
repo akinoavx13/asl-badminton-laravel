@@ -39,20 +39,38 @@
             <thead>
             <tr>
                 <th rowspan="1" class="text-center">Date</th>
+                <th rowspan="1" class="text-center">Mis à jour le</th>
                 <th class="text-center">Volontaire</th>
             </tr>
             </thead>
 
             <tbody>
             @foreach($latestVolunteers as $index => $people) 
-                <tr class="text-left">
-                    <td rowspan="1" style="background: #fbfcfc;">
-                        {{ $people->day }}
-                    </td>
-                    <td>
-                        {{ $people->user->forname }} {{ $people->user->name }}
-                    </td>
-                </tr>
+                @if ($people[1] == 'Personne')
+                    <tr class="text-left text-danger">
+                        <td rowspan="1">
+                            <strong>{{ $people[0] }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{ $people[2] }}</strong>
+                        </td>
+                        <td>
+                            <strong>{{ $people[1] }}</strong>
+                        </td>
+                    </tr>
+                @else
+                    <tr class="text-left">
+                        <td rowspan="1">
+                            {{ $people[0] }}
+                        </td>
+                        <td>
+                            {{ $people[2] }}
+                        </td>
+                        <td>
+                            {{ $people[1] }}
+                        </td>
+                    </tr>
+                @endif
             @endforeach
             </tbody>
         </table>

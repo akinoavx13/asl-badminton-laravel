@@ -56,11 +56,6 @@ class VolunteerController extends Controller
      */
     public function index()
     {
-        //
-        $volunteerYesterday = Volunteer::where('day', Carbon::yesterday())->get();
-        $volunteerToday = Volunteer::where('day', Carbon::today())->get();
-        $volunteerTomorrow = Volunteer::where('day', Carbon::tomorrow())->get();
-
         $biggestVolunteers = Volunteer::select('user_id')
             ->selectRaw('count(*) as count')
             ->groupBy('user_id')
@@ -68,19 +63,34 @@ class VolunteerController extends Controller
             ->take(10)
             ->get();
 
-        $latestVolunteers = Volunteer::select('user_id', 'day')
-            ->orderBy('day', 'desc')
-            ->take(30)
-            ->get();
+        // get last 30 days
+        $nbDay = 0;
+        $latestVolunteers = array();
 
-        foreach ($latestVolunteers as $index => $oneVolunteer)
+        while($nbDay <= 30)
         {
-            $oneDay = Date::createFromFormat('Y-m-d', $oneVolunteer['day']);
-            $oneDay = ucfirst($oneDay->format('l j F Y'));
-            $latestVolunteers[$index]['day'] = $oneDay;
+            $day = Date::today()->subDay($nbDay-1);
+            if(!$day->isWeekend())
+            {
+                $dayVolunteer = Volunteer::select('user_id', 'day', 'updated_at')->where('day', $day)->get();
+                $latestVolunteers[$nbDay][0] = ucfirst($day->format('l j F'));
+                if (!$dayVolunteer->count() == 0) {
+                    $latestVolunteers[$nbDay][1] = $dayVolunteer[0]->user->forname . " " . $dayVolunteer[0]->user->name;
+                    if ($dayVolunteer[0]->updated_at->format('j') == $day->format('j')) {
+                        $latestVolunteers[$nbDay][2] = " le même jour à " . $dayVolunteer[0]->updated_at->format('H:i');
+                    } else {
+                        $latestVolunteers[$nbDay][2] = " la veille à " . $dayVolunteer[0]->updated_at->format('H:i');
+                    }
+
+                } else {
+                    $latestVolunteers[$nbDay][1] = "Personne";
+                    $latestVolunteers[$nbDay][2] = "";
+                }
+            }
+            $nbDay++;
         }
 
-        return view('volunteer.index', compact('volunteerYesterday', 'volunteerToday', 'volunteerTomorrow', 'biggestVolunteers', 'latestVolunteers'));
+        return view('volunteer.index', compact('biggestVolunteers', 'latestVolunteers'));
     }
 
     /**
@@ -98,11 +108,35 @@ class VolunteerController extends Controller
         $user_id = $this->user->id;
         $date = $request->dateresp;
 
+        // // dayOfWeek returns a number between 0 (sunday) and 6 (saturday)
+        $todayDayOfWeek = Carbon::today()->dayOfWeek;
+        $isWeekEnd = false;
+
+        // if today between tuesday and thrusday no problem for yesterday and tomorrow
+        if ($todayDayOfWeek >= 2 and $todayDayOfWeek <= 4) {
+            $today = Date::today();
+            $tomorrow = Date::today()->addDay();
+        } else if ($todayDayOfWeek == 0) {
+            $today = Date::today();
+            $isWeekEnd = true;
+            $tomorrow = Date::today()->addDay();
+        } else if ($todayDayOfWeek == 1) {
+            $today = Date::today();
+            $tomorrow = Date::today()->addDay();
+        } else if ($todayDayOfWeek == 5) {
+            $today = Date::today();
+            $tomorrow = Date::today()->addDay(3);
+        } else if ($todayDayOfWeek == 6) {
+            $today = Date::today();
+            $isWeekEnd = true;
+            $tomorrow = Date::today()->addDay(2);
+        } 
+
         if ($date == 'today' || $date == 'tomorrow') {
             if ($date == 'today') {
-                $presentDate = Carbon::today();
+                $presentDate = $today;
             } else if ($date == 'tomorrow') {
-                $presentDate = Carbon::tomorrow();
+                $presentDate = $tomorrow;
             }
 
             //search if we are already at the volunteer

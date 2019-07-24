@@ -22,7 +22,7 @@
                     
 
                     <div class="col-md-4">
-                        <p class="text-center">Hier</p>
+                        <p class="text-center">Séance précédente ({{$yesterday}})</p>
                         <div class="text-center">
                                 @if (count($volunteerYesterday) ==0)
                                 <button type="button" class="btn btn-danger btn-outline dim" onclick="">
@@ -36,27 +36,31 @@
                     </div>
 
                     <div class="col-md-4">
-                        <p class="text-center">Aujourd'hui</p>
+                        <p class="text-center">Séance du jour ({{ $today}})</p>
                         <div class="text-center">
-                            @if (count($volunteerToday) ==0)
-                                <button type="button" class="btn btn-danger btn-outline dim" data-toggle="modal" data-target=".volunteerToday">
-                                    Je m’occupe du set !
-                                </button>
-                            @else
-                                 @if($auth->id == $volunteerToday[0]->user_id)
-                                    <h3 class="text-center">{{$volunteerToday[0]->user->forname}} {{$volunteerToday[0]->user->name}} 
-                                    <a href="{{ route('volunteer.delete', $volunteerToday[0]->id) }}" class="text-danger"><span
-                                            class="fa fa-times"></span></a></h3>
+                            @if ($isWeekEnd == false)
+                                @if (count($volunteerToday) ==0)
+                                    <button type="button" class="btn btn-danger btn-outline dim" data-toggle="modal" data-target=".volunteerToday">
+                                        Je m’occupe du set !
+                                    </button>
                                 @else
-                                    <h3 class="text-center">{{$volunteerToday[0]->user->forname}} {{$volunteerToday[0]->user->name}} </h3>
+                                     @if($auth->id == $volunteerToday[0]->user_id)
+                                        <h3 class="text-center">{{$volunteerToday[0]->user->forname}} {{$volunteerToday[0]->user->name}} 
+                                        <a href="{{ route('volunteer.delete', $volunteerToday[0]->id) }}" class="text-danger"><span
+                                                class="fa fa-times"></span></a></h3>
+                                    @else
+                                        <h3 class="text-center">{{$volunteerToday[0]->user->forname}} {{$volunteerToday[0]->user->name}} </h3>
+                                    @endif
                                 @endif
+                            @else
+                                Pas de séance aujourd'hui
                             @endif
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="text-center">
-                            <p class="text-center">Demain</p>
+                            <p class="text-center">Prochaine séance ({{$tomorrow}})</p>
                                 @if (count($volunteerTomorrow) ==0)
                                 <button type="button" class="btn btn-danger btn-outline dim" data-toggle="modal" data-target=".volunteerTomorrow">
                                     Je m’occupe du set !
