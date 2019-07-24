@@ -173,10 +173,45 @@ class HomeController extends Controller
             return redirect()->back()->with('error', "compte inactif: contactez l'administrateur");
         }
 
-        $volunteerYesterday = Volunteer::where('day', Carbon::yesterday())->get();
-        $volunteerToday = Volunteer::where('day', Carbon::today())->get();
-        $volunteerTomorrow = Volunteer::where('day', Carbon::tomorrow())->get();
+        // // dayOfWeek returns a number between 0 (sunday) and 6 (saturday)
+        $todayDayOfWeek = Carbon::today()->dayOfWeek;
+        $isWeekEnd = false;
 
-        return view('home.index', compact('scores', 'actualities', 'postsScores', 'volunteerYesterday', 'volunteerToday', 'volunteerTomorrow'));
+        // if today between tuesday and thrusday no problem for yesterday and tomorrow
+
+        if ($todayDayOfWeek >= 2 and $todayDayOfWeek <= 4) {
+            $today = Date::today();
+            $yesterday = Date::today()->subDay();
+            $tomorrow = Date::today()->addDay();
+        } else if ($todayDayOfWeek == 0) {
+            $today = Date::today();
+            $isWeekEnd = true;
+            $yesterday = Date::today()->subDay(2);
+            $tomorrow = Date::today()->addDay();
+        } else if ($todayDayOfWeek == 1) {
+            $today = Date::today();
+            $yesterday = Date::today()->subDay(3);
+            $tomorrow = Date::today()->addDay();
+        } else if ($todayDayOfWeek == 5) {
+            $today = Date::today();
+            $yesterday = Date::today()->subDay();
+            $tomorrow = Date::today()->addDay(3);
+        } else if ($todayDayOfWeek == 6) {
+            $today = Date::today();
+            $isWeekEnd = true;
+            $yesterday = Date::today()->subDay();
+            $tomorrow = Date::today()->addDay(2);
+        } 
+        
+        $volunteerYesterday = Volunteer::where('day', $yesterday)->get();
+        $volunteerToday = Volunteer::where('day', $today)->get();
+        $volunteerTomorrow = Volunteer::where('day', $tomorrow)->get();
+
+        $today = $today->format('l');
+        $yesterday = $yesterday->format('l');
+        $tomorrow = $tomorrow->format('l');
+        
+
+        return view('home.index', compact('scores', 'actualities', 'postsScores', 'volunteerYesterday', 'volunteerToday', 'volunteerTomorrow', 'today','yesterday','tomorrow','isWeekEnd'));
     }
 }
