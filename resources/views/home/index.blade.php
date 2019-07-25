@@ -15,6 +15,7 @@
                         @if($auth->hasRole('admin'))
                             <a href="{{ route('volunteer.index') }}" class="text-primary">
                                  <span class="fa fa-newspaper-o"></span></a>
+                            <a href="{{ route('volunteer.check') }}" class"="text-muted">(mail alert)</a>
                         @endif
                     </h1>
                 </div>
