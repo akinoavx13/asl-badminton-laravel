@@ -80,8 +80,8 @@ class VolunteerController extends Controller
             }
         }
 
-        $data['title'] = "Cherche un volontaire pour le set";
-        $data['content'] = "Pour information personne ne s'est porté candidat pour prendre le set aujourd'hui. Si il n'y a pas volontaire la séance sera annulée :-( <br> Pour candidater rendez vous sur <a href='badminton.aslectra.com/home'>la page d'accueil du site </a>";
+        $data['title'] = "Cherche un(e) volontaire pour le set";
+        $data['content'] = "Pour information, personne ne s'est porté candidat pour prendre le set aujourd'hui. S'il n'y a pas de volontaire, la séance sera annulée :-( <br> Pour candidater, rendez-vous sur <a href='badminton.aslectra.com/home'>la page d'accueil du site</a>.";
         $data['writter'] = "robot@ASL-Badminton";
 
         foreach($allPlayers2 as $users) {
