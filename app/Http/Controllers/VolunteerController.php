@@ -7,7 +7,9 @@ use App\Http\Requests\VolunteerRequest;
 use App\User;
 use Carbon\Carbon;
 use Jenssegers\Date\Date;
-
+use App\Http\Utilities\SendMail;
+use App\Player;
+use App\Season;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -47,7 +49,53 @@ class VolunteerController extends Controller
             'uses' => 'VolunteerController@delete',
             'as' => 'volunteer.delete',
         ]);
+
+        $router->get('check', [
+            'uses' => 'VolunteerController@check',
+            'as'   => 'volunteer.check',
+        ]);
     }
+
+    public function check()
+    {
+        $day = Date::today();
+        $dayVolunteer = Volunteer::select('user_id', 'day', 'updated_at')->where('day', $day)->get();
+        if ($dayVolunteer->count() == 0) {
+            $season = Season::Active()->first()->id;
+            $allPlayers = Player::select('users.email')
+                    ->join('users', 'users.id', '=', 'players.user_id')
+                    ->where('users.state', '<>', 'inactive')
+                    ->where('users.role', '=', 'admin')
+                    ->where('players.season_id', '=', $season)
+                    ->orderBy('users.email', 'asc')
+                    ->get()
+                    ->chunk(45)
+                    ->toArray();
+
+        $allPlayers2 = [];
+
+        foreach ($allPlayers as $index => $users) {
+            foreach ($users as $user) {
+                $allPlayers2[$index][] = $user['email'];
+            }
+        }
+
+        $data['title'] = "Cherche un volontaire pour le set";
+        $data['content'] = "Pour information personne ne s'est porté candidat pour prendre le set aujourd'hui. Si il n'y a pas volontaire la séance sera annulée :-( <br> Pour candidater rendez vous sur <a href='badminton.aslectra.com/home'>la page d'accueil du site </a>";
+        $data['writter'] = "robot@ASL-Badminton";
+
+        foreach($allPlayers2 as $users) {
+            SendMail::send($users, 'newActuality', $data, 'Badminton: Cherche un volontaire pour le set');
+        }
+
+        return redirect()->back()->with('success', 'Le mail de demande a bien été posté !');
+
+        } else {
+            return redirect()->back()->with('success', 'il y a déjà un volontaire !'); 
+        }
+    }
+
+
 
     /**
      * Display a listing of the resource.
