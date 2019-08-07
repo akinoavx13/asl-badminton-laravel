@@ -58,40 +58,46 @@ class VolunteerController extends Controller
 
     public function check()
     {
-        $day = Date::today();
-        $dayVolunteer = Volunteer::select('user_id', 'day', 'updated_at')->where('day', $day)->get();
-        if ($dayVolunteer->count() == 0) {
-            $season = Season::Active()->first()->id;
-            $allPlayers = Player::select('users.email')
-                    ->join('users', 'users.id', '=', 'players.user_id')
-                    ->where('users.state', '<>', 'inactive')
-                    ->where('users.role', '=', 'admin')
-                    ->where('players.season_id', '=', $season)
-                    ->orderBy('users.email', 'asc')
-                    ->get()
-                    ->chunk(45)
-                    ->toArray();
+        // // dayOfWeek returns a number between 0 (sunday) and 6 (saturday)
+        $todayDayOfWeek = Carbon::today()->dayOfWeek;
+        if ($todayDayOfWeek == 0 || $todayDayOfWeek == 6) {
+            return redirect()->back()->with('success', 'Pas de mail envoyé le samedi ou dimanche !'); 
+        } else  {
+            $day = Date::today();
+            $dayVolunteer = Volunteer::select('user_id', 'day', 'updated_at')->where('day', $day)->get();
+            if ($dayVolunteer->count() == 0) {
+                $season = Season::Active()->first()->id;
+                $allPlayers = Player::select('users.email')
+                        ->join('users', 'users.id', '=', 'players.user_id')
+                        ->where('users.state', '<>', 'inactive')
+                        ->where('users.role', '=', 'admin')
+                        ->where('players.season_id', '=', $season)
+                        ->orderBy('users.email', 'asc')
+                        ->get()
+                        ->chunk(45)
+                        ->toArray();
 
-        $allPlayers2 = [];
+            $allPlayers2 = [];
 
-        foreach ($allPlayers as $index => $users) {
-            foreach ($users as $user) {
-                $allPlayers2[$index][] = $user['email'];
+            foreach ($allPlayers as $index => $users) {
+                foreach ($users as $user) {
+                    $allPlayers2[$index][] = $user['email'];
+                }
             }
-        }
 
-        $data['title'] = "Cherche un(e) volontaire pour le set";
-        $data['content'] = "Pour information, personne ne s'est porté candidat pour prendre le set aujourd'hui. S'il n'y a pas de volontaire, la séance sera annulée :-( <br> Pour candidater, rendez-vous sur <a href='badminton.aslectra.com/home'>la page d'accueil du site</a>.";
-        $data['writter'] = "robot@ASL-Badminton";
+            $data['title'] = "Cherche un(e) volontaire pour le set";
+            $data['content'] = "Pour information, personne ne s'est porté candidat pour prendre le set aujourd'hui. S'il n'y a pas de volontaire, la séance sera annulée :-( <br> Pour candidater, rendez-vous sur <a href='badminton.aslectra.com/home'>la page d'accueil du site</a>.";
+            $data['writter'] = "robot@ASL-Badminton";
 
-        foreach($allPlayers2 as $users) {
-            SendMail::send($users, 'newActuality', $data, 'Badminton: Cherche un volontaire pour le set');
-        }
+            foreach($allPlayers2 as $users) {
+                SendMail::send($users, 'newActuality', $data, 'Badminton: Cherche un volontaire pour le set');
+            }
 
-        return redirect()->back()->with('success', 'Le mail de demande a bien été posté !');
+            return redirect()->back()->with('success', 'Le mail de demande a bien été posté !');
 
-        } else {
-            return redirect()->back()->with('success', 'il y a déjà un volontaire !'); 
+            } else {
+                return redirect()->back()->with('success', 'il y a déjà un volontaire !'); 
+            }
         }
     }
 
