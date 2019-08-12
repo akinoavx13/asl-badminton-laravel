@@ -84,6 +84,7 @@ class SettingController extends Controller
                 't_shirt_price'              => 25,
                 'championship_simple_woman'  => false,
                 'championship_double_woman'  => false,
+                'volunteer_alert_flag'       => true,
             ]);
 
             return redirect()->route('setting.index')->with('success', "Les paramètres sont créés !");
@@ -124,6 +125,7 @@ class SettingController extends Controller
             't_shirt_price'              => $request->t_shirt_price,
             'championship_simple_woman'  => $request->championship_simple_woman,
             'championship_double_woman'  => $request->championship_double_woman,
+            'volunteer_alert_flag'       => $request->volunteer_alert_flag,
         ]);
 
         return redirect()->route('setting.index')->with('success', "Les modifications sont bien prises en compte !");

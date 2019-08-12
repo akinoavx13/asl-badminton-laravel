@@ -279,6 +279,28 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('volunteer_alert_flag', 'Envoi alerte mail pour le set  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('volunteer_alert_flag', '1', $setting->exists ? $setting->hasVolunteerAlertFlag(true) ? true : false : false, ['required']) !!}
+                        Joueurs
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('volunteer_alert_flag', '0', $setting->exists ? $setting->hasVolunteerAlertFlag(false) ? true : false : true, ['required']) !!}
+                        Administrateurs
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group text-center">
             {!! Form::submit('Sauvegarder', ['class' => 'btn btn-primary']) !!}
         </div>
