@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers;
 use App\Volunteer;
 use App\Http\Requests\VolunteerRequest;
 use App\User;
@@ -10,6 +11,8 @@ use Jenssegers\Date\Date;
 use App\Http\Utilities\SendMail;
 use App\Player;
 use App\Season;
+use App\Setting;
+
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -67,16 +70,29 @@ class VolunteerController extends Controller
             $dayVolunteer = Volunteer::select('user_id', 'day', 'updated_at')->where('day', $day)->get();
             if ($dayVolunteer->count() == 0) {
                 $season = Season::Active()->first()->id;
-                $allPlayers = Player::select('users.email')
-                        ->join('users', 'users.id', '=', 'players.user_id')
-                        ->where('users.state', '<>', 'inactive')
-                        ->where('users.role', '=', 'admin')
-                        ->where('players.season_id', '=', $season)
-                        ->orderBy('users.email', 'asc')
-                        ->get()
-                        ->chunk(45)
-                        ->toArray();
-
+                $setting = Helpers::getInstance()->setting();
+                if ($setting->volunteer_alert_flag == false) {
+                    $allPlayers = Player::select('users.email')
+                            ->join('users', 'users.id', '=', 'players.user_id')
+                            ->where('users.state', '<>', 'inactive')
+                            ->where('users.role', '=', 'admin')
+                            ->where('players.season_id', '=', $season)
+                            ->orderBy('users.email', 'asc')
+                            ->get()
+                            ->chunk(45)
+                            ->toArray();
+                   }
+                else {
+                    $allPlayers = Player::select('users.email')
+                            ->join('users', 'users.id', '=', 'players.user_id')
+                            ->where('users.state', '<>', 'inactive')
+                            ->where('players.season_id', '=', $season)
+                            ->orderBy('users.email', 'asc')
+                            ->get()
+                            ->chunk(45)
+                            ->toArray();
+                }
+                
             $allPlayers2 = [];
 
             foreach ($allPlayers as $index => $users) {

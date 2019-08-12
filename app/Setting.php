@@ -29,6 +29,7 @@ class Setting extends Model
         't_shirt_price',
         'championship_simple_woman',
         'championship_double_woman',
+        'volunteer_alert_flag',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -39,6 +40,7 @@ class Setting extends Model
         'can_enroll_tournament'     => 'boolean',
         'championship_simple_woman' => 'boolean',
         'championship_double_woman' => 'boolean',
+        'volunteer_alert_flag'      => 'boolean',
     ];
 
     /******************/
@@ -68,6 +70,11 @@ class Setting extends Model
     public function hasChampionshipDoubleWoman($championshipDoubleWoman)
     {
         return $this->championship_double_woman === $championshipDoubleWoman;
+    }
+
+    public function hasVolunteerAlertFlag($volunteer_alert_flag)
+    {
+        return $this->volunteer_alert_flag === $volunteer_alert_flag;
     }
 
 }
