@@ -186,7 +186,7 @@ Route::group(['prefix' => 'sportHall', 'middleware' => ['auth', 'notCE']], funct
     SportHallController::routes($router);
 });
 
-Route::group(['prefix' => 'volunteer', 'middleware' => ['auth', 'notCE']], function () use ($router)
+Route::group(['prefix' => 'volunteer'], function () use ($router)
 {
     VolunteerController::routes($router);
 });
@@ -207,3 +207,4 @@ Route::group(['prefix' => 'stat', 'middleware' => ['auth', 'notCE']], function()
 Route::group(['prefix' => 'availability', 'middleware' => ['auth', 'notCE']], function() use ($router) {
    AvailabilityController::routes($router);
 });
+

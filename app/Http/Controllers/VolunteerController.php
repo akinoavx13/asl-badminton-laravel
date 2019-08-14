@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers;
+use Illuminate\Http\Response;
 use App\Volunteer;
 use App\Http\Requests\VolunteerRequest;
 use App\User;
@@ -57,14 +58,32 @@ class VolunteerController extends Controller
             'uses' => 'VolunteerController@check',
             'as'   => 'volunteer.check',
         ]);
+
+        $router->get('checkAPI', [
+            'uses' => 'VolunteerController@checkAPI',
+            'as'   => 'volunteer.checkAPI',
+        ]);        
+
+
     }
 
-    public function check()
+    public function checkAPI() {
+        $resultmessage = $this->check(true);
+        return response()->json(['message' => $resultmessage], 200);
+    }
+
+
+    public function check($apicall = false)
     {
         // // dayOfWeek returns a number between 0 (sunday) and 6 (saturday)
         $todayDayOfWeek = Carbon::today()->dayOfWeek;
         if ($todayDayOfWeek == 0 || $todayDayOfWeek == 6) {
-            return redirect()->back()->with('success', 'Pas de mail envoyé le samedi ou dimanche !'); 
+            if ($apicall == false) {
+                return redirect()->back()->with('success', 'Pas de mail envoyé le samedi ou dimanche !');
+            } else {
+                return 'Pas de mail envoye le samedi ou dimanche !'; 
+            //return response()->json(['message' => 'Pas de mail envoyé le samedi ou dimanche !'], 200);
+            }
         } else  {
             $day = Date::today();
             $dayVolunteer = Volunteer::select('user_id', 'day', 'updated_at')->where('day', $day)->get();
@@ -109,10 +128,21 @@ class VolunteerController extends Controller
                 SendMail::send($users, 'newActuality', $data, 'Badminton: Cherche un volontaire pour le set');
             }
 
-            return redirect()->back()->with('success', 'Le mail de demande a bien été posté !');
+            if ($apicall == false) {
+                return redirect()->back()->with('success', 'Le mail de demande a bien été posté !');
+            } else {
+                return 'Le mail de demande a bien ete poste !'; 
+                //return response()->json(['message' => 'le mail de demande a bien été posté'], 200);    
+            }
+            
 
             } else {
-                return redirect()->back()->with('success', 'il y a déjà un volontaire !'); 
+                if ($apicall == false) {
+                    return redirect()->back()->with('success', 'il y a déjà un volontaire !');
+                    //return response()->json(['message' => 'il y a déjà un volontaire'], 200);
+                } else {
+                    return 'il y a deja un volontaire !';
+                }
             }
         }
     }
