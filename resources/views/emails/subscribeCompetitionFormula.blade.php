@@ -28,8 +28,8 @@
         </li>
         <li>
             <p>
-                S'il s’agit d’un renouvellement de licence et que le certificat médical fourni l’année dernière avait
-                moins de 3 ans, il faut remplir la <a href="{{ asset('documents/formulaire_licence.pdf') }}">demande de licence</a> et vous pouvez éviter le
+                S'il s’agit d’un renouvellement de licence et que le certificat médical fourni l’année dernière a
+                moins de 3 ans au 1er Juillet de cette année, il faut remplir la <a href="{{ asset('documents/formulaire_licence.pdf') }}">demande de licence</a> et vous pouvez éviter le
                 certificat médical et ne fournir que le <a href="{{ asset('documents/questionnaire_sante.pdf') }}">questionnaire de santé</a> (sous réserve que vous répondrez NON à
                 toutes les questions, sinon il faudra tout de même un <a href="{{ asset('documents/certificat_medical.pdf') }}">certificat médical</a>).
             </p>
