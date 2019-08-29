@@ -163,6 +163,15 @@
                 </li>
             @endif
 
+            @if($auth)
+                <li class="{{ Request::is('emailToDev') ? 'active' : '' }}">
+                    <a href="http://aslectra.com/documents/Presentation%20Badminton.pdf">
+                        <i class="fa fa-university"></i>
+                        <span class="nav-label">Informations</span>
+                    </a>
+                </li>
+            @endif
+
         </ul>
         <p class="text-center">&copy; <a href="http://maxime.maheo.free.fr">Maxime Maheo</a></p>
     </div>
