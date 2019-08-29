@@ -335,7 +335,7 @@
                             <li>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Statue CE :</label>
+                                        <label>Statut CE :</label>
                                     </div>
                                     <div class="col-md-8">
                                         @if($player->hasCeState('contribution_payable'))
@@ -350,7 +350,7 @@
                             <li>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Statue GBC :</label>
+                                        <label>Statut GBC :</label>
                                     </div>
                                     <div class="col-md-8">
                                         @if($player->hasGbcState('non_applicable'))
