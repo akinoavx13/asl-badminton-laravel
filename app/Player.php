@@ -172,19 +172,19 @@ class Player extends Model
 
         //calculate leisure formula
         if ($this->hasFormula('leisure') || $this->hasFormula('tournament')) {
-            $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->leisure_external_price : $setting->leisure_price;
+            $price['formula'] += ($this->user->hasLectraRelation('external') || $this->user->hasLectraRelation('subcontractor') ) ? $setting->leisure_external_price : $setting->leisure_price;
         } //calculate fun formula
         elseif ($this->hasFormula('fun')) {
-            $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->fun_external_price : $setting->fun_price;
+            $price['formula'] += ($this->user->hasLectraRelation('external') || $this->user->hasLectraRelation('subcontractor') )? $setting->fun_external_price : $setting->fun_price;
         } //calculate performance formula
         elseif ($this->hasFormula('performance')) {
-            $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->performance_external_price : $setting->performance_price;
+            $price['formula'] += ($this->user->hasLectraRelation('external') || $this->user->hasLectraRelation('subcontractor') )? $setting->performance_external_price : $setting->performance_price;
         } //calculate corpo formula
         elseif ($this->hasFormula('corpo')) {
-            $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->corpo_external_price : $setting->corpo_price;
+            $price['formula'] += ($this->user->hasLectraRelation('external') || $this->user->hasLectraRelation('subcontractor') )? $setting->corpo_external_price : $setting->corpo_price;
         } //calculate competition formula
         elseif ($this->hasFormula('competition')) {
-            $price['formula'] += $this->user->hasLectraRelation('external') ? $setting->competition_external_price : $setting->competition_price;
+            $price['formula'] += ($this->user->hasLectraRelation('external') || $this->user->hasLectraRelation('subcontractor') )? $setting->competition_external_price : $setting->competition_price;
         }
 
         return $price;
