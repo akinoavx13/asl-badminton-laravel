@@ -301,7 +301,7 @@
                         <h3 class="text-center">Formule loisir</h3>
                     </div>
                     <div class="ibox-content">
-                        @if($auth->hasLectraRelation('external'))
+                        @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->leisure_external_price }}€ + (cotisation ASL)</strong></h4>
                         @else
                             <h4 class="text-center"><strong>{{ $setting->leisure_price }}€ + (cotisation ASL)</strong></h4>
@@ -344,7 +344,7 @@
                         <h3 class="text-center">Formule tournoi</h3>
                     </div>
                     <div class="ibox-content">
-                        @if($auth->hasLectraRelation('external'))
+                        @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->leisure_external_price }}€ + (cotisation ASL)</strong></h4>
                         @else
                             <h4 class="text-center"><strong>{{ $setting->leisure_price }}€ + (cotisation ASL)</strong></h4>
@@ -387,7 +387,7 @@
                         <h3 class="text-center">Formule fun</h3>
                     </div>
                     <div class="ibox-content">
-                        @if($auth->hasLectraRelation('external'))
+                        @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->fun_external_price }}€ + (cotisation ASL)</strong></h4>
                         @else
                             <h4 class="text-center"><strong>{{ $setting->fun_price }}€ + (cotisation ASL)</strong></h4>
@@ -430,7 +430,7 @@
                         <h3 class="text-center">Formule performance</h3>
                     </div>
                     <div class="ibox-content">
-                        @if($auth->hasLectraRelation('external'))
+                        @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->performance_external_price }}€ + (cotisation ASL)</strong></h4>
                         @else
                             <h4 class="text-center"><strong>{{ $setting->performance_price }}€ + (cotisation ASL)</strong></h4>
@@ -473,7 +473,7 @@
                         <h3 class="text-center">Formule corpo</h3>
                     </div>
                     <div class="ibox-content">
-                        @if($auth->hasLectraRelation('external'))
+                        @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->corpo_external_price }}€ + (cotisation ASL)</strong></h4>
                         @else
                             <h4 class="text-center"><strong>{{ $setting->corpo_price }}€ + (cotisation ASL)</strong></h4>
@@ -517,7 +517,7 @@
                         <h3 class="text-center">Formule competition</h3>
                     </div>
                     <div class="ibox-content">
-                        @if($auth->hasLectraRelation('external'))
+                        @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->competition_external_price }}€ + (cotisation ASL)</strong></h4>
                         @else
                             <h4 class="text-center"><strong>{{ $setting->competition_price }}€ + (cotisation ASL)</strong></h4>
