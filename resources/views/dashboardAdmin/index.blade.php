@@ -115,6 +115,16 @@
                                                target="_top"> <i class="fa fa-send"></i></a>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            <button type="button" class="btn btn-danger m-r-sm">
+                                                {{ count($users['usersPartnership']) }}
+                                            </button>
+                                            Mairie
+                                            <a href="mailto:@foreach($users['usersPartnership'] as $user){{ $user->email}};@endforeach ?Subject=Badminton"
+                                               target="_top"> <i class="fa fa-send"></i></a>
+                                        </td>
+                                    </tr>
 
                                     </tbody>
                                 </table>
@@ -141,7 +151,7 @@
                                 <div class="panel-heading">
                                     <h2 class="text-center">
                                         Non lectra
-                                        <a href="mailto:@foreach($users['usersChild'] as $user){{ $user->email}};@endforeach @foreach($users['usersConjoint'] as $user){{ $user->email}};@endforeach @foreach($users['usersExternal'] as $user){{ $user->email}};@endforeach @foreach($users['usersTrainee'] as $user){{ $user->email}};@endforeach @foreach($users['usersSubcontractor'] as $user){{ $user->email}};@endforeach ?Subject=Badminton"
+                                        <a href="mailto:@foreach($users['usersChild'] as $user){{ $user->email}};@endforeach @foreach($users['usersConjoint'] as $user){{ $user->email}};@endforeach @foreach($users['usersExternal'] as $user){{ $user->email}};@endforeach @foreach($users['usersTrainee'] as $user){{ $user->email}};@endforeach @foreach($users['usersSubcontractor'] as $user){{ $user->email}};@endforeach @foreach($users['usersPartnership'] as $user){{ $user->email}};@endforeach ?Subject=Badminton"
                                            target="_top"> <i class="fa fa-send"></i></a>
                                     </h2>
                                 </div>
@@ -196,11 +206,23 @@
                                     @endif
                                     @if(count($users['usersSubcontractor']) > 0)
                                         <h2 class="text-center text-danger">
-                                            Stagiaire
+                                            Sous Traitant
                                             <a href="mailto:@foreach($users['usersSubcontractor'] as $user){{ $user->email}};@endforeach ?Subject=Badminton"
                                                target="_top"> <i class="fa fa-send"></i></a>
                                         </h2>
                                         @foreach($users['usersSubcontractor'] as $user)
+                                            <p class="text-center">
+                                                {{ $user }}
+                                            </p>
+                                        @endforeach
+                                    @endif
+                                    @if(count($users['usersPartnership']) > 0)
+                                        <h2 class="text-center text-danger">
+                                            Mairie
+                                            <a href="mailto:@foreach($users['usersPartnership'] as $user){{ $user->email}};@endforeach ?Subject=Badminton"
+                                               target="_top"> <i class="fa fa-send"></i></a>
+                                        </h2>
+                                        @foreach($users['usersPartnership'] as $user)
                                             <p class="text-center">
                                                 {{ $user }}
                                             </p>
@@ -260,7 +282,7 @@
                                     @endif
                                     @if(count($users['usersHoliday']) > 0)
                                         <h2 class="text-center text-danger">
-                                            Conjoint
+                                            Vacances
                                             <a href="mailto:@foreach($users['usersHoliday'] as $user){{ $user->email}};@endforeach ?Subject=Badminton"
                                                target="_top"> <i class="fa fa-send"></i></a>
                                         </h2>

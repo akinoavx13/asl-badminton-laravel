@@ -40,7 +40,7 @@ class UserUpdateRequest extends Request
             'tshirt_size'         => 'required|in:XXS,XS,S,M,L,XL,XXL',
             'gender'              => 'required|in:man,woman',
             'state'               => 'required|in:hurt,holiday,active,inactive',
-            'lectra_relationship' => 'required|in:lectra,child,conjoint,external,trainee,subcontractor',
+            'lectra_relationship' => 'required|in:lectra,child,conjoint,external,trainee,subcontractor,partnership',
             'newsletter'          => 'required|boolean',
             'avatar'              => 'image',
             'ending_holiday'      => 'required_if:active,holiday|date_format:d/m/Y',

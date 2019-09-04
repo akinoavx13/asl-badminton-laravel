@@ -303,8 +303,10 @@
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->leisure_external_price }}€ + (cotisation ASL)</strong></h4>
-                        @else
+                        @elseif(!$auth->hasLectraRelation('partnership')) 
                             <h4 class="text-center"><strong>{{ $setting->leisure_price }}€ + (cotisation ASL)</strong></h4>
+                        @else
+                            <h4 class="text-center"><strong>incription gratuite</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -346,8 +348,10 @@
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->leisure_external_price }}€ + (cotisation ASL)</strong></h4>
-                        @else
+                        @elseif(!$auth->hasLectraRelation('partnership'))
                             <h4 class="text-center"><strong>{{ $setting->leisure_price }}€ + (cotisation ASL)</strong></h4>
+                        @else
+                            <h4 class="text-center"><strong>incription gratuite</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -389,8 +393,10 @@
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->fun_external_price }}€ + (cotisation ASL)</strong></h4>
-                        @else
+                        @elseif(!$auth->hasLectraRelation('partnership'))
                             <h4 class="text-center"><strong>{{ $setting->fun_price }}€ + (cotisation ASL)</strong></h4>
+                        @else
+                            <h4 class="text-center"><strong>incription gratuite</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -432,8 +438,10 @@
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->performance_external_price }}€ + (cotisation ASL)</strong></h4>
-                        @else
+                        @elseif(!$auth->hasLectraRelation('partnership'))
                             <h4 class="text-center"><strong>{{ $setting->performance_price }}€ + (cotisation ASL)</strong></h4>
+                        @else
+                            <h4 class="text-center"><strong>incription non disponible</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -475,8 +483,10 @@
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->corpo_external_price }}€ + (cotisation ASL)</strong></h4>
-                        @else
+                        @elseif(!$auth->hasLectraRelation('partnership'))
                             <h4 class="text-center"><strong>{{ $setting->corpo_price }}€ + (cotisation ASL)</strong></h4>
+                        @else
+                            <h4 class="text-center"><strong>incription non disponible</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"
@@ -519,8 +529,10 @@
                     <div class="ibox-content">
                         @if($auth->hasLectraRelation('external') || $auth->hasLectraRelation('subcontractor'))
                             <h4 class="text-center"><strong>{{ $setting->competition_external_price }}€ + (cotisation ASL)</strong></h4>
-                        @else
+                        @elseif(!$auth->hasLectraRelation('partnership'))
                             <h4 class="text-center"><strong>{{ $setting->competition_price }}€ + (cotisation ASL)</strong></h4>
+                        @else
+                            <h4 class="text-center"><strong>incription non disponible</strong></h4>
                         @endif
 
                         <p><strong>Jeu libre : </strong><span class="fa fa-check-circle-o fa-2x text-success"

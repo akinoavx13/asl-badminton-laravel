@@ -204,7 +204,7 @@
 
                 <div class="col-md-9">
                     {!! Form::select('lectra_relationship', ['lectra' => 'Lectra', 'child' => 'Enfant', 'conjoint' =>
-                    'Conjoint', 'external' => 'Externe', 'trainee' => 'Stagiaire', 'subcontractor' => 'Prestataire'],
+                    'Conjoint', 'external' => 'Externe', 'trainee' => 'Stagiaire', 'subcontractor' => 'Prestataire', 'partnership' => 'Mairie'],
                     old('lectra_relationship'),['class' => 'form-control', 'required']) !!}
                 </div>
             </div>

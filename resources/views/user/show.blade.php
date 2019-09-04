@@ -68,6 +68,8 @@
                                     Stagiaire
                                 @elseif($user->hasLectraRelation('subcontractor'))
                                     Prestataire
+                                @elseif($user->hasLectraRelation('partnership'))
+                                    Mairie
                                 @endif
                             </div>
                         </div>
