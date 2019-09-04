@@ -46,6 +46,7 @@ class DashboardAdminController extends Controller
         $users['usersExternal'] = [];
         $users['usersTrainee'] = [];
         $users['usersSubcontractor'] = [];
+        $users['usersPartnership'] = [];
         $users['usersHurt'] = [];
         $users['usersHoliday'] = [];
         $users['nbUsersInvalid'] =
@@ -89,6 +90,10 @@ class DashboardAdminController extends Controller
             elseif ($user->hasLectraRelation('subcontractor'))
             {
                 $users['usersSubcontractor'][$index] = $user;
+            }
+            elseif ($user->hasLectraRelation('partnership'))
+            {
+                $users['usersPartnership'][$index] = $user;
             }
 
             if ($user->hasState('hurt'))
