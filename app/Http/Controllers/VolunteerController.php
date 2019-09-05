@@ -239,8 +239,8 @@ class VolunteerController extends Controller
                 $presentDate = $tomorrow;
             }
 
-            //search if we are already at the volunteer
-            $alreadyPresent = Volunteer::where('user_id', $user_id)->where('day', $presentDate)->count();
+            //search if there is already a volunteer
+            $alreadyPresent = Volunteer::where('day', $presentDate)->count();
 
             if ($alreadyPresent == 0) {
                 Volunteer::create([
@@ -252,7 +252,7 @@ class VolunteerController extends Controller
 
                 return redirect()->back()->with('success', "Merci vous êtes responsable du set !");
             } else {
-                return redirect()->back()->with('error', "Vous êtes déjà responsable du set !");
+                return redirect()->back()->with('error', "Il y a déjà un responsable du set !");
             }
 
         }
