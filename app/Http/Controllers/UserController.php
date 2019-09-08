@@ -269,6 +269,7 @@ class UserController extends Controller
             'lectra_relationship' => $request->lectra_relationship,
             'newsletter'          => $request->newsletter,
             'avatar'              => $request->avatar,
+            'tension'             => $request->tension,
         ]);
 
         $this->updateIfInjuryHolidayAreAfterNow($user, $request);
@@ -403,6 +404,7 @@ class UserController extends Controller
                 'password'            => bcrypt($request->password),
                 'avatar'              => $request->avatar,
                 'first_connect'       => false,
+                'tension'             => $request->tension,
             ]);
 
             $this->updateIfInjuryHolidayAreAfterNow($user, $request);

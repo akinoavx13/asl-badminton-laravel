@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddingRopeRequest;
 use App\Http\Utilities\SendMail;
 use App\Rope;
+use App\User;
+use App\Http\Requests\RopeRequest;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -25,7 +27,7 @@ class RopeController extends Controller
             'as'   => 'rope.index',
         ]);
 
-        $router->get('withdrawal', [
+        $router->post('withdrawal', [
             'uses' => 'RopeController@withdrawal',
             'as'   => 'rope.withdrawal',
         ]);
@@ -55,20 +57,30 @@ class RopeController extends Controller
 
         $rest = $adding - $withdrawal;
 
-        return view('rope.index', compact('rest'));
+        $myConsumption = Rope::where('user_id', $this->user->id)->where('fill', false)->orderBy('created_at', 'desc')->get();
+        $myTension = $this->user->tension;
+
+        return view('rope.index', compact('rest', 'myConsumption', 'myTension'));
     }
 
-    public function withdrawal()
+    public function withdrawal(RopeRequest $request)
     {
+        
         Rope::create([
             'user_id' => $this->user->id,
             'rest'    => 1,
             'fill'    => false,
+            'tension' => $request->tension,
+            'comment' => $request->comment,
         ]);
+
+        if ($request->tension != $this->user->tension) {
+            $this->user->update(['tension' => $request->tension,]);
+        }
 
         if (env('APP_ENV') == 'prod')
         {
-            SendMail::send($this->user, 'takeRope', $this->user->attributesToArray(), 'Demande de cordage AS Lectra
+            SendMail::send($this->user, 'takeRope', array('name' => $this->user->name, 'forname' => $this->user->forname, 'tension' => $request->tension, 'comment' => $request->comment), 'Demande de cordage AS Lectra
         Badminton', true);
         }
 

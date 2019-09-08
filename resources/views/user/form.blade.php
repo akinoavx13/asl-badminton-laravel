@@ -77,6 +77,17 @@
 
             <div class="form-group">
                 <div class="col-md-3">
+                    {!! Form::label('tension', 'Tension de cordage préférée :', ['class' => 'control-label']) !!}
+                    <i class="text-navy">*</i>
+                </div>
+
+                <div class="col-md-9">
+                    {!! Form::number('tension', $user->exists ? $user->tension : old('tension'), ['class' => 'form-control', 'step' => '0.1', 'required']) !!}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
                     {!! Form::label('gender', 'Sexe :', ['class' => 'control-label']) !!}
                     <i class="text-navy">*</i>
                 </div>
