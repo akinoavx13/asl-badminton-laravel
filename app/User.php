@@ -42,6 +42,7 @@ class User extends Model implements AuthenticatableContract,
         'ending_injury',
         'token_first_connection',
         'first_connect',
+        'tension',
     ];
 
     protected $hidden = ['password', 'remember_token'];

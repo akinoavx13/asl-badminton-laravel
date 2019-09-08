@@ -169,6 +169,17 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
+                                    <label>Tension préférée :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    {{ $user->tension }} kg
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="row">
+                                <div class="col-md-4">
                                     <label>Actif :</label>
                                 </div>
                                 <div class="col-md-8">

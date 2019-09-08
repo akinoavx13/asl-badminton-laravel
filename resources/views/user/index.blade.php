@@ -24,6 +24,7 @@
                                     <th class="text-center">E-mail</th>
                                     <th class="text-center">Sexe</th>
                                     <th class="text-center">Taille</th>
+                                    <th class="text-center">Tension</th>
                                     <th class="text-center">Relation avec lectra</th>
                                     <th class="text-center">Etat</th>
                                     <th class="text-center">Email Actu</th>
@@ -51,6 +52,7 @@
                                             @endif
                                         </td>
                                         <td class="text-center">{{ $user->tshirt_size }}</td>
+                                        <td class="text-center">{{ $user->tension }}</td>
                                         <td class="text-center">
                                             @if($user->hasLectraRelation('lectra'))
                                                 Lectra
