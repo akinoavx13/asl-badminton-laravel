@@ -12,6 +12,8 @@ class Rope extends Model
         'user_id',
         'rest',
         'fill',
+        'tension',
+        'comment',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
