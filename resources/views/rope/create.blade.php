@@ -22,7 +22,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h1 class="text-center">Ajouter une bobine</h1>
@@ -52,7 +52,7 @@
             </div>
 
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
             @if(count($ropes) > 0)
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
@@ -61,6 +61,8 @@
                             <tr>
                                 <th class="text-center">Nom</th>
                                 <th class="text-center">Date</th>
+                                <th class="text-center">Tension</th>
+                                <th class="text-center">Comment</th>
                                 <th class="text-center">Action</th>
                             </tr>
                             </thead>
@@ -75,6 +77,12 @@
                                         <span class="text-navy">
                                             {{ $rope->created_at }}
                                         </span>
+                                    </td>
+                                    <td>
+                                        {{ $rope->tension }} kg
+                                    </td>
+                                    <td>
+                                        {{ $rope->comment }}
                                     </td>
                                     <td>
                                         @if($rope->hasFill(true))
@@ -105,6 +113,7 @@
         $(document).ready(function() {
             $('#ropesList').DataTable( {
                 "pageLength": 100,
+                "order": [[ 2, "desc" ]],
                 language: {
                     processing:     "Traitement en cours...",
                     search:         "Rechercher&nbsp;:",

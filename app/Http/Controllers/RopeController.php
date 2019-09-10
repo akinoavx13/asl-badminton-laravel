@@ -95,7 +95,7 @@ class RopeController extends Controller
 
         $rest = $adding - $withdrawal;
 
-        $ropes = Rope::select('users.name', 'users.forname', 'ropes.created_at', 'ropes.rest', 'ropes.fill')
+        $ropes = Rope::select('users.name', 'users.forname', 'ropes.created_at', 'ropes.rest', 'ropes.fill', 'ropes.tension', 'ropes.comment')
             ->join('users', 'users.id', '=', 'ropes.user_id')
             ->orderBy('created_at', 'desc')
             ->get();
