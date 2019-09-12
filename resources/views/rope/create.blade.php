@@ -52,7 +52,46 @@
             </div>
 
         </div>
+
         <div class="col-md-8">
+            @if(count($lastRopes) > 0)
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h1 class="text-center">Consommation sur 6 mois (> à 1 cordage)</h1>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-striped table-hover display" id="lastropesList">
+                            <thead>
+                            <tr>
+                                <th class="text-center">Nom</th>
+                                <th class="text-center">Consommation</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            @foreach($lastRopes as $rope)
+                                @if ($rope->rest > 1)
+                                <tr class="text-center">
+                                    <td>
+                                        {{ $rope->forname }} {{ $rope->name }}
+                                    </td>
+                                    <td>
+                                        {{ $rope->rest }}
+                                    </td>
+                                </tr>
+                                @endif
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @else
+                <h2 class="text-danger text-center">Personne n'a pris de cordage</h2>
+            @endif
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             @if(count($ropes) > 0)
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">

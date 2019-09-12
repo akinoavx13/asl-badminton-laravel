@@ -8,6 +8,8 @@ use App\Rope;
 use App\User;
 use App\Http\Requests\RopeRequest;
 use Illuminate\Http\Request;
+use DB;
+use Carbon\Carbon;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -99,8 +101,20 @@ class RopeController extends Controller
             ->join('users', 'users.id', '=', 'ropes.user_id')
             ->orderBy('created_at', 'desc')
             ->get();
+      
+        $today = Carbon::today();
+        $sixMonthBefore =$today->subMonth(6);   
+    
+        $lastRopes = DB::table('ropes')
+            ->select(DB::raw("SUM(ropes.rest) as rest, users.name, users.forname"))
+            ->where('ropes.fill', false)
+            ->where('ropes.created_at', '>', $sixMonthBefore)
+            ->join('users', 'users.id', '=', 'ropes.user_id')
+            ->groupBy('users.id')
+            ->orderBy('rest', 'desc')
+            ->get();
 
-        return view('rope.create', compact('rest', 'ropes'));
+        return view('rope.create', compact('rest', 'ropes', 'lastRopes'));
     }
 
     public function adding(AddingRopeRequest $request)
