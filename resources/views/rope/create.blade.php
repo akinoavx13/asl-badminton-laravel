@@ -34,12 +34,22 @@
 
                     <div class="form-group">
                         <div class="col-md-3">
-                            {!! Form::label('rest', 'Nombre de cordage :', ['class' => 'control-label']) !!}
+                            {!! Form::label('rest', 'Nb cordage', ['class' => 'control-label']) !!}
                             <i class="text-navy">*</i>
                         </div>
 
                         <div class="col-md-9">
                             {!! Form::number('rest', old('rest'), ['class' => 'form-control', 'required']) !!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            {!! Form::label('comment', 'Commentaire', ['class' => 'control-label']) !!}
+                        </div>
+
+                        <div class="col-md-9">
+                            {!! Form::text('comment', old('comment'), ['class' => 'form-control']) !!}
                         </div>
                     </div>
 
@@ -152,7 +162,7 @@
         $(document).ready(function() {
             $('#ropesList').DataTable( {
                 "pageLength": 100,
-                "order": [[ 2, "desc" ]],
+                "order": [[ 1, "desc" ]],
                 language: {
                     processing:     "Traitement en cours...",
                     search:         "Rechercher&nbsp;:",
