@@ -54,7 +54,7 @@
                                         {{ $oneConsumption->created_at }}
                                     </td>
                                     <td>
-                                        {{ $oneConsumption->tension }}
+                                        {{ $oneConsumption->tension }} kg
                                     </td>
                                     <td>
                                         {{ $oneConsumption->comment }}
@@ -131,7 +131,7 @@
         $(document).ready(function() {
             $('#myConsumptionList').DataTable( {
                 "pageLength": 100,
-                "order": [[ 2, "desc" ]],
+                "order": [[ 0, "desc" ]],
                 language: {
                     processing:     "Traitement en cours...",
                     search:         "Rechercher&nbsp;:",

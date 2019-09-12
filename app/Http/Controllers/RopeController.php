@@ -76,13 +76,18 @@ class RopeController extends Controller
             'comment' => $request->comment,
         ]);
 
+        $withdrawal = Rope::where('fill', false)->sum('rest');
+        $adding = Rope::where('fill', true)->sum('rest');
+
+        $rest = $adding - $withdrawal;
+
         if ($request->tension != $this->user->tension) {
             $this->user->update(['tension' => $request->tension,]);
         }
 
-        if (env('APP_ENV') == 'prod')
+        if (env('APP_ENV') != 'prod')
         {
-            SendMail::send($this->user, 'takeRope', array('name' => $this->user->name, 'forname' => $this->user->forname, 'tension' => $request->tension, 'comment' => $request->comment), 'Demande de cordage AS Lectra
+            SendMail::send($this->user, 'takeRope', array('name' => $this->user->name, 'forname' => $this->user->forname, 'tension' => $request->tension, 'comment' => $request->comment, 'rest' => $rest), 'Demande de cordage AS Lectra
         Badminton', true);
         }
 
@@ -123,6 +128,7 @@ class RopeController extends Controller
             'user_id' => $this->user->id,
             'rest'    => $request->rest,
             'fill'    => true,
+            'comment' => $request->comment,
         ]);
 
         $rest = $rope->rest;
