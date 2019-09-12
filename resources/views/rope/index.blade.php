@@ -130,6 +130,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#myConsumptionList').DataTable( {
+                "pageLength": 100,
+                "order": [[ 2, "desc" ]],
                 language: {
                     processing:     "Traitement en cours...",
                     search:         "Rechercher&nbsp;:",
