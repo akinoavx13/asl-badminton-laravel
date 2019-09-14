@@ -85,7 +85,7 @@ class RopeController extends Controller
             $this->user->update(['tension' => $request->tension,]);
         }
 
-        if (env('APP_ENV') != 'prod')
+        if (env('APP_ENV') == 'prod')
         {
             SendMail::send($this->user, 'takeRope', array('name' => $this->user->name, 'forname' => $this->user->forname, 'tension' => $request->tension, 'comment' => $request->comment, 'rest' => $rest), 'Demande de cordage AS Lectra
         Badminton', true);
@@ -132,6 +132,16 @@ class RopeController extends Controller
         ]);
 
         $rest = $rope->rest;
+        $withdrawal = Rope::where('fill', false)->sum('rest');
+        $adding = Rope::where('fill', true)->sum('rest');
+
+        $total = $adding - $withdrawal;
+
+
+        if (env('APP_ENV') == 'prod')
+        {
+            SendMail::send($this->user, 'addRope', array('name' => $this->user->name, 'forname' => $this->user->forname, 'comment' => $request->comment, 'rest' => $rest, 'total' => $total), 'Ajout de cordage AS Lectra Badminton', true);
+        }
 
         return redirect()->back()->with('success', "L'approvisionnement de $rest cordage a bien été enregistré");
     }
