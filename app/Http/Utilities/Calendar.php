@@ -14,13 +14,15 @@ use App\Season;
 use App\Tournament;
 use Carbon\Carbon;
 use Jenssegers\Date\Date;
+use App\Setting;
+use App\Helpers;
 
 class Calendar
 {
 
     public static function getAllDaysMonth()
     {
-
+        $setting = Helpers::getInstance()->setting();
         $season = Season::active()->first();
 
         $lastDay = new Carbon('last day of this month');
@@ -45,11 +47,15 @@ class Calendar
         while($day <= $lastDay)
         {
             $date = Date::createFromDate($day->year, $day->month, $day->day);
-            $day->addDay();
-            if(!$date->isWeekend() && $date >= Date::today())
+            $todayDayOfWeek = $date->dayOfWeek;
+            $open = $setting->isOpenDay($todayDayOfWeek);
+
+            if($open == true && $date >= Date::today())
             {
                 $allDays[] = $date;
             }
+
+            $day->addDay();
         }
 
         return $allDays;

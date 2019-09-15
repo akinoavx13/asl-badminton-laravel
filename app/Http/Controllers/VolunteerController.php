@@ -77,20 +77,22 @@ class VolunteerController extends Controller
     {
         // // dayOfWeek returns a number between 0 (sunday) and 6 (saturday)
         $todayDayOfWeek = Carbon::today()->dayOfWeek;
-        if ($todayDayOfWeek == 0 || $todayDayOfWeek == 6) {
+        $setting = Helpers::getInstance()->setting();
+        $open = $setting->isOpenDay($todayDayOfWeek);
+
+        if ($open == false) {
             if ($apicall == false) {
-                return redirect()->back()->with('success', 'Pas de mail envoyé le samedi ou dimanche !');
+                return redirect()->back()->with('success', 'Pas de mail envoyé la salle est fermée');
             } else {
-                return 'Pas de mail envoye le samedi ou dimanche !'; 
-            //return response()->json(['message' => 'Pas de mail envoyé le samedi ou dimanche !'], 200);
+                return 'Pas de mail envoyé la salle est fermée';             
             }
         } else  {
             $day = Date::today();
             $dayVolunteer = Volunteer::select('user_id', 'day', 'updated_at')->where('day', $day)->get();
             if ($dayVolunteer->count() == 0) {
                 $season = Season::Active()->first()->id;
-                $setting = Helpers::getInstance()->setting();
                 if ($setting->volunteer_alert_flag == false) {
+                    // si setting pas d'alerte mail, on envoie qu'aux administrateurs
                     $allPlayers = Player::select('users.email')
                             ->join('users', 'users.id', '=', 'players.user_id')
                             ->where('users.state', '<>', 'inactive')
@@ -131,8 +133,7 @@ class VolunteerController extends Controller
             if ($apicall == false) {
                 return redirect()->back()->with('success', 'Le mail de demande a bien été posté !');
             } else {
-                return 'Le mail de demande a bien ete poste !'; 
-                //return response()->json(['message' => 'le mail de demande a bien été posté'], 200);    
+                return 'Le mail de demande a bien ete poste !';     
             }
             
 
@@ -163,15 +164,20 @@ class VolunteerController extends Controller
             ->take(10)
             ->get();
 
-        // get last 30 days
+        // get last 30 open days
         $nbDay = 0;
+        $nbOpenDay = 0;
         $latestVolunteers = array();
+        $setting = Helpers::getInstance()->setting();
 
-        while($nbDay <= 30)
+        while($nbOpenDay <= 30)
         {
             $day = Date::today()->subDay($nbDay-1);
-            if(!$day->isWeekend())
+            $dayOfWeek = $day->dayOfWeek;
+            $open = $setting->isOpenDay($dayOfWeek);
+            if($open == true)
             {
+                $nbOpenDay++;
                 $dayVolunteer = Volunteer::select('user_id', 'day', 'updated_at')->where('day', $day)->get();
                 $latestVolunteers[$nbDay][0] = ucfirst($day->format('l j F'));
                 if (!$dayVolunteer->count() == 0) {
@@ -209,53 +215,38 @@ class VolunteerController extends Controller
         $date = $request->dateresp;
 
         // // dayOfWeek returns a number between 0 (sunday) and 6 (saturday)
+        $setting = Helpers::getInstance()->setting();
+        $open = false;
+
         $todayDayOfWeek = Carbon::today()->dayOfWeek;
-        $isWeekEnd = false;
+        $open = $setting->isOpenDay($todayDayOfWeek);
 
-        // if today between tuesday and thrusday no problem for yesterday and tomorrow
-        if ($todayDayOfWeek >= 2 and $todayDayOfWeek <= 4) {
-            $today = Date::today();
-            $tomorrow = Date::today()->addDay();
-        } else if ($todayDayOfWeek == 0) {
-            $today = Date::today();
-            $isWeekEnd = true;
-            $tomorrow = Date::today()->addDay();
-        } else if ($todayDayOfWeek == 1) {
-            $today = Date::today();
-            $tomorrow = Date::today()->addDay();
-        } else if ($todayDayOfWeek == 5) {
-            $today = Date::today();
-            $tomorrow = Date::today()->addDay(3);
-        } else if ($todayDayOfWeek == 6) {
-            $today = Date::today();
-            $isWeekEnd = true;
-            $tomorrow = Date::today()->addDay(2);
-        } 
-
-        if ($date == 'today' || $date == 'tomorrow') {
-            if ($date == 'today') {
-                $presentDate = $today;
-            } else if ($date == 'tomorrow') {
-                $presentDate = $tomorrow;
-            }
-
-            //search if there is already a volunteer
-            $alreadyPresent = Volunteer::where('day', $presentDate)->count();
-
-            if ($alreadyPresent == 0) {
-                Volunteer::create([
-                    'user_id' => $user_id,
-                    'day' => $presentDate
-                ]);
-
-                
-
-                return redirect()->back()->with('success', "Merci vous êtes responsable du set !");
-            } else {
-                return redirect()->back()->with('error', "Il y a déjà un responsable du set !");
-            }
-
+        $presentDate = Date::today();
+        if ($date == 'tomorrow') {
+            do {
+                $presentDate = $presentDate->addDay();    
+                $presentDateDayOfWeek = $presentDate->dayOfWeek;
+                $open = $setting->isOpenDay($presentDateDayOfWeek); 
+            } while ($open == false);
         }
+
+        //search if there is already a volunteer
+        $alreadyPresent = Volunteer::where('day', $presentDate)->count();
+
+        if ($alreadyPresent == 0) {
+            Volunteer::create([
+                'user_id' => $user_id,
+                'day' => $presentDate
+            ]);
+
+            
+
+            return redirect()->back()->with('success', "Merci vous êtes responsable du set !");
+        } else {
+            return redirect()->back()->with('error', "Il y a déjà un responsable du set !");
+        }
+
+        
 
         return redirect()->back()->with('error', "Vous ne pouvez être responsable que aujourd'hui ou demain");
     }

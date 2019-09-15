@@ -11,6 +11,8 @@ use Jenssegers\Date\Date;
 use Auth;
 use App\Volunteer;
 use Carbon\Carbon;
+use App\Setting;
+use App\Helpers;
 
 /**
  * View scores
@@ -174,34 +176,25 @@ class HomeController extends Controller
         }
 
         // // dayOfWeek returns a number between 0 (sunday) and 6 (saturday)
-        $todayDayOfWeek = Carbon::today()->dayOfWeek;
-        $isWeekEnd = false;
+        $setting = Helpers::getInstance()->setting();
+        $today = Date::today();
+        $todayDayOfWeek = $today->dayOfWeek;
+        $openToday = $setting->isOpenDay($todayDayOfWeek);
+        
+        
+        $tomorrow = Date::today();
+        do {
+                $tomorrow = $tomorrow->addDay();    
+                $tomorrowDateDayOfWeek = $tomorrow->dayOfWeek;
+                $open = $setting->isOpenDay($tomorrowDateDayOfWeek); 
+            } while ($open == false);
 
-        // if today between tuesday and thrusday no problem for yesterday and tomorrow
-
-        if ($todayDayOfWeek >= 2 and $todayDayOfWeek <= 4) {
-            $today = Date::today();
-            $yesterday = Date::today()->subDay();
-            $tomorrow = Date::today()->addDay();
-        } else if ($todayDayOfWeek == 0) {
-            $today = Date::today();
-            $isWeekEnd = true;
-            $yesterday = Date::today()->subDay(2);
-            $tomorrow = Date::today()->addDay();
-        } else if ($todayDayOfWeek == 1) {
-            $today = Date::today();
-            $yesterday = Date::today()->subDay(3);
-            $tomorrow = Date::today()->addDay();
-        } else if ($todayDayOfWeek == 5) {
-            $today = Date::today();
-            $yesterday = Date::today()->subDay();
-            $tomorrow = Date::today()->addDay(3);
-        } else if ($todayDayOfWeek == 6) {
-            $today = Date::today();
-            $isWeekEnd = true;
-            $yesterday = Date::today()->subDay();
-            $tomorrow = Date::today()->addDay(2);
-        } 
+        $yesterday = Date::today();
+        do {
+                $yesterday = $yesterday->subDay();    
+                $yesterdayDateDayOfWeek = $yesterday->dayOfWeek;
+                $open = $setting->isOpenDay($yesterdayDateDayOfWeek); 
+            } while ($open == false);
         
         $volunteerYesterday = Volunteer::where('day', $yesterday)->get();
         $volunteerToday = Volunteer::where('day', $today)->get();
@@ -212,6 +205,6 @@ class HomeController extends Controller
         $tomorrow = $tomorrow->format('l');
         
 
-        return view('home.index', compact('scores', 'actualities', 'postsScores', 'volunteerYesterday', 'volunteerToday', 'volunteerTomorrow', 'today','yesterday','tomorrow','isWeekEnd'));
+        return view('home.index', compact('scores', 'actualities', 'postsScores', 'volunteerYesterday', 'volunteerToday', 'volunteerTomorrow', 'today','yesterday','tomorrow','openToday'));
     }
 }
