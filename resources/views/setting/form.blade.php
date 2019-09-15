@@ -301,6 +301,161 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('monday', 'Salle ouverte le Lundi  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('monday', '1', $setting->exists ? $setting->hasMonday(true) ? true : false : false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('monday', '0', $setting->exists ? $setting->hasMonday(false) ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('tuesday', 'Salle ouverte le Mardi  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('tuesday', '1', $setting->exists ? $setting->hasTuesday(true) ? true : false : false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('tuesday', '0', $setting->exists ? $setting->hasTuesday(false) ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('wednesday', 'Salle ouverte le Mercredi  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('wednesday', '1', $setting->exists ? $setting->hasWednesday(true) ? true : false : false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('wednesday', '0', $setting->exists ? $setting->hasWednesday(false) ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('thursday', 'Salle ouverte le Jeudi  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('thursday', '1', $setting->exists ? $setting->hasThursday(true) ? true : false : false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('thursday', '0', $setting->exists ? $setting->hasThursday(false) ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('friday', 'Salle ouverte le Vendredi  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('friday', '1', $setting->exists ? $setting->hasFriday(true) ? true : false : false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('friday', '0', $setting->exists ? $setting->hasFriday(false) ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('saturday', 'Salle ouverte le Samedi  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('saturday', '1', $setting->exists ? $setting->hasSaturday(true) ? true : false : false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('saturday', '0', $setting->exists ? $setting->hasSaturday(false) ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                {!! Form::label('sunday', 'Salle ouverte le Dimanche  :', ['class' => 'control-label']) !!}
+                <i class="text-navy">*</i>
+            </div>
+
+            <div class="col-md-9">
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('sunday', '1', $setting->exists ? $setting->hasSunday(true) ? true : false : false, ['required']) !!}
+                        Oui
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        {!! Form::radio('sunday', '0', $setting->exists ? $setting->hasSunday(false) ? true : false : true, ['required']) !!}
+                        Non
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
         <div class="form-group text-center">
             {!! Form::submit('Sauvegarder', ['class' => 'btn btn-primary']) !!}
         </div>

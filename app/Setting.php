@@ -30,6 +30,13 @@ class Setting extends Model
         'championship_simple_woman',
         'championship_double_woman',
         'volunteer_alert_flag',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -41,6 +48,13 @@ class Setting extends Model
         'championship_simple_woman' => 'boolean',
         'championship_double_woman' => 'boolean',
         'volunteer_alert_flag'      => 'boolean',
+        'monday'                    => 'boolean',
+        'tuesday'                   => 'boolean',
+        'wednesday'                 => 'boolean',
+        'thursday'                  => 'boolean',
+        'friday'                    => 'boolean',
+        'saturday'                  => 'boolean',
+        'sunday'                    => 'boolean',
     ];
 
     /******************/
@@ -75,6 +89,65 @@ class Setting extends Model
     public function hasVolunteerAlertFlag($volunteer_alert_flag)
     {
         return $this->volunteer_alert_flag === $volunteer_alert_flag;
+    }
+    public function hasMonday($day)
+    {
+        return $this->monday === $day;
+    }
+    public function hasTuesday($day)
+    {
+        return $this->tuesday === $day;
+    }
+    public function hasWednesday($day)
+    {
+        return $this->wednesday === $day;
+    }
+    public function hasthursday($day)
+    {
+        return $this->thursday === $day;
+    }
+    public function hasFriday($day)
+    {
+        return $this->friday === $day;
+    }
+    public function hasSaturday($day)
+    {
+        return $this->saturday === $day;
+    }
+    public function hasSunday($day)
+    {
+        return $this->sunday === $day;
+    }
+    public function isOpenDay($day)
+    {
+        // dayOfWeek returns a number between 0 (sunday) and 6 (saturday)
+        switch($day) {
+            case 0:
+                $result = $this->sunday;
+                break;
+            case 1:
+                $result = $this->monday;
+                break;
+            case 2:
+                $result = $this->tuesday;
+                break;
+            case 3:
+                $result = $this->wednesday;
+                break;
+            case 4:
+                $result = $this->thursday;
+                break;
+            case 5:
+                $result = $this->friday;
+                break;
+            case 6:
+                $result = $this->saturday;
+                break;
+            default:
+                $result = false;
+                break;
+        }
+        return $result;
     }
 
 }

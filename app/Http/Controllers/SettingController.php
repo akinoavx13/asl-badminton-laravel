@@ -85,6 +85,13 @@ class SettingController extends Controller
                 'championship_simple_woman'  => false,
                 'championship_double_woman'  => false,
                 'volunteer_alert_flag'       => true,
+                'monday'                     => true,
+                'tuesday'                    => true,
+                'wednesday'                  => true,
+                'thursday'                   => true,
+                'friday'                     => true,
+                'saturday'                   => false,
+                'sunday'                     => false,
             ]);
 
             return redirect()->route('setting.index')->with('success', "Les paramètres sont créés !");
@@ -126,6 +133,14 @@ class SettingController extends Controller
             'championship_simple_woman'  => $request->championship_simple_woman,
             'championship_double_woman'  => $request->championship_double_woman,
             'volunteer_alert_flag'       => $request->volunteer_alert_flag,
+            'monday'                     => $request->monday,
+            'tuesday'                    => $request->tuesday,
+            'wednesday'                  => $request->wednesday,
+            'thursday'                   => $request->thursday,
+            'friday'                     => $request->friday,
+            'saturday'                   => $request->saturday,
+            'sunday'                     => $request->sunday,
+
         ]);
 
         return redirect()->route('setting.index')->with('success', "Les modifications sont bien prises en compte !");

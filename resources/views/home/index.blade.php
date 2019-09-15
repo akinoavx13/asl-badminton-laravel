@@ -39,7 +39,7 @@
                     <div class="col-md-4">
                         <p class="text-center">Séance du jour ({{ $today}})</p>
                         <div class="text-center">
-                            @if ($isWeekEnd == false)
+                            @if ($openToday == true)
                                 @if (count($volunteerToday) ==0)
                                     <button type="button" class="btn btn-danger btn-outline dim" data-toggle="modal" data-target=".volunteerToday">
                                         Je m’occupe du set !
