@@ -404,7 +404,7 @@ class UserController extends Controller
                 'password'            => bcrypt($request->password),
                 'avatar'              => $request->avatar,
                 'first_connect'       => false,
-                'tension'             => 0,
+                'tension'             => $request->tension,
             ]);
 
             $this->updateIfInjuryHolidayAreAfterNow($user, $request);

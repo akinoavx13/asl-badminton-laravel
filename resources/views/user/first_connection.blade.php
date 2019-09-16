@@ -107,7 +107,7 @@
                 </div>
 
                 <div class="col-md-9">
-                    {!! Form::number('tension', old('tension'), ['class' => 'form-control', 'step' => '0.1', required']) !!}
+                    {!! Form::number('tension', old('tension'), ['class' => 'form-control', 'step' => '0.1', 'required']) !!}
                 </div>
             </div>
 
