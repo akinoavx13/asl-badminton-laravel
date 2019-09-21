@@ -23,6 +23,11 @@ class Player extends Model
         't_shirt',
         'user_id',
         'season_id',
+        'certificate',
+        'corpo_team',
+        'corpo_team_mixte',
+        'corpo_comment',
+        'polo_delivered',
     ];
 
     protected $casts = [
@@ -35,6 +40,7 @@ class Player extends Model
         'corpo_woman' => 'boolean',
         'corpo_mixte' => 'boolean',
         't_shirt' => 'boolean',
+        'certificate' => 'boolean', 
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -116,6 +122,11 @@ class Player extends Model
     public function hasFormula($formula)
     {
         return $this->formula === $formula;
+    }
+
+    public function hasCertificate($certificate)
+    {
+        return $this->certificate === $certificate;
     }
 
     /******************/

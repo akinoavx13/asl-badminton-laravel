@@ -72,8 +72,11 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <a href="{{ route('player.index') }}" class="btn btn-primary btn-outline btn-block"><i class="fa fa-list"></i> Lister</a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ route('player.corpo') }}" class="btn btn-primary btn-outline btn-block"><i class="fa fa-list"></i> Corpo</a>
                         </div>
                     </div>
                 </div>

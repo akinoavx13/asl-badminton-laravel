@@ -88,7 +88,7 @@
 
                         {!! Form::open(['route' => 'rope.withdrawal', 'class' => 'form-horizontal']) !!}
 
-                        <p class="text-left">Je souhaite envoyer une demande par e-mail à Cestas Sport, j'yrai porter ma raquette dans les meilleurs délais.
+                        <p class="text-left">Je souhaite envoyer une demande par e-mail à Cestas Sport, j'irai porter ma raquette dans les meilleurs délais.
                         
                         <div class="form-group">
                             <div class="col-md-3">

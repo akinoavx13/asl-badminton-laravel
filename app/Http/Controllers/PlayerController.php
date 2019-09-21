@@ -6,6 +6,7 @@ use App\Helpers;
 use App\Http\Requests\PlayerListRequest;
 use App\Http\Requests\PlayerStoreRequest;
 use App\Http\Requests\PlayerUpdateRequest;
+use App\Http\Requests\updateCorpoCommentRequest;
 use App\Http\Utilities\SendMail;
 use App\Player;
 use App\Season;
@@ -44,11 +45,25 @@ class PlayerController extends Controller
             'as'         => 'player.index',
         ]);
 
+        //corpo list
+        $router->get('/corpo', [
+            'middleware' => ['admin', 'notCE'],
+            'uses'       => 'PlayerController@corpo',
+            'as'         => 'player.corpo',
+        ]);
+
         //player list with season
         $router->post('/index', [
             'middleware' => ['admin', 'notCE'],
             'uses'       => 'PlayerController@index',
             'as'         => 'player.index',
+        ]);
+
+        //player list with season
+        $router->post('/corpo', [
+            'middleware' => ['admin', 'notCE'],
+            'uses'       => 'PlayerController@corpo',
+            'as'         => 'player.corposxcccccccccccccccccccccccccccccccccccccDFR',
         ]);
 
         //player delete
@@ -99,6 +114,85 @@ class PlayerController extends Controller
             'uses'       => 'PlayerController@changeGbcStateToValid',
             'as'         => 'player.gbc_stateTocontribution_paid',
         ]);
+
+        //player change corpo_team number
+        $router->get('/corpo_team/{player_id}', [
+            'middleware' => ['admin', 'notCE'],
+            'uses'       => 'PlayerController@changeCorpoTeam',
+            'as'         => 'player.changeCorpoTeam',
+        ]);
+        //player change corpo_team number
+        $router->get('/corpo_team_mixte/{player_id}', [
+            'middleware' => ['admin', 'notCE'],
+            'uses'       => 'PlayerController@changeCorpoTeamMixte',
+            'as'         => 'player.changeCorpoTeamMixte',
+        ]);
+        //player change polo_delivered
+        $router->get('/polo_delivered/{player_id}', [
+            'middleware' => ['admin', 'notCE'],
+            'uses'       => 'PlayerController@changePoloDelivered',
+            'as'         => 'player.changePoloDelivered',
+        ]);
+        //player change polo_delivered
+        $router->get('/corpo_comment/{player_id}/comment/{comment}', [
+            'middleware' => ['admin', 'notCE'],
+            'uses'       => 'PlayerController@changeCorpoComment',
+            'as'         => 'player.changeCorpoComment',
+        ]);
+
+        //admin update comment
+        $router->post('/corpo.updateComment', [
+            'uses' => 'PlayerController@updateComment',
+            'as'   => 'player.updateComment',
+        ]);
+
+    }
+
+
+    /**
+     * View all players on current season or specific season
+     *
+     * @param PlayerListRequest $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function corpo(PlayerListRequest $request)
+    {
+        $season = null;
+
+        if ($request->exists('season_id')) {
+            $season = Season::findOrFail($request->season_id);
+        } else {
+            $season = Season::active()->first();
+            if ($season == null) {
+                // situation anormale, il doit toujours exiter une saison active
+                abort(404);
+            }
+        }
+
+        $playersCorpo = Player::select('players.*')
+            ->where('formula', '=', 'corpo')
+            //->orWhere('formula', '=', 'competition')
+            ->with('user')
+            ->join('users', 'users.id', '=', 'players.user_id')
+            ->orderByForname()
+            ->withSeason($season->id)
+            ->get();
+
+        $playersCompetition = Player::select('players.*')
+            //->where('formula', '=', 'corpo')
+            ->Where('formula', '=', 'competition')
+            ->with('user')
+            ->join('users', 'users.id', '=', 'players.user_id')
+            ->orderByForname()
+            ->withSeason($season->id)
+            ->get();
+
+        $players = $playersCorpo->merge($playersCompetition);
+
+        $seasons = Season::orderBy('created_at', 'desc')->lists('name', 'id');
+
+        return view('player.corpo', compact('players', 'seasons', 'season'));
+
     }
 
     /**
@@ -217,6 +311,9 @@ class PlayerController extends Controller
             'season_id'     => $activeSeason->id,
             'search_double' => $request->double && $request->double_partner === 'search' ? true : false,
             'search_mixte'  => $request->mixte && $request->mixte_partner === 'search' ? true : false,
+            'certificate'   => false,
+            'corpo_team'    => 0,
+            'corpo_team_mixte' => 0,
         ]);
 
         $this->createSimpleTeams($player, $activeSeason);
@@ -416,17 +513,107 @@ class PlayerController extends Controller
     {
         $player = Player::findOrFail($player_id);
 
-        if ($player->hasGbcState('entry_must')) {
-            $player->update([
-                'gbc_state' => 'valid',
-            ]);
+        switch ($player->gbc_state) {
+            case 'non_applicable':
+                $player->update(['gbc_state' => 'entry_must']);
+                break;
+            case 'entry_must':
+                $player->update(['gbc_state' => 'valid']);
+                break;
+            case 'valid':
+                $player->update(['gbc_state' => 'licence']);
+                break;
+            case 'licence':
+                $player->update(['gbc_state' => 'non_applicable']);
+                break;
+            }
 
-            return redirect()->back()->with('success', "Le joueur $player a son dossier GBC valide !");
-        }
-
-        return redirect()->back()->with('error',
-            "Le joueur $player est non applicable ou il a déjà validé son dossier!");
+        return redirect()->back()->with('success', "Le joueur $player a son statut mis à jour");
     }
+
+    public function changeCorpoTeam($player_id)
+    {
+        $player = Player::findOrFail($player_id);
+
+        switch ($player->corpo_team) {
+            case 0:
+                $player->update(['corpo_team' => 1]);
+                break;
+            case 1:
+                $player->update(['corpo_team' => 2]);
+                break;
+            case 2:
+                $player->update(['corpo_team' => 3]);
+                break;
+            default:
+                $player->update(['corpo_team' => 0]);
+                break;
+            }
+
+        return redirect()->back()->with('success', "Le joueur $player a son equipe mise à jour");
+    }
+
+    public function changeCorpoTeamMixte($player_id)
+    {
+        $player = Player::findOrFail($player_id);
+
+        switch ($player->corpo_team_mixte) {
+            case 0:
+                $player->update(['corpo_team_mixte' => 1]);
+                break;
+            case 1:
+                $player->update(['corpo_team_mixte' => 2]);
+                break;
+            case 2:
+                $player->update(['corpo_team_mixte' => 3]);
+                break;
+            default:
+                $player->update(['corpo_team_mixte' => 0]);
+                break;
+            }
+
+        return redirect()->back()->with('success', "Le joueur $player a son equipe mise à jour");
+    }
+
+    public function changePoloDelivered($player_id)
+    {
+        $player = Player::findOrFail($player_id);
+
+        switch ($player->polo_delivered) {
+            case 'to_order':
+                $player->update(['polo_delivered' => 'to_deliver']);
+                break;
+            case 'to_deliver':
+                $player->update(['polo_delivered' => 'done']);
+                break;
+            case 'done':
+                $player->update(['polo_delivered' => 'to_order']);
+                break;
+            }
+
+        return redirect()->back()->with('success', "Le joueur $player a son polo mise à jour");
+    }
+    
+    public function changeCorpoComment($player_id, $comment)
+    {
+        
+        $player = Player::findOrFail($player_id);
+
+        $player->update(['corpo_comment' => $player_id]);
+
+        return redirect()->back()->with('success', "Le joueur $player a son commentaire mis à jour");
+    }
+
+    public function updateComment(updateCorpoCommentRequest $request)
+    {
+        
+        $player = Player::findOrFail($request->playerId);
+
+        $player->update(['corpo_comment' => $request->corpoComment]);
+
+        return redirect()->back()->with('success', "Le joueur $player a son commentaire mis à jour");
+    }
+
 
     /**
      * Helpfull to create simple teams for one player
