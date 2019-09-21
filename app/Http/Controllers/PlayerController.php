@@ -63,7 +63,7 @@ class PlayerController extends Controller
         $router->post('/corpo', [
             'middleware' => ['admin', 'notCE'],
             'uses'       => 'PlayerController@corpo',
-            'as'         => 'player.corposxcccccccccccccccccccccccccccccccccccccDFR',
+            'as'         => 'player.corpo',
         ]);
 
         //player delete
@@ -371,9 +371,11 @@ class PlayerController extends Controller
             'season_id'     => $activeSeason->id,
             'search_double' => $request->double && $request->double_partner === 'search' ? true : false,
             'search_mixte'  => $request->mixte && $request->mixte_partner === 'search' ? true : false,
-            'certificate'   => false,
+            'certificate'   => '',
             'corpo_team'    => 0,
             'corpo_team_mixte' => 0,
+            'polo_delivred' => '',
+            'corpo_comment' => '',
         ]);
 
         $this->createSimpleTeams($player, $activeSeason);
