@@ -145,7 +145,12 @@ class PlayerController extends Controller
             'uses' => 'PlayerController@updateComment',
             'as'   => 'player.updateComment',
         ]);
-
+        //player change polo_delivered
+        $router->get('/certificate/{player_id}', [
+            'middleware' => ['admin', 'notCE'],
+            'uses'       => 'PlayerController@changeCertificate',
+            'as'         => 'player.changeCertificate',
+        ]);
     }
 
 
@@ -189,9 +194,64 @@ class PlayerController extends Controller
 
         $players = $playersCorpo->merge($playersCompetition);
 
+        // on cherche les deux saisons précédentes
+        $allSeasons = Season::select('*')
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        $next = 0;
+        $season1 = null;
+        $season2 = null;
+        foreach ($allSeasons as $oneSeason) {
+            if ($next == 2) {
+                $season2 = $oneSeason;
+                $next = 3;
+            }
+            if ($next == 1) {
+                $season1 = $oneSeason;
+                $next = 2;
+            }
+            if ($oneSeason->id == $season->id) {
+               $next = 1; 
+            }
+        }
+
+        $certificates1 = [];
+        $onePlayer1 = null;
+        foreach ($players as $onePlayer) {
+            if ($season1 != null) {
+                $onePlayer1 = Player::select('players.*')
+                ->where('players.user_id', '=', $onePlayer->user_id)
+                ->withSeason($season1->id)
+                ->first();
+            }
+            if ($onePlayer1 != null) {
+                $certificates1[$onePlayer->id] = $onePlayer1->certificate;
+            } else {
+                $certificates1[$onePlayer->id] = '';
+            }
+        }
+        
+        $certificates2 = [];
+        $onePlayer2 = null;
+        foreach ($players as $onePlayer) {
+            if ($season2 != null) {
+                $onePlayer2 = Player::select('players.*')
+                ->where('players.user_id', '=', $onePlayer->user_id)
+                ->withSeason($season2->id)
+                ->first();
+            }
+            if ($onePlayer2 != null) {
+                $certificates2[$onePlayer->id] = $onePlayer2->certificate;
+            } else {
+                $certificates2[$onePlayer->id] = '';
+            }
+        }
+        
+
         $seasons = Season::orderBy('created_at', 'desc')->lists('name', 'id');
 
-        return view('player.corpo', compact('players', 'seasons', 'season'));
+        return view('player.corpo', compact('players', 'seasons', 'season', 'certificates1', 'certificates2'));
 
     }
 
@@ -613,6 +673,28 @@ class PlayerController extends Controller
 
         return redirect()->back()->with('success', "Le joueur $player a son commentaire mis à jour");
     }
+
+    public function changeCertificate($player_id)
+    {
+        $player = Player::findOrFail($player_id);
+
+        switch ($player->certificate) {
+            case 'questionnaire':
+                $player->update(['certificate' => 'certificate']);
+                break;
+            case 'certificate':
+                $player->update(['certificate' => '']);
+                break;
+            case '':
+                $player->update(['certificate' => 'questionnaire']);
+                break;
+            }
+
+        return redirect()->back()->with('success', "Le joueur $player a son certificat mis à jour");
+    }
+
+
+
 
 
     /**

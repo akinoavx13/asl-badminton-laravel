@@ -163,30 +163,33 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if($player->hasCertificate(true))
-                                                    <span class="fa fa-check-circle-o fa-2x text-success"
-                                                          aria-hidden="true"><span hidden>Certificate</span></span>
-                                                @else
-                                                    <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                          aria-hidden="true"><span hidden>pas Certificate</span></span>
+                                                @if ($player->certificate == 'questionnaire')
+                                                    <a href="{{ route('player.changeCertificate', $player->id) }}"
+                                                       class="btn btn-warning">Q</a>
+                                                @elseif ($player->certificate == 'certificate')
+                                                    <a href="{{ route('player.changeCertificate', $player->id) }}"
+                                                       class="btn btn-primary">CM</a>
+                                                @elseif ($player->certificate == '')
+                                                    <a href="{{ route('player.changeCertificate', $player->id) }}"
+                                                       class="btn btn-danger">??</a>
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if($player->hasCertificate(true))
-                                                    <span class="fa fa-check-circle-o fa-2x text-success"
-                                                          aria-hidden="true"><span hidden>Certificate</span></span>
-                                                @else
-                                                    <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                          aria-hidden="true"><span hidden>pas Certificate</span></span>
+                                                @if($certificates1[$player->id] == 'questionnaire')
+                                                    <span class="btn btn-warning">Q</span>
+                                                @elseif($certificates1[$player->id] == 'certificate')
+                                                    <span class="btn btn-primary">CM</span>
+                                                @elseif ($certificates1[$player->id] == '')
+                                                    <span class="btn btn-danger">??</span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if($player->hasCertificate(true))
-                                                    <span class="fa fa-check-circle-o fa-2x text-success"
-                                                          aria-hidden="true"><span hidden>Certificate</span></span>
-                                                @else
-                                                    <span class="fa fa-times-circle-o fa-2x text-danger"
-                                                          aria-hidden="true"><span hidden>pas Certificate</span></span>
+                                                @if($certificates2[$player->id] == 'questionnaire')
+                                                    <span class="btn btn-warning">Q</span>
+                                                @elseif($certificates2[$player->id] == 'certificate')
+                                                    <span class="btn btn-primary">CM</span>
+                                                @elseif ($certificates2[$player->id] == '')
+                                                    <span class="btn btn-danger">??</span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
