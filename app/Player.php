@@ -40,7 +40,6 @@ class Player extends Model
         'corpo_woman' => 'boolean',
         'corpo_mixte' => 'boolean',
         't_shirt' => 'boolean',
-        'certificate' => 'boolean', 
     ];
 
     protected $dates = ['created_at', 'updated_at'];
