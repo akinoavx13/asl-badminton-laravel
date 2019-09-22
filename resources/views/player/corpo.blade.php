@@ -169,9 +169,9 @@
                                                 @elseif ($player->certificate == 'certificate')
                                                     <a href="{{ route('player.changeCertificate', $player->id) }}"
                                                        class="btn btn-primary">CM</a>
-                                                @elseif ($player->certificate == '')
+                                                @elseif ($player->certificate == 'non applicable')
                                                     <a href="{{ route('player.changeCertificate', $player->id) }}"
-                                                       class="btn btn-danger">??</a>
+                                                       class="btn btn-danger">N/A</a>
                                                 @endif
                                             </td>
                                             <td class="text-center">
@@ -179,8 +179,8 @@
                                                     <span class="btn btn-warning">Q</span>
                                                 @elseif($certificates1[$player->id] == 'certificate')
                                                     <span class="btn btn-primary">CM</span>
-                                                @elseif ($certificates1[$player->id] == '')
-                                                    <span class="btn btn-danger">??</span>
+                                                @elseif ($certificates1[$player->id] == 'non applicable')
+                                                    <span class="btn btn-danger">N/A</span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
@@ -188,8 +188,8 @@
                                                     <span class="btn btn-warning">Q</span>
                                                 @elseif($certificates2[$player->id] == 'certificate')
                                                     <span class="btn btn-primary">CM</span>
-                                                @elseif ($certificates2[$player->id] == '')
-                                                    <span class="btn btn-danger">??</span>
+                                                @elseif ($certificates2[$player->id] == 'non applicable')
+                                                    <span class="btn btn-danger">N/A</span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
@@ -202,6 +202,9 @@
                                                 @elseif ($player->polo_delivered == 'done')
                                                     <a href="{{ route('player.changePoloDelivered', $player->id) }}"
                                                        class="btn btn-primary">Livré</a>
+                                                @elseif ($player->polo_delivered == 'non applicable')
+                                                    <a href="{{ route('player.changePoloDelivered', $player->id) }}"
+                                                       class="btn btn-primary">N/A</a>
                                                 @endif
                                             </td>
                                             <td class="text-center">

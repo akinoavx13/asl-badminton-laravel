@@ -133,7 +133,7 @@ class PlayerController extends Controller
             'uses'       => 'PlayerController@changePoloDelivered',
             'as'         => 'player.changePoloDelivered',
         ]);
-        //player change polo_delivered
+        //player change corpoComment
         $router->get('/corpo_comment/{player_id}/comment/{comment}', [
             'middleware' => ['admin', 'notCE'],
             'uses'       => 'PlayerController@changeCorpoComment',
@@ -145,7 +145,7 @@ class PlayerController extends Controller
             'uses' => 'PlayerController@updateComment',
             'as'   => 'player.updateComment',
         ]);
-        //player change polo_delivered
+        //player change certificate
         $router->get('/certificate/{player_id}', [
             'middleware' => ['admin', 'notCE'],
             'uses'       => 'PlayerController@changeCertificate',
@@ -228,7 +228,7 @@ class PlayerController extends Controller
             if ($onePlayer1 != null) {
                 $certificates1[$onePlayer->id] = $onePlayer1->certificate;
             } else {
-                $certificates1[$onePlayer->id] = '';
+                $certificates1[$onePlayer->id] = 'non applicable';
             }
         }
         
@@ -244,7 +244,7 @@ class PlayerController extends Controller
             if ($onePlayer2 != null) {
                 $certificates2[$onePlayer->id] = $onePlayer2->certificate;
             } else {
-                $certificates2[$onePlayer->id] = '';
+                $certificates2[$onePlayer->id] = 'non applicable';
             }
         }
         
@@ -371,10 +371,10 @@ class PlayerController extends Controller
             'season_id'     => $activeSeason->id,
             'search_double' => $request->double && $request->double_partner === 'search' ? true : false,
             'search_mixte'  => $request->mixte && $request->mixte_partner === 'search' ? true : false,
-            'certificate'   => '',
+            'certificate'   => 'non_applicable',
             'corpo_team'    => 0,
             'corpo_team_mixte' => 0,
-            'polo_delivred' => '',
+            'polo_delivred' => 'non_applicable',
             'corpo_comment' => '',
         ]);
 
@@ -642,6 +642,9 @@ class PlayerController extends Controller
         $player = Player::findOrFail($player_id);
 
         switch ($player->polo_delivered) {
+            case 'non applicable':
+                $player->update(['polo_delivered' => 'to_order']);
+                break;
             case 'to_order':
                 $player->update(['polo_delivered' => 'to_deliver']);
                 break;
@@ -649,7 +652,7 @@ class PlayerController extends Controller
                 $player->update(['polo_delivered' => 'done']);
                 break;
             case 'done':
-                $player->update(['polo_delivered' => 'to_order']);
+                $player->update(['polo_delivered' => 'non applicable']);
                 break;
             }
 
@@ -685,9 +688,9 @@ class PlayerController extends Controller
                 $player->update(['certificate' => 'certificate']);
                 break;
             case 'certificate':
-                $player->update(['certificate' => '']);
+                $player->update(['certificate' => 'non applicable']);
                 break;
-            case '':
+            case 'non applicable':
                 $player->update(['certificate' => 'questionnaire']);
                 break;
             }

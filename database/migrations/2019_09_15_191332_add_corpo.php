@@ -15,11 +15,11 @@ class AddCorpo extends Migration
         //
         DB::statement("ALTER TABLE players MODIFY COLUMN gbc_state ENUM('non_applicable', 'entry_must', 'valid', 'licence')");
         Schema::table('players', function (Blueprint $table) {
-            $table->enum('certificate', ['questionnaire', 'certificate']);
+            $table->enum('certificate', ['non_applicable', 'questionnaire', 'certificate']);
             $table->string('corpo_comment');
             $table->integer('corpo_team');
             $table->integer('corpo_team_mixte');
-            $table->enum('polo_delivered', ['to_order','to_deliver', 'done']);
+            $table->enum('polo_delivered', ['non_applicable','to_order','to_deliver', 'done']);
         });
             
     }
