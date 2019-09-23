@@ -195,7 +195,7 @@
                                             <td class="text-center">
                                                 @if ($player->polo_delivered == 'to_order')
                                                     <a href="{{ route('player.changePoloDelivered', $player->id) }}"
-                                                       class="btn btn-danger">A commander</a>
+                                                       class="btn btn-warning">A commander</a>
                                                 @elseif ($player->polo_delivered == 'to_deliver')
                                                     <a href="{{ route('player.changePoloDelivered', $player->id) }}"
                                                        class="btn btn-success">A livrer</a>
@@ -204,7 +204,7 @@
                                                        class="btn btn-primary">Livré</a>
                                                 @elseif ($player->polo_delivered == 'non applicable')
                                                     <a href="{{ route('player.changePoloDelivered', $player->id) }}"
-                                                       class="btn btn-primary">N/A</a>
+                                                       class="btn btn-info">N/A</a>
                                                 @endif
                                             </td>
                                             <td class="text-center">
