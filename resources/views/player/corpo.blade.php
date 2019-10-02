@@ -195,7 +195,7 @@
                                             <td class="text-center">
                                                 @if ($player->polo_delivered == 'to_order')
                                                     <a href="{{ route('player.changePoloDelivered', $player->id) }}"
-                                                       class="btn btn-warning">A commander</a>
+                                                       class="btn btn-warning">A commander ({{ $player->user->tshirt_size}})</a>
                                                 @elseif ($player->polo_delivered == 'to_deliver')
                                                     <a href="{{ route('player.changePoloDelivered', $player->id) }}"
                                                        class="btn btn-success">A livrer</a>
