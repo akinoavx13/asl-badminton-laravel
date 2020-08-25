@@ -35,6 +35,9 @@
             </p>
         </li>
     </ul>
+    <P> 
+        Dans tous les cas la <a href="{{ asset('documents/fiche-Inscription-GBC.pdf') }}">fiche d'inscription au GBC</a> est également à renseigner.
+    </p>
 
     <br><br>
         Merci de prendre connaissance des règles de fonctionnement:
