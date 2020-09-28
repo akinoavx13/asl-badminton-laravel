@@ -36,7 +36,7 @@
         </li>
     </ul>
     <P> 
-        Dans tous les cas la <a href="{{ asset('documents/fiche-Inscription-GBC.pdf') }}">fiche d'inscription au GBC</a> est également à renseigner ainsi que le <a href="{{ asset('documents/protocole-joueur-gbc.pdf') }}">protocole joueur</a>.
+        Dans tous les cas la <a href="{{ asset('documents/fiche-Inscription-GBC.pdf') }}">fiche d'inscription au GBC</a> est également à renseigner (mais pas la partie cotisation annuelle).
     </p>
     
     <br><br>
