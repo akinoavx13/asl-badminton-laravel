@@ -165,7 +165,7 @@
 
             @if($auth)
                 <li class="{{ Request::is('emailToDev') ? 'active' : '' }}">
-                    <a href="http://aslectra.com/documents/Presentation%20Badminton.pdf">
+                    <a href="https://teams.microsoft.com/l/file/4ADFA569-15B8-4FE0-9818-C24FE03175C8?tenantId=15eb2494-5298-4347-81a3-e2d3c08a0f82&fileType=pdf&objectUrl=https%3A%2F%2Flectra33.sharepoint.com%2Fsites%2FASL%2FDocuments%20partages%2FGeneral%2FPresentation%20Badminton.pdf&baseUrl=https%3A%2F%2Flectra33.sharepoint.com%2Fsites%2FASL&serviceName=teams&threadId=19:d402d7d5fc164372b440cd48b5b505fd@thread.skype&groupId=e2184ed8-dfc6-47de-ac57-d07361426829">
                         <i class="fa fa-university"></i>
                         <span class="nav-label">Informations</span>
                     </a>
