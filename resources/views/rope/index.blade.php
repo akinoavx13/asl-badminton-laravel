@@ -88,7 +88,7 @@
 
                         {!! Form::open(['route' => 'rope.withdrawal', 'class' => 'form-horizontal']) !!}
 
-                        <p class="text-left">Je souhaite envoyer une demande par e-mail à Cestas Sport, j'irai porter ma raquette dans les meilleurs délais.
+                        <p class="text-left">Je souhaite envoyer une demande par e-mail à Sport 2000 Cestas, j'irai porter ma raquette dans les meilleurs délais.
                         
                         <div class="form-group">
                             <div class="col-md-3">
@@ -100,7 +100,7 @@
                             </div>
                         </div>
 
-                        <p>Vous avez la possibilité de laisser un commentaire pour Jérémy de Cestas Sports (ex: votre date de passage,...).<br> 
+                        <p>Vous avez la possibilité de laisser un commentaire pour Jérémy de Sport 2000 Cestas (ex: votre date de passage,...).<br> 
                         Ce commentaire est optionnel. </p>
                         <div class="form-group">
                             <div class="col-md-3">
