@@ -92,7 +92,7 @@ class RopeController extends Controller
         }
 
         return redirect()->route('home.index')->with('success',
-            "Le cordage de votre raquette vient d'être enregistré, un mail a été envoyé à Sport 2000 Cestas");
+            "Le cordage de votre raquette vient d'être enregistré, un mail a été envoyé à notre partenaire");
     }
 
     public function create()
