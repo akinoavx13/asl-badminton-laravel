@@ -14,7 +14,7 @@
     </p>
 
     <p>
-        <strong style="color:red;"Pour finaliser votre inscription, merci de bien vouloir vous inscrire en ligne pour obtenir une licence de Badminton avec le club de Gradignan.</strong>
+        <strong style="color:red;">Pour finaliser votre inscription, merci de bien vouloir vous inscrire en ligne pour obtenir une licence de Badminton avec le club de Gradignan.</strong>
     </p>
 
     <ul>
