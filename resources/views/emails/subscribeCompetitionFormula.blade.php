@@ -14,29 +14,23 @@
     </p>
 
     <p>
-        Pour finaliser votre inscription, merci de bien vouloir remplir les formulaires ci-dessous et de les transmettre le
-        plus tôt possible à Christophe Mahéo.
+        Pour finaliser votre inscription, merci de bien vouloir vous inscrire en ligne pour obtenir une licence de Badminton avec le club de Gradignan.
     </p>
 
     <ul>
         <li>
             <p>
-                S'il s’agit de votre première demande de licence, il faut remplir le <a href="{{ asset('documents/certificat_medical.pdf') }}">certificat médical</a>
-                et la
-                <a href="{{ asset('documents/formulaire_licence.pdf') }}">demande de licence</a>.
+                Si vous étiez licencié(e) la saison précédente, connectez-vous à votre espace <a href="https://www.myffbad.fr/connexion">MyFFBAD</a> avec votre numéro de licence. Puis faite votre demande renouvellement de licence en ligne.
             </p>
         </li>
         <li>
             <p>
-                S'il s’agit d’un renouvellement de licence et que le certificat médical fourni l’année dernière a
-                moins de 3 ans au 1er Octobre de cette année, il faut remplir la <a href="{{ asset('documents/formulaire_licence.pdf') }}">demande de licence</a> et vous pouvez éviter le
-                certificat médical et ne fournir que le <a href="{{ asset('documents/questionnaire_sante.pdf') }}">questionnaire de santé</a> (sous réserve que vous répondrez NON à
-                toutes les questions, sinon il faudra tout de même un <a href="{{ asset('documents/certificat_medical.pdf') }}">certificat médical</a>).
+                Si vous êtes nouveau ou nouvelle licencié(e), connectez-vous sur <a href"https://www.myffbad.fr/club/569">MyFFBAD</a> et faite votre demande de licence. 
             </p>
         </li>
     </ul>
     <P> 
-    Dans tous les cas la <a href="{{ asset('documents/fiche-Inscription-GBC.pdf') }}">fiche d'inscription au GBC</a> est également à renseigner ainsi que le <a href="{{ asset('documents/protocole-joueur-gbc.pdf') }}">protocole joueur</a>.
+        Il faut choisir Adulte Jeud Libre ou Adulte 1 entrainement <strong>(NE PAS CHOISIR Licence Lectra)</strong> et payer en ligne. Lorsque votre licence sera active vous pourrez obtenir son remboursement en faisant la demande par mail à Christophe Mahéo.
     </p>
 
     <br><br>

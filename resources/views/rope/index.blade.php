@@ -88,7 +88,7 @@
 
                         {!! Form::open(['route' => 'rope.withdrawal', 'class' => 'form-horizontal']) !!}
 
-                        <p class="text-left">Je souhaite envoyer une demande par e-mail à EPHOR, j'irai porter/confier ma raquette dans les meilleurs délais.
+                        <p class="text-left">Je souhaite envoyer une demande par e-mail à EPHOR, j'irai porter/confier ma raquette dans les meilleurs délais. J'attache un papier sur ma raquette avec mon Nom et Prénom et la tension. 
                         
                         <div class="form-group">
                             <div class="col-md-3">
@@ -100,7 +100,7 @@
                             </div>
                         </div>
 
-                        <p>Vous avez la possibilité de laisser un commentaire pour notre partenaire EPHOR (ex: votre date de passage, à qui vous confiez la raquette...).<br> 
+                        <p>Vous avez la possibilité de laisser un commentaire pour notre partenaire EPHOR (ex: votre date de passage, à qui vous confiez la raquette, le modèle de raquette...).<br> 
                         Ce commentaire est optionnel. </p>
                         <div class="form-group">
                             <div class="col-md-3">
