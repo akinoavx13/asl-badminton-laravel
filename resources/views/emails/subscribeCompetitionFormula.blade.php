@@ -14,7 +14,7 @@
     </p>
 
     <p>
-        Pour finaliser votre inscription, merci de bien vouloir vous inscrire en ligne pour obtenir une licence de Badminton avec le club de Gradignan.
+        <strong style="color:red;"Pour finaliser votre inscription, merci de bien vouloir vous inscrire en ligne pour obtenir une licence de Badminton avec le club de Gradignan.</strong>
     </p>
 
     <ul>
@@ -25,7 +25,7 @@
         </li>
         <li>
             <p>
-                Si vous êtes nouveau ou nouvelle licencié(e), connectez-vous sur <a href"https://www.myffbad.fr/club/569">MyFFBAD</a> et faite votre demande de licence. 
+                Si vous êtes nouveau ou nouvelle licencié(e), connectez-vous sur <a href="https://www.myffbad.fr/club/569">MyFFBAD</a> et faite votre demande de licence. 
             </p>
         </li>
     </ul>
