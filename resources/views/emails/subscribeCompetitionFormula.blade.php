@@ -30,7 +30,7 @@
         </li>
     </ul>
     <P> 
-        Il faut choisir Adulte Jeud Libre ou Adulte 1 entrainement <strong>(NE PAS CHOISIR Licence Lectra)</strong> et payer en ligne. Lorsque votre licence sera active vous pourrez obtenir son remboursement en faisant la demande par mail à Christophe Mahéo.
+        Sur le formulaire qui vous sera proposé, vous pouvez choisir "Adulte", "Jeu Libre" ou "Adulte 1 entrainement" <strong>(NE PAS CHOISIR "Licence Lectra")</strong> et payer en ligne. Lorsque votre licence sera active vous pourrez obtenir son remboursement (plafond de remboursement à 175€) en faisant la demande par mail à Christophe Mahéo.
     </p>
 
     <br><br>

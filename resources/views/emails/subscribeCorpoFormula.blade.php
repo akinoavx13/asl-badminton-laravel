@@ -30,7 +30,7 @@
         </li>
     </ul>
     <P> 
-        Il faut choisir la licence LECTRA (à 60€) et payer en ligne. Lorsque votre licence sera active vous pourrez obtenir son remboursement en faisant la demande par mail à Christophe Mahéo.
+        Sur le formulaire qui vous sera proposé, vous devez choisir "licence LECTRA (à 60€)" et payer en ligne. Lorsque votre licence sera active vous pourrez obtenir son remboursement (plafond de remboursement à 60€) en faisant la demande par mail à Christophe Mahéo.
     </p>
     
     <br><br>
