@@ -25,7 +25,7 @@
         </li>
         <li>
             <p>
-                Si vous êtes nouveau ou nouvelle licencié(e), connectez-vous sur <a href"https://www.myffbad.fr/club/569">MyFFBAD</a> et faite votre demande de licence.                
+                Si vous êtes nouveau ou nouvelle licencié(e), connectez-vous sur <a href="https://www.myffbad.fr/club/569">MyFFBAD</a> et faite votre demande de licence.                
             </p>
         </li>
     </ul>
