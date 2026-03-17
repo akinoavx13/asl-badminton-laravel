@@ -13,6 +13,7 @@ class Rope extends Model
         'rest',
         'fill',
         'tension',
+        'type',
         'comment',
     ];
 

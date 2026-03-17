@@ -110,6 +110,7 @@
                             <tr>
                                 <th class="text-center">Nom</th>
                                 <th class="text-center">Date</th>
+                                <th class="text-center">Type de cordage</th>
                                 <th class="text-center">Tension</th>
                                 <th class="text-center">Comment</th>
                                 <th class="text-center">Action</th>
@@ -126,6 +127,9 @@
                                         <span class="text-navy">
                                             {{ $rope->created_at }}
                                         </span>
+                                    </td>
+                                    <td>
+                                        {{ $rope->type }}
                                     </td>
                                     <td>
                                         {{ $rope->tension }} kg

@@ -42,6 +42,7 @@
                         <thead>
                         <tr>
                             <th class="text-center">Date</th>
+                            <th class="text-center">Type de cordage</th>
                             <th class="text-center">Tension</th>
                             <th class="text-center">Commentaire</th>
                         </tr>
@@ -52,6 +53,9 @@
                                 <tr class="text-center">
                                     <td>
                                         {{ $oneConsumption->created_at }}
+                                    </td>
+                                    <td>
+                                        {{ $oneConsumption->type }}
                                     </td>
                                     <td>
                                         {{ $oneConsumption->tension }} kg
@@ -97,6 +101,32 @@
 
                             <div class="col-md-9">
                                 {!! Form::number('tension', $myTension, ['class' => 'form-control', 'step' => '0.1', 'required']) !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                {!! Form::label('type', 'Type de cordage :', ['class' => 'control-label']) !!}
+                            </div>
+
+                            <div class="col-md-9">
+                                <?php $selectedType = old('type', 'BG80'); ?>
+                                @foreach([
+                                    'BG65'      => ['label' => 'BG65',      'desc' => 'Durable et fiable, toucher neutre et confortable'],
+                                    'BG65Ti'    => ['label' => 'BG65Ti',    'desc' => 'Résistance + puissance, dynamique grâce au titane'],
+                                    'BG80'      => ['label' => 'BG80',      'desc' => 'Offensif, excellent contrôle et mordant'],
+                                    'BG80Power' => ['label' => 'BG80Power', 'desc' => 'Puissance explosive, idéal pour les smashers'],
+                                    'VBS77'     => ['label' => 'VBS77',     'desc' => 'Contrôle et stabilité, faible perte de tension'],
+                                    'VBS66'     => ['label' => 'VBS66',     'desc' => 'Puissance et vitesse, idéal joueurs techniques'],
+                                ] as $value => $info)
+                                    <div class="radio" style="margin-top: 2px; margin-bottom: 2px;">
+                                        <label>
+                                            <input type="radio" name="type" value="{{ $value }}" {{ $selectedType === $value ? 'checked' : '' }} required>
+                                            <strong>{{ $info['label'] }}</strong>
+                                            <span class="text-muted" style="margin-left: 5px;">— {{ $info['desc'] }}</span>
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
 
