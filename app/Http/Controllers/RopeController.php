@@ -73,6 +73,7 @@ class RopeController extends Controller
             'rest'    => 1,
             'fill'    => false,
             'tension' => $request->tension,
+            'type'    => $request->type,
             'comment' => $request->comment,
         ]);
 
@@ -87,7 +88,7 @@ class RopeController extends Controller
 
         if (env('APP_ENV') == 'prod')
         {
-            SendMail::send($this->user, 'takeRope', array('name' => $this->user->name, 'forname' => $this->user->forname, 'tension' => $request->tension, 'comment' => $request->comment, 'rest' => $rest), 'Demande de cordage AS Lectra
+            SendMail::send($this->user, 'takeRope', array('name' => $this->user->name, 'forname' => $this->user->forname, 'tension' => $request->tension, 'type' => $request->type, 'comment' => $request->comment, 'rest' => $rest), 'Demande de cordage AS Lectra
         Badminton', true);
         }
 
@@ -102,7 +103,7 @@ class RopeController extends Controller
 
         $rest = $adding - $withdrawal;
 
-        $ropes = Rope::select('users.name', 'users.forname', 'ropes.created_at', 'ropes.rest', 'ropes.fill', 'ropes.tension', 'ropes.comment')
+        $ropes = Rope::select('users.name', 'users.forname', 'ropes.created_at', 'ropes.rest', 'ropes.fill', 'ropes.tension', 'ropes.type', 'ropes.comment')
             ->join('users', 'users.id', '=', 'ropes.user_id')
             ->orderBy('created_at', 'desc')
             ->get();

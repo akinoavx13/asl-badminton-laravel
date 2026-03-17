@@ -35,6 +35,7 @@ class RopeRequest extends Request
         return [
             //
             'tension'   => 'required',
+            'type'      => 'required|in:BG65,BG65Ti,BG80,BG80Power,VBS77,VBS66',
         ];
     }
 }
